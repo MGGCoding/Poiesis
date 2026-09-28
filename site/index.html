@@ -1,0 +1,32 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<link rel="stylesheet" href="styles.css">
+</head><body>
+<title>Poiesis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=Kalam:wght@400;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Work+Sans:wght@400;500;600&family=Young+Serif&display=swap">
+<header class="top">
+  <div class="wrap bar">
+    <div class="lefthd"><button class="profbtn" id="profBtn" aria-label="Your profile" title="Your profile"></button><a class="mark" href="#" id="home">Poiesis</a></div>
+    <div class="switch" role="tablist" id="switch" aria-label="Go to">
+      <button role="tab" data-tab="muse">Muse</button><button role="tab" data-tab="notebook">Notebook</button>
+    </div>
+    <div class="icons">
+      <button class="ibtn" id="lookBtn" aria-label="Change the room" title="Change the room" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.8 1.8-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 0 0 5-5C21 6.4 17 3 12 3z"/><circle cx="7.5" cy="11" r="1.1" fill="currentColor"/><circle cx="10.5" cy="7" r="1.1" fill="currentColor"/><circle cx="15" cy="7.5" r="1.1" fill="currentColor"/></svg></button>
+      <button class="ibtn" id="fontBtn" aria-label="Change the type" title="Change the type" aria-expanded="false"><span class="aa" aria-hidden="true">Aa</span></button>
+    </div>
+  </div>
+</header>
+<div class="pop" id="lookPop" hidden><h3>Rooms</h3><p>Where would you like to work today?</p><div class="plist" id="lookList"></div></div>
+<div class="pop" id="fontPop" hidden><h3>Type</h3><p>Choose the letters you read and write in. Any type goes with any room.</p><div class="plist" id="fontList"></div></div>
+<main class="wrap">
+  <div class="view" id="view"></div>
+  <footer><a href="#" id="whyLink" class="whylink">Why Poiesis ›</a><span>A working sketch, 2026. Other members are examples; what you write stays in this browser. Paintings appear as color studies.</span></footer>
+</main>
+<div class="selpop" id="selpop" hidden></div>
+<div class="toast" id="toast" role="status" hidden></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><filter id="m-wash" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency=".018" numOctaves="3" seed="7"/><feDisplacementMap in="SourceGraphic" scale="46"/><feGaussianBlur stdDeviation="1.4"/></filter></defs></svg>
+<script src="copy.js"></script>
+<script src="app.js"></script>
+
+</body></html>
