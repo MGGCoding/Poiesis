@@ -8,6 +8,8 @@ dead before 1956), or is a Poiesis translation of a public-domain original.
 Checked 2026-09-25: every text was proofed against the source URL in its file, and every painting's museum
 record and open-access licence was confirmed.
 
+> **Revised 29 Sep 2026:** 30 Sep – 9 Oct now offer four Scripture options each, with a theme, poem, passage and painting for every option. See [REVISION-v2.md](REVISION-v2.md). The first version is kept in [archive/v1](archive/v1/).
+
 ## Layout
 - `calendar/YYYY-MM-DD.md`: one file per day with the theme, Orthodox commemorations, readings, spine step, the three works, why they belong together, and the ✝ verse.
 - `works/poems|passages|paintings/<id>.md`: one file per work, with YAML front matter (source, edition, rights, story sources, palette) followed by the full text or museum record, the ⓘ story and a go-deeper question.

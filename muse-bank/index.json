@@ -36,162 +36,822 @@
   {
    "date": "2026-09-30",
    "dow": "Wednesday",
-   "theme": "new",
-   "orthodox": "Hieromartyr Gregory the Illuminator of Armenia",
-   "readings": "Ephesians 5:25–33 · Luke 5:33–39",
+   "version": 2,
+   "orthodox": "Hieromartyr Gregory the Illuminator of Armenia · Liturgy: Ephesians 5:25–33, Luke 5:33–39",
+   "catholic": "St Jerome · Mass: Job 9:1–12, 14–16; Psalm 88; Luke 9:57–62",
+   "hours": "Psalter Week II, Wednesday · Evening Prayer Psalm 62 · Night Prayer Psalms 31 and 130",
    "spine": "Letter 8 (Borgeby gård, 12 Aug 1904): the new that enters us",
-   "works": [
-    "rossetti-a-birthday",
-    "emerson-circles",
-    "vangogh-first-steps"
-   ],
-   "why": "The birthday of a life, every end a beginning, a child's first step.",
-   "cross_ref": "Luke 5:38",
-   "cross_text": "But new wine must be put into fresh wineskins, and both are preserved."
+   "chosen": null,
+   "suggested": "D",
+   "suggested_why": "Compline gives the first of these ten days an ending: a hymn children can pray, and a burden-and-wagon story anyone can picture.",
+   "options": [
+    {
+     "letter": "A",
+     "theme": "new",
+     "source": "Orthodox Divine Liturgy · Gospel",
+     "ref": "Luke 5:38",
+     "text": "But new wine must be put into fresh wineskins, and both are preserved.",
+     "poem": "rossetti-a-birthday",
+     "passage": "emerson-circles",
+     "painting": {
+      "artist": "Vincent van Gogh",
+      "era": "Post-Impressionism, 1890",
+      "title": "First Steps, after Millet"
+     },
+     "why": "The birthday of a life, every end a beginning, a child's first step.",
+     "liturgy_note": "Version 1 choice (Orthodox reading), kept as an option.",
+     "origin": "v1"
+    },
+    {
+     "letter": "B",
+     "theme": "stars",
+     "source": "Catholic Mass · first reading (St Jerome)",
+     "ref": "Job 9:8–9",
+     "text": "He alone stretches out the heavens, and treads on the waves of the sea. He makes the Bear, Orion, and the Pleiades, and the rooms of the south.",
+     "poem": "teasdale-stars",
+     "passage": "kant-starry-heavens",
+     "painting": {
+      "artist": "Adam Elsheimer",
+      "era": "early Baroque, 1609",
+      "title": "The Flight into Egypt"
+     },
+     "why": "Job's God who makes the Bear and Orion; a woman alone on a hill under the stars; Kant's awe at the starry heavens.",
+     "liturgy_note": "First reading at Catholic Mass, Wed 30 Sep 2026 (Wed of Week 26 in Ordinary Time, Year II): Job 9:1–12,14–16 (vv. 8–9 fall within it); Ps 88; Luke 9:57–62 — confirmed earlier from catholicgallery.org (not re-fetched in this pass).",
+     "origin": "v2"
+    },
+    {
+     "letter": "C",
+     "theme": "rest",
+     "source": "Liturgy of the Hours · Evening Prayer",
+     "ref": "Psalm 62:1–2",
+     "text": "My soul rests in God alone.\nMy salvation is from him.\nHe alone is my rock, my salvation, and my fortress.\nI will never be greatly shaken.",
+     "poem": "herbert-pulley",
+     "passage": "thoreau-broad-margin",
+     "painting": {
+      "artist": "Camille Corot",
+      "era": "Barbizon school, 1864",
+      "title": "Souvenir de Mortefontaine"
+     },
+     "why": "The soul resting in God alone; Herbert's God who keeps back rest so we come home; Thoreau's broad margin.",
+     "liturgy_note": "Liturgy of the Hours, Evening Prayer, Wed 30 Sep 2026 (Wednesday of Week 26 in Ordinary Time, psalter week II): Psalm 61 (62) is the first psalm — confirmed at https://universalis.com/20260930/vespers.htm",
+     "origin": "v2"
+    },
+    {
+     "letter": "D",
+     "theme": "entrust",
+     "source": "Night Prayer (Compline)",
+     "ref": "Psalm 31:5",
+     "text": "Into your hand I commend my spirit.\nYou redeem me, Yahweh, God of truth.",
+     "poem": "ken-evening-hymn",
+     "passage": "smith-burden-in-the-wagon",
+     "painting": {
+      "artist": "Jean-François Millet",
+      "era": "Barbizon realism, 1857–59",
+      "title": "The Angelus"
+     },
+     "why": "The last words of the day handed over; Ken's bedtime hymn; the man in the wagon who will not put his burden down.",
+     "liturgy_note": "Liturgy of the Hours, Night Prayer (Compline), Wed 30 Sep 2026: Psalm 30 (31) is the first psalm and 'Into your hands, Lord, I commend my spirit' is the short responsory — confirmed at https://universalis.com/20260930/compline.htm (the /comp.htm URL returns 404)",
+     "origin": "v2"
+    }
+   ]
   },
   {
    "date": "2026-10-01",
    "dow": "Thursday",
-   "theme": "song",
-   "orthodox": "St Romanos the Melodist; Apostle Ananias (GOARCH). The OCA also keeps the Protection of the Theotokos today; the Greek Church keeps it on 28 Oct.",
-   "readings": "Ephesians 5:33–6:9 · Luke 6:12–19",
+   "version": 2,
+   "orthodox": "St Romanos the Melodist (GOARCH); the Protection of the Theotokos (OCA) · Liturgy: Ephesians 5:33–6:9, Luke 6:12–19 · Vespers of the Protection: Genesis 28:10–17",
+   "catholic": "St Thérèse of Lisieux · Mass: Job 19:21–27; Psalm 27; Luke 10:1–12",
+   "hours": "Psalter Week II, Thursday · Night Prayer Psalm 16",
    "spine": "Letter 1 (Paris, 17 Feb 1903): must you write?",
-   "works": [
-    "romanos-nativity-kontakion",
-    "augustine-hymns-milan",
-    "breton-song-of-the-lark"
-   ],
-   "why": "A hymn given in a dream, a convert weeping at hymns, a girl stopped in the field by a lark.",
-   "cross_ref": "Luke 6:12",
-   "cross_text": "In these days, he went out to the mountain to pray, and he continued all night in prayer to God."
+   "chosen": null,
+   "suggested": "C",
+   "suggested_why": "The Vespers reading only the Orthodox hear, and a Jacob's ladder that runs through ordinary places.",
+   "options": [
+    {
+     "letter": "A",
+     "theme": "song",
+     "source": "Orthodox Divine Liturgy · Gospel (St Romanos the Melodist)",
+     "ref": "Luke 6:12",
+     "text": "In these days, he went out to the mountain to pray, and he continued all night in prayer to God.",
+     "poem": "romanos-nativity-kontakion",
+     "passage": "augustine-hymns-milan",
+     "painting": {
+      "artist": "Jules Breton",
+      "era": "French Realism, 1884",
+      "title": "The Song of the Lark"
+     },
+     "why": "Christ up the mountain all night; the song Romanos was given in a dream; Augustine weeping at the hymns of Milan.",
+     "liturgy_note": "Version 1 choice (Orthodox reading), kept as an option.",
+     "origin": "v1"
+    },
+    {
+     "letter": "B",
+     "theme": "goodness",
+     "source": "Catholic Mass · responsorial psalm (St Thérèse)",
+     "ref": "Psalm 27:13",
+     "text": "I am still confident of this:\nI will see the goodness of Yahweh in the land of the living.",
+     "poem": "hopkins-pied-beauty",
+     "passage": "muir-mountains-in-us",
+     "painting": {
+      "artist": "John Constable",
+      "era": "English Romanticism, 1821",
+      "title": "The Hay Wain"
+     },
+     "why": "The goodness of the Lord in the land of the living; dappled things; Muir finding the mountains inside him.",
+     "liturgy_note": "Responsorial psalm at Catholic Mass, Thu 1 Oct 2026 (Thursday of Week 26 in Ordinary Time, Year II): Job 19:21–27; Ps 27; Luke 10:1–12 — confirmed earlier from catholicgallery.org (not re-fetched in this pass).",
+     "origin": "v2"
+    },
+    {
+     "letter": "C",
+     "theme": "here",
+     "source": "Orthodox Vespers of the Protection",
+     "ref": "Genesis 28:16–17",
+     "text": "Jacob awakened out of his sleep, and he said, “Surely Yahweh is in this place, and I didn’t know it.” He was afraid, and said, “How awesome this place is! This is none other than God’s house, and this is the gate of heaven.”",
+     "poem": "barrett-browning-earths-crammed",
+     "passage": "jefferies-story-of-my-heart",
+     "painting": {
+      "artist": "William Blake",
+      "era": "English Romanticism, c. 1799–1806",
+      "title": "Jacob's Ladder"
+     },
+     "why": "Jacob wakes: God was in this place; every common bush afire; Jefferies on his hill.",
+     "liturgy_note": "Orthodox Vespers for the Protection of the Theotokos (1 Oct, new calendar): Genesis 28:10–17, Ezekiel 43:27–44:4, Proverbs 9:1–11 — confirmed at https://orthocal.info/readings/gregorian/2026/10/1/ (these Vespers are served on the eve, the evening of 30 Sep; Julian-calendar churches keep the feast on 14 Oct).",
+     "origin": "v2"
+    },
+    {
+     "letter": "D",
+     "theme": "sent",
+     "source": "Catholic Mass · Gospel",
+     "ref": "Luke 10:2–4",
+     "text": "Then he said to them, “The harvest is indeed plentiful, but the laborers are few. Pray therefore to the Lord of the harvest, that he may send out laborers into his harvest. Go your ways. Behold, I send you out as lambs among wolves. Carry no purse, nor wallet, nor sandals. Greet no one on the way.",
+     "poem": "whitman-open-road",
+     "passage": "woolman-love-first-motion",
+     "painting": {
+      "artist": "James Tissot",
+      "era": "late 19th century, 1886–94",
+      "title": "The Seventy Disciples Two by Two"
+     },
+     "why": "Sent out with no purse; afoot and light-hearted; Woolman setting out because love was the first motion.",
+     "liturgy_note": "Gospel at Catholic Mass, Thu 1 Oct 2026 (Thursday of Week 26 in Ordinary Time, Year II): Luke 10:1–12 (vv. 2–4 fall within it), with Job 19:21–27 and Ps 27 — confirmed earlier from catholicgallery.org (not re-fetched in this pass).",
+     "origin": "v2"
+    }
+   ]
   },
   {
    "date": "2026-10-02",
    "dow": "Friday",
-   "theme": "poor",
-   "orthodox": "Hieromartyr Cyprian and Martyr Justina; Blessed Andrew the Fool-for-Christ",
-   "readings": "Ephesians 6:18–24 · Luke 6:17–23",
+   "version": 2,
+   "orthodox": "Hieromartyr Cyprian and Martyr Justina; St Andrew the Fool-for-Christ · Liturgy: Ephesians 6:18–24, Luke 6:17–23",
+   "catholic": "The Holy Guardian Angels · Mass: Job 38:1, 12–21; 40:3–5; Psalm 139; Matthew 18:1–5, 10",
+   "hours": "Psalter Week II, Friday (Guardian Angels) · Psalm 51 is Friday's Morning Prayer psalm and is said daily at Orthodox Matins and Small Compline",
    "spine": "Letter 1: “for the one who creates there is no poverty”",
-   "works": [
-    "burns-a-mans-a-man",
-    "tolstoy-what-men-live-by",
-    "bastien-lepage-joan-of-arc"
-   ],
-   "why": "Honest poverty sung, a poor shoemaker's house where an angel learns what men live by, a peasant girl hearing voices in her garden.",
-   "cross_ref": "Luke 6:20–21",
-   "cross_text": "Blessed are you who are poor, for God's Kingdom is yours. Blessed are you who hunger now, for you will be filled. Blessed are you who weep now, for you will laugh."
+   "chosen": null,
+   "suggested": "B",
+   "suggested_why": "It keeps the Guardian Angels' feast and puts Traherne's child-angel beside MacDonald. It is the most tender of the four.",
+   "options": [
+    {
+     "letter": "A",
+     "theme": "poor",
+     "source": "Orthodox Divine Liturgy · Gospel",
+     "ref": "Luke 6:20–21",
+     "text": "Blessed are you who are poor, for God's Kingdom is yours. Blessed are you who hunger now, for you will be filled. Blessed are you who weep now, for you will laugh.",
+     "poem": "burns-a-mans-a-man",
+     "passage": "tolstoy-what-men-live-by",
+     "painting": {
+      "artist": "Jules Bastien-Lepage",
+      "era": "French Naturalism, 1879",
+      "title": "Joan of Arc"
+     },
+     "why": "Blessed are you who are poor; the honest man's worth; the angel's lesson that we live by love.",
+     "liturgy_note": "Version 1 choice (Orthodox reading), kept as an option.",
+     "origin": "v1"
+    },
+    {
+     "letter": "B",
+     "theme": "little",
+     "source": "Catholic Mass · Gospel (Guardian Angels)",
+     "ref": "Matthew 18:3–4, 10",
+     "text": "Most certainly I tell you, unless you turn and become as little children, you will in no way enter into the Kingdom of Heaven. Whoever therefore humbles himself as this little child is the greatest in the Kingdom of Heaven. … See that you don't despise one of these little ones, for I tell you that in heaven their angels always see the face of my Father who is in heaven.",
+     "poem": "traherne-wonder",
+     "passage": "macdonald-child-in-the-midst",
+     "painting": {
+      "artist": "Pietro da Cortona",
+      "era": "Italian Baroque, 1656",
+      "title": "The Guardian Angel"
+     },
+     "why": "Become as little children, whose angels see God's face; Traherne coming down like an angel; MacDonald's God who is like the child.",
+     "liturgy_note": "Gospel at Mass, Fri 2 Oct 2026, memorial of the Holy Guardian Angels: Matt 18:1–5,10 (first reading Job 38:1,12–21; 40:3–5; Ps 139), per catholicgallery.org; universalis.com/20261002/lauds.htm also names the day 'The Holy Guardian Angels'.",
+     "origin": "v2"
+    },
+    {
+     "letter": "C",
+     "theme": "dawn",
+     "source": "Catholic Mass · first reading",
+     "ref": "Job 38:12",
+     "text": "Have you commanded the morning in your days,\nand caused the dawn to know its place,",
+     "poem": "hopkins-gods-grandeur",
+     "passage": "emerson-nature-beauty",
+     "painting": {
+      "artist": "Claude Monet",
+      "era": "Impressionism, 1872",
+      "title": "Impression, Sunrise"
+     },
+     "why": "Have you commanded the morning? The Holy Ghost over the bent world at dawn; Emerson's hill-top at day-break.",
+     "liturgy_note": "First reading at Mass, Fri 2 Oct 2026: Job 38:1,12–21; 40:3–5 (Ps 139; Gospel Matt 18:1–5,10), per catholicgallery.org.",
+     "origin": "v2"
+    },
+    {
+     "letter": "D",
+     "theme": "broken",
+     "source": "Psalm 51 · Orthodox Matins and Compline; Friday Morning Prayer",
+     "ref": "Psalm 51:17",
+     "text": "The sacrifices of God are a broken spirit.\nO God, you will not despise a broken and contrite heart.",
+     "poem": "herbert-love-iii",
+     "passage": "dostoevsky-peasant-women",
+     "painting": {
+      "artist": "Pieter de Grebber",
+      "era": "Dutch Golden Age, c. 1635–40",
+      "title": "King David in Prayer"
+     },
+     "why": "A broken and contrite heart God will not despise; Love bids the guilty guest sit down; Zosima: no sin the Lord will not forgive.",
+     "liturgy_note": "Psalm 51 (50 in the Greek numbering) is said every day at Orthodox Matins and Small Compline, and is the Friday Morning Prayer psalm in the Roman Hours (on 2 Oct Universalis gives the Guardian Angels' festal psalms instead).",
+     "origin": "v2"
+    }
+   ]
   },
   {
    "date": "2026-10-03",
    "dow": "Saturday",
-   "theme": "carried",
-   "orthodox": "Hieromartyr Dionysius the Areopagite",
-   "readings": "1 Corinthians 15:39–45 · Luke 5:17–26",
+   "version": 2,
+   "orthodox": "Hieromartyr Dionysius the Areopagite (Acts 17:34) · Liturgy: 1 Corinthians 15:39–45, Luke 5:17–26",
+   "catholic": "Saturday of Week 26 · Mass: Job 42:1–3, 5–6, 12–17; Psalm 119; Luke 10:17–24",
+   "hours": "Psalter Week II, Saturday · Night Prayer Psalms 4 and 134",
    "spine": "Letter 2 (Viareggio, 5 Apr 1903): the few companions",
-   "works": [
-    "tagore-gitanjali-1",
-    "montaigne-of-friendship",
-    "cassatt-childs-bath"
-   ],
-   "why": "A reed flute carried over hills, a friend who cannot say why but ‘because it was he’, a child held.",
-   "cross_ref": "Luke 5:19–20",
-   "cross_text": "They went up to the housetop and let him down through the tiles with his cot into the middle before Jesus. Seeing their faith, he said to him, “Man, your sins are forgiven you.”"
+   "chosen": null,
+   "suggested": "C",
+   "suggested_why": "Dionysius's own day, and the Cloud of Unknowing descends from his writings: the richest link across East and West.",
+   "options": [
+    {
+     "letter": "A",
+     "theme": "carried",
+     "source": "Orthodox Divine Liturgy · Gospel",
+     "ref": "Luke 5:19–20",
+     "text": "They went up to the housetop and let him down through the tiles with his cot into the middle before Jesus. Seeing their faith, he said to him, “Man, your sins are forgiven you.”",
+     "poem": "tagore-gitanjali-1",
+     "passage": "montaigne-of-friendship",
+     "painting": {
+      "artist": "Mary Cassatt",
+      "era": "Impressionism, 1893",
+      "title": "The Child's Bath"
+     },
+     "why": "Friends lower a man through the roof; Tagore's endless vessel; Montaigne's friend.",
+     "liturgy_note": "Version 1 choice (Orthodox reading), kept as an option.",
+     "origin": "v1"
+    },
+    {
+     "letter": "B",
+     "theme": "see",
+     "source": "Catholic Mass · first reading",
+     "ref": "Job 42:5",
+     "text": "I had heard of you by the hearing of the ear,\nbut now my eye sees you.",
+     "poem": "blake-auguries-of-innocence",
+     "passage": "chesterton-book-of-job",
+     "painting": {
+      "artist": "Georges de La Tour",
+      "era": "French Baroque, c. 1650",
+      "title": "Job Mocked by His Wife"
+     },
+     "why": "Job: I had heard of you, now my eye sees you; a world in a grain of sand; Chesterton on God's answer.",
+     "liturgy_note": "First reading at Mass, Sat 3 Oct 2026: Job 42:1–3,5–6,12–17 (Ps 119; Gospel Luke 10:17–24), per catholicgallery.org.",
+     "origin": "v2"
+    },
+    {
+     "letter": "C",
+     "theme": "near",
+     "source": "Orthodox commemoration of St Dionysius the Areopagite",
+     "ref": "Acts 17:27–28a",
+     "text": "that they should seek the Lord, if perhaps they might reach out for him and find him, though he is not far from each one of us. 'For in him we live, move, and have our being.'",
+     "poem": "thompson-kingdom-of-god",
+     "passage": "cloud-of-unknowing-lift-up",
+     "painting": {
+      "artist": "Raphael",
+      "era": "High Renaissance, 1515",
+      "title": "St Paul Preaching in Athens"
+     },
+     "why": "The speech Dionysius heard: in him we live and move; the traffic of Jacob's ladder at Charing Cross; the cloud of unknowing that Dionysius's own writings inspired.",
+     "liturgy_note": "orthocal.info/readings/gregorian/2026/10/3/ lists Hieromartyr Dionysius the Areopagite (noting Acts 17:19–34) on 3 Oct; the day's appointed readings there are 1 Cor 15:39–45 and Luke 5:17–26, not Acts 17.",
+     "origin": "v2"
+    },
+    {
+     "letter": "D",
+     "theme": "sleep",
+     "source": "Night Prayer (Compline)",
+     "ref": "Psalm 4:8",
+     "text": "In peace I will both lay myself down and sleep, for you alone, Yahweh, make me live in safety.",
+     "poem": "rossetti-up-hill",
+     "passage": "cervantes-sancho-sleep",
+     "painting": {
+      "artist": "Frederic Leighton",
+      "era": "Victorian Aestheticism, 1895",
+      "title": "Flaming June"
+     },
+     "why": "In peace I will lie down and sleep; beds for all who come; Sancho blessing whoever invented sleep.",
+     "liturgy_note": "Night Prayer (Compline), Sat 3 Oct 2026 (Saturday of week 26 in Ordinary Time): Ps 4 and Ps 133(134), confirmed at https://universalis.com/20261003/compline.htm.",
+     "origin": "v2"
+    }
+   ]
   },
   {
    "date": "2026-10-04",
    "dow": "Sunday",
-   "theme": "generous",
-   "orthodox": "18th Sunday after Pentecost; Hieromartyr Hierotheos of Athens",
-   "readings": "2 Corinthians 9:6–11 · Luke 6:31–36",
+   "version": 2,
+   "orthodox": "18th Sunday after Pentecost; Hieromartyr Hierotheos · Liturgy: 2 Corinthians 9:6–11, Luke 6:31–36 · Matins Gospel John 20:1–10",
+   "catholic": "27th Sunday in Ordinary Time (Year A); St Francis of Assisi's day (not kept on a Sunday) · Mass: Isaiah 5:1–7; Psalm 80; Philippians 4:6–9; Matthew 21:33–43",
+   "hours": "Psalter Week III, Sunday · Morning Prayer Psalms 93 and 148",
    "spine": "Letter 7: love is difficult",
-   "works": [
-    "shakespeare-quality-of-mercy",
-    "hugo-bishop-candlesticks",
-    "murillo-prodigal-son"
-   ],
-   "why": "Mercy's argument, mercy's act, mercy's embrace.",
-   "cross_ref": "Luke 6:36",
-   "cross_text": "Therefore be merciful, even as your Father is also merciful."
+   "chosen": null,
+   "suggested": "C",
+   "suggested_why": "St Francis's day, even though a Sunday hides it at Mass. The Canticle is the saint's own poem.",
+   "options": [
+    {
+     "letter": "A",
+     "theme": "generous",
+     "source": "Orthodox Divine Liturgy · Gospel (18th Sunday)",
+     "ref": "Luke 6:36",
+     "text": "Therefore be merciful, even as your Father is also merciful.",
+     "poem": "shakespeare-quality-of-mercy",
+     "passage": "hugo-bishop-candlesticks",
+     "painting": {
+      "artist": "Bartolomé Esteban Murillo",
+      "era": "Spanish Baroque, 1667–70",
+      "title": "The Return of the Prodigal Son"
+     },
+     "why": "Be merciful as your Father; mercy that droppeth as the gentle rain; the bishop who gives the silver away.",
+     "liturgy_note": "Version 1 choice (Orthodox reading), kept as an option.",
+     "origin": "v1"
+    },
+    {
+     "letter": "B",
+     "theme": "vineyard",
+     "source": "Catholic Mass · first reading (27th Sunday)",
+     "ref": "Isaiah 5:1–2",
+     "text": "Let me sing for my well beloved a song of my beloved about his vineyard. My beloved had a vineyard on a very fruitful hill. He dug it up, gathered out its stones, planted it with the choicest vine, built a tower in the middle of it, and also cut out a wine press in it. He looked for it to yield grapes, but it yielded wild grapes.",
+     "poem": "keats-to-autumn",
+     "passage": "stevenson-napa-wine",
+     "painting": {
+      "artist": "Francisco Goya",
+      "era": "late 18th century, 1786",
+      "title": "The Grape Harvest"
+     },
+     "why": "The song of the beloved's vineyard; Keats's season of mellow fruitfulness; Stevenson in the Napa vineyards.",
+     "liturgy_note": "Catholic Mass, 27th Sunday in Ordinary Time (Year A), Sun 4 Oct 2026: first reading Isa 5:1–7 (Ps 80; Phil 4:6–9; Matt 21:33–43), per catholicgallery.org (as supplied in the brief; not re-fetched here).",
+     "origin": "v2"
+    },
+    {
+     "letter": "C",
+     "theme": "praise",
+     "source": "Liturgy of the Hours · Sunday Morning Prayer (St Francis's day)",
+     "ref": "Psalm 148:3, 7–10",
+     "text": "Praise him, sun and moon! Praise him, all you shining stars! … Praise Yahweh from the earth, you great sea creatures, and all depths, lightning and hail, snow and clouds, stormy wind, fulfilling his word, mountains and all hills, fruit trees and all cedars, wild animals and all livestock, small creatures and flying birds,",
+     "poem": "francis-canticle-of-the-sun",
+     "passage": "heywood-sermon-to-the-birds",
+     "painting": {
+      "artist": "Giotto (attributed)",
+      "era": "Proto-Renaissance, c. 1297–1300",
+      "title": "St Francis Preaching to the Birds"
+     },
+     "why": "Praise him, sun and moon; Brother Sun and Sister Moon; Francis preaching to the birds.",
+     "liturgy_note": "Liturgy of the Hours, Lauds for Sun 4 Oct 2026 (27th Sunday in Ordinary Time, psalter Week III): Ps 93, Dan 3 canticle, Ps 148 — confirmed at https://universalis.com/20261004/lauds.htm. The Sunday outranks the memorial of St Francis, so Universalis lists no St Francis observance that day.",
+     "origin": "v2"
+    },
+    {
+     "letter": "D",
+     "theme": "lovely",
+     "source": "Catholic Mass · second reading",
+     "ref": "Philippians 4:8",
+     "text": "Finally, brothers, whatever things are true, whatever things are honorable, whatever things are just, whatever things are pure, whatever things are lovely, whatever things are of good report: if there is any virtue and if there is anything worthy of praise, think about these things.",
+     "poem": "thomas-adlestrop",
+     "passage": "ruskin-open-sky",
+     "painting": {
+      "artist": "Jean-Siméon Chardin",
+      "era": "French Rococo, c. 1733–34",
+      "title": "Soap Bubbles"
+     },
+     "why": "Whatever is lovely, think on these things; one minute at Adlestrop; Ruskin: how little we look at the sky.",
+     "liturgy_note": "Catholic Mass, 27th Sunday in Ordinary Time, Sun 4 Oct 2026: second reading Phil 4:6–9, per catholicgallery.org (as supplied in the brief; not re-fetched here).",
+     "origin": "v2"
+    }
+   ]
   },
   {
    "date": "2026-10-05",
    "dow": "Monday",
-   "theme": "enemy",
-   "orthodox": "Martyr Charitina; St Methodia of Kimolos",
-   "readings": "Philippians 1:1–7 · Luke 6:24–30",
+   "version": 2,
+   "orthodox": "Martyr Charitina; St Methodia of Kimolos · Liturgy: Philippians 1:1–7, Luke 6:24–30",
+   "catholic": "Monday of Week 27 · Mass: Galatians 1:6–12; Psalm 111; Luke 10:25–37",
+   "hours": "Psalter Week III, Monday · Morning Prayer Psalm 84, Isaiah 2:2–5, Psalm 96",
    "spine": "Letter 7: the work for which all other work is preparation",
-   "works": [
-    "blake-a-poison-tree",
-    "lincoln-malice-toward-none",
-    "homer-prisoners-from-the-front"
-   ],
-   "why": "How hatred grows, how a nation might stop it, two sides face to face on a field.",
-   "cross_ref": "Luke 6:27–28",
-   "cross_text": "But I tell you who hear: love your enemies, do good to those who hate you, bless those who curse you, and pray for those who mistreat you."
+   "chosen": null,
+   "suggested": "B",
+   "suggested_why": "The best-known parable of the week and the most practical passage (Addams).",
+   "options": [
+    {
+     "letter": "A",
+     "theme": "enemy",
+     "source": "Orthodox Divine Liturgy · Gospel",
+     "ref": "Luke 6:27–28",
+     "text": "But I tell you who hear: love your enemies, do good to those who hate you, bless those who curse you, and pray for those who mistreat you.",
+     "poem": "blake-a-poison-tree",
+     "passage": "lincoln-malice-toward-none",
+     "painting": {
+      "artist": "Winslow Homer",
+      "era": "American Realism, 1866",
+      "title": "Prisoners from the Front"
+     },
+     "why": "Love your enemies; the wrath that grew into a poison tree; with malice toward none.",
+     "liturgy_note": "Version 1 choice (Orthodox reading), kept as an option.",
+     "origin": "v1"
+    },
+    {
+     "letter": "B",
+     "theme": "neighbor",
+     "source": "Catholic Mass · Gospel",
+     "ref": "Luke 10:33–34",
+     "text": "But a certain Samaritan, as he traveled, came where he was. When he saw him, he was moved with compassion, came to him, and bound up his wounds, pouring on oil and wine. He set him on his own animal, brought him to an inn, and took care of him.",
+     "poem": "hunt-abou-ben-adhem",
+     "passage": "addams-halsted-street",
+     "painting": {
+      "artist": "Eugène Delacroix",
+      "era": "French Romanticism, 1849",
+      "title": "The Good Samaritan"
+     },
+     "why": "The Samaritan moved with compassion; one who loves his fellow men; Jane Addams moving in on Halsted Street.",
+     "liturgy_note": "Catholic Mass, Monday of the 27th Week in Ordinary Time, 5 Oct 2026: Gal 1:6–12; Ps 111; Gospel Luke 10:25–37, per catholicgallery.org (as supplied in the brief; not re-fetched here).",
+     "origin": "v2"
+    },
+    {
+     "letter": "C",
+     "theme": "home",
+     "source": "Liturgy of the Hours · Morning Prayer",
+     "ref": "Psalm 84:3",
+     "text": "Yes, the sparrow has found a home, and the swallow a nest for herself, where she may have her young, near your altars, Yahweh of Armies, my King, and my God.",
+     "poem": "yeats-innisfree",
+     "passage": "grahame-dulce-domum",
+     "painting": {
+      "artist": "Carl Larsson",
+      "era": "Swedish, 1896",
+      "title": "Breakfast under the Big Birch"
+     },
+     "why": "The sparrow has found a home; Innisfree; Mole catching the scent of his old house.",
+     "liturgy_note": "Liturgy of the Hours, Lauds for Mon 5 Oct 2026 (Monday of week 27 in Ordinary Time, psalter Week III): Ps 84 (83), Isa 2 canticle, Ps 96 (95) — confirmed at https://universalis.com/20261005/lauds.htm.",
+     "origin": "v2"
+    },
+    {
+     "letter": "D",
+     "theme": "unfinished",
+     "source": "Orthodox Divine Liturgy · Epistle",
+     "ref": "Philippians 1:6",
+     "text": "being confident of this very thing, that he who began a good work in you will complete it until the day of Jesus Christ.",
+     "poem": "browning-rabbi-ben-ezra",
+     "passage": "eliot-middlemarch-finale",
+     "painting": {
+      "artist": "Gilbert Stuart",
+      "era": "American Federal era, 1796",
+      "title": "George Washington (the unfinished Athenaeum portrait)"
+     },
+     "why": "He who began a good work will complete it; the potter's wheel; Dorothea's unhistoric acts.",
+     "liturgy_note": "Orthodox Divine Liturgy, 5 Oct 2026: Epistle Phil 1:1–7, Gospel Luke 6:24–30, per orthocal.info (as supplied in the brief; not re-fetched here).",
+     "origin": "v2"
+    }
+   ]
   },
   {
    "date": "2026-10-06",
    "dow": "Tuesday",
-   "theme": "doubt",
-   "orthodox": "Holy Apostle Thomas; St Innocent of Alaska",
-   "readings": "Philippians 1:8–14 · Luke 6:37–45 (feast: John 20:19–31)",
+   "version": 2,
+   "orthodox": "Holy Apostle Thomas; St Innocent of Alaska · Liturgy: Philippians 1:8–14, Luke 6:37–45 · feast: John 20:19–31",
+   "catholic": "St Bruno (optional) · Mass: Galatians 1:13–24; Psalm 139; Luke 10:38–42",
+   "hours": "Psalter Week III, Tuesday · Evening Prayer Psalms 125 and 131",
    "spine": "Letter 9 (Furuborg, 4 Nov 1904): doubt can become a good quality",
-   "works": [
-    "tennyson-in-memoriam-96",
-    "keats-negative-capability",
-    "terbrugghen-incredulity-thomas"
-   ],
-   "why": "Honest doubt, the courage to stay in uncertainty, a finger in the wound.",
-   "cross_ref": "John 20:29",
-   "cross_text": "Jesus said to him, “Because you have seen me, you have believed. Blessed are those who have not seen and have believed.”"
+   "chosen": null,
+   "suggested": "B",
+   "suggested_why": "Martha and Mary made modern by Kipling, with Brother Lawrence reconciling them.",
+   "options": [
+    {
+     "letter": "A",
+     "theme": "doubt",
+     "source": "Orthodox feast of the Apostle Thomas",
+     "ref": "John 20:29",
+     "text": "Jesus said to him, “Because you have seen me, you have believed. Blessed are those who have not seen and have believed.”",
+     "poem": "tennyson-in-memoriam-96",
+     "passage": "keats-negative-capability",
+     "painting": {
+      "artist": "Hendrick ter Brugghen",
+      "era": "Utrecht Caravaggism, c. 1622",
+      "title": "The Incredulity of Saint Thomas"
+     },
+     "why": "Blessed are those who have not seen; honest doubt; Keats's negative capability.",
+     "liturgy_note": "Version 1 choice (Orthodox reading), kept as an option.",
+     "origin": "v1"
+    },
+    {
+     "letter": "B",
+     "theme": "needful",
+     "source": "Catholic Mass · Gospel",
+     "ref": "Luke 10:41–42",
+     "text": "Jesus answered her, \"Martha, Martha, you are anxious and troubled about many things, but one thing is needed. Mary has chosen the good part, which will not be taken away from her.\"",
+     "poem": "kipling-sons-of-martha",
+     "passage": "lawrence-practice-presence",
+     "painting": {
+      "artist": "Diego Velázquez",
+      "era": "Spanish Golden Age, 1618",
+      "title": "Kitchen Scene with Christ in the House of Martha and Mary"
+     },
+     "why": "Martha, Martha, one thing is needed; Kipling's defence of Martha's sons; Brother Lawrence at prayer in his kitchen.",
+     "liturgy_note": "Gospel at Mass, Tuesday 6 Oct 2026 (Tue of Week 27 in Ordinary Time): Luke 10:38–42 — per catholicgallery.org as given in the brief (Gal 1:13–24; Ps 139; Luke 10:38–42); not independently re-fetched by me.",
+     "origin": "v2"
+    },
+    {
+     "letter": "C",
+     "theme": "quiet",
+     "source": "Liturgy of the Hours · Evening Prayer (St Bruno)",
+     "ref": "Psalm 131:2",
+     "text": "Surely I have stilled and quieted my soul, like a weaned child with his mother, like a weaned child is my soul within me.",
+     "poem": "whittier-brewing-of-soma",
+     "passage": "underhill-practical-mysticism",
+     "painting": {
+      "artist": "Vilhelm Hammershøi",
+      "era": "Danish, 1903–04",
+      "title": "Interior with Young Woman Seen from the Back"
+     },
+     "why": "A soul quieted like a weaned child; Whittier's still dews of quietness; Underhill's ring of silence.",
+     "liturgy_note": "Evening Prayer, Tuesday 6 Oct 2026 (Tue of Week 27 in Ordinary Time, Psalter Week III; optional memorial of St Bruno): psalms are Ps 124(125), Ps 130(131) 'Childlike trust in God', and Rev 4–5 canticle — checked at https://universalis.com/20261006/vespers.htm",
+     "origin": "v2"
+    },
+    {
+     "letter": "D",
+     "theme": "made",
+     "source": "Catholic Mass · responsorial psalm",
+     "ref": "Psalm 139:13–14",
+     "text": "For you formed my inmost being.\nYou knit me together in my mother's womb.\nI will give thanks to you,\nfor I am fearfully and wonderfully made.\nYour works are wonderful.\nMy soul knows that very well.",
+     "poem": "hopkins-kingfishers",
+     "passage": "browne-religio-medici",
+     "painting": {
+      "artist": "Michelangelo",
+      "era": "High Renaissance, c. 1508–12",
+      "title": "The Creation of Adam"
+     },
+     "why": "Fearfully and wonderfully made; each mortal thing crying what I do is me; Browne: all Africa and her prodigies in us.",
+     "liturgy_note": "Responsorial Psalm at Mass, Tuesday 6 Oct 2026: Ps 139 (with Gal 1:13–24; Luke 10:38–42) — per catholicgallery.org as given in the brief; not independently re-fetched by me.",
+     "origin": "v2"
+    }
+   ]
   },
   {
    "date": "2026-10-07",
    "dow": "Wednesday",
-   "theme": "rock",
-   "orthodox": "Martyrs Sergius and Bacchus",
-   "readings": "Philippians 1:12–20 · Luke 6:46–7:1",
+   "version": 2,
+   "orthodox": "Martyrs Sergius and Bacchus · Liturgy: Philippians 1:12–20, Luke 6:46–7:1",
+   "catholic": "Our Lady of the Rosary · Mass: Galatians 2:1–2, 7–14; Psalm 117; Luke 11:1–4",
+   "hours": "Psalter Week III, Wednesday · Night Prayer Psalms 31 and 130",
    "spine": "Letter 3 (Viareggio, 23 Apr 1903): ripening like the tree",
-   "works": [
-    "bronte-no-coward-soul",
-    "thoreau-castles-in-the-air",
-    "vermeer-little-street"
-   ],
-   "why": "A soul anchored on the rock, castles that need foundations, houses that have stood for centuries.",
-   "cross_ref": "Luke 6:48",
-   "cross_text": "He is like a man building a house, who dug and went deep and laid a foundation on the rock."
+   "chosen": null,
+   "suggested": "D",
+   "suggested_why": "Compline's watchman, Milton's patience and Newman's watching: the quietest day of the ten.",
+   "options": [
+    {
+     "letter": "A",
+     "theme": "rock",
+     "source": "Orthodox Divine Liturgy · Gospel",
+     "ref": "Luke 6:48",
+     "text": "He is like a man building a house, who dug and went deep and laid a foundation on the rock.",
+     "poem": "bronte-no-coward-soul",
+     "passage": "thoreau-castles-in-the-air",
+     "painting": {
+      "artist": "Johannes Vermeer",
+      "era": "Dutch Golden Age, c. 1658",
+      "title": "The Little Street"
+     },
+     "why": "The house dug deep on the rock; no coward soul; Thoreau's castles with foundations under them.",
+     "liturgy_note": "Version 1 choice (Orthodox reading), kept as an option.",
+     "origin": "v1"
+    },
+    {
+     "letter": "B",
+     "theme": "pray",
+     "source": "Catholic Mass · Gospel (Our Lady of the Rosary)",
+     "ref": "Luke 11:1",
+     "text": "When he finished praying in a certain place, one of his disciples said to him, \"Lord, teach us to pray, just as John also taught his disciples.\"",
+     "poem": "herbert-prayer-i",
+     "passage": "julian-ground-of-beseeching",
+     "painting": {
+      "artist": "Albrecht Dürer",
+      "era": "Northern Renaissance, 1508",
+      "title": "Praying Hands"
+     },
+     "why": "Lord, teach us to pray; prayer, heaven in ordinary; Julian hears: I am the ground of thy beseeching.",
+     "liturgy_note": "Gospel at Mass, Wednesday 7 Oct 2026 (Our Lady of the Rosary): Luke 11:1–4 (with Gal 2:1–2, 7–14; Ps 117) — per catholicgallery.org as given in the brief; not independently re-fetched by me.",
+     "origin": "v2"
+    },
+    {
+     "letter": "C",
+     "theme": "chains",
+     "source": "Orthodox Divine Liturgy · Epistle (Sts Sergius and Bacchus)",
+     "ref": "Philippians 1:12–14",
+     "text": "Now I desire to have you know, brothers, that the things which happened to me have turned out rather to the progress of the Good News, so that it became evident to the whole palace guard, and to all the rest, that my bonds are in Christ, and that most of the brothers in the Lord, being confident through my bonds, are more abundantly bold to speak the word of God without fear.",
+     "poem": "lovelace-to-althea",
+     "passage": "boethius-consolation-i",
+     "painting": {
+      "artist": "Rembrandt van Rijn",
+      "era": "Dutch Golden Age, 1627",
+      "title": "The Apostle Paul in Prison"
+     },
+     "why": "Paul's chains turned to the gospel's gain; stone walls do not a prison make; Philosophy visits Boethius in his cell.",
+     "liturgy_note": "Orthodox Divine Liturgy Epistle, 7 Oct 2026 (Martyrs Sergius and Bacchus): Phil 1:12–20, Gospel Luke 6:46–7:1 — per orthocal.info as given in the brief; not independently re-fetched by me.",
+     "origin": "v2"
+    },
+    {
+     "letter": "D",
+     "theme": "wait",
+     "source": "Night Prayer (Compline)",
+     "ref": "Psalm 130:5–6",
+     "text": "I wait for Yahweh. My soul waits. I hope in his word. My soul longs for the Lord more than watchmen long for the morning, more than watchmen for the morning.",
+     "poem": "milton-when-i-consider",
+     "passage": "newman-watching",
+     "painting": {
+      "artist": "Caspar David Friedrich",
+      "era": "German Romanticism, 1822",
+      "title": "Woman at a Window"
+     },
+     "why": "More than watchmen for the morning; they also serve who only stand and wait; Newman on watching for a friend.",
+     "liturgy_note": "Night Prayer (Compline), Wednesday 7 Oct 2026 (Wed of Week 27 in Ordinary Time): psalms are Ps 30(31) and Ps 129(130) 'Out of the depths' — checked at https://universalis.com/20261007/compline.htm (the /comp.htm URL 404s).",
+     "origin": "v2"
+    }
+   ]
   },
   {
    "date": "2026-10-08",
    "dow": "Thursday",
-   "theme": "coming",
-   "orthodox": "Venerable Pelagia the Penitent; St Thaïs",
-   "readings": "Philippians 1:20–27 · Luke 7:17–30",
+   "version": 2,
+   "orthodox": "Venerable Pelagia the Penitent · Liturgy: Philippians 1:20–27, Luke 7:17–30",
+   "catholic": "Thursday of Week 27 · Mass: Galatians 3:1–5; Luke 1:69–75; Luke 11:5–13",
+   "hours": "Psalter Week III, Thursday · Morning Prayer Psalm 87, Isaiah 40:10–17, Psalm 99",
    "spine": "Letter 6: God as the one who is coming",
-   "works": [
-    "rossetti-advent",
-    "rilke-letter-6-coming",
-    "memling-annunciation"
-   ],
-   "why": "Watching through the night, the one who is coming, the moment of arrival.",
-   "cross_ref": "Luke 7:19",
-   "cross_text": "“Are you the one who is coming, or should we look for another?”"
+   "chosen": null,
+   "suggested": "B",
+   "suggested_why": "Donne and Bunyan are two of the strongest texts in the set, and both answer the Gospel directly.",
+   "options": [
+    {
+     "letter": "A",
+     "theme": "coming",
+     "source": "Orthodox Divine Liturgy · Gospel",
+     "ref": "Luke 7:19",
+     "text": "“Are you the one who is coming, or should we look for another?”",
+     "poem": "rossetti-advent",
+     "passage": "rilke-letter-6-coming",
+     "painting": {
+      "artist": "Hans Memling",
+      "era": "Early Netherlandish, c. 1465–70",
+      "title": "The Annunciation"
+     },
+     "why": "Are you the one who is coming? Rossetti's Advent; Rilke's God who is coming.",
+     "liturgy_note": "Version 1 choice (Orthodox reading), kept as an option.",
+     "origin": "v1"
+    },
+    {
+     "letter": "B",
+     "theme": "knock",
+     "source": "Catholic Mass · Gospel",
+     "ref": "Luke 11:9–10",
+     "text": "I tell you, keep asking, and it will be given you. Keep seeking, and you will find. Keep knocking, and it will be opened to you. For everyone who asks receives. He who seeks finds. To him who knocks it will be opened.",
+     "poem": "donne-batter-my-heart",
+     "passage": "bunyan-wicket-gate",
+     "painting": {
+      "artist": "William Holman Hunt",
+      "era": "Pre-Raphaelite, 1851–53",
+      "title": "The Light of the World"
+     },
+     "why": "Knock and it will be opened; Donne begging God to do more than knock; Christian at the wicket gate.",
+     "liturgy_note": "Luke 11:5–13 is the Gospel at Mass for Thursday 8 Oct 2026 (Thursday of Week 27 in Ordinary Time), per catholicgallery.org as supplied in the brief; not re-checked by me.",
+     "origin": "v2"
+    },
+    {
+     "letter": "C",
+     "theme": "gather",
+     "source": "Liturgy of the Hours · Morning Prayer canticle",
+     "ref": "Isaiah 40:11",
+     "text": "He will feed his flock like a shepherd. He will gather the lambs in his arm, and carry them in his bosom. He will gently lead those who have their young.",
+     "poem": "meynell-shepherdess",
+     "passage": "hardy-madding-crowd-lamb",
+     "painting": {
+      "artist": "Anton Mauve",
+      "era": "Hague School, c. 1880s",
+      "title": "Changing Pasture"
+     },
+     "why": "He gathers the lambs in his arm; Meynell's shepherdess of thoughts; Gabriel Oak carrying a newborn lamb.",
+     "liturgy_note": "CONFIRMED: Universalis Lauds for Thu 8 Oct 2026 (Thursday of week 27 in Ordinary Time = psalter Week III) gives Ps 86(87), Canticle Isaiah 40 ('The good shepherd is God, the Most High' = Isa 40:10–17), Ps 98(99); reading 1 Pet 4:10–11. https://universalis.com/20261008/lauds.htm",
+     "origin": "v2"
+    },
+    {
+     "letter": "D",
+     "theme": "gain",
+     "source": "Orthodox Divine Liturgy · Epistle",
+     "ref": "Philippians 1:21",
+     "text": "For to me to live is Christ, and to die is gain.",
+     "poem": "landor-dying-speech",
+     "passage": "plato-apology-departure",
+     "painting": {
+      "artist": "Jacques-Louis David",
+      "era": "Neoclassicism, 1787",
+      "title": "The Death of Socrates"
+     },
+     "why": "To live is Christ, to die is gain; Landor ready to depart; Socrates: I to die, you to live.",
+     "liturgy_note": "Phil 1:20–27 is the Orthodox Epistle for 8 Oct 2026, per orthocal.info as supplied in the brief (https://orthocal.info/readings/gregorian/2026/10/8/); not re-checked by me.",
+     "origin": "v2"
+    }
+   ]
   },
   {
    "date": "2026-10-09",
    "dow": "Friday",
-   "theme": "dance",
-   "orthodox": "Holy Apostle James son of Alphaeus; Righteous Abraham and Lot; St Tikhon of Moscow",
-   "readings": "Philippians 1:27–2:4 · Luke 7:31–35",
+   "version": 2,
+   "orthodox": "Apostle James son of Alphaeus; Righteous Abraham and Lot; St Tikhon of Moscow · Liturgy: Philippians 1:27–2:4, Luke 7:31–35 · Vespers: Wisdom 3:1–9",
+   "catholic": "St Denis and companions; St John Leonardi; St John Henry Newman's feast day · Mass: Galatians 3:7–14; Psalm 111; Luke 11:15–26",
+   "hours": "Psalter Week III, Friday · Morning Prayer Psalm 51, Jeremiah 14:17–21, Psalm 100",
    "spine": "Letter 10 (Paris, 26 Dec 1908): art too is only a way of living",
-   "works": [
-    "yeats-among-school-children",
-    "nietzsche-god-who-could-dance",
-    "degas-dance-class"
-   ],
-   "why": "The dancer and the dance, a God who could dance, the hard work of a dance class.",
-   "cross_ref": "Luke 7:32",
-   "cross_text": "“We piped to you, and you didn't dance. We mourned, and you didn't weep.”"
+   "chosen": null,
+   "suggested": "B",
+   "suggested_why": "Philippians 2:3–4 is the Girard verse: the whole of Poiesis in one sentence.",
+   "options": [
+    {
+     "letter": "A",
+     "theme": "dance",
+     "source": "Orthodox Divine Liturgy · Gospel",
+     "ref": "Luke 7:32",
+     "text": "“We piped to you, and you didn't dance. We mourned, and you didn't weep.”",
+     "poem": "yeats-among-school-children",
+     "passage": "nietzsche-god-who-could-dance",
+     "painting": {
+      "artist": "Edgar Degas",
+      "era": "Impressionism, 1874",
+      "title": "The Dance Class"
+     },
+     "why": "We piped and you did not dance; the dancer and the dance; the God who knows how to dance.",
+     "liturgy_note": "Version 1 choice (Orthodox reading), kept as an option.",
+     "origin": "v1"
+    },
+    {
+     "letter": "B",
+     "theme": "others",
+     "source": "Orthodox Divine Liturgy · Epistle",
+     "ref": "Philippians 2:3–4",
+     "text": "doing nothing through rivalry or through conceit, but in humility, each counting others better than himself; each of you not just looking to his own things, but each of you also to the things of others.",
+     "poem": "shakespeare-sonnet-29",
+     "passage": "bacon-of-envy",
+     "painting": {
+      "artist": "Ford Madox Brown",
+      "era": "Pre-Raphaelite, 1852–56",
+      "title": "Jesus Washing Peter's Feet"
+     },
+     "why": "Nothing from rivalry, count others better; Sonnet 29, envy turned by love; Bacon: envy is ever joined with comparing.",
+     "liturgy_note": "Phil 1:27–2:4 is the Orthodox Epistle for 9 Oct 2026, per orthocal.info as supplied in the brief (https://orthocal.info/readings/gregorian/2026/10/9/); not re-checked by me.",
+     "origin": "v2"
+    },
+    {
+     "letter": "C",
+     "theme": "trust",
+     "source": "Catholic Mass · first reading (Abraham; St John Henry Newman)",
+     "ref": "Galatians 3:7–9",
+     "text": "Know therefore that those who are of faith are children of Abraham. The Scripture, foreseeing that God would justify the Gentiles by faith, preached the Good News beforehand to Abraham, saying, “In you all the nations will be blessed.” So then, those who are of faith are blessed with the faithful Abraham.",
+     "poem": "newman-lead-kindly-light",
+     "passage": "stevenson-travel-for-travels-sake",
+     "painting": {
+      "artist": "József Molnár",
+      "era": "Hungarian Romanticism, 1850",
+      "title": "Abraham's Journey from Ur to Canaan"
+     },
+     "why": "The faithful Abraham; Newman's one step enough for me; Stevenson travelling not to go anywhere, but to go.",
+     "liturgy_note": "Gal 3:7–14 is the first reading at Mass on Fri 9 Oct 2026, per catholicgallery.org as supplied in the brief; the Orthodox commemoration of Abraham and Lot and Newman's 9 Oct feast are also from the brief; not re-checked by me.",
+     "origin": "v2"
+    },
+    {
+     "letter": "D",
+     "theme": "peace",
+     "source": "Orthodox Vespers",
+     "ref": "Wisdom 3:1–3",
+     "text": "But the souls of the righteous are in the hand of God,\nand no torment will touch them.\nIn the eyes of the foolish they seemed to have died.\nTheir departure was considered a disaster,\nand their travel away from us ruin,\nbut they are in peace.",
+     "poem": "vaughan-peace",
+     "passage": "aurelius-ripe-olive",
+     "painting": {
+      "artist": "Fra Angelico",
+      "era": "Early Renaissance, c. 1431",
+      "title": "The Last Judgment"
+     },
+     "why": "The souls of the righteous are in God's hand, at peace; Vaughan's country far beyond the stars; the olive that falls when ripe.",
+     "liturgy_note": "Wisdom 3:1–9 is among the Orthodox Vespers readings for 9 Oct 2026, per orthocal.info as supplied in the brief (https://orthocal.info/readings/gregorian/2026/10/9/); not re-checked by me.",
+     "origin": "v2"
+    }
+   ]
   },
   {
    "date": "2026-10-10",
@@ -1094,6 +1754,787 @@
    "source": "https://www.metmuseum.org/art/collection/search/336283",
    "rights": "green",
    "file": "works/paintings/vellert-st-luke.md"
+  },
+  {
+   "id": "teasdale-stars",
+   "slot": "poem",
+   "title": "Stars",
+   "maker": "Sara Teasdale",
+   "date": "1920 (Flame and Shadow)",
+   "day": "2026-09-30",
+   "option": "B",
+   "theme": "stars",
+   "source": "https://www.gutenberg.org/files/591/old/fshad10.txt",
+   "rights": "green",
+   "file": "works/poems/teasdale-stars.md"
+  },
+  {
+   "id": "kant-starry-heavens",
+   "slot": "passage",
+   "title": "Critique of Practical Reason",
+   "maker": "Immanuel Kant, translated by Thomas Kingsmill Abbott",
+   "date": "1788 (German); Abbott's English translation in print by 1889 (4th rev. ed., London: Longmans, Green)",
+   "day": "2026-09-30",
+   "option": "B",
+   "theme": "stars",
+   "source": "https://www.gutenberg.org/cache/epub/5683/pg5683-images.html",
+   "rights": "green",
+   "file": "works/passages/kant-starry-heavens.md"
+  },
+  {
+   "id": "herbert-pulley",
+   "slot": "poem",
+   "title": "The Pulley",
+   "maker": "George Herbert",
+   "date": "1633 (The Temple)",
+   "day": "2026-09-30",
+   "option": "C",
+   "theme": "rest",
+   "source": "http://www.luminarium.org/sevenlit/herbert/pulley.htm",
+   "rights": "green",
+   "file": "works/poems/herbert-pulley.md"
+  },
+  {
+   "id": "thoreau-broad-margin",
+   "slot": "passage",
+   "title": "Walden",
+   "maker": "Henry David Thoreau",
+   "date": "1854",
+   "day": "2026-09-30",
+   "option": "C",
+   "theme": "rest",
+   "source": "https://www.gutenberg.org/cache/epub/205/pg205-images.html",
+   "rights": "green",
+   "file": "works/passages/thoreau-broad-margin.md"
+  },
+  {
+   "id": "ken-evening-hymn",
+   "slot": "poem",
+   "title": "An Evening Hymn (“Glory to Thee my God, this night”)",
+   "maker": "Thomas Ken",
+   "date": "1695 (appended to A Manual of Prayers for the Use of the Scholars of Winchester College); this is the 1697 text",
+   "day": "2026-09-30",
+   "option": "D",
+   "theme": "entrust",
+   "source": "https://www.hymnsandcarolsofchristmas.com/Hymns_and_Carols/NonChristmas/glory_to_thee_my_god_this_night-1697.htm",
+   "rights": "green",
+   "file": "works/poems/ken-evening-hymn.md"
+  },
+  {
+   "id": "smith-burden-in-the-wagon",
+   "slot": "passage",
+   "title": "The Christian's Secret of a Happy Life, ch. 3: The Life Defined",
+   "maker": "Hannah Whitall Smith",
+   "date": "1875",
+   "day": "2026-09-30",
+   "option": "D",
+   "theme": "entrust",
+   "source": "https://ccel.org/ccel/smith_hw/secret/secret.v.html",
+   "rights": "green",
+   "file": "works/passages/smith-burden-in-the-wagon.md"
+  },
+  {
+   "id": "hopkins-pied-beauty",
+   "slot": "poem",
+   "title": "Pied Beauty",
+   "maker": "Gerard Manley Hopkins",
+   "date": "written 1877; first published 1918 (Poems, ed. Robert Bridges)",
+   "day": "2026-10-01",
+   "option": "B",
+   "theme": "goodness",
+   "source": "https://www.poetryfoundation.org/poems/44399/pied-beauty",
+   "rights": "green",
+   "file": "works/poems/hopkins-pied-beauty.md"
+  },
+  {
+   "id": "muir-mountains-in-us",
+   "slot": "passage",
+   "title": "My First Summer in the Sierra",
+   "maker": "John Muir",
+   "date": "1911",
+   "day": "2026-10-01",
+   "option": "B",
+   "theme": "goodness",
+   "source": "https://www.gutenberg.org/cache/epub/32540/pg32540-images.html",
+   "rights": "green",
+   "file": "works/passages/muir-mountains-in-us.md"
+  },
+  {
+   "id": "barrett-browning-earths-crammed",
+   "slot": "poem",
+   "title": "Aurora Leigh (Book VII)",
+   "maker": "Elizabeth Barrett Browning",
+   "date": "1856 (title page 1857)",
+   "day": "2026-10-01",
+   "option": "C",
+   "theme": "here",
+   "source": "https://en.wikisource.org/wiki/Page:Aurora_Leigh_a_Poem.djvu/313",
+   "rights": "green",
+   "file": "works/poems/barrett-browning-earths-crammed.md"
+  },
+  {
+   "id": "jefferies-story-of-my-heart",
+   "slot": "passage",
+   "title": "The Story of My Heart",
+   "maker": "Richard Jefferies",
+   "date": "1883",
+   "day": "2026-10-01",
+   "option": "C",
+   "theme": "here",
+   "source": "https://www.gutenberg.org/cache/epub/2317/pg2317-images.html",
+   "rights": "green",
+   "file": "works/passages/jefferies-story-of-my-heart.md"
+  },
+  {
+   "id": "whitman-open-road",
+   "slot": "poem",
+   "title": "Song of the Open Road",
+   "maker": "Walt Whitman",
+   "date": "1856 (as 'Poem of the Road'); final text 1891–92",
+   "day": "2026-10-01",
+   "option": "D",
+   "theme": "sent",
+   "source": "https://www.poetryfoundation.org/poems/48859/song-of-the-open-road",
+   "rights": "green",
+   "file": "works/poems/whitman-open-road.md"
+  },
+  {
+   "id": "woolman-love-first-motion",
+   "slot": "passage",
+   "title": "The Journal of John Woolman",
+   "maker": "John Woolman",
+   "date": "1774 (first published posthumously)",
+   "day": "2026-10-01",
+   "option": "D",
+   "theme": "sent",
+   "source": "https://ccel.org/ccel/woolman/journal.i.ix.html",
+   "rights": "green",
+   "file": "works/passages/woolman-love-first-motion.md"
+  },
+  {
+   "id": "traherne-wonder",
+   "slot": "poem",
+   "title": "Wonder",
+   "maker": "Thomas Traherne",
+   "date": "written c. 1660s–70s; first published 1903 (Poetical Works, ed. Bertram Dobell)",
+   "day": "2026-10-02",
+   "option": "B",
+   "theme": "little",
+   "source": "https://rpo.library.utoronto.ca/content/wonder",
+   "rights": "green",
+   "file": "works/poems/traherne-wonder.md"
+  },
+  {
+   "id": "macdonald-child-in-the-midst",
+   "slot": "passage",
+   "title": "The Child in the Midst",
+   "maker": "George MacDonald",
+   "date": "1867 (Unspoken Sermons, first series)",
+   "day": "2026-10-02",
+   "option": "B",
+   "theme": "little",
+   "source": "https://www.ccel.org/ccel/macdonald/unspoken1.ii.html",
+   "rights": "green",
+   "file": "works/passages/macdonald-child-in-the-midst.md"
+  },
+  {
+   "id": "hopkins-gods-grandeur",
+   "slot": "poem",
+   "title": "God's Grandeur",
+   "maker": "Gerard Manley Hopkins",
+   "date": "written 1877; first published 1918 (Poems, ed. Robert Bridges)",
+   "day": "2026-10-02",
+   "option": "C",
+   "theme": "dawn",
+   "source": "https://www.poetryfoundation.org/poems/44395/gods-grandeur",
+   "rights": "green",
+   "file": "works/poems/hopkins-gods-grandeur.md"
+  },
+  {
+   "id": "emerson-nature-beauty",
+   "slot": "passage",
+   "title": "Nature",
+   "maker": "Ralph Waldo Emerson",
+   "date": "1836 (Nature); text as in the 1849 new edition",
+   "day": "2026-10-02",
+   "option": "C",
+   "theme": "dawn",
+   "source": "https://www.gutenberg.org/files/29433/29433-h/29433-h.htm",
+   "rights": "green",
+   "file": "works/passages/emerson-nature-beauty.md"
+  },
+  {
+   "id": "herbert-love-iii",
+   "slot": "poem",
+   "title": "Love (III)",
+   "maker": "George Herbert",
+   "date": "1633 (The Temple)",
+   "day": "2026-10-02",
+   "option": "D",
+   "theme": "broken",
+   "source": "https://poets.org/poem/love-iii",
+   "rights": "green",
+   "file": "works/poems/herbert-love-iii.md"
+  },
+  {
+   "id": "dostoevsky-peasant-women",
+   "slot": "passage",
+   "title": "The Brothers Karamazov",
+   "maker": "Fyodor Dostoevsky, translated by Constance Garnett",
+   "date": "1880 (Russian); Garnett translation 1912",
+   "day": "2026-10-02",
+   "option": "D",
+   "theme": "broken",
+   "source": "https://www.ccel.org/ccel/dostoevsky/karamozov/files/book02/chapter03.html",
+   "rights": "green",
+   "file": "works/passages/dostoevsky-peasant-women.md"
+  },
+  {
+   "id": "blake-auguries-of-innocence",
+   "slot": "poem",
+   "title": "Auguries of Innocence",
+   "maker": "William Blake",
+   "date": "written c. 1803 (Pickering Manuscript); first published 1863 (with Gilchrist's Life of William Blake)",
+   "day": "2026-10-03",
+   "option": "B",
+   "theme": "see",
+   "source": "https://poets.org/poem/auguries-innocence",
+   "rights": "green",
+   "file": "works/poems/blake-auguries-of-innocence.md"
+  },
+  {
+   "id": "chesterton-book-of-job",
+   "slot": "passage",
+   "title": "Introduction to the Book of Job",
+   "maker": "G. K. Chesterton",
+   "date": "1907 (per brief); text from the 1916 Cecil Palmer & Hayward edition",
+   "day": "2026-10-03",
+   "option": "B",
+   "theme": "see",
+   "source": "https://www.gutenberg.org/files/75778/75778-h/75778-h.htm",
+   "rights": "green",
+   "file": "works/passages/chesterton-book-of-job.md"
+  },
+  {
+   "id": "thompson-kingdom-of-god",
+   "slot": "poem",
+   "title": "The Kingdom of God (“In No Strange Land”)",
+   "maker": "Francis Thompson",
+   "date": "found among his papers at his death; first published 1908 (Selected Poems, ed. Wilfrid Meynell)",
+   "day": "2026-10-03",
+   "option": "C",
+   "theme": "near",
+   "source": "https://bookdome.com/poems/Selected-Poems-Francis-Thompson/In-No-Strange-Land.html",
+   "rights": "green",
+   "file": "works/poems/thompson-kingdom-of-god.md"
+  },
+  {
+   "id": "cloud-of-unknowing-lift-up",
+   "slot": "passage",
+   "title": "The Cloud of Unknowing",
+   "maker": "Anonymous (14th-century English), edited by Evelyn Underhill",
+   "date": "c. 1375 (Middle English); Underhill's modernized edition 1912 (2nd ed. 1922)",
+   "day": "2026-10-03",
+   "option": "C",
+   "theme": "near",
+   "source": "https://sacred-texts.com/chr/cou/cou08.htm",
+   "rights": "green",
+   "file": "works/passages/cloud-of-unknowing-lift-up.md"
+  },
+  {
+   "id": "rossetti-up-hill",
+   "slot": "poem",
+   "title": "Up-Hill",
+   "maker": "Christina Rossetti",
+   "date": "1862 (Goblin Market and Other Poems)",
+   "day": "2026-10-03",
+   "option": "D",
+   "theme": "sleep",
+   "source": "https://www.poetryfoundation.org/poems/45002/up-hill",
+   "rights": "green",
+   "file": "works/poems/rossetti-up-hill.md"
+  },
+  {
+   "id": "cervantes-sancho-sleep",
+   "slot": "passage",
+   "title": "Don Quixote",
+   "maker": "Miguel de Cervantes, translated by John Ormsby",
+   "date": "1615 (Part II); Ormsby translation 1885",
+   "day": "2026-10-03",
+   "option": "D",
+   "theme": "sleep",
+   "source": "https://www.gutenberg.org/files/5943/5943-h/5943-h.htm",
+   "rights": "green",
+   "file": "works/passages/cervantes-sancho-sleep.md"
+  },
+  {
+   "id": "keats-to-autumn",
+   "slot": "poem",
+   "title": "To Autumn",
+   "maker": "John Keats",
+   "date": "Written 19 Sept 1819; published 1820 (Lamia, Isabella, The Eve of St. Agnes, and Other Poems)",
+   "day": "2026-10-04",
+   "option": "B",
+   "theme": "vineyard",
+   "source": "https://www.poetryfoundation.org/poems/44484/to-autumn",
+   "rights": "green",
+   "file": "works/poems/keats-to-autumn.md"
+  },
+  {
+   "id": "stevenson-napa-wine",
+   "slot": "passage",
+   "title": "Napa Wine (from The Silverado Squatters)",
+   "maker": "Robert Louis Stevenson",
+   "date": "1883 (The Silverado Squatters)",
+   "day": "2026-10-04",
+   "option": "B",
+   "theme": "vineyard",
+   "source": "https://www.gutenberg.org/files/516/516-h/516-h.htm",
+   "rights": "green",
+   "file": "works/passages/stevenson-napa-wine.md"
+  },
+  {
+   "id": "francis-canticle-of-the-sun",
+   "slot": "poem",
+   "title": "The Canticle of the Sun",
+   "maker": "St Francis of Assisi, translated by Paschal Robinson, O.F.M.",
+   "date": "Composed c. 1224–1226; this translation published 1905 (The Writings of St. Francis of Assisi, Dolphin Press, Philadelphia; title page 1905, Wikipedia gives 1906)",
+   "day": "2026-10-04",
+   "option": "C",
+   "theme": "praise",
+   "source": "https://sacred-texts.com/chr/wosf/wosf22.htm",
+   "rights": "green",
+   "file": "works/poems/francis-canticle-of-the-sun.md"
+  },
+  {
+   "id": "heywood-sermon-to-the-birds",
+   "slot": "passage",
+   "title": "The Sermon to the Birds (The Little Flowers of St Francis, ch. XVI)",
+   "maker": "The Little Flowers of St Francis (Fioretti), attributed to Ugolino Brunforte, translated by W. (William) Heywood",
+   "date": "Fioretti compiled late 14th century from the Latin Actus (c. 1327–1340); Heywood translation 1906",
+   "day": "2026-10-04",
+   "option": "C",
+   "theme": "praise",
+   "source": "https://sacred-texts.com/chr/lff/lff019.htm",
+   "rights": "green",
+   "file": "works/passages/heywood-sermon-to-the-birds.md"
+  },
+  {
+   "id": "thomas-adlestrop",
+   "slot": "poem",
+   "title": "Adlestrop",
+   "maker": "Edward Thomas",
+   "date": "1917 (New Statesman, April 1917; Poems, 1917)",
+   "day": "2026-10-04",
+   "option": "D",
+   "theme": "lovely",
+   "source": "https://www.poetryfoundation.org/poems/53744/adlestrop",
+   "rights": "green",
+   "file": "works/poems/thomas-adlestrop.md"
+  },
+  {
+   "id": "ruskin-open-sky",
+   "slot": "passage",
+   "title": "Of the Open Sky (from Modern Painters, vol. I)",
+   "maker": "John Ruskin",
+   "date": "1843 (Modern Painters, vol. I)",
+   "day": "2026-10-04",
+   "option": "D",
+   "theme": "lovely",
+   "source": "https://www.guildofstgeorge.org.uk/resources/readings-from-ruskin/of-the-open-sky",
+   "rights": "green",
+   "file": "works/passages/ruskin-open-sky.md"
+  },
+  {
+   "id": "hunt-abou-ben-adhem",
+   "slot": "poem",
+   "title": "Abou Ben Adhem",
+   "maker": "Leigh Hunt",
+   "date": "1834 (The Amulet, ed. S. C. Hall)",
+   "day": "2026-10-05",
+   "option": "B",
+   "theme": "neighbor",
+   "source": "https://www.poetryfoundation.org/poems/44433/abou-ben-adhem",
+   "rights": "green",
+   "file": "works/poems/hunt-abou-ben-adhem.md"
+  },
+  {
+   "id": "addams-halsted-street",
+   "slot": "passage",
+   "title": "First Days at Hull-House (from Twenty Years at Hull-House)",
+   "maker": "Jane Addams",
+   "date": "1910 (Twenty Years at Hull-House)",
+   "day": "2026-10-05",
+   "option": "B",
+   "theme": "neighbor",
+   "source": "https://www.ucl.ac.uk/USHistory/Building/docs/Addams.htm",
+   "rights": "green",
+   "file": "works/passages/addams-halsted-street.md"
+  },
+  {
+   "id": "yeats-innisfree",
+   "slot": "poem",
+   "title": "The Lake Isle of Innisfree",
+   "maker": "W. B. Yeats",
+   "date": "1890 (National Observer, Dec 1890); collected 1892 (The Countess Kathleen and Various Legends and Lyrics)",
+   "day": "2026-10-05",
+   "option": "C",
+   "theme": "home",
+   "source": "https://www.poetryfoundation.org/poems/43281/the-lake-isle-of-innisfree",
+   "rights": "green",
+   "file": "works/poems/yeats-innisfree.md"
+  },
+  {
+   "id": "grahame-dulce-domum",
+   "slot": "passage",
+   "title": "Dulce Domum (from The Wind in the Willows)",
+   "maker": "Kenneth Grahame",
+   "date": "1908 (The Wind in the Willows)",
+   "day": "2026-10-05",
+   "option": "C",
+   "theme": "home",
+   "source": "https://etc.usf.edu/lit2go/105/the-wind-in-the-willows/1801/dulce-domum/",
+   "rights": "green",
+   "file": "works/passages/grahame-dulce-domum.md"
+  },
+  {
+   "id": "browning-rabbi-ben-ezra",
+   "slot": "poem",
+   "title": "Rabbi Ben Ezra",
+   "maker": "Robert Browning",
+   "date": "1864 (Dramatis Personae)",
+   "day": "2026-10-05",
+   "option": "D",
+   "theme": "unfinished",
+   "source": "https://www.poetryfoundation.org/poems/43775/rabbi-ben-ezra",
+   "rights": "green",
+   "file": "works/poems/browning-rabbi-ben-ezra.md"
+  },
+  {
+   "id": "eliot-middlemarch-finale",
+   "slot": "passage",
+   "title": "Finale (from Middlemarch)",
+   "maker": "George Eliot",
+   "date": "1871–72 (Middlemarch)",
+   "day": "2026-10-05",
+   "option": "D",
+   "theme": "unfinished",
+   "source": "https://americanliterature.com/author/george-eliot/book/middlemarch/finale",
+   "rights": "green",
+   "file": "works/passages/eliot-middlemarch-finale.md"
+  },
+  {
+   "id": "kipling-sons-of-martha",
+   "slot": "poem",
+   "title": "The Sons of Martha",
+   "maker": "Rudyard Kipling",
+   "date": "1907 (first printed in the London Standard, 29 April 1907, per poetryloverspage.com; collected in The Years Between, Methuen, 1919)",
+   "day": "2026-10-06",
+   "option": "B",
+   "theme": "needful",
+   "source": "https://www.gutenberg.org/cache/epub/21777/pg21777-images.html",
+   "rights": "green",
+   "file": "works/poems/kipling-sons-of-martha.md"
+  },
+  {
+   "id": "lawrence-practice-presence",
+   "slot": "passage",
+   "title": "The Practice of the Presence of God (Fourth Conversation)",
+   "maker": "Brother Lawrence of the Resurrection (Nicolas Herman) (anonymous 1895 translation)",
+   "date": "Conversations first published 1692 (French); this English translation published 1895",
+   "day": "2026-10-06",
+   "option": "B",
+   "theme": "needful",
+   "source": "https://archive.org/stream/brotherlawrencep00lawr/brotherlawrencep00lawr_djvu.txt",
+   "rights": "green",
+   "file": "works/passages/lawrence-practice-presence.md"
+  },
+  {
+   "id": "whittier-brewing-of-soma",
+   "slot": "poem",
+   "title": "The Brewing of Soma",
+   "maker": "John Greenleaf Whittier",
+   "date": "1872 (The Atlantic Monthly, April 1872; collected in The Pennsylvania Pilgrim, and Other Poems, 1872)",
+   "day": "2026-10-06",
+   "option": "C",
+   "theme": "quiet",
+   "source": "https://keytopoetry.com/john-greenleaf-whittier/poems/the-brewing-of-soma/",
+   "rights": "green",
+   "file": "works/poems/whittier-brewing-of-soma.md"
+  },
+  {
+   "id": "underhill-practical-mysticism",
+   "slot": "passage",
+   "title": "Practical Mysticism",
+   "maker": "Evelyn Underhill",
+   "date": "1914 (London: J. M. Dent); US edition E. P. Dutton, 1915",
+   "day": "2026-10-06",
+   "option": "C",
+   "theme": "quiet",
+   "source": "https://www.gutenberg.org/files/21774/21774-h/21774-h.htm",
+   "rights": "green",
+   "file": "works/passages/underhill-practical-mysticism.md"
+  },
+  {
+   "id": "hopkins-kingfishers",
+   "slot": "poem",
+   "title": "As kingfishers catch fire",
+   "maker": "Gerard Manley Hopkins",
+   "date": "written c. 1877; first published 1918 (Poems of Gerard Manley Hopkins, ed. Robert Bridges, no. 34)",
+   "day": "2026-10-06",
+   "option": "D",
+   "theme": "made",
+   "source": "https://www.poetryfoundation.org/poems/44389/as-kingfishers-catch-fire",
+   "rights": "green",
+   "file": "works/poems/hopkins-kingfishers.md"
+  },
+  {
+   "id": "browne-religio-medici",
+   "slot": "passage",
+   "title": "Religio Medici",
+   "maker": "Sir Thomas Browne",
+   "date": "1643 (first authorized edition)",
+   "day": "2026-10-06",
+   "option": "D",
+   "theme": "made",
+   "source": "https://www.gutenberg.org/files/586/586-h/586-h.htm",
+   "rights": "green",
+   "file": "works/passages/browne-religio-medici.md"
+  },
+  {
+   "id": "herbert-prayer-i",
+   "slot": "poem",
+   "title": "Prayer (I)",
+   "maker": "George Herbert",
+   "date": "1633 (The Temple)",
+   "day": "2026-10-07",
+   "option": "B",
+   "theme": "pray",
+   "source": "https://www.poetryfoundation.org/poems/44371/prayer-i",
+   "rights": "green",
+   "file": "works/poems/herbert-prayer-i.md"
+  },
+  {
+   "id": "julian-ground-of-beseeching",
+   "slot": "passage",
+   "title": "Revelations of Divine Love",
+   "maker": "Julian of Norwich, translated by Grace Warrack",
+   "date": "written late 14th–early 15th c.; Warrack's modernized version first published 1901 (Methuen)",
+   "day": "2026-10-07",
+   "option": "B",
+   "theme": "pray",
+   "source": "https://ccel.org/ccel/julian/revelations/revelations.xv.i.html",
+   "rights": "green",
+   "file": "works/passages/julian-ground-of-beseeching.md"
+  },
+  {
+   "id": "lovelace-to-althea",
+   "slot": "poem",
+   "title": "To Althea, from Prison",
+   "maker": "Richard Lovelace",
+   "date": "written 1642; published 1649 (Lucasta)",
+   "day": "2026-10-07",
+   "option": "C",
+   "theme": "chains",
+   "source": "https://www.poetryfoundation.org/poems/44657/to-althea-from-prison",
+   "rights": "green",
+   "file": "works/poems/lovelace-to-althea.md"
+  },
+  {
+   "id": "boethius-consolation-i",
+   "slot": "passage",
+   "title": "The Consolation of Philosophy",
+   "maker": "Boethius, translated by H. R. James",
+   "date": "written c. 523–524; James translation published 1897 (London: Elliot Stock)",
+   "day": "2026-10-07",
+   "option": "C",
+   "theme": "chains",
+   "source": "https://www.gutenberg.org/files/14328/14328-h/14328-h.htm",
+   "rights": "green",
+   "file": "works/passages/boethius-consolation-i.md"
+  },
+  {
+   "id": "milton-when-i-consider",
+   "slot": "poem",
+   "title": "Sonnet 19: When I consider how my light is spent",
+   "maker": "John Milton",
+   "date": "written c. 1652–55; published 1673 (Poems, &c. upon Several Occasions)",
+   "day": "2026-10-07",
+   "option": "D",
+   "theme": "wait",
+   "source": "https://www.poetryfoundation.org/poems/44750/sonnet-19-when-i-consider-how-my-light-is-spent",
+   "rights": "green",
+   "file": "works/poems/milton-when-i-consider.md"
+  },
+  {
+   "id": "newman-watching",
+   "slot": "passage",
+   "title": "Watching (Parochial and Plain Sermons IV, 22)",
+   "maker": "John Henry Newman",
+   "date": "Parochial Sermons vol. IV (volume dedication dated 19 Nov 1838; first published c. 1839)",
+   "day": "2026-10-07",
+   "option": "D",
+   "theme": "wait",
+   "source": "https://www.newmanreader.org/works/parochial/volume4/sermon22.html",
+   "rights": "green",
+   "file": "works/passages/newman-watching.md"
+  },
+  {
+   "id": "donne-batter-my-heart",
+   "slot": "poem",
+   "title": "Holy Sonnets: Batter my heart, three-person'd God",
+   "maker": "John Donne",
+   "date": "1633 (Poems, by J. D., published posthumously)",
+   "day": "2026-10-08",
+   "option": "B",
+   "theme": "knock",
+   "source": "https://www.poetryfoundation.org/poems/44106/holy-sonnets-batter-my-heart-three-persond-god",
+   "rights": "green",
+   "file": "works/poems/donne-batter-my-heart.md"
+  },
+  {
+   "id": "bunyan-wicket-gate",
+   "slot": "passage",
+   "title": "The Pilgrim's Progress",
+   "maker": "John Bunyan",
+   "date": "1678",
+   "day": "2026-10-08",
+   "option": "B",
+   "theme": "knock",
+   "source": "https://www.gutenberg.org/cache/epub/131/pg131-images.html",
+   "rights": "green",
+   "file": "works/passages/bunyan-wicket-gate.md"
+  },
+  {
+   "id": "meynell-shepherdess",
+   "slot": "poem",
+   "title": "The Shepherdess",
+   "maker": "Alice Meynell",
+   "date": "1902 (Later Poems)",
+   "day": "2026-10-08",
+   "option": "C",
+   "theme": "gather",
+   "source": "https://www.gutenberg.org/files/22032/22032-h/22032-h.htm",
+   "rights": "green",
+   "file": "works/poems/meynell-shepherdess.md"
+  },
+  {
+   "id": "hardy-madding-crowd-lamb",
+   "slot": "passage",
+   "title": "Far from the Madding Crowd",
+   "maker": "Thomas Hardy",
+   "date": "1874",
+   "day": "2026-10-08",
+   "option": "C",
+   "theme": "gather",
+   "source": "https://www.gutenberg.org/cache/epub/107/pg107-images.html",
+   "rights": "green",
+   "file": "works/passages/hardy-madding-crowd-lamb.md"
+  },
+  {
+   "id": "landor-dying-speech",
+   "slot": "poem",
+   "title": "Dying Speech of an Old Philosopher",
+   "maker": "Walter Savage Landor",
+   "date": "1849",
+   "day": "2026-10-08",
+   "option": "D",
+   "theme": "gain",
+   "source": "https://www.poetryfoundation.org/poems/44562/dying-speech-of-an-old-philosopher",
+   "rights": "green",
+   "file": "works/poems/landor-dying-speech.md"
+  },
+  {
+   "id": "plato-apology-departure",
+   "slot": "passage",
+   "title": "Apology",
+   "maker": "Plato, translated by Benjamin Jowett",
+   "date": "c. 399–390 BC (original); Jowett translation 1871, 3rd ed. 1892",
+   "day": "2026-10-08",
+   "option": "D",
+   "theme": "gain",
+   "source": "https://www.gutenberg.org/cache/epub/1656/pg1656-images.html",
+   "rights": "green",
+   "file": "works/passages/plato-apology-departure.md"
+  },
+  {
+   "id": "shakespeare-sonnet-29",
+   "slot": "poem",
+   "title": "Sonnet 29: When, in disgrace with fortune and men's eyes",
+   "maker": "William Shakespeare",
+   "date": "1609 (Shake-speares Sonnets)",
+   "day": "2026-10-09",
+   "option": "B",
+   "theme": "others",
+   "source": "https://www.poetryfoundation.org/poems/45090/sonnet-29-when-in-disgrace-with-fortune-and-mens-eyes",
+   "rights": "green",
+   "file": "works/poems/shakespeare-sonnet-29.md"
+  },
+  {
+   "id": "bacon-of-envy",
+   "slot": "passage",
+   "title": "Of Envy",
+   "maker": "Francis Bacon",
+   "date": "1625 (Essays, final edition)",
+   "day": "2026-10-09",
+   "option": "B",
+   "theme": "others",
+   "source": "https://www.gutenberg.org/cache/epub/575/pg575-images.html",
+   "rights": "green",
+   "file": "works/passages/bacon-of-envy.md"
+  },
+  {
+   "id": "newman-lead-kindly-light",
+   "slot": "poem",
+   "title": "The Pillar of the Cloud (Lead, Kindly Light)",
+   "maker": "John Henry Newman",
+   "date": "Written at sea, 16 June 1833; collected in Verses on Various Occasions (1868)",
+   "day": "2026-10-09",
+   "option": "C",
+   "theme": "trust",
+   "source": "https://www.newmanreader.org/works/verses/verse90.html",
+   "rights": "green",
+   "file": "works/poems/newman-lead-kindly-light.md"
+  },
+  {
+   "id": "stevenson-travel-for-travels-sake",
+   "slot": "passage",
+   "title": "Travels with a Donkey in the Cévennes",
+   "maker": "Robert Louis Stevenson",
+   "date": "1879",
+   "day": "2026-10-09",
+   "option": "C",
+   "theme": "trust",
+   "source": "https://www.gutenberg.org/cache/epub/535/pg535-images.html",
+   "rights": "green",
+   "file": "works/passages/stevenson-travel-for-travels-sake.md"
+  },
+  {
+   "id": "vaughan-peace",
+   "slot": "poem",
+   "title": "Peace",
+   "maker": "Henry Vaughan",
+   "date": "1650 (Silex Scintillans)",
+   "day": "2026-10-09",
+   "option": "D",
+   "theme": "peace",
+   "source": "https://www.poetryfoundation.org/poems/45429/peace-56d2250b10901",
+   "rights": "green",
+   "file": "works/poems/vaughan-peace.md"
+  },
+  {
+   "id": "aurelius-ripe-olive",
+   "slot": "passage",
+   "title": "Meditations",
+   "maker": "Marcus Aurelius, translated by George Long",
+   "date": "c. AD 170–180 (original); Long translation 1862",
+   "day": "2026-10-09",
+   "option": "D",
+   "theme": "peace",
+   "source": "https://classics.mit.edu/Antoninus/meditations.4.four.html",
+   "rights": "green",
+   "file": "works/passages/aurelius-ripe-olive.md"
   }
- ]
+ ],
+ "revised": "2026-09-29: 30 Sep – 9 Oct now offer four Scripture options each (see REVISION-v2.md); v1 archived in archive/v1/"
 }
