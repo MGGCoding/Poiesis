@@ -138,3 +138,50 @@ The Muse page (Round 7), the Muse Curriculum (Round 8), the revised sticker mech
 - **The publish folder is `Desktop\Poeisis\publish\`**: `index.html`, `copy.js`, `README.md`, `LICENSE`, `404.html`, `.nojekyll`. That folder, and nothing else, is what goes to GitHub. The earlier `poiesis-site` folder is superseded and can be deleted.
 - Version 10 of the live artifact carries `copy.js` as a companion file, so the artifact and the GitHub copy read the same words.
 - Also in this round (Round 9 continued): the day's word sits big on the left with the three works on the right, one line, on both desktop and phone; it no longer waits for all three impressions. "N others wrote today" moved beside the work's title. The poem is 28 lines (Barrett Browning); Hopkins and Keats are now whole sonnets at 14 lines each, which is the whole poem rather than the 25-line minimum.
+
+## Round 10 (28 Sept 2026): Phone Studio (open)
+- Workshop: "Poiesis Phone Studio" (https://claude.ai/artifact/VgTjZEcmUTM3BnNS69csNZ), built from Niko's paper sketch. Eye order: theme → poem, passage, scripture.
+- **Scripture replaces the painting as the third work.** This overrides Round 6 (poem, passage, painting), the curriculum's hidden-scaffold rule and "faith implicit, for now". The day's painting stays as an image beside the reading.
+- Icons: pencil (poem), passage symbol on test (open book / brain / oil lamp), Greek cross (scripture).
+- Translation: Niko prefers the US Catholic translation (NABRE or NRSV-CE, to confirm). Both need a licence for apps and websites. The studio uses the WEB (public domain) until then.
+- The phone defaults to a stacked list with tap to open. The desktop is unchanged; three desktop experiments are in the studio (Theme as the hero, Iconostasis, The table).
+
+## Round 11 (28 Sept 2026): accounts, saving and conversations (the backend)
+Full write-up: `docs/architecture.md`. Setup steps: `supabase/README.md`.
+- **Supabase** (hosted Postgres plus sign-in). Every rule lives in the database: the gate, private notebooks, only the maker sees who was moved, the daily limits, three days open. A future iOS or Android app gets them for free.
+- **No rebuild.** The plain HTML/JS site stays. `site/data.js` and `site/config.js` are added, and with the config blank the site is exactly the prototype. The app later comes from wrapping the same site (Capacitor). Because there was no rebuild, the phone designs from the UI design chat were not pulled in this round.
+- **Sign-in:** email link, email and password, Google, Apple. The Google and Apple buttons appear once each is switched on in `config.js`.
+- **Conversations are Twitter-style threads:** the first post, replies in time order below, and replies to replies stay in the thread. Newest threads first, 20 at a time with 3 replies each, then "show more".
+- **Nothing moves on screen by itself.** No live push. A refresh button on the page is the only way new writing appears.
+- **The "top 10" is gone** (overrides Round 4). A conversation takes new writing for three days, then closes. Nothing is deleted or ranked.
+- **Notebook privacy:** protected by database rules, not end-to-end encrypted. The Why page must say so plainly; encryption stays a later option.
+- **Offline:** the whole notebook (including the pen) works offline and saves when the connection returns. Writing at the table needs a connection.
+- **Updated 29 Sept for Round 13:** a link is never blocked by the database. A link written before a work's first impression opens that work's table and counts as your first impression there, so a separate one is refused. Reading others' links on a side still needs your own link on that side (Round 6).
+- **The seed follows the v2 muse bank:** from 30 Sept each day's works are the chosen option's poem, passage and Scripture reading (the suggested option until one is chosen). The painting sits beside them and is not written on. Rerun `node supabase/seed-from-muse-bank.mjs` after choosing.
+- **Room and type sync across devices**; layout settings stay per device (Round 13).
+- **Stickers stay out of the database rules.** Since Round 9 they are a private collection with gilding as a free finish, so they sync with the notebook.
+- **Moderation:** a report button for everyone; moderators can hide a post. It vanishes for others but not for its author.
+- **Open sign-up; no age rule yet. Free plan through the beta.**
+- Measured on 1.6M posts and 20k people: every read the app makes takes under 10 ms.
+
+### Still open
+- **Age:** open sign-up with no rule. Before launch, the terms need a minimum age. 13 is the usual floor under US law (COPPA); EU countries set it between 13 and 16. The terms and a privacy policy are needed before strangers join. (Not legal advice.)
+- **Sample content:** a new account starts with the prototype's sample pages and example members. They need replacing with an empty notebook and one welcome page before sign-up opens.
+- **Closed conversations:** someone who never wrote on a day cannot read that day's conversation, even after it closes (the past muses). Keep it that way, or open closed ones to everyone?
+- **Next build:** wire the Muse page to real threads (`PoiesisData.threads` is ready and tested).
+
+## Round 12 — Phone home, Constitution copy, Why section (29 Sept 2026)
+- Phone Muse page opens on a "Today" home merged from Phone Studio: date, theme word always shown (with squiggle), day line, the three works as a list (icon, title, status, "begin here"), link rows between works, "Tie all three together", and a pinned "N others wrote today" note. Tapping a work opens it with "‹ Today" and "Next work ›".
+- The day's theme is always revealed; the theme setting was removed from Settings.
+- Generic copy across the site rewritten to align with the Constitution (~55 lines in copy.js).
+- New Why section at the bottom of the Muse page (desktop and phone home) prints part one of the Constitution, "Discourse on Creation and the Muse", verbatim.
+- Copy parser now keeps intentional leading spaces in values.
+- All site words are editable in the Claude Doc "Poiesis — Site Copy"; edit the Words column, then ask Claude to apply.
+- Pending: the Phone Studio decision that Scripture replaces the painting is not yet applied to site content.
+
+## Round 13 — Open links, Why page, shared room (29 Sept 2026)
+- Links between works are never blocked. Writing a link before a work's first impression makes the link your first impression on each unwritten work (labeled "written as a link with the ___"): it unlocks others' impressions there and draws that work's sticker. One later thought per work still allowed.
+- Link rows and "Tie all three together" always show on the phone home and desktop row.
+- Why moved off the Muse page. It lives only behind the one-line "Why Poiesis ›" footer link. The Why page keeps the explanations first, then prints the Constitution part one, then Join.
+- Room and type are the same on phone and desktop (default: Monastery room, Modern type). Layout settings stay per device.
+- Fixed placeholders that showed raw code text in several inputs.

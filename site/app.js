@@ -5,7 +5,7 @@ const COPY=(function(){ const o={}; let raw="";
  try{ raw=(typeof window!=="undefined"&&window.POIESIS_COPY)||""; }catch(e){}
  String(raw).split("\n").forEach(line=>{ const s=line.trim(); if(!s||s.charAt(0)==="#") return;
   const i=line.indexOf(":"); if(i<1) return; const k=line.slice(0,i).trim(); if(!/^[a-z0-9.]+$/i.test(k)) return;
-  o[k]=line.slice(i+1).trim().replace(/\\n/g,"\n"); });
+  o[k]=line.slice(i+1).replace(/^ /,"").replace(/\r$/,"").replace(/\\n/g,"\n"); });
  return o; })();
 function T(k,d){ const v=COPY[k]; return (v===undefined||v==="")?d:v; }
 function applyStaticCopy(){
@@ -340,7 +340,8 @@ function fresh(){ return {look:null, font:"book", tab:"muse", mi:0, past:null, d
  season:"gathering", rule:DEF_RULE, recent:[], visits:{}, log:[], page:{title:"",body:""}, pen:"",
  profile:{name:"Niko", line:"", makes:"", photo:null, ring:"laurel", badge:"Apprentice", top:"handel", formed:["Homer","Henry James"]}}; }
 let S; try{ S=Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY)||"null")||{}); }catch(e){ S=fresh(); }
-function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ toast(T("toast.storage","This browser is out of room for pictures. Your words are still here.")); } }
+function save(quiet){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ toast(T("toast.storage","This browser is out of room for pictures. Your words are still here.")); }
+ if(!quiet && window.PoiesisData) window.PoiesisData.changed(); /* data.js: sync to the account */ }
 if(S.pick.date && S.pick.date<today()) S.pick={date:null,id:null};
 S.visits[today()]=1; save();
 let tt; function toast(m){ const t=$("#toast"); t.textContent=m; t.hidden=false; clearTimeout(tt); tt=setTimeout(()=>t.hidden=true,2800); }
@@ -353,14 +354,14 @@ const initials=n=>n.split(" ").map(w=>w[0]).join("").slice(0,2);
 /* ---------- Settings: one set for wide screens, one for phones ---------- */
 const HOUSE={
  desk:{room:"monastery",font:"modern",density:"airy",theme:"start",three:"tabs",tplace:"top",backing:"none",tsize:"m",labels:"off",sides:"faint",arch:"under",guide:"pulse",cue:"note",cueplace:"hang",shade:"writer",shadeStyle:"pencil",reveal:"ink",turner:"strip",nb:"spread",nbpaper:"lined",prompt:"focus",fill:"drawing",paper:"fascicle",nums:"hand",numSide:"left",stanza:"space",gloss:"dots",psize:"m",storyMode:"info",infoStyle:"pop",story:"tag",gate:"folded",pplace:"row",wtab:"off",wlook:"notecard"},
- phone:{room:"cafe",font:"garamond",density:"snug",theme:"start",three:"stickers",tplace:"top",pplace:"row",backing:"none",tsize:"s",labels:"off",sides:"faint",arch:"arch",guide:"none",cue:"note",cueplace:"hang",shade:"writer",shadeStyle:"pencil",reveal:"ink",turner:"strip",wtab:"off",wlook:"notecard",prompt:"focus",fill:"drawing",paper:"card",nums:"off",numSide:"left",stanza:"space",gloss:"sup",psize:"m",storyMode:"info",infoStyle:"pop",story:"label",gate:"blur",nb:"card",nbpaper:"lined"}
+ phone:{room:"monastery",font:"modern",density:"snug",theme:"start",three:"stickers",tplace:"top",pplace:"row",backing:"none",tsize:"s",labels:"off",sides:"faint",arch:"arch",guide:"none",cue:"note",cueplace:"hang",shade:"writer",shadeStyle:"pencil",reveal:"ink",turner:"strip",wtab:"off",wlook:"notecard",prompt:"focus",fill:"drawing",paper:"card",nums:"off",numSide:"left",stanza:"space",gloss:"sup",psize:"m",storyMode:"info",infoStyle:"pop",story:"label",gate:"blur",nb:"card",nbpaper:"lined"}
 };
 const SETTINGS=[
  {name:"Page", ctrls:[
-  {k:"room", label:"Room", opts:LOOKS.map(l=>[l.id,l.name])},
-  {k:"font", label:"Type", opts:FONTS.map(f=>[f.id,f.name])},
+  {k:"room", label:"Room (same on every screen)", opts:LOOKS.map(l=>[l.id,l.name])},
+  {k:"font", label:"Type (same on every screen)", opts:FONTS.map(f=>[f.id,f.name])},
   {k:"density", label:"Breathing room", opts:[["snug","Snug"],["airy","Airy"]]},
-  {k:"theme", label:"The day’s theme word", opts:[["start","With the date"],["end","Revealed after all three"],["off","Never shown"]]}]},
+  ]},
  {name:"The three", ctrls:[
   {k:"three", label:"Each work shows as", opts:[["stickers","Its sticker"],["thumbs","A tiny thumbnail"],["tabs","An index tab"]]},
   {k:"tplace", dev:"desk", label:"Where", opts:[["top","Centred above the page"],["title","Beside the title, over the notebook"]]},
@@ -407,6 +408,9 @@ const SETTINGS=[
 ];
 if(!S.ui) S.ui={};
 ["desk","phone"].forEach(d=>{ S.ui[d]=Object.assign(clone(HOUSE[d]), S.ui[d]||{}); });
+const SHARED=["room","font"];
+function setPref(k,v,d){ if(SHARED.includes(k)) ["desk","phone"].forEach(x=>S.ui[x][k]=v); else S.ui[d||DEV()][k]=v; }
+if(!S.sharedLook){ SHARED.forEach(k=>S.ui.phone[k]=S.ui.desk[k]); S.sharedLook=1; }
 const phoneMQ=matchMedia("(max-width: 700px)");
 const DEV=()=>phoneMQ.matches?"phone":"desk";
 const U=()=>S.ui[DEV()];
@@ -432,13 +436,13 @@ function applyPrefs(){
 function pop(btn,p){ const other=p.id==="lookPop"?$("#fontPop"):$("#lookPop"); other.hidden=true; p.hidden=!p.hidden; btn.setAttribute("aria-expanded",String(!p.hidden)); }
 $("#lookBtn").onclick=e=>{e.stopPropagation(); pop(e.currentTarget,$("#lookPop"));};
 $("#fontBtn").onclick=e=>{e.stopPropagation(); pop(e.currentTarget,$("#fontPop"));};
-$("#lookList").onclick=e=>{const b=e.target.closest("[data-look]"); if(b){U().room=b.dataset.look; save(); applyPrefs(); if(S.tab==="profile") render();}};
-$("#fontList").onclick=e=>{const b=e.target.closest("[data-font]"); if(b){U().font=b.dataset.font; save(); applyPrefs(); render();}};
+$("#lookList").onclick=e=>{const b=e.target.closest("[data-look]"); if(b){setPref("room",b.dataset.look); save(); applyPrefs(); if(S.tab==="profile") render();}};
+$("#fontList").onclick=e=>{const b=e.target.closest("[data-font]"); if(b){setPref("font",b.dataset.font); save(); applyPrefs(); render();}};
 document.addEventListener("click",e=>{ for(const p of [$("#lookPop"),$("#fontPop")]) if(!p.hidden&&!p.contains(e.target)) p.hidden=true;
  if(!e.target.closest(".bm")) document.querySelectorAll(".bmenu:not([hidden])").forEach(m=>m.hidden=true); });
 
 /* ---------- Navigation ---------- */
-$("#switch").onclick=e=>{const b=e.target.closest("[data-tab]"); if(b){ if(b.dataset.tab==="muse") S.past=null; go(b.dataset.tab);} };
+$("#switch").onclick=e=>{const b=e.target.closest("[data-tab]"); if(b){ if(b.dataset.tab==="muse"){ S.past=null; S.phome=true; } go(b.dataset.tab);} };
 $("#home").onclick=e=>{e.preventDefault(); S.past=null; go("muse");};
 $("#profBtn").onclick=()=>go("profile");
 $("#whyLink").onclick=e=>{e.preventDefault(); go("why");};
@@ -474,7 +478,7 @@ function dayCount(){
 /* ---------- Today's stickers ---------- */
 function untilMidnight(){ const n=new Date(), m=new Date(n); m.setHours(24,0,0,0); const d=m-n, h=Math.floor(d/36e5), mi=Math.floor(d%36e5/6e4); return `${h}h ${mi}m`; }
 
-function synOpen(id){ if(id==="whole") return MUSES.every(m=>S.sealed[m.id]); const l=LINK[id]; return !!(S.sealed[l.a]&&S.sealed[l.b]); }
+function synOpen(id){ return true; }
 function synSubjects(id){ return id==="whole"?MUSES.map(m=>m.id):[LINK[id].a, LINK[id].b]; }
 function andList(a){ return a.length<3?a.join(" and "):a.slice(0,-1).join(", ")+" and "+a[a.length-1]; }
 function synName(id){ return id==="whole"?"all three":`${MUSE[LINK[id].a].kind.toLowerCase()} & ${MUSE[LINK[id].b].kind.toLowerCase()}`; }
@@ -485,16 +489,15 @@ function synBoxHTML(id){
   <div class="synhead"><h3>${id==="whole"?"All three":`${esc(MUSE[ids[0]].kind)} <span class="j">and</span> ${esc(MUSE[ids[1]].kind)}`}</h3><button class="btn small ghost" data-act="closesyn">${T("link.close","Close")}</button></div>
   <div class="synworks">${ids.map(x=>{ const m=MUSE[x], s=S.sealed[x];
     return `<div class="synw"><span class="type kind">${esc(m.kind)}</span><b>${esc(m.title)}</b><small class="muted">${esc(m.maker)}</small>
-     ${s?`<p class="yours">“${esc(s.text)}”<small>your first impression</small></p>`:`<p class="yours locked2">${T("link.notyet","Not yet. ")}<button class="btn small" data-vertgo="${x}">${T("link.goandwrite","Go and write")}</button></p>`}</div>`; }).join("")}</div>
-  ${missing.length?`<p class="muted" style="margin:10px 0 0">Leave a first impression on the ${esc(andList(missing.map(x=>MUSE[x].kind.toLowerCase())))} first. The line opens then.</p>`:
-   mine?`<div class="writer seal" style="margin-top:12px"><span class="wax" aria-hidden="true">P</span><small>${id==="whole"?T("link.yours.whole","Your thought on all three"):`Your ${esc(synName(id))} link`} · ${when(mine.at)}</small><div class="first">${esc(mine.text)}</div>
+     ${s?`<p class="yours">“${esc(s.text)}”<small>${s.via?T("link.via.small","your link, as your first impression"):T("link.first.small","your first impression")}</small></p>`:`<p class="yours locked2">${T("link.counts","Not written yet. This link will count as your first impression here.")}</p>`}</div>`; }).join("")}</div>
+  ${mine?`<div class="writer seal" style="margin-top:12px"><span class="wax" aria-hidden="true">P</span><small>${id==="whole"?T("link.yours.whole","Your thought on all three"):`Your ${esc(synName(id))} link`} · ${when(mine.at)}</small><div class="first">${esc(mine.text)}</div>
      <p class="type" style="color:#8a7b68;margin:10px 0 0;font-size:.62rem">${T("link.published.under","Published under ")}${ids.map(x=>esc(MUSE[x].kind.toLowerCase())).join(", ")}${T("link.published.journal"," · also in your journal")}</p></div>`:
    `<div class="writer" style="margin-top:12px"><h4>${id==="whole"?T("link.whole.heading","One thought that holds all three"):T("link.pair.heading","What do these two say to each other?")}</h4>
     <div class="sub">${id==="whole"?T("link.whole.line","Where do they meet, where do they argue — and what does the day leave you with?"):T("link.pair.line","Agreement is not required. Disagreement is often better.")}</div>
-    <textarea class="grow" id="synDraft" rows="1" aria-label="Your link" placeholder=T("link.placeholder","Two or three sentences is plenty.")>${esc(d)}</textarea>
+    <textarea class="grow" id="synDraft" rows="1" aria-label="Your link" placeholder="${T("link.placeholder","Two or three sentences is plenty.")}">${esc(d)}</textarea>
     <div class="wrow"><span class="type" style="color:#8a7b68">${T("link.appears","Appears under the ")}${esc(andList(ids.map(x=>MUSE[x].kind.toLowerCase())))}</span>
      <button class="btn primary" data-act="pubsyn" ${d.trim()?"":"disabled"}>${T("link.publish","Publish this link")}</button></div></div>`}
-  ${missing.length?"":synThreadHTML(id)}
+  ${synThreadHTML(id)}
  </div>`;
 }
 function synThreadHTML(id){
@@ -522,12 +525,15 @@ function synListHTML(){
 }
 function publishSyn(id){
  const t=(S.synDrafts[id]||"").trim(); if(!t) return;
- const ids=synSubjects(id), jid=uid("j");
- S.syn[id]={text:t, at:Date.now(), jid};
+ const ids=synSubjects(id), jid=uid("j"), now=Date.now();
+ S.syn[id]={text:t, at:now, jid};
+ const fresh=ids.filter(x=>!S.sealed[x]&&!MUSE[x].closed); let drew=null;
+ fresh.forEach(x=>{ S.sealed[x]={text:t, at:now, jid, via:id}; const d=drawSticker(x); if(d){ drew=d; S.keepAsk=x; } });
+ if(drew) setCheck(drew);
  S.journal.unshift({id:jid, date:today(), title:`Link: ${synName(id)}`, lines:[], q:null, muse:ids[0], body:`${t}\n\n— on ${ids.map(x=>`${MUSE[x].maker}, ${MUSE[x].title}`).join(" · ")}`});
  remember("journal",jid,`Link: ${synName(id)}`);
  S.synDrafts[id]=""; save(); render();
- toast(`${T("toast.link.published","Published under the ")}${andList(ids.map(x=>MUSE[x].kind.toLowerCase()))}.`);
+ toast(fresh.length?`${T("toast.link.counts","Your link is your first impression on the ")}${andList(fresh.map(x=>MUSE[x].kind.toLowerCase()))}.`:`${T("toast.link.published","Published under the ")}${andList(ids.map(x=>MUSE[x].kind.toLowerCase()))}.`);
  setTimeout(()=>$("#synbox")?.scrollIntoView({behavior:reduce?"auto":"smooth", block:"center"}),60);
 }
 
@@ -545,7 +551,7 @@ function writerHTML(m){
  const s=S.sealed[m.id];
  if(s) return `<div class="writer seal"><span class="wax" aria-hidden="true">P</span><small>Your first impression · ${when(s.at)}</small><div class="first">${esc(s.text)}</div>
    ${myLayers(m.id).map(l=>`<div class="layer"><small>${esc(l.w||"later")}</small>${esc(l.t)}</div>`).join("")}
-   ${m.closed?"":`<form class="addlayer" id="laterF"><input id="layerIn" aria-label=T("post.reply.mine.placeholder","Add another thought") placeholder="Add another thought…"><button class="btn small">Add</button></form>
+   ${m.closed?"":`<form class="addlayer" id="laterF"><input id="layerIn" aria-label="${T("post.reply.mine.placeholder","Add another thought")}" placeholder="Add another thought…"><button class="btn small">Add</button></form>
    <p class="type" style="color:#8a7b68;margin:8px 0 0;font-size:.62rem">Your first impression stays as written. Thoughts after it: as many as you like.</p>`}
    <p class="type" style="color:#8a7b68;margin:6px 0 0;font-size:.62rem">Also kept in your journal</p></div>`;
  if(m.closed) return `<div class="writer"><h4>This muse has passed</h4><p class="sub">Its conversation closed before you left an impression. You can still write about it in your notebook.</p></div>`;
@@ -663,7 +669,7 @@ function cueHTML(){
 function threeHTML(size,vert,nocue){
  const u=U(), ns=stepNext(), box=itemBox(size,vert), labels=u.labels==="on", T=30, K=30;
  const pl=on=>(u.guide==="pulse"&&on)?" m-pulse":"";
- const why=id=>{ const need=synSubjects(id).filter(x=>!S.sealed[x]).map(x=>MUSE[x].kind.toLowerCase()); return need.length?` (opens once you’ve answered the ${andList(need)})`:S.syn[id]?" (written)":""; };
+ const why=id=>S.syn[id]?" (written)":"";
  const thr=k=>{ const st=linkState(k), nx=ns&&ns.t==="s"&&ns.id===k; return `<button type="button" class="m-thr s-${st}${pl(nx)}" data-mside="${k}" style="${vert?`height:${T}px;width:${box.w}px`:`width:${T}px;height:${box.h}px`}" aria-label="Link: ${esc(LINKS3[k].map(x=>MUSE[x].kind).join(" and "))}${why(k)}" data-tip="${esc(LINKS3[k].map(x=>MUSE[x].kind).join(" & "))}${why(k)}"><i></i></button>`; };
  const kst=linkState("whole"), knx=ns&&ns.t==="c";
  const knot=`<button type="button" class="m-knot s-${kst}${pl(knx)}" data-mside="whole" style="${vert?`height:${K}px;width:${box.w}px`:`width:${K}px;height:${box.h}px`}" aria-label="All three${why("whole")}" data-tip="All three${why("whole")}"><i></i></button>`;
@@ -729,10 +735,10 @@ function noteHTML(m){
 function writerInnerM(m, nb){
  const s=S.sealed[m.id], u=U();
  if(!s&&m.closed) return `<p class="m-nbhead">${T("muse.past.heading","This muse has passed")}</p><p style="margin:0;font-size:.92rem;color:#6b5d4d">${T("muse.past.line","Its conversation closed before you left an impression. You can still write about it in your notebook.")}</p>`;
- if(s) return `<div class="m-mine"><small>${T("muse.first.label","Your first impression")} · ${when(s.at)}</small>${esc(s.text)}</div>
+ if(s) return `<div class="m-mine"><small>${s.via?`${T("muse.first.via","Your first impression, written as a link with the ")}${esc(synSubjects(s.via).filter(x=>x!==m.id).map(x=>MUSE[x].kind.toLowerCase()).join(" and "))}`:T("muse.first.label","Your first impression")} · ${when(s.at)}</small>${esc(s.text)}</div>
   ${m.deeper?`<div class="m-deeper"><span>${T("muse.deeper.label","Go deeper")}</span>${esc(m.deeper)}</div>`:""}
   ${myLayers(m.id).map(l=>`<div class="m-layer"><small>${esc(l.w||"later")}</small>${esc(l.t)}</div>`).join("")}
-  ${m.closed?"":`<form class="m-later" id="laterF"><textarea id="layerIn" class="${nb?"":"m-wbox"}" aria-label=T("post.reply.mine.placeholder","Add another thought") placeholder=T("muse.later.placeholder","Add another thought, or reply to yourself.")></textarea><div class="m-foot"><span class="m-note">${T("muse.first.stays","Your first impression stays as written")}</span><button class="btn small">${T("muse.later.button","Add")}</button></div></form>`}`;
+  ${m.closed?"":`<form class="m-later" id="laterF"><textarea id="layerIn" class="${nb?"":"m-wbox"}" aria-label="${T("post.reply.mine.placeholder","Add another thought")}" placeholder="${T("muse.later.placeholder","Add another thought, or reply to yourself.")}"></textarea><div class="m-foot"><span class="m-note">${T("muse.first.stays","Your first impression stays as written")}</span><button class="btn small">${T("muse.later.button","Add")}</button></div></form>`}`;
  const d=S.drafts[m.id]||"", dim=u.prompt==="focus"&&d.length>0;
  return `<p class="m-nbhead ${dim?"dim":""}">${esc(PROMPT)}</p><textarea id="draft" class="${nb?"m-grow":"m-wbox"}" aria-label="${esc(PROMPT)}" placeholder="${T("muse.prompt.placeholder","One sentence is enough.")}">${esc(d)}</textarea>
   <div class="m-foot"><span>${u.shade==="writer"?shadeHTML(m.id,34):""}</span><button class="btn primary" data-act="seal" ${d.trim()?"":"disabled"}>${T("muse.first.button","Leave my first impression")}</button></div>`;
@@ -781,11 +787,56 @@ function keepAskHTML(){
 function keepSticker(id){ setCheck(id); S.keepAsk=null; render(); toast(`${STICKERS[id].name}${T("toast.sticker.check"," carries today’s check. It settles at midnight.")}`); }
 function synOverlay(){ if(!S.openSyn) return ""; return `<div class="m-overlay" data-synbg><div>${synBoxHTML(S.openSyn)}</div></div>`; }
 
+/* ---------- Phone home (from the Phone Studio): theme first, the works as a list, tap to open ---------- */
+const PICON={
+ pencil:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 25l1.6-5.4L21 7.2a2.6 2.6 0 0 1 3.8 3.7L12.4 23.4z"/><path d="M19.2 9l3.8 3.8"/><path d="M8.6 19.6l3.8 3.8"/><path d="M7 25l3-.8"/></svg>',
+ book:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 9.5C13 7.3 9 6.8 5.5 7.4v16.2c3.5-.6 7.5-.1 10.5 2.1 3-2.2 7-2.7 10.5-2.1V7.4C23 6.8 19 7.3 16 9.5z"/><path d="M16 9.5v16.2"/><path d="M8.5 11.5c1.8-.2 3.6.1 5 .8M8.5 15c1.8-.2 3.6.1 5 .8M18.5 12.3c1.4-.7 3.2-1 5-.8"/></svg>',
+ cross:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M13.2 5.5h5.6v7.7h7.7v5.6h-7.7v7.7h-5.6v-7.7H5.5v-5.6h7.7z"/></svg>',
+ frame:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="7" width="21" height="18" rx="1"/><rect x="9" y="10.5" width="14" height="11"/><path d="M10 20l4-5 3 3 2.5-2.5 3.5 4.5"/></svg>'
+};
+const iconFor=m=>({Poem:"pencil",Passage:"book",Scripture:"cross",Painting:"frame"})[m.kind]||"book";
+function constitutionHTML(){
+ return `<section class="m-whyb" id="constitution"><p class="type muted" style="margin:0">${T("whybottom.from","From the Constitution of Poiesis")}</p><h2>${T("whybottom.heading","Discourse on Creation and the Muse")}</h2>
+  ${["p1","p2","p3"].map(k=>`<p>${T("whybottom."+k,"")}</p>`).join("")}</section>`;
+}
+function phoneHomeHTML(){
+ const dateStr=new Date().toLocaleDateString(undefined,{weekday:"long", month:"long", day:"numeric"});
+ const done=id=>!!S.sealed[id], all=MUSES.every(x=>done(x.id)), first=MUSES.find(x=>!done(x.id)), none=!MUSES.some(x=>done(x.id));
+ const seg=(a,b,id)=>{ if(!id) return ""; const lbl=`${MUSE[a].kind.toLowerCase()} and ${MUSE[b].kind.toLowerCase()}`; return `<button type="button" class="ph-seg" data-side="${id}">${S.syn[id]?"✓ "+T("phone.link.done","linked: ")+lbl:"↳ "+T("phone.link.write","write a link: ")+lbl}</button>`; };
+ const rows=MUSES.map((w,i)=>{ const st=done(w.id)?`<span class="ph-st">✓ ${T("phone.written","written")}</span>`:`<span class="ph-st"><span class="ph-dash">${esc(w.maker.split(" ").slice(-1)[0][0])}</span></span>`;
+   const nextSeg=i<MUSES.length-1?seg(w.id,MUSES[i+1].id,LINKS.find(l=>(l.a===w.id&&l.b===MUSES[i+1].id)||(l.b===w.id&&l.a===MUSES[i+1].id))?.id):"";
+   return `<button type="button" class="ph-row" data-popen="${w.id}"><span class="ph-ic" aria-hidden="true">${PICON[iconFor(w)]}</span><span class="ph-rt"><span class="k">${esc(w.kind.toLowerCase())}</span><b>${esc(w.title)}</b><span class="mk">${esc(w.maker)}</span></span>${st}${none&&first===w?`<span class="ph-begin">${T("phone.begin","begin here")}</span>`:""}</button>${nextSeg||""}`; }).join("");
+ const knot=true?`<button type="button" class="ph-knot" data-side="whole"><span>◇</span>${S.syn.whole?T("phone.all.done","You tied all three together"):T("phone.all.write","Tie all three together")}</button>`:"";
+ const reading=S.reading?`<div class="m-reading"><div class="v">“${esc(DAY.verse)}”</div><div class="r">${esc(DAY.verseRef)} · ${T("muse.reading.connector","today’s reading, ")}${esc(DAY.reading)}</div><p>${esc(DAY.readingNote)}</p></div>`:"";
+ const cols=TODAY.slice(0,4).map(p=>`<span style="background:${PEOPLE[p.n].c}">${esc(initials(p.n))}</span>`).join("");
+ return `<div class="ph-home"><p class="ph-date">${esc(dateStr)}</p>
+  <div class="ph-theme"><h1 class="ph-tw">${esc(DAY.theme)}</h1><button class="m-cross" type="button" data-act="reading" aria-expanded="${!!S.reading}" aria-label="The day’s reading">✝</button></div>
+  <p class="ph-line">${esc(DAY.line)}</p>${reading}
+  <div class="ph-three">${rows}${knot}</div>
+  <div class="ph-others"><span class="ph-avs">${cols}</span>${TODAY.length}${T("phone.others.suffix"," others wrote today")}</div></div>`;
+}
 function renderMuse(v){
+ if(DEV()==="phone"&&!S.past&&S.phome!==false){
+  v.innerHTML=`${phoneHomeHTML()}${synOverlay()}${keepAskHTML()}`;
+  wireBoard(v);
+  v.onclick=e=>{
+   const o=e.target.closest("[data-popen]"); if(o){ S.phome=false; goMuse(o.dataset.popen); return; }
+   const sd=e.target.closest("[data-side]"); if(sd){ openSyn(sd.dataset.side); return; }
+   if(e.target.matches("[data-synbg]")){ S.openSyn=null; save(); render(); return; }
+   const kp=e.target.closest("[data-keep]"); if(kp){ keepSticker(kp.dataset.keep); return; }
+   const vt=e.target.closest("[data-vertgo]"); if(vt){ S.phome=false; goMuse(vt.dataset.vertgo); return; }
+   const a=e.target.closest("[data-act]")?.dataset.act; if(!a) return;
+   if(a==="reading"){ S.reading=!S.reading; save(); render(); }
+   if(a==="why"){ e.preventDefault(); go("why"); }
+   if(a==="closesyn"){ S.openSyn=null; save(); render(); }
+   if(a==="pubsyn") publishSyn(S.openSyn);
+   if(a==="nokeep"){ S.keepAsk=null; save(); render(); }
+  };
+  return;
+ }
  const m=curMuse(), u=U(), dev=DEV(), past=!!m.closed;
  const dateStr=new Date().toLocaleDateString(undefined,{weekday:"long", month:"long", day:"numeric"});
- const shown=u.theme!=="off"&&!(u.theme==="end"&&!MUSES.every(x=>S.sealed[x.id]));
- const themeW=u.theme==="off"?"":shown?`<h1 class="m-themebig">${esc(DAY.theme)}</h1><button class="m-cross" type="button" data-act="reading" aria-expanded="${!!S.reading}" aria-label="The day’s reading" data-tip="The day’s reading · ${esc(DAY.reading)}">✝</button>`:`<span class="m-themebig hid" data-tip="Revealed once you’ve answered all three">· · ·</span>`;
+ const themeW=`<h1 class="m-themebig">${esc(DAY.theme)}</h1><button class="m-cross" type="button" data-act="reading" aria-expanded="${!!S.reading}" aria-label="The day’s reading" data-tip="The day’s reading · ${esc(DAY.reading)}">✝</button>`;
  const reading=(S.reading&&!past)?`<div class="m-reading"><div class="v">“${esc(DAY.verse)}”</div><div class="r">${esc(DAY.verseRef)} · ${T("muse.reading.connector","today’s reading, ")}${esc(DAY.reading)}</div><p>${esc(DAY.readingNote)}</p></div>`:"";
  const day=past?`<div class="pastbar" style="margin-top:18px"><span><b>${esc(m.day)}</b> · this muse has passed</span><button class="btn small" data-act="today">${T("muse.past.back","Back to today’s muses")}</button></div>`:`<div class="m-dayrow"><div class="m-dayl"><span class="type muted">${esc(dateStr)}</span><div class="m-themewrap">${themeW}</div></div>${u.tplace==="title"&&dev==="desk"?"":`<div class="m-dayr">${threeHTML(threeSize(),false,true)}</div>`}</div>${reading}`;
  const info=u.storyMode==="info"?`<button class="m-infob" type="button" data-info aria-expanded="${!!S.info}" aria-label="About this work" data-tip="${T("muse.info.label","About this work")}">i</button>`:"";
@@ -807,6 +858,8 @@ function renderMuse(v){
   const look=u.wlook==="line"&&S.sealed[m.id]?"notecard":u.wlook;
   body=`${day}<div class="m-stack">${titleRow}<div class="m-wscope">${tab}<div class="m-wwrap">${workHTML(m,false)}${curlHTML(m)}</div>${noteHTML(m)}<div style="height:var(--gap)"></div><div class="m-writer ${look}" id="writerBox">${writerInnerM(m,false)}</div></div></div>${story}${bottomTurnerM(m)}`;
  }
+ if(dev==="phone"&&!past){ const i=MUSES.indexOf(m), nx=MUSES[(i+1)%MUSES.length];
+  body=`<div class="ph-bar"><button type="button" class="ph-back" data-act="phome">${T("phone.back","‹ Today")}</button><span class="ph-mini">${esc(DAY.theme)}</span></div>${body.replace(day,"")}<p class="ph-nextw"><button type="button" class="ph-back" data-mgo="${nx.id}">${T("phone.next","Next work ›")}</button></p>`; }
  v.innerHTML=`${body}${responsesHTML(m)}${infoLayer(m)}${synOverlay()}${keepAskHTML()}`;
  wireBoard(v); wireWriterM(m); if(u.gloss!=="none") applyGloss(v);
  v.onclick=e=>{
@@ -819,7 +872,9 @@ function renderMuse(v){
   const kp=e.target.closest("[data-keep]"); if(kp){ keepSticker(kp.dataset.keep); return; }
   const pa=e.target.closest("[data-pa]"); if(pa){ postAction(pa); return; }
   const a=e.target.closest("[data-act]")?.dataset.act; if(!a) return;
-  if(a==="today"){ S.past=null; save(); render(); }
+  if(a==="today"){ S.past=null; S.phome=true; save(); render(); }
+  if(a==="phome"){ S.phome=true; S.info=false; save(); render(); scrollTo({top:0}); }
+  if(a==="why"){ e.preventDefault(); go("why"); }
   if(a==="reading"){ S.reading=!S.reading; save(); render(); }
   if(a==="nokeep"){ S.keepAsk=null; save(); render(); toast("You can keep one from any muse you’ve answered, until midnight."); }
   if(a==="closesyn"){ S.openSyn=null; save(); render(); }
@@ -854,16 +909,14 @@ function renderSettings(v){
  v.onclick=e=>{
   const pt=e.target.closest("[data-ptab]"); if(pt){ S.ptab=pt.dataset.ptab; save(); render(); return; }
   const sd=e.target.closest("[data-setdev]"); if(sd){ S.setDev=sd.dataset.setdev; save(); renderSettings(v); return; }
-  const b=e.target.closest("[data-set]"); if(b){ const d=S.setDev||DEV(); S.ui[d][b.dataset.set]=b.dataset.val; save(); applyPrefs(); renderSettings(v); return; }
-  if(e.target.closest("[data-sethouse]")){ const d=S.setDev||DEV(); S.ui[d]=clone(HOUSE[d]); save(); applyPrefs(); renderSettings(v); toast(`Back to the house style for ${d==="desk"?"wide screens":"phones"}.`); }
+  const b=e.target.closest("[data-set]"); if(b){ const d=S.setDev||DEV(); setPref(b.dataset.set,b.dataset.val,d); save(); applyPrefs(); renderSettings(v); return; }
+  if(e.target.closest("[data-sethouse]")){ const d=S.setDev||DEV(); const keep={room:S.ui[d].room,font:S.ui[d].font}; S.ui[d]=Object.assign(clone(HOUSE[d]),keep); save(); applyPrefs(); renderSettings(v); toast(`Back to the house style for ${d==="desk"?"wide screens":"phones"}.`); }
  };
 }
 
 function goMuse(id){ const k=MUSES.findIndex(x=>x.id===id); if(k<0){ S.past=id; } else { S.past=null; S.mi=k; } S.openSyn=null; S.info=false; S.card=0; save(); render(); const top=$("#view").getBoundingClientRect().top; if(top<0) scrollTo({top:scrollY+top-70, behavior:reduce?"auto":"smooth"}); }
 function openSyn(id){
  S.info=false;
- if(!synOpen(id)){ const need=synSubjects(id).filter(x=>!S.sealed[x]).map(x=>MUSE[x].kind.toLowerCase());
-  toast(`${T("toast.link.locked","First an impression on ")}${need.join(" and ")}. Then the line opens.`); S.openSyn=id; save(); render(); return; }
  S.openSyn=S.openSyn===id?null:id; save(); render();
  if(S.openSyn){ setTimeout(()=>{ $("#synbox")?.scrollIntoView({behavior:reduce?"auto":"smooth", block:"center"}); $("#synDraft")?.focus(); },80); }
 }
@@ -995,9 +1048,9 @@ function pageHTML(){
    <div class="nb-page" data-id="${p.id}">
     ${artHTML(p)}
     <div class="nb-epi">${ls.length?ls.map((l,i)=>`<div class="nb-epiline ${i===0?"first":""}"><span>${esc(l.text)}</span><small>${esc([l.who,l.where].filter(Boolean).join(", "))}</small><button class="x2" data-nbdrop="${l.id}" aria-label="Take this line off the page">×</button></div>`).join(""):`<p class="nb-empty">${T("page.empty","No line yet — choose one from the left, or write straight onto the page.")}</p>`}</div>
-    <input class="nb-title" id="nbTitle" value="${esc(p.title||"")}" placeholder=T("page.title.placeholder","Title (if it wants one)") aria-label="Title">
+    <input class="nb-title" id="nbTitle" value="${esc(p.title||"")}" placeholder="${T("page.title.placeholder","Title (if it wants one)")}" aria-label="Title">
     <p class="nb-prompt">${esc(pagePromptFor(p))}</p>
-    <textarea class="nb-body" id="nbBody" aria-label="Write" placeholder=T("page.body.placeholder","Write under it…")>${esc(p.body||"")}</textarea>
+    <textarea class="nb-body" id="nbBody" aria-label="Write" placeholder="${T("page.body.placeholder","Write under it…")}">${esc(p.body||"")}</textarea>
     <div class="nb-foot">
      <label class="nb-hang">${T("page.hangs","Hangs on")}
       <select id="nbQ" aria-label="Hang this page on a question"><option value="">${T("page.hangs.none","— nothing yet —")}</option>${S.questions.map(q=>`<option value="${q.id}" ${p.q===q.id?"selected":""}>${esc(q.text)}</option>`).join("")}<option value="__new">${T("page.hangs.new","+ a new question…")}</option></select></label>
@@ -1018,7 +1071,7 @@ function boardHTMLnb(){
 function questionsHTML(){
  const open=S.questions.filter(q=>!q.done), done=S.questions.filter(q=>q.done);
  return `<div class="nb-qs">
-  <form class="nb-addq" id="addQF"><input class="field" id="qIn" placeholder=T("q.placeholder","A question you keep coming back to") aria-label="New question"><button class="btn primary small">${T("q.add","Put it on the shelf")}</button></form>
+  <form class="nb-addq" id="addQF"><input class="field" id="qIn" placeholder="${T("q.placeholder","A question you keep coming back to")}" aria-label="New question"><button class="btn primary small">${T("q.add","Put it on the shelf")}</button></form>
   ${open.map(q=>{ const ps=pagesOn(q.id), last=ps[0], quiet=last?daysSince(last.date):null;
    return `<div class="nb-q"><div class="nb-qtop"><b>${esc(q.text)}</b>${quiet!==null&&quiet>=14?`<span class="nb-nudge">${T("q.nudge","Still breathing?")}</span>`:""}</div>
     <p class="nb-qlast">${esc(lastOn(q.id))}</p>
@@ -1038,7 +1091,7 @@ function todayHTML(){
    <blockquote class="nb-said">${esc(src)}</blockquote>
    <div class="rowbtns"><button class="btn small" data-nbact="carry">${T("today.carry","Carry this line forward")}</button></div></div>
   <div class="nb-facing right"><p class="type muted" style="margin:0 0 8px">${T("today.answer","Your answer")}</p>
-   <textarea class="nb-body" id="nbAnswer" placeholder=T("today.answer.placeholder","Answer it here. When you are done it becomes a page.")>${esc(S.nb.answer||"")}</textarea>
+   <textarea class="nb-body" id="nbAnswer" placeholder="${T("today.answer.placeholder","Answer it here. When you are done it becomes a page.")}">${esc(S.nb.answer||"")}</textarea>
    <div class="nb-foot"><span class="nb-saved">${T("today.kept","Kept as you type")}</span><button class="btn primary small" data-nbact="makepage">${T("today.makepage","Make it a page")}</button></div></div>
   ${S.lines.filter(l=>l.rest).length?`<details class="nb-resting"><summary>${T("today.resting","Lines you let rest")} (${S.lines.filter(l=>l.rest).length})</summary>${S.lines.filter(l=>l.rest).map(l=>`<button class="nb-line" data-nbwake="${l.id}">${esc(l.text)}</button>`).join("")}</details>`:""}</div>`;
 }
@@ -1050,15 +1103,15 @@ function indexHTML(){
  rows.sort((a,b)=> s==="date"?b.p.date.localeCompare(a.p.date) : s==="source"?a.src.localeCompare(b.src) : (a.qq||"zz").localeCompare(b.qq||"zz"));
  return `<div class="nb-index">
   <div class="nb-ihead"><div class="viewt" role="group" aria-label="Sort by">${[["date",T("index.bydate","By date")],["source",T("index.bysource","By source")],["question",T("index.byquestion","By question")]].map(([k,l])=>`<button data-nbsort="${k}" aria-pressed="${s===k}">${l}</button>`).join("")}</div>
-   <input class="field" id="nbSearch" value="${esc(S.nb.search||"")}" placeholder=T("index.search","Search your pages") aria-label="Search"></div>
+   <input class="field" id="nbSearch" value="${esc(S.nb.search||"")}" placeholder="${T("index.search","Search your pages")}" aria-label="Search"></div>
   <table class="nb-itable"><tr><th>${T("index.col.page","Page")}</th><th>${T("index.col.firstline","First line")}</th><th>${T("index.col.hangs","Hangs on")}</th><th>${T("index.col.date","Date")}</th></tr>
   ${rows.map(r=>`<tr data-nbopen="${r.p.id}"><td><b>${esc(r.p.title||T("index.untitled","Untitled"))}</b></td><td>${esc(r.src.slice(0,52))}</td><td>${esc(r.qq||"—")}</td><td class="d">${fmt(r.p.date)}</td></tr>`).join("")||`<tr><td colspan="4" class="muted">${T("index.empty","Nothing found.")}</td></tr>`}</table></div>`;
 }
 function pocketHTML(){
  return `<div class="nb-pocket">
   <h3>${T("pocket.heading","Pocket")}</h3><p class="muted" style="margin:2px 0 12px;font-size:.92rem">${T("pocket.line","One job on the phone: catch the line before it goes. It will be waiting on the desk.")}</p>
-  <textarea class="nb-body" id="pkText" placeholder=T("pocket.placeholder","A line, a phrase, an overheard thing…")>${esc(S.nb.pocket||"")}</textarea>
-  <div class="nb-addrow"><input class="field" id="pkWho" placeholder=T("pocket.who.placeholder","Who or where from (optional)") aria-label="Who or where from"><button class="btn primary" data-nbact="pocket">${T("pocket.keep","Keep it")}</button></div>
+  <textarea class="nb-body" id="pkText" placeholder="${T("pocket.placeholder","A line, a phrase, an overheard thing…")}">${esc(S.nb.pocket||"")}</textarea>
+  <div class="nb-addrow"><input class="field" id="pkWho" placeholder="${T("pocket.who.placeholder","Who or where from (optional)")}" aria-label="Who or where from"><button class="btn primary" data-nbact="pocket">${T("pocket.keep","Keep it")}</button></div>
   ${S.lines.filter(l=>l.from==="phone").length?`<p class="type muted" style="margin:16px 0 6px">${T("pocket.caught","Caught lately")}</p>${S.lines.filter(l=>l.from==="phone").slice(0,8).map(l=>`<div class="nb-line still">${esc(l.text)}${l.who?`<i>— ${esc(l.who)}</i>`:""}</div>`).join("")}`:""}
   <details class="nb-resting" style="margin-top:18px"><summary>${T("pocket.desk.summary","The rest of the notebook lives on the desk")}</summary><p class="muted" style="font-size:.88rem;margin:8px 0 0">${T("pocket.desk.line","Pages, the board, your questions and the index are all there. This is on purpose: the phone catches, the desk works.")}</p></details></div>`;
 }
@@ -1195,8 +1248,8 @@ function renderProfile(v){
  v.innerHTML=`<div class="viewt m-ptabs" role="tablist"><button data-ptab="you" aria-pressed="true">${T("profile.tab.you","Your profile")}</button><button data-ptab="settings" aria-pressed="false">${T("profile.tab.settings","Settings")}</button></div><div class="profile"><div class="panel pcard">
    <div class="pa">${avatarHTML(me()).replace('class="av"','class="av big"')}<div><button class="btn small" id="pPic">${p.photo?"Change photo":"Add a photo"}</button><input type="file" id="pFile" accept="image/*" hidden></div></div>
    <label class="lbl" for="pName">${T("profile.name","Name")}</label><input class="field" id="pName" value="${esc(p.name)}">
-   <label class="lbl" for="pLine">${T("profile.line","A line about you")}</label><input class="field" id="pLine" value="${esc(p.line)}" placeholder=T("profile.line.placeholder","Reads Homer on trams")>
-   <label class="lbl" for="pMake">${T("profile.makes","What you make")}</label><input class="field" id="pMake" value="${esc(p.makes)}" placeholder=T("profile.makes.placeholder","Essays, a few poems, bread")>
+   <label class="lbl" for="pLine">${T("profile.line","A line about you")}</label><input class="field" id="pLine" value="${esc(p.line)}" placeholder="${T("profile.line.placeholder","Reads Homer on trams")}">
+   <label class="lbl" for="pMake">${T("profile.makes","What you make")}</label><input class="field" id="pMake" value="${esc(p.makes)}" placeholder="${T("profile.makes.placeholder","Essays, a few poems, bread")}">
    <p class="lbl">${T("profile.ring","Ring")}</p><div class="rings">${Object.entries(RINGS).map(([k,r])=>`<button class="ringbtn" data-ring="${k}" aria-pressed="${p.ring===k}"><span class="av" style="background:var(--accent);box-shadow:${r.css}"></span><small>${r.name}</small></button>`).join("")}</div>
    <p class="lbl">${T("profile.badge","Badge")}</p><div class="badges">${BADGES.map(b=>{const ok=b.ok(); return `<button class="badge pick" data-badge="${b.id}" aria-pressed="${p.badge===b.id}" ${ok?"":"disabled"} data-tip="${esc(ok?b.how:"Locked · "+b.how)}">${esc(b.id)}</button>`;}).join("")}</div></div>
   <div>${todayPanel}<div class="panel"><h3>${T("profile.makers.heading","Your makers")}</h3><p class="muted" style="margin:2px 0 4px;font-size:.9rem">${T("profile.makers.line","Each maker has a set of six, each one tied to something they really made or did. A first impression draws one you don’t have yet — never a repeat. Only makers you have met are shown.")}</p>
@@ -1243,6 +1296,7 @@ function renderWhy(v){
     <p>${T("why.two.p2","A curated page works the other way. When a whole circle reads the same sonnet on the same morning, they have something in common to talk about. That is how seminars, reading groups and the old commonplace books worked: a chosen text, set before people who then argue about it, quote it back to each other, and make something of it.")}</p>
     <p>${T("why.two.p3","So every muse in Poiesis is picked by a person, and comes with the story of how it was made. The curation is the invitation. The discourse is what the circle does with it.")}</p></div></section>
   <section class="trio"><div><h3>${T("why.trio.one.heading","Receive")}</h3><p>${T("why.trio.one.line","A daily letter and three muses — a poem, a passage, a painting — each with the story of how it came to be.")}</p></div><div><h3>${T("why.trio.two.heading","Keep")}</h3><p>${T("why.trio.two.line","One notebook: every page starts from a line you kept, and can hang on a question you keep returning to.")}</p></div><div><h3>${T("why.trio.three.heading","Make, and give it on")}</h3><p>${T("why.trio.three.line","Leave a first impression, keep adding to it, and draw the lines between the three.")}</p></div></section>
+  ${constitutionHTML()}
   <section class="join panel"><div><p class="type muted" style="margin:0">${T("why.join.eyebrow","Join the work")}</p><h2 style="font-size:1.8rem">${T("why.join.heading","Help choose what the circle reads.")}</h2><p class="muted" style="margin:6px 0 0">${T("why.join.line","We’re looking for a few people to help build Poiesis from the start.")}</p></div>
    <div class="roles">${[[T("why.role.curator","Curator"),T("why.role.curator.line","Choose the muses and find the true story of how each one was made.")],[T("why.role.writer","Writer"),T("why.role.writer.line","Write the morning letter: short, warm, and worth opening before the phone.")],[T("why.role.moderator","Moderator"),T("why.role.moderator.line","Keep the circles kind, so collaboration never turns into competition.")]].map(([r,d])=>`<div><h3>${r}</h3><p>${d}</p><a class="btn" href="mailto:${CONTACT}?subject=${encodeURIComponent(r+" — Poiesis")}" target="_blank" rel="noopener">${T("why.role.button","Write to us")}</a></div>`).join("")}</div>
    <p class="muted" style="font-size:.85rem;margin:12px 0 0">${T("why.contact.line","Or write directly to ")}<span style="user-select:all">${CONTACT}</span></p></section>`;
@@ -1253,7 +1307,7 @@ function renderWhy(v){
 function penInit(){
  const btn=document.createElement("button"); btn.className="pen"; btn.setAttribute("aria-label",T("pen.label","Write something down")); btn.title=T("pen.label","Write something down"); btn.innerHTML=PENCIL;
  const box=document.createElement("div"); box.className="penbox"; box.hidden=true;
- box.innerHTML=`<p class="type" style="color:#8a7b68;margin:0 0 4px">${T("pen.before","Before it goes")}</p><textarea class="lined" id="penTxt" aria-label="Quick note" placeholder=T("pen.placeholder","Write it down…") style="min-height:160px"></textarea>
+ box.innerHTML=`<p class="type" style="color:#8a7b68;margin:0 0 4px">${T("pen.before","Before it goes")}</p><textarea class="lined" id="penTxt" aria-label="Quick note" placeholder="${T("pen.placeholder","Write it down…")}" style="min-height:160px"></textarea>
   <div class="wrow"><button class="btn ghost" id="penX">${T("pen.close","Close")}</button><button class="btn primary" id="penKeep">${T("pen.keep","Keep in my journal")}</button></div>`;
  document.body.append(box, btn);
  const t=box.querySelector("#penTxt"); t.value=S.pen||"";
@@ -1263,6 +1317,16 @@ function penInit(){
  box.querySelector("#penKeep").onclick=()=>{ const s=t.value.trim(); if(!s){ t.focus(); return; } const id=uid("j"), m=S.tab==="muse"?curMuse():null;
   S.journal.unshift({id, date:today(), title:s.split("\n")[0].slice(0,40), lines:[], q:null, muse:m?m.id:null, body:s}); remember("journal",id,s.slice(0,40)); S.nb.sel=id; S.pen=""; t.value=""; save(); box.hidden=true; toast(T("toast.pen.kept","Kept as a page in your notebook.")); if(S.tab==="notebook") render(); };
 }
+
+/* ---------- Hooks for data.js (accounts and sync) ---------- */
+let renderLater=false;
+const typing=()=>{ const a=document.activeElement; return !!a && /^(TEXTAREA|INPUT|SELECT)$/.test(a.tagName); };
+document.addEventListener("focusout", ()=>{ if(renderLater) setTimeout(()=>{ if(renderLater && !typing()){ renderLater=false; render(); } }, 250); });
+window.PoiesisApp={ T, toast, today, state:()=>S,
+ // New data arrived from the account: keep it, and redraw unless someone is mid-sentence.
+ commit(){ save(true); applyPrefs(); if(typing()){ renderLater=true; return; } render(); },
+ // Start this device's copy afresh (signing out, or another person signing in). Display settings stay.
+ reset(){ const ui=S.ui, sl=S.sharedLook; S=fresh(); S.ui=ui; S.sharedLook=sl; S.visits[today()]=1; save(true); applyPrefs(); render(); } };
 
 applyStaticCopy(); applyPrefs(); penInit(); render();
 setInterval(()=>{ const c=document.querySelector(".clock"); if(c) c.textContent=`· leave at midnight, ${untilMidnight()}`; }, 30000);
