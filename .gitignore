@@ -1,5 +1,10 @@
+# GitHub gets only the website and what publishes it.
+# Everything else stays on this computer only (back it up yourself).
+/*
+!/site/
+!/.github/
+!/README.md
+!/.gitignore
 .DS_Store
 node_modules/
 *.log
-
-_to_delete/
