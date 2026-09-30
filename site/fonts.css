@@ -1,0 +1,53 @@
+/* The site's seven typefaces, kept in the repository instead of fetched from
+   Google. The site now works with no internet at all, and nothing about who is
+   reading leaves the machine.
+
+   Every file is a latin-subset .woff2 from the Fontsource packages
+   (@fontsource/<family>), which repackage the Google Fonts originals under
+   each family's own licence. IM Fell English, Literata, Young Serif, Work
+   Sans, Kalam, EB Garamond and Courier Prime are all SIL Open Font
+   Licence 1.1; see fonts/LICENSES.md.
+
+   To add a weight: npm i @fontsource/<family>, copy the latin .woff2 out of
+   its files/ folder into site/fonts/, and add a block here. */
+
+@font-face { font-family:"IM Fell English"; font-style:normal; font-weight:400; font-display:swap;
+  src:url("fonts/im-fell-english-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family:"IM Fell English"; font-style:italic; font-weight:400; font-display:swap;
+  src:url("fonts/im-fell-english-latin-400-italic.woff2") format("woff2"); }
+
+@font-face { font-family:"Literata"; font-style:normal; font-weight:400; font-display:swap;
+  src:url("fonts/literata-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family:"Literata"; font-style:italic; font-weight:400; font-display:swap;
+  src:url("fonts/literata-latin-400-italic.woff2") format("woff2"); }
+@font-face { font-family:"Literata"; font-style:normal; font-weight:600; font-display:swap;
+  src:url("fonts/literata-latin-600-normal.woff2") format("woff2"); }
+
+@font-face { font-family:"Young Serif"; font-style:normal; font-weight:400; font-display:swap;
+  src:url("fonts/young-serif-latin-400-normal.woff2") format("woff2"); }
+
+@font-face { font-family:"Work Sans"; font-style:normal; font-weight:400; font-display:swap;
+  src:url("fonts/work-sans-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family:"Work Sans"; font-style:normal; font-weight:500; font-display:swap;
+  src:url("fonts/work-sans-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family:"Work Sans"; font-style:normal; font-weight:600; font-display:swap;
+  src:url("fonts/work-sans-latin-600-normal.woff2") format("woff2"); }
+
+@font-face { font-family:"Kalam"; font-style:normal; font-weight:400; font-display:swap;
+  src:url("fonts/kalam-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family:"Kalam"; font-style:normal; font-weight:700; font-display:swap;
+  src:url("fonts/kalam-latin-700-normal.woff2") format("woff2"); }
+
+@font-face { font-family:"EB Garamond"; font-style:normal; font-weight:400; font-display:swap;
+  src:url("fonts/eb-garamond-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family:"EB Garamond"; font-style:italic; font-weight:400; font-display:swap;
+  src:url("fonts/eb-garamond-latin-400-italic.woff2") format("woff2"); }
+@font-face { font-family:"EB Garamond"; font-style:normal; font-weight:600; font-display:swap;
+  src:url("fonts/eb-garamond-latin-600-normal.woff2") format("woff2"); }
+
+@font-face { font-family:"Courier Prime"; font-style:normal; font-weight:400; font-display:swap;
+  src:url("fonts/courier-prime-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family:"Courier Prime"; font-style:italic; font-weight:400; font-display:swap;
+  src:url("fonts/courier-prime-latin-400-italic.woff2") format("woff2"); }
+@font-face { font-family:"Courier Prime"; font-style:normal; font-weight:700; font-display:swap;
+  src:url("fonts/courier-prime-latin-700-normal.woff2") format("woff2"); }

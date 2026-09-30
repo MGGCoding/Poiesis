@@ -366,7 +366,42 @@ const DEF_JOURNAL_OLD=[
   body:"— “He only writes when he’s angry, so he’s very productive.”\n— a boy on the tram explaining Caravaggio to his grandmother\n— “We’ll finish it when it’s finished.”"}];
 
 /* ---------- State ---------- */
-const KEY="poiesis.v7"; const clone=o=>JSON.parse(JSON.stringify(o));
+/* ---------- Who is at this keyboard ----------
+   The prototype has no accounts. ?user=<name> gives each person their own
+   saved state in the same browser, so two tabs side by side are two people.
+   Leave it off and everything behaves exactly as before. */
+function whoParam(){
+ try{ const u=(new URLSearchParams(location.search).get("user")||"").trim().slice(0,24);
+  return /^[\w-]+$/.test(u)?u.toLowerCase():""; }catch(e){ return ""; }
+}
+const WHO=whoParam();
+const WHONAME=WHO?WHO.charAt(0).toUpperCase()+WHO.slice(1).replace(/[-_]+/g," "):"Niko";
+const KEY="poiesis.v7"+(WHO?"."+WHO:""); const clone=o=>JSON.parse(JSON.stringify(o));
+/* ---------- The table ----------
+   One shared row store for everyone using this browser, kept apart from each
+   person's own state. It is the same shape data.js syncs to the account, so
+   the day two machines are involved this is swapped for that and nothing else
+   changes. Rows are written when you leave a first impression or publish a
+   link, and read back as other people's impressions on every other ?user=. */
+const TABLE_KEY="poiesis.table.v1";
+const Table={
+ all(){ try{ return JSON.parse(localStorage.getItem(TABLE_KEY)||"{}")||{}; }catch(e){ return {}; } },
+ rows(on){ return (this.all()[on]||[]).filter(r=>r.day===today()); },
+ others(on){ return this.rows(on).filter(r=>(r.by||"")!==WHO); },
+ put(row){ if(!WHO) return;                       /* nobody is signed in as anyone */
+  const t=this.all(), list=t[row.on]=t[row.on]||[];
+  const i=list.findIndex(r=>r.id===row.id); if(i<0) list.push(row); else list[i]=row;
+  try{ localStorage.setItem(TABLE_KEY, JSON.stringify(t)); }catch(e){} },
+ clear(){ try{ localStorage.removeItem(TABLE_KEY); }catch(e){} }
+};
+/* another tab wrote something: show it without a reload */
+try{ window.addEventListener("storage", e=>{ if(e.key===TABLE_KEY && typeof render==="function") render(); }); }catch(e){}
+/* other people's impressions on this work, sample ones and real ones together */
+function postsFor(mid){
+ const mine=Table.others(mid).map(r=>({id:r.id, name:r.name, at:when(r.at), first:r.text,
+  moved:(r.moved||0), replies:[], linkOf:r.via||null, live:true}));
+ return [...(SAMPLES?(POSTS[mid]||[]):[]), ...mine];
+}
 function fresh(){ return {look:null, font:"book", tab:"muse", mi:0, past:null, drafts:{}, likes:{},
  replies:{me_handel:[{n:"You", t:"Twenty-four days of writing, forty years of listening.", w:"9:10 p.m."}]},
  syn:{}, synDrafts:{}, openSyn:null, showWho:false,
@@ -377,7 +412,7 @@ function fresh(){ return {look:null, font:"book", tab:"muse", mi:0, past:null, d
  journal:clone(DEF_PAGES), lines:clone(DEF_LINES), questions:clone(DEF_QUESTIONS), trash:[],
  nb:{way:"page", sel:"j2", pick:[], sort:"date", search:"", adding:false, closer:false, voice:"muse", answer:"", pocket:"", thread:null},
  season:"gathering", recent:[], visits:{}, log:[], page:{title:"",body:""}, pen:"",
- profile:{name:"Niko", line:"", makes:"", photo:null, ring:"laurel", badge:"Apprentice", top:"handel", formed:["Homer","Henry James"]}}; }
+ profile:{name:WHONAME, line:"", makes:"", photo:null, ring:"laurel", badge:"Apprentice", top:"handel", formed:["Homer","Henry James"]}}; }
 let S; try{ S=Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY)||"null")||{}); }catch(e){ S=fresh(); }
 function save(quiet){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ toast(T("toast.storage","This browser is out of room for pictures. Your words are still here.")); }
  if(!quiet && window.PoiesisData) window.PoiesisData.changed(); /* data.js: sync to the account */ }
@@ -458,7 +493,11 @@ const U=()=>S.ui[DEV()];
 function stickerHTML(id, size, tip, gilt){ const s=STICKERS[id]; if(!s) return ""; return `<span class="stk${gilt?" gilt":""}" style="width:${size}px;height:${size}px" tabindex="0" data-tip="${esc(tip||`${s.series} · ${s.name}`)}">${s.svg}</span>`; }
 function avatarHTML(o){ const ring=RINGS[o.ring]||RINGS.none; return `<span class="av" style="background:${o.photo?`url('${o.photo}') center/cover`:o.c};box-shadow:${ring.css}">${o.photo?"":esc(o.initials)}</span>`; }
 function me(){ const p=S.profile; return {c:"var(--accent)", initials:initials(p.name||"You"), photo:p.photo, ring:p.ring}; }
-function personAv(n){ const P=PEOPLE[n]; return P?avatarHTML({c:P.c, initials:initials(n), ring:P.ring}):avatarHTML(me()); }
+const COLOURS=["#3d5d86","#6b4a7d","#8a5a3b","#2f5d50","#8a2f22","#5f7f45","#2c4a58"];
+function personAv(n){ const P=PEOPLE[n]; if(P) return avatarHTML({c:P.c, initials:initials(n), ring:P.ring});
+ if(!n||n==="You") return avatarHTML(me());
+ let h=0; for(let i=0;i<n.length;i++) h=(h*31+n.charCodeAt(i))>>>0;
+ return avatarHTML({c:COLOURS[h%COLOURS.length], initials:initials(n), ring:"none"}); }
 function myTop(){ return S.profile.top && S.owned[S.profile.top] ? S.profile.top : null; }
 
 /* ---------- Rooms & type ---------- */
@@ -508,9 +547,10 @@ const TODAY=[
 function mineParts(){ const p=MUSES.filter(m=>S.sealed[m.id]).map(m=>m.id); LINKS.forEach(l=>{ if(S.syn[l.id]) p.push(l.id); }); if(S.syn.whole) p.push("whole"); return p; }
 function myReplyCount(){ return Object.values(S.replies).reduce((n,a)=>n+a.length,0); }
 function dayCount(){
- const others=SAMPLES?(TODAY.reduce((n,p)=>n+p.parts.length,0)
-  + MUSES.reduce((n,m)=>n+(POSTS[m.id]||[]).reduce((k,p)=>k+(p.replies||[]).length,0),0)
-  + SYNS.reduce((n,y)=>n+(y.replies||[]).length,0)):0;
+ const others=(TODAY.reduce((n,p)=>n+p.parts.length,0)
+  + MUSES.reduce((n,m)=>n+postsFor(m.id).reduce((k,p)=>k+(p.replies||[]).length,0),0)
+  + (SAMPLES?SYNS.reduce((n,y)=>n+(y.replies||[]).length,0):0))
+  + MUSES.reduce((n,m)=>n+Table.others(m.id).length,0);
  return others + mineParts().length + myReplyCount();
 }
 
@@ -571,6 +611,7 @@ function publishSyn(id){
  if(drew) setCheck(drew);
  S.journal.unshift({id:jid, date:today(), title:`Link: ${synName(id)}`, lines:[], q:null, muse:ids[0], body:`${t}\n\n— on ${ids.map(x=>`${MUSE[x].maker}, ${MUSE[x].title}`).join(" · ")}`});
  remember("journal",jid,`Link: ${synName(id)}`);
+ ids.forEach(x=>Table.put({id:"t_"+WHO+"_"+id+"_"+x, on:x, by:WHO, name:S.profile.name||WHONAME, at:now, day:today(), text:t, via:id}));
  S.synDrafts[id]=""; save(); render();
  toast(fresh.length?`${T("toast.link.counts","Your link is your first impression on the ")}${andList(fresh.map(x=>MUSE[x].kind.toLowerCase()))}.`:`${T("toast.link.published","Published under the ")}${andList(ids.map(x=>MUSE[x].kind.toLowerCase()))}.`);
  setTimeout(()=>$("#synbox")?.scrollIntoView({behavior:reduce?"auto":"smooth", block:"center"}),60);
@@ -602,14 +643,15 @@ function writerHTML(m){
 function bmMenu(){ return `<span class="bm"><button class="btn icon" data-pa="bm" aria-label="Keep this" aria-expanded="false" title="Keep this">${BOOKMARK}</button>
  <span class="bmenu" hidden><button data-pa="save" data-to="line">${T("keep.menu.line","Keep the line")}</button><button data-pa="save" data-to="page">${T("keep.menu.page","Write a page under it")}</button></span></span>`; }
 function postHTML(p, m, mine, closed){
- const P=mine?null:PEOPLE[p.name];
- const top=mine?myTop():P.top;
- const topTip=top?(mine?`${STICKERS[top].series} · ${STICKERS[top].name}`:`${STICKERS[top].name} · ${p.name.split(" ")[0]} collected this ${GOT[p.name]}`):"";
- const badge=mine?S.profile.badge:P.badge;
+ const P=mine?null:(PEOPLE[p.name]||null);
+ const top=mine?myTop():(P?P.top:null);
+ const topTip=top?(mine?`${STICKERS[top].series} · ${STICKERS[top].name}`:`${STICKERS[top].name} · ${p.name.split(" ")[0]} collected this ${GOT[p.name]||"earlier"}`):"";
+ const badge=mine?S.profile.badge:(P?P.badge:"");
+ const role=mine?"Your circle sees this":(P?P.role:T("post.alsohere","Also writing in this browser"));
  const reps=[...(p.replies||[]), ...(S.replies[p.id]||[])];
  const shown=closed?reps.slice(0,3):reps;
  return `<article class="post" data-p="${p.id}" data-m="${m.id}"${p.linkOf?` data-syn="1" data-link="${p.linkOf}"`:""}>
-  <div class="who">${mine?avatarHTML(me()):personAv(p.name)}<div><b>${mine?esc(S.profile.name||"You"):esc(p.name)}</b> ${top?stickerHTML(top,20,topTip):""} ${badge?`<span class="badge">${esc(badge)}</span>`:""} ${mine?"":'<span class="sample">sample</span>'}<small>${esc(mine?"Your circle sees this":P.role)}</small></div></div>
+  <div class="who">${mine?avatarHTML(me()):personAv(p.name)}<div><b>${mine?esc(S.profile.name||"You"):esc(p.name)}</b> ${top?stickerHTML(top,20,topTip):""} ${badge?`<span class="badge">${esc(badge)}</span>`:""} ${P?'<span class="sample">sample</span>':""}<small>${esc(role)}</small></div></div>
   <div class="thought${p.linkOf?" link":""}"><span class="wax" aria-hidden="true"></span><small class="type" style="color:#8a7b68;font-size:.64rem">${p.linkOf?`A link · ${esc(linkTag(p.linkOf))}`:"First impression"} · ${esc(p.at)}</small>
    <div class="first">${esc(p.first)}</div>
    ${p.later?`<div class="layer"><small>${esc(p.later.when)}</small>${p.later.poem?`<div class="poem">${esc(p.later.poem)}</div>`:""}${p.later.sketch?`<div class="sk s-garage" role="img" aria-label="Sketch"></div>`:""}${p.later.text?esc(p.later.text):""}</div>`:""}
@@ -620,7 +662,7 @@ function postHTML(p, m, mine, closed){
 }
 function linkTag(id){ return id==="whole"?"all three":synSubjects(id).map(x=>MUSE[x].kind.toLowerCase()).join(" & "); }
 function responsesHTML(m){
- const posts=POSTS[m.id]||[], s=S.sealed[m.id];
+ const posts=postsFor(m.id), s=S.sealed[m.id];
  const linksHere=[...LINKS.map(l=>l.id),"whole"].filter(id=>synSubjects(id).includes(m.id));
  const otherLinks=SAMPLES?SYNS.filter(y=>linksHere.includes(y.on)):[];
  const myLinks=linksHere.filter(id=>S.syn[id]).map(id=>({id:"me_syn_"+id, at:when(S.syn[id].at), first:S.syn[id].text, linkOf:id}));
@@ -928,7 +970,8 @@ function renderMuse(v){
   const colL=`<div class="m-colL">${head}<div class="m-wwrap">${workHTML(m,spread)}</div>${noteHTML(m)}</div>`;
   const colR=`<div class="m-colR">${beside?threeHTML(threeSize(),false):""}${nb}</div>`;
   let duo=`<div class="m-duo">${colL}${colR}</div>`;
-  if(spread) duo=`<div class="m-book">${duo}${m.poem?`<span class="m-folio">${esc((m.poemNote||"").split("·").pop().trim())}</span>`:""}${curlHTML(m)}</div>`;
+  /* the folio is the page mark, not a second printing of the note above it */
+  if(spread) duo=`<div class="m-book">${duo}<span class="m-folio">${esc(m.kind)} · ${MUSES.indexOf(m)+1} of ${MUSES.length}</span>${curlHTML(m)}</div>`;
   body=`${day}${duo}${bottomTurnerM(m)}${story}`;
  } else {
   const titleRow=head;
@@ -1015,13 +1058,14 @@ function seal(m){
  const jid=uid("j"); S.sealed[m.id]={text:t, at:Date.now(), jid};
  S.journal.unshift({id:jid, date:today(), title:`First impression: ${m.maker}`, lines:[], q:null, muse:m.id, body:t}); remember("journal",jid,`First impression: ${m.maker}`);
  S.drafts[m.id]=""; const all=MUSES.every(x=>S.sealed[x.id]);
+ Table.put({id:"t_"+WHO+"_"+m.id, on:m.id, by:WHO, name:S.profile.name||WHONAME, at:Date.now(), day:today(), text:t});
  const drew=drawSticker(m.id); if(drew) setCheck(drew); S.keepAsk=drew?m.id:null; save(); render();
  toast(all?"All three. The knot after the painting is open, and the day’s word is uncovered.":drew?`You drew ${STICKERS[drew].name}.`:"Kept. Here’s how it sang in others.");
  setTimeout(()=>$("#responses")?.scrollIntoView({behavior:reduce?"auto":"smooth", block:"start"}),60);
 }
 function findPost(pid, mid){
  if(pid.startsWith("me_")) return {mine:true, name:"You", first:pid.startsWith("me_syn_")?S.syn[pid.slice(7)]?.text:S.sealed[mid]?.text};
- return (POSTS[mid]||[]).find(x=>x.id===pid) || SYNS.find(x=>x.id===pid);
+ return postsFor(mid).find(x=>x.id===pid) || SYNS.find(x=>x.id===pid);
 }
 function postAction(b){
  const art=b.closest("[data-p]"), pid=art.dataset.p, mid=art.dataset.m, p=findPost(pid, mid); if(!p) return;
@@ -1161,7 +1205,7 @@ function todayHTML(){
  const m=MUSES[0], voices=[["muse",T("today.voice.muse","The muse"),T("today.voice.muse.line","What did today’s three put in front of you?")],["table",T("today.voice.table","The table"),T("today.voice.table.line","Someone else’s impression that stayed with you.")],["you",T("today.voice.you","You, before"),T("today.voice.you.line","A page of your own you have not finished with.")]];
  const v=S.nb.voice||"muse";
  const src=v==="muse"?(S.sealed[curMuse().id]?.text||FIRSTLINE_NEW[curMuse().id]||curMuse().title)
-  :v==="table"?((POSTS[curMuse().id]||[])[0]?.first||"—")
+  :v==="table"?(postsFor(curMuse().id)[0]?.first||"—")
   :(S.journal[0]?.body?.split("\n")[0]||S.journal[0]?.title||"—");
  return `<div class="nb-today">
   <div class="nb-facing left"><p class="type muted" style="margin:0 0 8px">${T("today.who","Who speaks first")}</p>
@@ -1374,7 +1418,8 @@ window.PoiesisApp={ T, toast, today, state:()=>S,
  // New data arrived from the account: keep it, and redraw unless someone is mid-sentence.
  commit(){ save(true); applyPrefs(); if(typing()){ renderLater=true; return; } render(); },
  // Start this device's copy afresh (signing out, or another person signing in). Display settings stay.
- reset(){ const ui=S.ui, sl=S.sharedLook; S=fresh(); S.ui=ui; S.sharedLook=sl; S.visits[today()]=1; save(true); applyPrefs(); render(); } };
+ reset(){ const ui=S.ui, sl=S.sharedLook; S=fresh(); S.ui=ui; S.sharedLook=sl; S.visits[today()]=1; save(true); applyPrefs(); render(); },
+  who:WHO, table:Table };
 
 applyStaticCopy(); applyPrefs(); penInit(); render();
 setInterval(()=>{ const c=document.querySelector(".clock"); if(c) c.textContent=`· leave at midnight, ${untilMidnight()}`; }, 30000);

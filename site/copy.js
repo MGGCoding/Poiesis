@@ -60,6 +60,7 @@ others.first: Nobody else has written here yet. The conversation closes
 others.linkfeed.empty: No one has joined this work to another yet. Tap a thread between two works to begin.
 post.moved.off: ♡ Moved me
 post.moved.on: ♥ Moved me
+post.alsohere: Also writing in this browser
 post.writeback: Write back
 post.addtothis: Add to this
 post.reply.placeholder: Say what it stirred in you
