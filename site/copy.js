@@ -5,7 +5,15 @@
  * Keep the key (the part before the colon) exactly as it is.
  * Use \n inside a line if you want a line break.
  * Do not use the backtick character ` anywhere in here.
- * Delete a line and that piece of wording goes back to its built-in default.
+ *
+ * Two ways to take wording away, and they do different things:
+ *   LEAVE IT BLANK  (keep the key, delete the words)  -> that wording is gone
+ *                    from the site. Nothing is shown in its place, and a
+ *                    button left with no label is hidden rather than rendered
+ *                    empty. Use this when a line is awkward or beside the point.
+ *   DELETE THE LINE (key and all)                     -> that wording goes back
+ *                    to its built-in default, the way it was before you edited.
+ *                    Use this to undo a change.
  */
 window.POIESIS_COPY = `
 
@@ -13,16 +21,16 @@ window.POIESIS_COPY = `
 site.tab.muse: Muse
 site.tab.notebook: Notebook
 site.why.link: Why Poiesis ›
-site.footer: A working sketch, 2026. The other members here are examples, and what you write stays in this browser. Paintings appear as color studies until their images are licensed.
+site.footer: A working sketch, 2026.
 site.rooms.title: Rooms
-site.rooms.line: Where will you sit with the muse today?
+site.rooms.line: Where feels most at home?
 site.type.title: Type
 site.type.line: The letters you read and write in. Any type suits any room.
 
 # THE HERO (shown on the Why page)
 hero.eyebrow: Poiesis, a place to receive and to make
-hero.headline: Every made thing began as a thing 
-hero.headline.stressed: received
+hero.headline: Every great mind was 
+hero.headline.stressed: inspired
 lexicon.word: poiesis
 lexicon.greek: ποίησις
 lexicon.part: noun · from Greek 
@@ -32,12 +40,12 @@ lexicon.one: The act of bringing into being what was not there before, in imitat
 lexicon.two: Making as active reception: the maker labors, and inspiration is given.
 
 # THE MUSE PAGE ========================================================
-muse.prompt: How does this muse call to your own experience? What do you hear it singing?
+muse.prompt: What is your first impression? An idea, a poem, a connection, a reference, a question, etc.
 muse.prompt.placeholder: One sentence is enough.
 muse.first.button: Leave my first impression
 muse.first.label: Your first impression
 muse.first.stays: Your first impression stays as you wrote it
-muse.later.placeholder: Add a later thought: a reference, a question, a line of your own.
+muse.later.placeholder: Add anything else
 muse.later.button: Add
 muse.deeper.label: Go deeper
 muse.reading.connector: today’s reading, 
@@ -48,10 +56,10 @@ muse.past.back: Back to today’s muses
 muse.info.label: How this was made
 
 # READING OTHERS
-others.heading: How it sang in others
-others.folded.button: Write yours first, then unfold theirs
+others.heading: What others thought
+others.folded.button: Write yours first, then dialogue with others
 others.gate.heading: First, your own impression.
-others.gate.line: What you receive first should be yours, before any other voice gets in. Writing it also draws one sticker from 
+others.gate.line: A fruitful dialogue with others starts between the muse and oneself
 others.gate.scripture: What you write first stays yours, before anyone else’s voice gets in. It also draws you the day’s seal.
 others.gate.button: Write my first impression
 others.closed.line: This conversation has closed to new writing. Nothing said here was lost.
@@ -75,8 +83,8 @@ cue.onlyyou: Nobody here yet today
 cue.onlyyou.some: Only you here so far today
 
 # LINKS BETWEEN WORKS
-link.pair.heading: What do these two say to each other?
-link.pair.line: They need not agree. Where they argue is often where they teach.
+link.pair.heading: How do you contrast these two?
+link.pair.line: What do they both capture? even in different ways
 link.whole.heading: One thought that holds all three
 link.whole.line: Where do they meet? What one thing are all three looking toward?
 link.placeholder: Two or three sentences is plenty.
@@ -84,7 +92,7 @@ link.publish: Publish this link
 link.appears: Appears under the 
 link.close: Close
 link.others.heading: How others connected them
-link.gate.line: Write your own link first, so the connection you see is yours.
+link.gate.line: Write your own link first
 link.yours.whole: Your thought on all three
 link.published.under: Published under 
 link.published.journal:  · also in your notebook
@@ -126,12 +134,12 @@ nb.art.smaller: Smaller again
 
 # THE PAGE ITSELF — the prompt changes with how many lines are on it
 page.prompt.question: Hanging on: 
-page.prompt.none: An empty page. Begin with a line that struck you, or simply begin.
+page.prompt.none: 
 page.prompt.one: One line at the top. What is it asking of you?
-page.prompt.two: Two lines that have never met. Write the paragraph that introduces them.
-page.prompt.three: Three lines. What do they know together that none of them knows alone?
-page.empty: No line yet. Choose one from the left, or write straight onto the page.
-page.title.placeholder: Title (if it wants one)
+page.prompt.two: Two lines to bring together:
+page.prompt.three: Three lines, what do they all say?
+page.empty: No line yet. Choose one or write straight onto the page.
+page.title.placeholder: Title (optional)
 page.body.placeholder: Write under it…
 page.hangs: Hangs on
 page.hangs.none: — nothing yet —
@@ -143,23 +151,23 @@ page.tearout: Tear out
 # THE BOARD
 board.line: Everything that has struck you, in one place. Choose up to three and write under them.
 board.add: + Pin a line of your own
-board.foot: Move them about. A line you take down goes to rest; the Index still keeps it.
+board.foot: 
 
 # QUESTIONS
 q.placeholder: A question you keep coming back to
 q.add: Put it on the shelf
-q.nudge: Still breathing?
+q.nudge: 
 q.next: Write the next page on this
-q.became: This has become something
-q.became.heading: Became something
+q.became: 
+q.became.heading: 
 q.reopen: Open it again
-q.empty: No questions yet. A question you keep returning to is how a muse goes on working in you.
+q.empty: No questions yet.
 q.thread.empty: Nothing written on it yet.
 
 # TODAY — facing pages
-today.who: Who speaks first
+today.who: 
 today.voice.muse: The muse
-today.voice.muse.line: What did today’s muses set before you?
+today.voice.muse.line: 
 today.voice.table: The table
 today.voice.table.line: Someone else’s impression that stayed with you.
 today.voice.you: You, before
@@ -346,7 +354,7 @@ phone.written: written
 phone.link.write: write a link: 
 phone.link.done: linked: 
 phone.all.write: Tie all three together
-phone.all.done: You tied all three together
+phone.all.done: All three are together
 phone.back: ‹ Today
 phone.next: Next work ›
 phone.others.suffix:  others wrote today

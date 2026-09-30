@@ -7,7 +7,10 @@ const COPY=(function(){ const o={}; let raw="";
   const i=line.indexOf(":"); if(i<1) return; const k=line.slice(0,i).trim(); if(!/^[a-z0-9.]+$/i.test(k)) return;
   o[k]=line.slice(i+1).replace(/^ /,"").replace(/\r$/,"").replace(/\\n/g,"\n"); });
  return o; })();
-function T(k,d){ const v=COPY[k]; return (v===undefined||v==="")?d:v; }
+/* A line deleted from copy.js falls back to the built-in default.
+   A line left BLANK hides that wording: an empty value is a decision. */
+function T(k,d){ const v=COPY[k]; return v===undefined?d:v; }
+function blank(k){ return COPY[k]===""; }
 function applyStaticCopy(){
  const set=(sel,k,d)=>{ const el=document.querySelector(sel); if(el) el.textContent=T(k,d); };
  set('#switch [data-tab="muse"]',"site.tab.muse","Muse");
@@ -530,6 +533,7 @@ function render(){
  document.querySelectorAll("#switch [data-tab]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===S.tab)));
  $("#profBtn").setAttribute("aria-current",String(S.tab==="profile"));
  ({muse:renderMuse, notebook:renderNotebook, why:renderWhy, profile:renderProfile})[S.tab]($("#view"));
+ pruneBlankControls($("#view"));
 }
 const HERO=`<section class="hero"><div><p class="eyebrow">${T("hero.eyebrow","Poiesis, a place to make things")}</p><h1>${T("hero.headline","Every made thing began as a thing ")}<em>${T("hero.headline.stressed","received")}</em>.</h1></div>
  <aside class="lexicon" aria-label="Definition of poiesis"><div><span class="hw">${T("lexicon.word","poiesis")}</span><span class="gr">${T("lexicon.greek","ποίησις")}</span></div><div class="pos">${T("lexicon.part","noun · from Greek ")}<i>${T("lexicon.root","poiein")}</i>, ${T("lexicon.rootgloss","“to make”")}</div>
@@ -642,6 +646,13 @@ function writerHTML(m){
 }
 function bmMenu(){ return `<span class="bm"><button class="btn icon" data-pa="bm" aria-label="Keep this" aria-expanded="false" title="Keep this">${BOOKMARK}</button>
  <span class="bmenu" hidden><button data-pa="save" data-to="line">${T("keep.menu.line","Keep the line")}</button><button data-pa="save" data-to="page">${T("keep.menu.page","Write a page under it")}</button></span></span>`; }
+/* others.gate.line ends in "… from " so the maker's name can follow it.
+   Rewrite it to end anywhere else and the name is simply not appended. */
+function gateLine(m){
+ if(m.kind==="Scripture") return T("others.gate.scripture","What you write first stays yours, before anyone else’s voice gets in. It also draws you the day’s seal.");
+ const line=T("others.gate.line","What you write first stays yours, before anyone else’s voice gets in. It also draws you one sticker from ");
+ return /\s$/.test(line)?line+esc(MAKERNAME[makerOf(m.id)]||m.maker)+".":line;
+}
 function postHTML(p, m, mine, closed){
  const P=mine?null:(PEOPLE[p.name]||null);
  const top=mine?myTop():(P?P.top:null);
@@ -674,7 +685,7 @@ function responsesHTML(m){
   const cl0=new Date(); cl0.setDate(cl0.getDate()+3);
   if(!s) return `<section class="responses" id="responses"><h3>${T("others.heading","How it sang in others")}</h3>
    <div class="firsthere"><b>${T("others.gate.heading","Leave your first impression to read theirs.")}</b>
-    <p class="muted" style="margin:6px 0 12px;font-size:.9rem">${m.kind==="Scripture"?T("others.gate.scripture","What you write first stays yours, before anyone else’s voice gets in. It also draws you the day’s seal."):T("others.gate.line","What you write first stays yours, before anyone else’s voice gets in. It also draws you one sticker from ")+esc(MAKERNAME[makerOf(m.id)]||m.maker)+"."}</p>
+    <p class="muted" style="margin:6px 0 12px;font-size:.9rem">${gateLine(m)}</p>
     <button class="btn primary" data-act="towrite">${T("others.gate.button","Write my first impression")}</button></div></section>`;
   return `<section class="responses" id="responses"><h3>${T("others.heading","How it sang in others")}</h3>
    <p class="muted" style="margin:0 0 8px;font-size:.9rem">${T("others.first","Nobody else has written here yet. The conversation closes ")}${cl0.toLocaleDateString(undefined,{weekday:"long"})}.</p>
@@ -691,7 +702,7 @@ function responsesHTML(m){
    <div class="peek">${posts.map(p=>personAv(p.name)).join("")}<span><b>${esc(who)}</b> left first impressions here. <span class="muted">${posts.length} impressions · ${otherLinks.length} links from other works · closes ${cl}</span></span></div>
    <div class="locked"><div class="ghost" aria-hidden="true">${posts.map(p=>postHTML(p,m)).join("")}</div>
    <div class="veil"><div><b style="font-family:var(--f-display);font-weight:400;font-size:1.25rem">${T("others.gate.heading","Leave your first impression to read theirs.")}</b>
-    <p class="muted" style="margin:6px 0 12px;font-size:.9rem">${m.kind==="Scripture"?T("others.gate.scripture","What you write first stays yours, before anyone else’s voice gets in. It also draws you the day’s seal."):T("others.gate.line","What you write first stays yours, before anyone else’s voice gets in. It also draws you one sticker from ")+esc(MAKERNAME[makerOf(m.id)]||m.maker)+"."}</p>
+    <p class="muted" style="margin:6px 0 12px;font-size:.9rem">${gateLine(m)}</p>
     <button class="btn primary" data-act="towrite">${T("others.gate.button","Write my first impression")}</button></div></div></div></section>`;
  const linkPosts=[...myLinks.map(p=>postHTML(p,m,true)), ...otherLinks.map(y=>postHTML({id:y.id, name:y.name, at:y.at, first:y.text, linkOf:y.on, replies:y.replies, moved:y.moved}, m))];
  return `<section class="responses" id="responses"><h3>${T("others.heading","How it sang in others")}</h3><p class="muted" style="margin:0 0 8px;font-size:.9rem">${posts.length+1} impressions · ${linkPosts.length} links that touch this work · the conversation closes ${cl}</p>
@@ -1250,6 +1261,7 @@ function renderNotebook(v){
  else if(way==="index") box.innerHTML=indexHTML();
  wireNotebook(v);
  if(way==="board") wireCork();
+ pruneBlankControls(v);
 }
 function wireNotebook(v){
  const t=$("#nbTitle"), b=$("#nbBody");
@@ -1414,6 +1426,12 @@ function penInit(){
 let renderLater=false;
 const typing=()=>{ const a=document.activeElement; return !!a && /^(TEXTAREA|INPUT|SELECT)$/.test(a.tagName); };
 document.addEventListener("focusout", ()=>{ if(renderLater) setTimeout(()=>{ if(renderLater && !typing()){ renderLater=false; render(); } }, 250); });
+/* A button whose only label was blanked has nothing left to read or press. */
+function pruneBlankControls(root){
+ (root||document).querySelectorAll(".view button, .view a.btn").forEach(el=>{
+  if(el.querySelector("svg,img")||el.getAttribute("aria-label")||el.textContent.trim()) return;
+  el.hidden=true; });
+}
 window.PoiesisApp={ T, toast, today, state:()=>S,
  // New data arrived from the account: keep it, and redraw unless someone is mid-sentence.
  commit(){ save(true); applyPrefs(); if(typing()){ renderLater=true; return; } render(); },
