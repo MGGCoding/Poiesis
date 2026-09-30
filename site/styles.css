@@ -831,6 +831,8 @@ html[data-dev="phone"] .m-study .plate.study{height:200px; border-width:7px}
 /* nobody has written here yet */
 .firsthere{background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:16px 18px; box-shadow:var(--shadow)}
 .firsthere b{font-family:var(--f-display); font-weight:400; font-size:1.25rem}
+/* wording left blank in copy.js leaves no gap behind it */
+#view :is(h2,h3,h4,p):empty{display:none}
 .m-reading .v2{font-family:var(--f-display); font-size:1.06rem; line-height:1.45; margin:2px 0 6px}
 
 /* open book */

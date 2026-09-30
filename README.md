@@ -6,7 +6,7 @@ Built on René Girard's idea of good mimesis: everyone aspires to a shared model
 
 ## Layout
 
-- `site/` — the deployed static app (GitHub Pages source). No build step: `index.html` links `styles.css`, `copy.js` (all UI wording — edit this to change the writing), `app.js` (behavior), `config.js` (which Supabase project, blank = prototype) and `data.js` (sign-in, notebook sync, conversations). Open `site/index.html` directly in a browser to run it.
+- `site/` — the deployed static app (GitHub Pages source). No build step: `index.html` links `styles.css`, `days.js` (the day's three works, generated from `muse-bank/` by `tools/build-days.mjs`), `copy.js` (all UI wording — edit the text after each colon; leave a value **blank** to take that wording off the site, delete the whole line to put the built-in default back), `fonts.css` and `fonts/` (the seven typefaces, so the site needs no internet), `app.js` (behavior), `config.js` (which Supabase project, blank = prototype) and `data.js` (sign-in, notebook sync, conversations). Open `site/index.html` directly in a browser to run it.
 - `supabase/` — the database: tables and rules (`migrations/`), the muse-bank seed, tests, and the setup steps (`supabase/README.md`). How it all fits: `docs/architecture.md`.
 - `muse-bank/` — the content bank: daily calendar of works (`calendar/`), the works themselves (`works/poems`, `works/passages`, `works/paintings`), and `index.json` indexing them. See `muse-bank/README.md`.
 - `docs/` — decisions log, project instructions, founder's notes, muse curriculum, daily letter.
