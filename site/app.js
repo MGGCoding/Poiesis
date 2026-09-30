@@ -934,7 +934,7 @@ function phoneHomeHTML(){
  const dateStr=new Date().toLocaleDateString(undefined,{weekday:"long", month:"long", day:"numeric"});
  const done=id=>!!S.sealed[id], all=MUSES.every(x=>done(x.id)), first=MUSES.find(x=>!done(x.id)), none=!MUSES.some(x=>done(x.id));
  const seg=(a,b,id)=>{ if(!id) return ""; const lbl=`${MUSE[a].kind.toLowerCase()} and ${MUSE[b].kind.toLowerCase()}`; return `<button type="button" class="ph-seg" data-side="${id}">${S.syn[id]?"✓ "+T("phone.link.done","linked: ")+lbl:"↳ "+T("phone.link.write","write a link: ")+lbl}</button>`; };
- const rows=MUSES.map((w,i)=>{ const st=done(w.id)?`<span class="ph-st">✓ ${T("phone.written","written")}</span>`:`<span class="ph-st"><span class="ph-dash">${esc(w.maker.split(" ").slice(-1)[0][0])}</span></span>`;
+ const rows=MUSES.map((w,i)=>{ const st=done(w.id)?`<span class="ph-st">✓ ${T("phone.written","written")}</span>`:`<span class="ph-st"><span class="ph-dash">${w.kind==="Scripture"?"✝":esc(w.maker.split(" ").slice(-1)[0][0])}</span></span>`;
    const nextSeg=i<MUSES.length-1?seg(w.id,MUSES[i+1].id,LINKS.find(l=>(l.a===w.id&&l.b===MUSES[i+1].id)||(l.b===w.id&&l.a===MUSES[i+1].id))?.id):"";
    return `<button type="button" class="ph-row" data-popen="${w.id}"><span class="ph-ic" aria-hidden="true">${PICON[iconFor(w)]}</span><span class="ph-rt"><span class="k">${esc(w.kind.toLowerCase())}</span><b>${esc(w.title)}</b><span class="mk">${esc(w.maker)}</span></span>${st}${none&&first===w?`<span class="ph-begin">${T("phone.begin","begin here")}</span>`:""}</button>${nextSeg||""}`; }).join("");
  const knot=true?`<button type="button" class="ph-knot" data-side="whole"><span>◇</span>${S.syn.whole?T("phone.all.done","You tied all three together"):T("phone.all.write","Tie all three together")}</button>`:"";
@@ -944,7 +944,8 @@ function phoneHomeHTML(){
   <div class="ph-theme"><h1 class="ph-tw">${esc(DAY.theme)}</h1><button class="m-cross" type="button" data-act="reading" aria-expanded="${!!S.reading}" aria-label="The day’s reading">✝</button></div>
   <p class="ph-line">${esc(DAY.line)}</p>${reading}
   <div class="ph-three">${rows}${knot}</div>
-  <div class="ph-others"><span class="ph-avs">${cols}</span>${TODAY.length}${T("phone.others.suffix"," others wrote today")}</div></div>`;
+  ${TODAY.length?`<div class="ph-others"><span class="ph-avs">${cols}</span>${TODAY.length}${T("phone.others.suffix"," others wrote today")}</div>`
+   :`<div class="ph-others">${mineParts().length?T("cue.onlyyou.some","Only you here so far today"):T("cue.onlyyou","Nobody here yet today")}</div>`}</div>`;
 }
 function renderMuse(v){
  if(DEV()==="phone"&&!S.past&&S.phome!==false){
