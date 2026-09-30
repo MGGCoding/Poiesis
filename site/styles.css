@@ -342,24 +342,6 @@ h1,h2,h3,h4{font-family:var(--f-display); font-weight:400; text-wrap:balance; ma
 .bcard.photo .cap{font-family:var(--f-hand); font-size:1rem; margin-top:5px; text-align:center}
 
 /* Rule */
-.rule{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:26px}
-.rulecard{background:var(--card); color:var(--card-ink); box-shadow:var(--shadow); padding:20px 22px; transform:rotate(-.5deg)}
-.rulecard h3{font-size:1.5rem; margin-bottom:6px}
-.rulecard textarea{width:100%; min-height:170px; border:0; background:transparent; resize:vertical; font-family:var(--f-hand); font-size:1.2rem; line-height:34px; color:var(--card-ink); background-image:repeating-linear-gradient(transparent 0 33px, var(--card-rule) 33px 34px); background-attachment:local}
-.rulecard textarea:focus{outline:none}
-.franklin table{border-collapse:collapse; width:100%; font-family:var(--f-type); font-size:.78rem; margin-top:14px}
-.franklin td{border-top:1px solid #d8ccb4; padding:5px 4px; vertical-align:top}
-.franklin caption{text-align:left; font-family:var(--f-type); font-size:.68rem; letter-spacing:.05em; text-transform:uppercase; color:#8a7b68; padding-bottom:4px}
-.lamp{display:flex; gap:10px; margin:6px 0}
-.lamp div{text-align:center; font-family:var(--f-type); font-size:.64rem; color:var(--muted)}
-.lamp i{display:block; width:22px; height:22px; border-radius:50%; margin:0 auto 4px; border:1px solid var(--line)}
-.lamp i.lit{background:radial-gradient(circle, #ffd98a 0 30%, #e2a64e 60%, transparent 72%); border-color:transparent}
-details.ledger{margin-top:22px; border-top:1px solid var(--line); padding-top:12px}
-details.ledger summary{cursor:pointer; color:var(--muted); font-size:.9rem}
-.tally{margin-top:10px; overflow-x:auto}
-.tally table{border-collapse:collapse; font-family:var(--f-type); font-size:.72rem; color:var(--muted)}
-.tally td, .tally th{padding:4px 8px; text-align:left; font-weight:400; border-bottom:1px solid var(--line); white-space:nowrap}
-.tally .marks{font-family:var(--f-hand); font-size:1.05rem; color:var(--on-surface)}
 
 /* Why */
 .why{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.4fr); gap:44px; padding-block:14px 10px}
@@ -385,7 +367,7 @@ footer{padding-block:34px 0; color:var(--muted-ground); font-size:.82rem; displa
   .journal{grid-template-columns:1fr}
   .jlist{flex-direction:row; overflow-x:auto}
   .jitem{min-width:160px}
-  .rule, .trio{grid-template-columns:1fr}
+  .trio{grid-template-columns:1fr}
   .book{grid-template-columns:1fr}
   .addrow{grid-template-columns:1fr}
   .musecard{padding:18px}
@@ -442,7 +424,6 @@ footer{padding-block:34px 0; color:var(--muted-ground); font-size:.82rem; displa
 .half .spage.right{display:none}
 .half .addrow{grid-template-columns:1fr}
 .half .board{height:520px}
-.half .rule{grid-template-columns:1fr}
 /* profile */
 .profile{display:grid; grid-template-columns:minmax(0,340px) minmax(0,1fr); gap:18px; align-items:start}
 .pcard{display:flex; flex-direction:column; gap:4px}
@@ -469,6 +450,13 @@ footer{padding-block:34px 0; color:var(--muted-ground); font-size:.82rem; displa
 .penbox{position:fixed; right:18px; bottom:calc(80px + env(safe-area-inset-bottom,0px)); z-index:35; width:min(340px, calc(100vw - 36px)); background:var(--card); color:var(--card-ink); box-shadow:0 20px 40px -14px rgba(0,0,0,.5); padding:14px 16px; transform:rotate(-.6deg)}
 .penbox .btn{background:transparent; color:var(--card-ink); border-color:#cdbfa6}
 .penbox .btn.primary{background:var(--accent); color:var(--on-accent); border-color:var(--accent)}
+/* wide screens: the pen stands on its side in the page margin, not over the page */
+@media (min-width: 1160px){
+  :root{--penx:max(12px, calc((100vw - 1100px)/2 - 44px))}
+  .pen{right:var(--penx); top:50%; bottom:auto; transform:translateY(-50%); width:34px; height:98px; border-radius:17px}
+  .pen svg{width:19px; height:19px}
+  .penbox{right:calc(var(--penx) + 44px); top:50%; bottom:auto; transform:translateY(-50%) rotate(-.6deg)}
+}
 /* why join */
 .join{margin-top:10px}
 .roles{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin-top:16px}
@@ -543,7 +531,6 @@ footer{padding-block:34px 0; color:var(--muted-ground); font-size:.82rem; displa
 .pinc:hover .pfoot, .pinc:focus-within .pfoot{opacity:1}
 .pfoot select{border:0; background:transparent; color:#6b5a3a; font-family:var(--f-type); font-size:.66rem; letter-spacing:.04em; text-transform:uppercase; max-width:75%}
 .x2{border:0; background:transparent; color:#8a7b68; font-size:1rem; padding:0 4px}
-.lamps{display:grid; grid-template-columns:auto 1fr; gap:4px 14px; align-items:center}
 .stickymargin .writer .first{font-size:1.18rem}
 @media (max-width: 860px){
   .split{grid-template-columns:1fr} .split.flip > :first-child{order:0}
@@ -801,6 +788,10 @@ html[data-dev="phone"] .m-infob{margin-top:6px; width:24px; height:24px}
 .m-colR > .m-three{align-items:center}
 .m-colR .m-nb{flex:1 1 auto}
 .m-wwrap{position:relative; display:flex; flex-direction:column; flex:1 1 auto}
+@media (min-width: 861px){
+  .m-duo > .m-colR{position:sticky; top:74px; align-self:start; max-height:calc(100vh - 94px); overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin}
+  .m-duo > .m-colR .m-nb{min-height:min(58vh, 520px)}
+}
 @media (max-width: 860px){ .m-duo{grid-template-columns:minmax(0,1fr)} .m-colR .m-nb{min-height:280px} .m-nb.d-tucked, .m-nb.d-matched{margin-left:0!important; transform:none!important} }
 
 .m-nb{position:relative; display:flex; flex-direction:column; color:var(--card-ink); min-height:260px}
@@ -831,6 +822,7 @@ html[data-dev="phone"] .m-infob{margin-top:6px; width:24px; height:24px}
 .m-book .m-duo{gap:0}
 .m-book .m-colL{padding-inline:34px 30px; box-shadow:inset -22px 0 26px -24px rgba(0,0,0,.35)}
 .m-book .m-colR{padding-inline:30px 30px; box-shadow:inset 22px 0 26px -24px rgba(0,0,0,.35); border-left:1px solid rgba(0,0,0,.08)}
+@media (min-width: 861px){ .m-book .m-colR{box-shadow:none; border-left:0} }
 .m-book .m-nb{background:transparent; box-shadow:none; padding:0}
 .m-book .byline, .m-book .m-worknote{color:#8a7b68}
 .m-book .kind{color:var(--accent)}
@@ -852,13 +844,19 @@ html[data-dev="phone"] .m-work.card, html[data-dev="phone"] .m-work.ruled{paddin
 html[data-dev="phone"] .m-work.fascicle{padding:16px 14px 16px 34px}
 .m-poem, .m-prose{position:relative; z-index:1}
 .m-poem{font-family:var(--f-display); font-size:var(--psz)}
-.m-pl{display:grid; grid-template-columns:2.2em max-content minmax(0,1fr); align-items:start; line-height:var(--pitch); min-height:var(--pitch)}
-.m-poem.nr .m-pl{grid-template-columns:max-content minmax(0,1fr) 2.2em}
+.m-pl{display:grid; grid-template-columns:2.2em minmax(0,1fr); align-items:start; line-height:var(--pitch); min-height:var(--pitch)}
+.m-pl .mg{display:none}
+.m-poem.nr .m-pl{grid-template-columns:minmax(0,1fr) 2.2em}
 .m-poem.nr .m-pl .n{order:3; text-align:right}
 .m-poem.nr .m-pl .mg{order:2}
-.m-poem.nonum .m-pl{grid-template-columns:max-content minmax(0,1fr)}
+.m-poem.nonum .m-pl{grid-template-columns:minmax(0,1fr)}
 .m-poem.nonum .m-pl .n{display:none}
-.m-pl .tx{white-space:pre-wrap}
+.m-pl .tx{white-space:pre-wrap; overflow-wrap:break-word; padding-left:1.35em; text-indent:-1.35em}
+/* gloss margins are a desktop option; they get their own track only when on */
+html[data-dev="desk"] .m-poem.gl .m-pl{grid-template-columns:2.2em minmax(0,1fr) minmax(0,11em)}
+html[data-dev="desk"] .m-poem.gl.nr .m-pl{grid-template-columns:minmax(0,1fr) minmax(0,11em) 2.2em}
+html[data-dev="desk"] .m-poem.gl.nonum .m-pl{grid-template-columns:minmax(0,1fr) minmax(0,11em)}
+html[data-dev="desk"] .m-poem.gl .m-pl .mg{display:block}
 html[data-dev="phone"] .m-pl{grid-template-columns:1.8em minmax(0,1fr)}
 html[data-dev="phone"] .m-poem.nr .m-pl{grid-template-columns:minmax(0,1fr) 1.8em}
 html[data-dev="phone"] .m-poem.nonum .m-pl{grid-template-columns:minmax(0,1fr)}

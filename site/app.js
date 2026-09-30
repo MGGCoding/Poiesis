@@ -278,11 +278,11 @@ Object.assign(GLOSS,{"Heft":"Weight; the feel of something heavy.","fascicle":"A
  "RIS":"Reflectance imaging spectroscopy: light-based scanning that identifies pigments and reveals what lies beneath the surface.","underpainting":"The rough first layer of a picture, blocked in before the details.",
  "pentimento":"A change the painter made, still faintly visible under the finished surface.","Walden":"The pond near Concord, Massachusetts, and the book Thoreau made from two years beside it."});
 const SEASONS={
- gathering:{name:"Gathering", line:"Collecting seeds. Nothing has to be good yet.", how:"Everything is open, full width: journal, scrapbook, idea board and rule.", prompt:"Write down three things you saw or overheard this week that you can’t stop thinking about.", lead:"board"},
+ gathering:{name:"Gathering", line:"Collecting seeds. Nothing has to be good yet.", how:"Everything is open, full width: journal, scrapbook and idea board.", prompt:"Write down three things you saw or overheard this week that you can’t stop thinking about.", lead:"board"},
  tending:{name:"Tending", line:"Going back to old seeds and seeing what still breathes.", how:"A writing page stays open. Beside it, whatever you want to reread.", prompt:"Open something you wrote a month ago. Copy out the one line that is still alive, and write the next one.", lead:"journal"},
  weaving:{name:"Weaving", line:"Bringing things that have never met into the same room.", how:"A writing page stays open beside your board, so two ideas can meet on the page.", prompt:"Pick two things you kept that have nothing to do with each other. Write the paragraph that introduces them.", lead:"board"},
  giving:{name:"Giving", line:"Letting something finished go out into the world.", how:"A writing page stays open for finishing. Beside it, your journal of drafts.", prompt:"Finish one small thing today, even a paragraph, and give it to one person.", lead:"journal"}};
-const SPACES={journal:"Journal", scrap:"Scrapbook", board:"Idea board", rule:"Rule of life"};
+const SPACES={journal:"Journal", scrap:"Scrapbook", board:"Idea board"};
 const LOOKS=[{id:"study",name:"Study",sw:["#e4d9c6","#b88a5c","#fdf9ef","#2f5d50"]},{id:"night",name:"Night desk",sw:["#1a1613","#3b2a1e","#efe2c4","#e2a64e"]},{id:"monastery",name:"Monastery",sw:["#ece2cb","#5e1a17","#f8f0dc","#b8913a"]},{id:"roman",name:"Roman terracotta",sw:["#e7c79c","#c0714a","#f7eddc","#2f5f8a"]},{id:"garden",name:"Garden",sw:["#dbe2cf","#6f7f55","#fbfaf2","#7d3f71"]},{id:"cafe",name:"Café",sw:["#eeebe6","#d6cfc3","#ffffff","#5b3a26"]},{id:"library",name:"Library",sw:["#1f2d24","#5a3d27","#f1e9d4","#c9a152"]}];
 const FONTS=[{id:"book",name:"Book (as it is)",f:"'IM Fell English', Georgia, serif"},{id:"garamond",name:"Garamond",f:"'EB Garamond', Garamond, serif"},{id:"typewriter",name:"Typewriter",f:"'Courier Prime', monospace"},{id:"modern",name:"Modern",f:"'Work Sans', Arial, sans-serif"},{id:"hand",name:"By hand",f:"'Kalam', cursive"}];
 
@@ -324,7 +324,6 @@ const DEF_JOURNAL_OLD=[
   body:"Tomás’s post about the second chair. What if the essay is about hospitality as a kind of attention? Weil on attention + Rublev’s open place + Yiayia’s kitchen table on Sundays.\n\nThree things that have never met. Start with the table."},
  {id:"j3", date:"2026-09-12", title:"Overheard, week two", season:"gathering", muse:null,
   body:"— “He only writes when he’s angry, so he’s very productive.”\n— a boy on the tram explaining Caravaggio to his grandmother\n— “We’ll finish it when it’s finished.”"}];
-const DEF_RULE="Write before I open my phone, three mornings a week.\nRead one poem aloud on Sundays.\nKeep one day fallow: receive, don’t make.\nFinish small things and give them away.";
 
 /* ---------- State ---------- */
 const KEY="poiesis.v7"; const clone=o=>JSON.parse(JSON.stringify(o));
@@ -337,7 +336,7 @@ function fresh(){ return {look:null, font:"book", tab:"muse", mi:0, past:null, d
  drawn:{hopkins:"hopkins", handel:"handel"}, reading:false,
  journal:clone(DEF_PAGES), lines:clone(DEF_LINES), questions:clone(DEF_QUESTIONS), trash:[],
  nb:{way:"page", sel:"j2", pick:[], sort:"date", search:"", adding:false, closer:false, voice:"muse", answer:"", pocket:"", thread:null},
- season:"gathering", rule:DEF_RULE, recent:[], visits:{}, log:[], page:{title:"",body:""}, pen:"",
+ season:"gathering", recent:[], visits:{}, log:[], page:{title:"",body:""}, pen:"",
  profile:{name:"Niko", line:"", makes:"", photo:null, ring:"laurel", badge:"Apprentice", top:"handel", formed:["Homer","Henry James"]}}; }
 let S; try{ S=Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY)||"null")||{}); }catch(e){ S=fresh(); }
 function save(quiet){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ toast(T("toast.storage","This browser is out of room for pictures. Your words are still here.")); }
@@ -701,7 +700,7 @@ function poemHTML(m){
    const show=u.nums==="all"||((u.nums==="five"||u.nums==="hand")&&n%5===0)||(u.nums==="stanza"&&li===0);
    h+=`<div class="m-pl"><span class="n">${show?n:""}</span><span class="tx">${esc(ln)}</span><span class="mg">${u.fill==="gloss"?glossLine(ln):""}</span></div>`; });
  });
- return `<div class="m-poem museText ${u.nums==="off"?"nonum":""} ${u.numSide==="right"?"nr":""} ${u.nums==="hand"?"hand":""}">${h}</div>`;
+ return `<div class="m-poem museText ${u.nums==="off"?"nonum":""} ${u.numSide==="right"?"nr":""} ${u.nums==="hand"?"hand":""} ${u.fill==="gloss"?"gl":""}">${h}</div>`;
 }
 function fillHTML(m){
  const f=U().fill; if(f==="none"||f==="gloss") return "";
@@ -1116,10 +1115,9 @@ function pocketHTML(){
   <details class="nb-resting" style="margin-top:18px"><summary>${T("pocket.desk.summary","The rest of the notebook lives on the desk")}</summary><p class="muted" style="font-size:.88rem;margin:8px 0 0">${T("pocket.desk.line","Pages, the board, your questions and the index are all there. This is on purpose: the phone catches, the desk works.")}</p></details></div>`;
 }
 function renderNotebook(v){
- if(DEV()==="phone"&&S.nb.way!=="rule"){ v.innerHTML=pocketHTML(); wireNotebook(v); return; }
+ if(DEV()==="phone"){ v.innerHTML=pocketHTML(); wireNotebook(v); return; }
  const way=S.nb.way||"page";
- v.innerHTML=`<div class="nb-bar"><div class="spaces" role="tablist">${WAYS.map(([k,l])=>`<button role="tab" data-nbway="${k}" aria-selected="${way===k}">${l}</button>`).join("")}</div>
-   <button class="btn ghost small" data-nbway="rule" aria-selected="${way==="rule"}">${T("nb.way.rule","Rule of life")}</button></div>
+ v.innerHTML=`<div class="nb-bar"><div class="spaces" role="tablist">${WAYS.map(([k,l])=>`<button role="tab" data-nbway="${k}" aria-selected="${way===k}">${l}</button>`).join("")}</div></div>
   <div class="panel nb-panel" id="nbspace"></div>`;
  const box=$("#nbspace");
  if(way==="page") box.innerHTML=pageHTML();
@@ -1127,7 +1125,6 @@ function renderNotebook(v){
  else if(way==="questions") box.innerHTML=questionsHTML();
  else if(way==="today") box.innerHTML=todayHTML();
  else if(way==="index") box.innerHTML=indexHTML();
- else if(way==="rule"){ renderRule(box); }
  wireNotebook(v);
  if(way==="board") wireCork();
 }
@@ -1194,34 +1191,6 @@ function wireCork(){
 /* kept for the muse page: a line saved from a post or a highlight */
 function addPin(o){ const id=addLine({text:o.text, who:o.cite||"", where:o.where||"", from:"muse", muse:o.muse||null});
  toast(T("toast.line.kept","Kept. It is on your board.")); return id; }
-
-/* Rule */
-function weekStart(d){ const x=new Date(d); x.setDate(x.getDate()-((x.getDay()+6)%7)); return x; }
-function tally(n){ let s=""; for(let i=0;i<Math.floor(n/5);i++) s+="<s>||||</s> "; return (s+"|".repeat(n%5))||"·"; }
-function renderRule(v){
- const ws=weekStart(new Date()), days=["M","T","W","T","F","S","S"];
- const mine=days.map((_,k)=>{ const d=new Date(ws); d.setDate(d.getDate()+k); return !!S.visits[d.toISOString().slice(0,10)]; });
- const his=[1,0,1,0,1,0,0], sample=[[5,6,1],[4,3,0],[6,9,2],[3,2,0],[5,7,1],[2,1,0],[6,8,1]], rows=[];
- for(let w=7;w>=1;w--){ const d=new Date(ws); d.setDate(d.getDate()-7*w); rows.push({l:d.toLocaleDateString(undefined,{month:"short",day:"numeric"}), o:sample[7-w][0], k:sample[7-w][1], g:sample[7-w][2]}); }
- const iso=ws.toISOString().slice(0,10);
- rows.push({l:"This week", o:Object.keys(S.visits).filter(d=>d>=iso).length, k:S.log.filter(l=>l.d>=iso).length, g:Object.values(S.sealed).filter(s=>new Date(s.at).toISOString().slice(0,10)>=iso).length});
- v.innerHTML=`<div class="rule"><div class="rulecard"><h3>My rule</h3><p class="type" style="color:#8a7b68;margin:0 0 8px">A few promises, in your own hand</p>
-   <textarea id="ruleText" aria-label="My rule of life">${esc(S.rule)}</textarea>
-   <div class="franklin"><table><caption>A muse for this page · Benjamin Franklin’s daily scheme, from his Autobiography</caption>
-    <tr><td>5–7</td><td><b>The Morning Question: What good shall I do this day?</b> Rise, wash, and address Powerful Goodness! Contrive day’s business, and take the resolution of the day.</td></tr>
-    <tr><td>8–11</td><td>Work.</td></tr><tr><td>12–1</td><td>Read, or overlook my accounts, and dine.</td></tr><tr><td>2–5</td><td>Work.</td></tr>
-    <tr><td>6–9</td><td><b>Evening Question: What good have I done to-day?</b> Put things in their places. Supper. Music or diversion, or conversation. Examination of the day.</td></tr><tr><td>10–4</td><td>Sleep.</td></tr></table></div></div>
-  <div><p class="type muted" style="margin:0 0 4px">Your companion</p><h3 style="font-size:1.4rem">Tomás keeps his rule with you</h3>
-   <p class="muted" style="margin:4px 0 10px">Each of you sees whether the other lit the lamp this week, never how much was made. <span class="sample">sample</span></p>
-   <div class="lamps"><span class="type muted">Tomás</span><div class="lamp">${days.map((d,k)=>`<div><i class="${his[k]?"lit":""}"></i>${d}</div>`).join("")}</div>
-    <span class="type muted">You</span><div class="lamp">${days.map((d,k)=>`<div><i class="${mine[k]?"lit":""}"></i>${d}</div>`).join("")}</div></div>
-   <div class="rowbtns" style="margin-top:10px"><button class="btn" id="word">Send Tomás a word</button><button class="btn ghost" id="fallow">Mark today as fallow</button></div>
-   <details class="ledger"><summary>Open the ledger (only you can see it)</summary><p class="muted" style="font-size:.88rem;margin:8px 0 0">Tally marks, the way you’d keep them in a notebook margin. The app never shows you this on its own.</p>
-    <div class="tally"><table><tr><th>Week of</th><th>Days you came</th><th>Things kept</th><th>First impressions</th></tr>${rows.map(r=>`<tr><td>${r.l}</td><td class="marks">${tally(r.o)}</td><td class="marks">${tally(r.k)}</td><td class="marks">${tally(r.g)}</td></tr>`).join("")}</table></div></details></div></div>`;
- $("#ruleText").oninput=e=>{ S.rule=e.target.value; save(); };
- $("#word").onclick=()=>toast("Sent. Tomás will see it the next time he opens Poiesis.");
- $("#fallow").onclick=()=>toast("Today is fallow. Nothing is asked of you.");
-}
 
 /* ---------- Profile ---------- */
 function collection(){ return Object.entries(S.owned).map(([id,o])=>({id, date:o.date, gilt:o.gilt})); }

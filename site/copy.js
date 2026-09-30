@@ -101,7 +101,6 @@ nb.way.board: Board
 nb.way.questions: Questions
 nb.way.today: Today
 nb.way.index: Index
-nb.way.rule: Rule of life
 nb.tray.heading: Lines that struck you
 nb.tray.add: + Add a line
 nb.tray.phone: From your phone
