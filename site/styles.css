@@ -817,6 +817,22 @@ html[data-dev="phone"] .m-infob{margin-top:6px; width:24px; height:24px}
 .m-mine small, .m-layer small{display:block; font-family:var(--f-type); font-size:.6rem; letter-spacing:.07em; text-transform:uppercase; color:#8a7b68; margin-bottom:4px}
 .m-layer{border-top:1px dashed #d8ccb4; margin-top:10px; padding-top:8px; font-family:var(--f-hand); font-size:1.05rem; white-space:pre-line}
 
+/* the Scripture slot: the reading, with the day's painting beside it */
+.m-work.scripture{background:var(--card); box-shadow:var(--shadow); padding:24px 26px 20px}
+.m-verse{margin:0; font-family:var(--f-display); font-size:calc(var(--psz) * 1.06); line-height:1.5; color:var(--card-ink); border-left:2px solid var(--accent); padding-left:18px}
+.m-verse span{display:block}
+.m-work.scripture .cite{font-family:var(--f-type); font-size:.6rem; letter-spacing:.06em; text-transform:uppercase; color:#8a7b68; margin:12px 0 0; padding-left:20px}
+.m-study{margin:20px 0 0}
+.m-study .plate.study{height:clamp(170px, 22vw, 260px); min-height:0; flex:none; border:10px solid var(--frame); box-shadow:var(--shadow); margin:0; filter:saturate(.92) contrast(.96)}
+.m-study figcaption{margin-top:8px; font-family:var(--f-type); font-size:.64rem; letter-spacing:.05em; color:#8a7b68; display:flex; flex-wrap:wrap; gap:4px 10px; align-items:baseline}
+.m-study figcaption b{font-family:var(--f-display); font-size:.95rem; font-weight:400; letter-spacing:0; text-transform:none; color:var(--card-ink)}
+html[data-dev="phone"] .m-work.scripture{padding:18px 16px 16px}
+html[data-dev="phone"] .m-study .plate.study{height:200px; border-width:7px}
+/* nobody has written here yet */
+.firsthere{background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:16px 18px; box-shadow:var(--shadow)}
+.firsthere b{font-family:var(--f-display); font-weight:400; font-size:1.25rem}
+.m-reading .v2{font-family:var(--f-display); font-size:1.06rem; line-height:1.45; margin:2px 0 6px}
+
 /* open book */
 .m-book{background:var(--card); color:var(--card-ink); box-shadow:var(--shadow); padding:28px 0 26px; position:relative}
 .m-book .m-duo{gap:0}

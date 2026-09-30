@@ -26,8 +26,8 @@ const BOOKMARK='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stro
 const PROMPT=T("muse.prompt","How does this muse call to your own experience? What do you hear it singing?");
 
 /* ---------- Muses ---------- */
-/* ---------- Muses: the curriculum day (Round 8) ---------- */
-const MUSES=[
+/* ---------- Muses: the built-in day, used when the bank has no entry ---------- */
+const BUILTIN_MUSES=[
  {id:"browning", mk:"browning", kind:"Poem", title:"Earth’s crammed with heaven", maker:"Elizabeth Barrett Browning", date:"Aurora Leigh, 1856",
   poem:"Why else do these things move him, leaf or stone?\nThe bird’s not moved that pecks at a springshoot;\nNor yet the horse, before a quarry a-graze:\nBut man, the twofold creature, apprehends\nThe twofold manner, in and outwardly,\nAnd nothing in the world comes single to him,\nA mere itself, cup, column, or candlestick,\nAll patterns of what shall be in the Mount;\nThe whole temporal show related royally,\nAnd built up to eterne significance\nThrough the open arms of God. “There’s nothing great\nNor small,” has said a poet of our day,\nWhose voice will ring beyond the curfew of eve\nAnd not be thrown out by the matin’s bell:\nAnd truly, I reiterate, nothing’s small!\nNo lily-muffled hum of a summer-bee,\nBut finds some coupling with the spinning stars;\nNo pebble at your foot, but proves a sphere;\nNo chaffinch, but implies the cherubim;\nAnd (glancing on my own thin, veinèd wrist)\nIn such a little tremor of the blood\nThe whole strong clamour of a vehement soul\nDoth utter itself distinct. Earth’s crammed with heaven,\nAnd every common bush afire with God;\nBut only he who sees, takes off his shoes—\nThe rest sit round it and pluck blackberries,\nAnd daub their natural faces unaware\nMore and more from the first similitude.", poemNote:"Book Seventh, 28 lines · 1856",
   deeper:"Read the six lines again and ask which one you were this morning: the one who took off his shoes, or one of the ones picking blackberries.",
@@ -49,16 +49,54 @@ const MUSES=[
    "Here almost everything has been let go: no story, no face, hardly any furniture. What is left is the light lying on the floorboards, painted by a man who saw the same floor every day for eleven years and did not stop looking at it."]}
 ];
 /* The day’s shape */
-const DAY={theme:"familiar", line:"What we have seen a thousand times, and stopped seeing.",
+const BUILTIN_DAY={theme:"familiar", line:"What we have seen a thousand times, and stopped seeing.",
  verse:"Most certainly I tell you, no prophet is acceptable in his hometown.", verseRef:"Luke 4:24 · World English Bible",
  reading:"Luke 4:22–30", readingNote:"The day’s reading in the Greek Orthodox calendar. It shapes the three works; it is never the point of them."};
+
+/* ---------- The day, from the muse bank ----------
+   tools/build-days.mjs writes site/days.js from muse-bank/. When it covers
+   today, the day's three works are the chosen option's poem, passage and
+   Scripture, and the painting sits beside the Scripture rather than being
+   written on. Otherwise the built-in day above is used unchanged. */
+function bankDay(){
+ const all=(typeof window!=="undefined"&&window.POIESIS_DAYS)||null; if(!all) return null;
+ const d=new Date(), iso=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+ return all[iso]||null;
+}
+const BANK=bankDay();
+/* one plain seal per maker the bank brings in, until that maker has a set of six */
+function bankSticker(m){
+ const mk=m.mk; if(SETS[mk]) return;                       /* a hand-drawn set already exists */
+ const ini=m.kind==="Scripture"?"✝":((m.maker||"?").replace(/[^A-Za-zÀ-ÿ ]/g,"").trim().split(/\s+/).slice(-1)[0][0]||"?");
+ const grounds={Poem:"#2f4030", Passage:"#3d5d86", Scripture:"#6b4a7d"};
+ const id="seal-"+mk;
+ STICKERS[id]={series:m.maker, ed:1, name:m.title, source:[m.title,m.date].filter(Boolean).join(" · "),
+  svg:`<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="23" fill="${grounds[m.kind]||"#3a2f26"}"/><circle cx="24" cy="24" r="18" fill="none" stroke="#e8dcbf" stroke-width="1.1" opacity=".7"/><text x="24" y="31" text-anchor="middle" font-family="Georgia,serif" font-size="19" fill="#e8dcbf">${ini}</text></svg>`};
+ SETS[mk]=[id];
+ MAKERNAME[mk]=m.maker;
+}
+function bankMuses(b){
+ return b.muses.map(m=>{
+  const o={id:m.id, mk:m.mk, kind:m.kind, title:m.title, maker:m.maker, date:m.date,
+   deeper:m.deeper||"", story:m.story||[], gloss:m.gloss||null};
+  if(m.poem){ o.poem=m.poem; if(m.poemNote) o.poemNote=m.poemNote; }
+  if(m.quote){ o.quote=m.quote; o.cite=m.cite||""; }
+  if(m.painting) o.painting=m.painting;
+  return o;
+ });
+}
+const MUSES = BANK ? bankMuses(BANK) : BUILTIN_MUSES;
+const DAY = BANK ? {theme:BANK.theme, line:BANK.line, verse:BANK.verse, verseRef:BANK.verseRef,
+                    reading:BANK.reading, readingNote:BANK.readingNote} : BUILTIN_DAY;
+/* the sample conversation belongs to the built-in day only */
+const SAMPLES = !BANK;
 const LINKS=[
- {id:"pp", a:"browning", b:"chesterton"},
- {id:"pv", a:"chesterton", b:"hammershoi"},
- {id:"vp", a:"hammershoi", b:"browning"}
+ {id:"pp", a:MUSES[0].id, b:MUSES[1].id},
+ {id:"pv", a:MUSES[1].id, b:MUSES[2].id},
+ {id:"vp", a:MUSES[2].id, b:MUSES[0].id}
 ];
 const LINK=Object.fromEntries(LINKS.map(l=>[l.id,l]));
-const LINKS3={pp:["browning","chesterton"], pv:["chesterton","hammershoi"], vp:["browning","hammershoi"]};
+const LINKS3={pp:[MUSES[0].id,MUSES[1].id], pv:[MUSES[1].id,MUSES[2].id], vp:[MUSES[0].id,MUSES[2].id]};
 const SYNS=[
  {id:"y1", on:"pp", name:"Lena Vogt", at:"8:12 a.m.", text:"She says the bush is always burning and we are picking blackberries. He says the sun rises because someone keeps asking for it. Between them: the thing is not tired, we are.", moved:9, replies:[{n:"Jonah Weil", t:"“The thing is not tired, we are.” Ouch, and yes."}]},
  {id:"y2", on:"pv", name:"Marta Ilić", at:"9:26 a.m.", text:"Chesterton wants you to say do it again. Hammershøi actually did it — the same four doors, sixty times. One of them is an argument and the other is a life.", moved:12, replies:[]},
@@ -241,6 +279,7 @@ const SETS={
 const MAKERNAME={browning:"Elizabeth Barrett Browning", chesterton:"G. K. Chesterton", hammershoi:"Vilhelm Hammershøi",
  dickinson:"Emily Dickinson", thoreau:"Henry David Thoreau", vermeer:"Johannes Vermeer", keats:"John Keats",
  matthew:"Caravaggio", james:"Henry James", starry:"Vincent van Gogh", rublev:"Andrei Rublev", hopkins:"Gerard Manley Hopkins", handel:"George Frideric Handel"};
+if(BANK) MUSES.forEach(bankSticker);   /* the bank's makers, now that the tables exist */
 function makerOf(m){ return (MUSE[m]||{}).mk || m; }
 /* the sticker a muse has drawn for you, if any */
 function drawnFor(mid){ return S.drawn[mid]||null; }
@@ -277,6 +316,7 @@ Object.assign(GLOSS,{"Heft":"Weight; the feel of something heavy.","fascicle":"A
  "moral reform":"For Thoreau, the work of waking up rather than the work of behaving well.","macro-XRF":"A scan that maps the chemical elements in paint, layer by layer, so earlier stages of a picture can be read without touching it.",
  "RIS":"Reflectance imaging spectroscopy: light-based scanning that identifies pigments and reveals what lies beneath the surface.","underpainting":"The rough first layer of a picture, blocked in before the details.",
  "pentimento":"A change the painter made, still faintly visible under the finished surface.","Walden":"The pond near Concord, Massachusetts, and the book Thoreau made from two years beside it."});
+if(BANK) MUSES.forEach(m=>{ if(m.gloss) Object.assign(GLOSS, m.gloss); });
 const SEASONS={
  gathering:{name:"Gathering", line:"Collecting seeds. Nothing has to be good yet.", how:"Everything is open, full width: journal, scrapbook and idea board.", prompt:"Write down three things you saw or overheard this week that you can’t stop thinking about.", lead:"board"},
  tending:{name:"Tending", line:"Going back to old seeds and seeing what still breathes.", how:"A writing page stays open. Beside it, whatever you want to reread.", prompt:"Open something you wrote a month ago. Copy out the one line that is still alive, and write the next one.", lead:"journal"},
@@ -464,13 +504,13 @@ const TODAY=[
  {n:"Samuel Achterberg", parts:["dickinson","vermeer","vp"], at:"7:12 a.m."},
  {n:"Tomás Reyes", parts:["thoreau","whole"], at:"7:19 a.m."},
  {n:"Lena Vogt", parts:["dickinson","thoreau","pp"], at:"8:02 a.m."}
-];
+].filter(()=>SAMPLES);
 function mineParts(){ const p=MUSES.filter(m=>S.sealed[m.id]).map(m=>m.id); LINKS.forEach(l=>{ if(S.syn[l.id]) p.push(l.id); }); if(S.syn.whole) p.push("whole"); return p; }
 function myReplyCount(){ return Object.values(S.replies).reduce((n,a)=>n+a.length,0); }
 function dayCount(){
- const others=TODAY.reduce((n,p)=>n+p.parts.length,0)
+ const others=SAMPLES?(TODAY.reduce((n,p)=>n+p.parts.length,0)
   + MUSES.reduce((n,m)=>n+(POSTS[m.id]||[]).reduce((k,p)=>k+(p.replies||[]).length,0),0)
-  + SYNS.reduce((n,y)=>n+(y.replies||[]).length,0);
+  + SYNS.reduce((n,y)=>n+(y.replies||[]).length,0)):0;
  return others + mineParts().length + myReplyCount();
 }
 
@@ -582,12 +622,23 @@ function linkTag(id){ return id==="whole"?"all three":synSubjects(id).map(x=>MUS
 function responsesHTML(m){
  const posts=POSTS[m.id]||[], s=S.sealed[m.id];
  const linksHere=[...LINKS.map(l=>l.id),"whole"].filter(id=>synSubjects(id).includes(m.id));
- const otherLinks=SYNS.filter(y=>linksHere.includes(y.on));
+ const otherLinks=SAMPLES?SYNS.filter(y=>linksHere.includes(y.on)):[];
  const myLinks=linksHere.filter(id=>S.syn[id]).map(id=>({id:"me_syn_"+id, at:when(S.syn[id].at), first:S.syn[id].text, linkOf:id}));
  const reps=posts.reduce((n,p)=>n+(p.replies||[]).length+(S.replies[p.id]||[]).length,0);
  if(m.closed){ const top=[...posts].sort((a,b)=>b.moved-a.moved).slice(0,10);
   return `<section class="responses" id="responses"><h3>${T("others.heading","How it sang in others")}</h3><p class="closed">${T("others.closed.line","This conversation has closed. Here are its top impressions and their first replies.")}</p>
    <div>${s?postHTML({id:"me_"+m.id, at:when(s.at), first:s.text},m,true,true):""}${top.map(p=>postHTML(p,m,false,true)).join("")}</div></section>`; }
+ if(!posts.length&&!m.closed){
+  const cl0=new Date(); cl0.setDate(cl0.getDate()+3);
+  if(!s) return `<section class="responses" id="responses"><h3>${T("others.heading","How it sang in others")}</h3>
+   <div class="firsthere"><b>${T("others.gate.heading","Leave your first impression to read theirs.")}</b>
+    <p class="muted" style="margin:6px 0 12px;font-size:.9rem">${m.kind==="Scripture"?T("others.gate.scripture","What you write first stays yours, before anyone else’s voice gets in. It also draws you the day’s seal."):T("others.gate.line","What you write first stays yours, before anyone else’s voice gets in. It also draws you one sticker from ")+esc(MAKERNAME[makerOf(m.id)]||m.maker)+"."}</p>
+    <button class="btn primary" data-act="towrite">${T("others.gate.button","Write my first impression")}</button></div></section>`;
+  return `<section class="responses" id="responses"><h3>${T("others.heading","How it sang in others")}</h3>
+   <p class="muted" style="margin:0 0 8px;font-size:.9rem">${T("others.first","Nobody else has written here yet. The conversation closes ")}${cl0.toLocaleDateString(undefined,{weekday:"long"})}.</p>
+   <div>${postHTML({id:"me_"+m.id, at:when(s.at), first:s.text},m,true)}</div>
+   <div class="linkfeed"><p class="type muted" style="margin:18px 0 6px">${T("others.linkfeed.heading","Links that pass through this work")}</p>${[...myLinks.map(p=>postHTML(p,m,true))].join("")||`<p class="muted" style="margin:0;font-size:.9rem">${T("others.linkfeed.empty","None yet. Tap a thread between two works to connect them.")}</p>`}</div></section>`;
+ }
  const names=posts.map(p=>p.name.split(" ")[0]);
  const who=names.length>2?`${names.slice(0,2).join(", ")} and ${names.length-2} other${names.length-2>1?"s":""}`:names.join(" and ");
  const closes=new Date(); closes.setDate(closes.getDate()+3); const cl=closes.toLocaleDateString(undefined,{weekday:"long"});
@@ -598,7 +649,7 @@ function responsesHTML(m){
    <div class="peek">${posts.map(p=>personAv(p.name)).join("")}<span><b>${esc(who)}</b> left first impressions here. <span class="muted">${posts.length} impressions · ${otherLinks.length} links from other works · closes ${cl}</span></span></div>
    <div class="locked"><div class="ghost" aria-hidden="true">${posts.map(p=>postHTML(p,m)).join("")}</div>
    <div class="veil"><div><b style="font-family:var(--f-display);font-weight:400;font-size:1.25rem">${T("others.gate.heading","Leave your first impression to read theirs.")}</b>
-    <p class="muted" style="margin:6px 0 12px;font-size:.9rem">${T("others.gate.line","What you write first stays yours, before anyone else’s voice gets in. It also draws you one sticker from ")}${esc(MAKERNAME[makerOf(m.id)]||m.maker)}.</p>
+    <p class="muted" style="margin:6px 0 12px;font-size:.9rem">${m.kind==="Scripture"?T("others.gate.scripture","What you write first stays yours, before anyone else’s voice gets in. It also draws you the day’s seal."):T("others.gate.line","What you write first stays yours, before anyone else’s voice gets in. It also draws you one sticker from ")+esc(MAKERNAME[makerOf(m.id)]||m.maker)+"."}</p>
     <button class="btn primary" data-act="towrite">${T("others.gate.button","Write my first impression")}</button></div></div></div></section>`;
  const linkPosts=[...myLinks.map(p=>postHTML(p,m,true)), ...otherLinks.map(y=>postHTML({id:y.id, name:y.name, at:y.at, first:y.text, linkOf:y.on, replies:y.replies, moved:y.moved}, m))];
  return `<section class="responses" id="responses"><h3>${T("others.heading","How it sang in others")}</h3><p class="muted" style="margin:0 0 8px;font-size:.9rem">${posts.length+1} impressions · ${linkPosts.length} links that touch this work · the conversation closes ${cl}</p>
@@ -623,7 +674,8 @@ let CLIPN=0;
 function clipSvg(svg){ const k="kc"+(CLIPN++); return svg.replace(/(<svg[^>]*>)/,`$1<clipPath id="${k}"><circle cx="24" cy="24" r="23.5"/></clipPath><g clip-path="url(#${k})">`).replace(/<\/svg>$/,"</g></svg>"); }
 function keptToday(){ return S.pick.date===today()?S.pick.id:null; }
 function revealAmt(id){ if(S.sealed[id]) return 1; if(U().reveal!=="ink") return 0; return Math.min(1,(S.drafts[id]||"").trim().length/70)*.85; }
-function placeholderSvg(id){ const mk=makerOf(id), nm=MAKERNAME[mk]||"?", ini=nm.split(" ").slice(-1)[0][0];
+function placeholderSvg(id){ const mk=makerOf(id), nm=MAKERNAME[mk]||"?";
+ const ini=(MUSE[id]||{}).kind==="Scripture"?"✝":nm.split(" ").slice(-1)[0][0];
  return `<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#e8e0cb" stroke="#b3a892" stroke-width="1.2"/><text x="24" y="31" text-anchor="middle" font-family="Georgia,serif" font-size="19" fill="#8a7b68">${esc(ini)}</text></svg>`; }
 function shadeHTML(id,size){
  const sid=S.drawn[id]||null, s=sid?STICKERS[sid]:null;
@@ -660,7 +712,10 @@ function itemBox(size,vert){ const u=U();
 }
 function cueHTML(){
  const u=U(); if(u.cue==="off") return "";
- const faces=`<span class="m-faces">${TODAY.slice(0,5).map(p=>`<i style="background:${PEOPLE[p.n].c}"></i>`).join("")}</span>`, n=dayCount();
+ const n=dayCount();
+ if(!TODAY.length) return mineParts().length?`<span class="m-cue"><span class="m-pnote">${T("cue.onlyyou.some","Only you here so far today")}</span></span>`
+  :`<span class="m-cue"><span class="m-pnote">${T("cue.onlyyou","Nobody here yet today")}</span></span>`;
+ const faces=`<span class="m-faces">${TODAY.slice(0,5).map(p=>`<i style="background:${PEOPLE[p.n].c}"></i>`).join("")}</span>`;
  if(u.cue==="bubble") return `<span class="m-cue" data-tip="${T("cue.tip","Contributions today")}">${faces}<span class="m-bubble">${n}</span></span>`;
  if(u.cue==="faces") return `<span class="m-cue" data-tip="${T("cue.tip","Contributions today")}">${faces}<span class="m-badge">${n}</span></span>`;
  return `<span class="m-cue">${faces}<span class="m-pnote">${TODAY.length}${T("cue.note"," others<br>wrote today")}</span></span>`;
@@ -719,10 +774,34 @@ function workHTML(m, inBook){
  const u=U();
  if(u.storyMode==="info"&&u.infoStyle==="flip"&&S.info) return `<div class="m-work back">${labelHTML(m,false)}<div class="m-foot" style="justify-content:flex-end"><button class="btn small" data-info>Turn it back</button></div></div>`;
  if(m.plate) return `<div class="plate ${m.plate}" role="img" aria-label="Color study after ${esc(m.title)}"><span class="note">Color study · museum image in the app</span></div>${m.quote?`<blockquote class="pull museText">${esc(m.quote)}<cite>${esc(m.cite)}</cite></blockquote>`:""}`;
+ if(m.kind==="Scripture") return `<div class="m-work scripture">${scriptureHTML(m)}</div>`;
  let inner;
  if(m.poem) inner=poemHTML(m);
  else { const paras=(m.quote||"").split(/(?<=…)\s+/); inner=`<div class="m-prose museText">${paras.map(p=>`<p>${esc(p)}</p>`).join("")}${m.cite?`<div class="cite">${esc(m.cite)}</div>`:""}</div>${m.notebook?`<div class="notebook-plate museText" style="margin:14px 0 0;position:relative;z-index:1">${m.notebook.map(esc).join("<br>")}<small>${esc(m.notebookNote)}</small></div>`:""}`; }
  return `<div class="m-work ${inBook?"inbook":u.paper}">${m.plate?"":fillHTML(m)}${inner}</div>`;
+}
+/* The third work is the day's Scripture. The painting stands beside it as a
+   colour study, labelled, until the museum images are licensed and hosted. */
+function studyHTML(p){
+ if(!p) return "";
+ const pal=p.palette||["#cfcabc","#9a9384","#6b6355"];
+ const [c1,c2,c3]=[pal[0], pal[1]||pal[0], pal[2]||pal[1]||pal[0]];
+ const bg=`radial-gradient(ellipse 70% 55% at 22% 24%, ${c1} 0 40%, transparent 78%),`
+  +`radial-gradient(ellipse 80% 60% at 78% 72%, ${c3} 0 38%, transparent 76%),`
+  +`radial-gradient(ellipse 90% 70% at 50% 50%, ${c2} 0 45%, transparent 85%), ${c2}`;
+ return `<figure class="m-study"><div class="plate study" role="img" aria-label="Color study after ${esc(p.title)} by ${esc(p.artist)}" style="background:${bg}"><span class="note">Color study · museum image in the app</span></div>
+  <figcaption><b>${esc(p.title)}</b><span>${esc(p.artist)}${p.era?` · ${esc(p.era)}`:""}</span></figcaption></figure>`;
+}
+function scriptureHTML(m){
+ const lines=(m.quote||"").split("\n").filter(x=>x.trim());
+ return `<blockquote class="m-verse museText">${lines.map(l=>`<span>${esc(l)}</span>`).join("")}</blockquote>
+  ${studyHTML(m.painting)}`;
+}
+/* The ✝ beside the day's word: what else is read today, never the third work again */
+function readingPanelHTML(){
+ if(BANK) return `<div class="m-reading"><div class="r">${T("muse.reading.also","Also read today")}</div>
+  <div class="v2">${esc(DAY.reading)}</div><p>${esc(DAY.readingNote)}</p></div>`;
+ return `<div class="m-reading"><div class="v">“${esc(DAY.verse)}”</div><div class="r">${esc(DAY.verseRef)} · ${T("muse.reading.connector","today’s reading, ")}${esc(DAY.reading)}</div><p>${esc(DAY.readingNote)}</p></div>`;
 }
 function noteHTML(m){
  const txt=m.poemNote||(m.plate?m.where:m.cite?"":m.date)||"";
@@ -806,7 +885,7 @@ function phoneHomeHTML(){
    const nextSeg=i<MUSES.length-1?seg(w.id,MUSES[i+1].id,LINKS.find(l=>(l.a===w.id&&l.b===MUSES[i+1].id)||(l.b===w.id&&l.a===MUSES[i+1].id))?.id):"";
    return `<button type="button" class="ph-row" data-popen="${w.id}"><span class="ph-ic" aria-hidden="true">${PICON[iconFor(w)]}</span><span class="ph-rt"><span class="k">${esc(w.kind.toLowerCase())}</span><b>${esc(w.title)}</b><span class="mk">${esc(w.maker)}</span></span>${st}${none&&first===w?`<span class="ph-begin">${T("phone.begin","begin here")}</span>`:""}</button>${nextSeg||""}`; }).join("");
  const knot=true?`<button type="button" class="ph-knot" data-side="whole"><span>◇</span>${S.syn.whole?T("phone.all.done","You tied all three together"):T("phone.all.write","Tie all three together")}</button>`:"";
- const reading=S.reading?`<div class="m-reading"><div class="v">“${esc(DAY.verse)}”</div><div class="r">${esc(DAY.verseRef)} · ${T("muse.reading.connector","today’s reading, ")}${esc(DAY.reading)}</div><p>${esc(DAY.readingNote)}</p></div>`:"";
+ const reading=S.reading?readingPanelHTML():"";
  const cols=TODAY.slice(0,4).map(p=>`<span style="background:${PEOPLE[p.n].c}">${esc(initials(p.n))}</span>`).join("");
  return `<div class="ph-home"><p class="ph-date">${esc(dateStr)}</p>
   <div class="ph-theme"><h1 class="ph-tw">${esc(DAY.theme)}</h1><button class="m-cross" type="button" data-act="reading" aria-expanded="${!!S.reading}" aria-label="The day’s reading">✝</button></div>
@@ -836,7 +915,7 @@ function renderMuse(v){
  const m=curMuse(), u=U(), dev=DEV(), past=!!m.closed;
  const dateStr=new Date().toLocaleDateString(undefined,{weekday:"long", month:"long", day:"numeric"});
  const themeW=`<h1 class="m-themebig">${esc(DAY.theme)}</h1><button class="m-cross" type="button" data-act="reading" aria-expanded="${!!S.reading}" aria-label="The day’s reading" data-tip="The day’s reading · ${esc(DAY.reading)}">✝</button>`;
- const reading=(S.reading&&!past)?`<div class="m-reading"><div class="v">“${esc(DAY.verse)}”</div><div class="r">${esc(DAY.verseRef)} · ${T("muse.reading.connector","today’s reading, ")}${esc(DAY.reading)}</div><p>${esc(DAY.readingNote)}</p></div>`:"";
+ const reading=(S.reading&&!past)?readingPanelHTML():"";
  const day=past?`<div class="pastbar" style="margin-top:18px"><span><b>${esc(m.day)}</b> · this muse has passed</span><button class="btn small" data-act="today">${T("muse.past.back","Back to today’s muses")}</button></div>`:`<div class="m-dayrow"><div class="m-dayl"><span class="type muted">${esc(dateStr)}</span><div class="m-themewrap">${themeW}</div></div>${u.tplace==="title"&&dev==="desk"?"":`<div class="m-dayr">${threeHTML(threeSize(),false,true)}</div>`}</div>${reading}`;
  const info=u.storyMode==="info"?`<button class="m-infob" type="button" data-info aria-expanded="${!!S.info}" aria-label="About this work" data-tip="${T("muse.info.label","About this work")}">i</button>`:"";
  const cueside=(!past&&U().cue!=="off")?`<span class="m-cueside">${cueHTML()}</span>`:"";

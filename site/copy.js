@@ -41,6 +41,7 @@ muse.later.placeholder: Add a later thought: a reference, a question, a line of 
 muse.later.button: Add
 muse.deeper.label: Go deeper
 muse.reading.connector: today’s reading, 
+muse.reading.also: Also read today
 muse.past.heading: This muse has passed
 muse.past.line: This muse’s conversation has closed. It is still yours to answer in your notebook.
 muse.past.back: Back to today’s muses
@@ -51,9 +52,11 @@ others.heading: How it sang in others
 others.folded.button: Write yours first, then unfold theirs
 others.gate.heading: First, your own impression.
 others.gate.line: What you receive first should be yours, before any other voice gets in. Writing it also draws one sticker from 
+others.gate.scripture: What you write first stays yours, before anyone else’s voice gets in. It also draws you the day’s seal.
 others.gate.button: Write my first impression
 others.closed.line: This conversation has closed to new writing. Nothing said here was lost.
 others.linkfeed.heading: Where this work meets the others
+others.first: Nobody else has written here yet. The conversation closes 
 others.linkfeed.empty: No one has joined this work to another yet. Tap a thread between two works to begin.
 post.moved.off: ♡ Moved me
 post.moved.on: ♥ Moved me
@@ -67,6 +70,8 @@ keep.menu.page: Write a page under it
 keep.quote: Quote in my impression
 cue.note:  others<br>wrote today
 cue.tip: Contributions today
+cue.onlyyou: Nobody here yet today
+cue.onlyyou.some: Only you here so far today
 
 # LINKS BETWEEN WORKS
 link.pair.heading: What do these two say to each other?
