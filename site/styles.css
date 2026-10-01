@@ -1208,3 +1208,33 @@ html[data-dev="phone"] .m-writer.notecard{transform:rotate(.3deg)}
 .author::before,.author::after{content:""; flex:1; border-top:1px solid var(--line)}
 .authmsg{margin:2px 0 0; font-size:.86rem; min-height:1.2em}
 .authcard .linkbtn{align-self:flex-start; font-size:.84rem}
+
+/* Round 14: link view keeps the works in sight; the day's saying */
+.m-overlay.sy-ov{position:fixed; inset:0; z-index:60; padding:3vh 12px; place-items:center}
+.m-overlay.sy-ov > div{position:static; width:min(1040px,100%); height:min(94vh,900px)}
+.sy-ov .synbox{margin:0; height:100%; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 18px 40px rgba(20,14,8,.25)}
+.sy-ov .sy-body{flex:1 1 auto; min-height:0; overflow:auto; padding-right:4px}
+.sy-ov .synworks{grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); align-items:start}
+.sy-ov .synw{display:flex; flex-direction:column; max-height:52vh}
+.sy-text{overflow:auto; margin:8px 0 0; padding:8px 10px; background:var(--card); color:var(--card-ink); border-radius:3px; font-size:.95rem; line-height:1.55}
+.sy-text p{margin:0 0 .7em}
+.sy-text small{display:block; color:var(--muted); font-size:.75rem}
+.sy-text .plate{min-height:150px}
+.sy-pin{flex:none; border-top:1px dashed var(--line); padding-top:10px; margin-top:8px; max-height:40%; overflow:auto}
+.sy-pin .writer{margin:0}
+@media (max-width:700px){
+ .m-overlay.sy-ov{padding:0}
+ .m-overlay.sy-ov > div{height:100dvh; width:100%}
+ .sy-ov .synbox{border-radius:0; border:0; padding:12px 12px 10px}
+ .sy-ov .synworks{display:flex; overflow-x:auto; scroll-snap-type:x mandatory; gap:10px; padding-bottom:6px}
+ .sy-ov .synw{flex:0 0 86%; scroll-snap-align:start; max-height:56dvh}
+}
+.m-maxim{margin:8px 0 2px; max-width:34rem; font-family:var(--f-body); font-style:italic; font-size:.95rem; line-height:1.45; color:var(--on-ground)}
+.m-maxim .mx-c{display:block; font-style:normal; font-size:.74rem; color:var(--muted-ground); margin-top:2px}
+.mx-keep{border:0; background:none; padding:0; margin-top:3px; font-family:var(--f-hand); font-size:.95rem; color:var(--accent); cursor:pointer; text-decoration:underline dotted}
+.mx-keep[disabled]{color:var(--muted-ground); text-decoration:none; cursor:default}
+
+.m-maxim{display:flex; gap:10px; align-items:flex-start}
+.mx-col{flex:none; width:22px; height:38px; margin-top:3px; color:var(--accent); opacity:.85}
+.mx-t{min-width:0}
+.ph-home .m-maxim{margin:14px 0 10px}

@@ -54,6 +54,7 @@ const BUILTIN_MUSES=[
 /* The day’s shape */
 const BUILTIN_DAY={theme:"familiar", line:"What we have seen a thousand times, and stopped seeing.",
  verse:"Most certainly I tell you, no prophet is acceptable in his hometown.", verseRef:"Luke 4:24 · World English Bible",
+ maxim:"I pass the whole day in review before myself, and repeat all that I have said and done.", maximCite:"Seneca, On Anger III.36 · tr. Aubrey Stewart, 1900",
  reading:"Luke 4:22–30", readingNote:"The day’s reading in the Greek Orthodox calendar. It shapes the three works; it is never the point of them."};
 
 /* ---------- The day, from the muse bank ----------
@@ -90,7 +91,8 @@ function bankMuses(b){
 }
 const MUSES = BANK ? bankMuses(BANK) : BUILTIN_MUSES;
 const DAY = BANK ? {theme:BANK.theme, line:BANK.line, verse:BANK.verse, verseRef:BANK.verseRef,
-                    reading:BANK.reading, readingNote:BANK.readingNote} : BUILTIN_DAY;
+                    reading:BANK.reading, readingNote:BANK.readingNote,
+                    maxim:BANK.maxim||BUILTIN_DAY.maxim, maximCite:BANK.maxim?BANK.maximCite:BUILTIN_DAY.maximCite} : BUILTIN_DAY;
 /* the sample conversation belongs to the built-in day only */
 const SAMPLES = !BANK;
 const LINKS=[
@@ -565,22 +567,29 @@ function synOpen(id){ return true; }
 function synSubjects(id){ return id==="whole"?MUSES.map(m=>m.id):[LINK[id].a, LINK[id].b]; }
 function andList(a){ return a.length<3?a.join(" and "):a.slice(0,-1).join(", ")+" and "+a[a.length-1]; }
 function synName(id){ return id==="whole"?"all three":`${MUSE[LINK[id].a].kind.toLowerCase()} & ${MUSE[LINK[id].b].kind.toLowerCase()}`; }
+function synTextHTML(m){
+ if(m.plate) return `<div class="plate ${m.plate}" role="img" aria-label="Color study after ${esc(m.title)}"><span class="note">Color study</span></div>${m.quote?`<p class="sy-q museText">${esc(m.quote)}</p>`:""}`;
+ if(m.poem) return `<div class="sy-poem museText">${m.poem.split("\n\n").map(st=>`<p>${st.split("\n").map(esc).join("<br>")}</p>`).join("")}</div>`;
+ return `<div class="sy-prose museText">${(m.quote||"").split(/(?<=…)\s+/).map(x=>`<p>${esc(x)}</p>`).join("")}${m.cite?`<small>${esc(m.cite)}</small>`:""}</div>`;
+}
 function synBoxHTML(id){
  const ids=synSubjects(id), mine=S.syn[id], d=S.synDrafts[id]||"";
  const missing=ids.filter(x=>!S.sealed[x]);
  return `<div class="synbox" id="synbox">
   <div class="synhead"><h3>${id==="whole"?"All three":`${esc(MUSE[ids[0]].kind)} <span class="j">and</span> ${esc(MUSE[ids[1]].kind)}`}</h3><button class="btn small ghost" data-act="closesyn">${T("link.close","Close")}</button></div>
-  <div class="synworks">${ids.map(x=>{ const m=MUSE[x], s=S.sealed[x];
-    return `<div class="synw"><span class="type kind">${esc(m.kind)}</span><b>${esc(m.title)}</b><small class="muted">${esc(m.maker)}</small>
+  <div class="sy-body"><div class="synworks">${ids.map(x=>{ const m=MUSE[x], s=S.sealed[x];
+    return `<div class="synw"><span class="type kind">${esc(m.kind)}</span><b>${esc(m.title)}</b><small class="muted">${esc(m.maker)}</small><div class="sy-text">${synTextHTML(m)}</div>
      ${s?`<p class="yours">“${esc(s.text)}”<small>${s.via?T("link.via.small","your link, as your first impression"):T("link.first.small","your first impression")}</small></p>`:`<p class="yours locked2">${T("link.counts","Not written yet. This link will count as your first impression here.")}</p>`}</div>`; }).join("")}</div>
-  ${mine?`<div class="writer seal" style="margin-top:12px"><span class="wax" aria-hidden="true">P</span><small>${id==="whole"?T("link.yours.whole","Your thought on all three"):`Your ${esc(synName(id))} link`} · ${when(mine.at)}</small><div class="first">${esc(mine.text)}</div>
+  ${synThreadHTML(id)}</div>
+  <div class="sy-pin">
+  ${mine?`<div class="writer seal" ><span class="wax" aria-hidden="true">P</span><small>${id==="whole"?T("link.yours.whole","Your thought on all three"):`Your ${esc(synName(id))} link`} · ${when(mine.at)}</small><div class="first">${esc(mine.text)}</div>
      <p class="type" style="color:#8a7b68;margin:10px 0 0;font-size:.62rem">${T("link.published.under","Published under ")}${ids.map(x=>esc(MUSE[x].kind.toLowerCase())).join(", ")}${T("link.published.journal"," · also in your journal")}</p></div>`:
-   `<div class="writer" style="margin-top:12px"><h4>${id==="whole"?T("link.whole.heading","One thought that holds all three"):T("link.pair.heading","What do these two say to each other?")}</h4>
+   `<div class="writer" ><h4>${id==="whole"?T("link.whole.heading","One thought that holds all three"):T("link.pair.heading","What do these two say to each other?")}</h4>
     <div class="sub">${id==="whole"?T("link.whole.line","Where do they meet, where do they argue — and what does the day leave you with?"):T("link.pair.line","Agreement is not required. Disagreement is often better.")}</div>
     <textarea class="grow" id="synDraft" rows="1" aria-label="Your link" placeholder="${T("link.placeholder","Two or three sentences is plenty.")}">${esc(d)}</textarea>
     <div class="wrow"><span class="type" style="color:#8a7b68">${T("link.appears","Appears under the ")}${esc(andList(ids.map(x=>MUSE[x].kind.toLowerCase())))}</span>
      <button class="btn primary" data-act="pubsyn" ${d.trim()?"":"disabled"}>${T("link.publish","Publish this link")}</button></div></div>`}
-  ${synThreadHTML(id)}
+  </div>
  </div>`;
 }
 function synThreadHTML(id){
@@ -916,7 +925,7 @@ function keepAskHTML(){
   <div class="m-keepb">${checked?"":`<button class="btn primary" data-keep="${sid}">${T("sticker.givecheck","Give it today’s check")}</button>`}<button class="btn ghost" data-act="nokeep">${T("sticker.card.close","Close")}</button></div></div></div>`;
 }
 function keepSticker(id){ setCheck(id); S.keepAsk=null; render(); toast(`${STICKERS[id].name}${T("toast.sticker.check"," carries today’s check. It settles at midnight.")}`); }
-function synOverlay(){ if(!S.openSyn) return ""; return `<div class="m-overlay" data-synbg><div>${synBoxHTML(S.openSyn)}</div></div>`; }
+function synOverlay(){ if(!S.openSyn) return ""; return `<div class="m-overlay sy-ov" data-synbg><div>${synBoxHTML(S.openSyn)}</div></div>`; }
 
 /* ---------- Phone home (from the Phone Studio): theme first, the works as a list, tap to open ---------- */
 const PICON={
@@ -930,6 +939,12 @@ function constitutionHTML(){
  return `<section class="m-whyb" id="constitution"><p class="type muted" style="margin:0">${T("whybottom.from","From the Constitution of Poiesis")}</p><h2>${T("whybottom.heading","Discourse on Creation and the Muse")}</h2>
   ${["p1","p2","p3"].map(k=>`<p>${T("whybottom."+k,"")}</p>`).join("")}</section>`;
 }
+function keepMaxim(){ if(S.maximKept===today()) return; const c=DAY.maximCite.split(" · ")[0].split(", "); addLine({text:DAY.maxim, who:c[0], where:c.slice(1).join(", "), from:"muse"}); S.maximKept=today(); save(); render(); toast(T("toast.maxim.kept","Kept in your notebook.")); }
+function maximHTML(){
+ if(!DAY.maxim) return "";
+ const kept=S.maximKept===today();
+ return `<div class="m-maxim"><svg class="mx-col" viewBox="0 0 28 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5h22M4.5 4.5c0 2 1.5 3 3 3h13c1.5 0 3-1 3-3"/><path d="M6 9h16M7 9v31M21 9v31M11.7 10.5v28M16.3 10.5v28"/><path d="M5.5 40.5h17M3.5 44h21"/></svg><div class="mx-t"><span class="mx-q">“${esc(DAY.maxim)}”</span><span class="mx-c">${esc(DAY.maximCite)}</span><button type="button" class="mx-keep" data-act="keepmaxim" ${kept?"disabled":""}>${kept?T("maxim.kept","kept"):T("maxim.keep","keep it")}</button></div></div>`;
+}
 function phoneHomeHTML(){
  const dateStr=new Date().toLocaleDateString(undefined,{weekday:"long", month:"long", day:"numeric"});
  const done=id=>!!S.sealed[id], all=MUSES.every(x=>done(x.id)), first=MUSES.find(x=>!done(x.id)), none=!MUSES.some(x=>done(x.id));
@@ -942,7 +957,7 @@ function phoneHomeHTML(){
  const cols=TODAY.slice(0,4).map(p=>`<span style="background:${PEOPLE[p.n].c}">${esc(initials(p.n))}</span>`).join("");
  return `<div class="ph-home"><p class="ph-date">${esc(dateStr)}</p>
   <div class="ph-theme"><h1 class="ph-tw">${esc(DAY.theme)}</h1><button class="m-cross" type="button" data-act="reading" aria-expanded="${!!S.reading}" aria-label="The day’s reading">✝</button></div>
-  <p class="ph-line">${esc(DAY.line)}</p>${reading}
+  ${maximHTML()}${reading}
   <div class="ph-three">${rows}${knot}</div>
   ${TODAY.length?`<div class="ph-others"><span class="ph-avs">${cols}</span>${TODAY.length}${T("phone.others.suffix"," others wrote today")}</div>`
    :`<div class="ph-others">${mineParts().length?T("cue.onlyyou.some","Only you here so far today"):T("cue.onlyyou","Nobody here yet today")}</div>`}</div>`;
@@ -959,6 +974,7 @@ function renderMuse(v){
    const vt=e.target.closest("[data-vertgo]"); if(vt){ S.phome=false; goMuse(vt.dataset.vertgo); return; }
    const a=e.target.closest("[data-act]")?.dataset.act; if(!a) return;
    if(a==="reading"){ S.reading=!S.reading; save(); render(); }
+   if(a==="keepmaxim"){ keepMaxim(); }
    if(a==="why"){ e.preventDefault(); go("why"); }
    if(a==="closesyn"){ S.openSyn=null; save(); render(); }
    if(a==="pubsyn") publishSyn(S.openSyn);
@@ -970,7 +986,7 @@ function renderMuse(v){
  const dateStr=new Date().toLocaleDateString(undefined,{weekday:"long", month:"long", day:"numeric"});
  const themeW=`<h1 class="m-themebig">${esc(DAY.theme)}</h1><button class="m-cross" type="button" data-act="reading" aria-expanded="${!!S.reading}" aria-label="The day’s reading" data-tip="The day’s reading · ${esc(DAY.reading)}">✝</button>`;
  const reading=(S.reading&&!past)?readingPanelHTML():"";
- const day=past?`<div class="pastbar" style="margin-top:18px"><span><b>${esc(m.day)}</b> · this muse has passed</span><button class="btn small" data-act="today">${T("muse.past.back","Back to today’s muses")}</button></div>`:`<div class="m-dayrow"><div class="m-dayl"><span class="type muted">${esc(dateStr)}</span><div class="m-themewrap">${themeW}</div></div>${u.tplace==="title"&&dev==="desk"?"":`<div class="m-dayr">${threeHTML(threeSize(),false,true)}</div>`}</div>${reading}`;
+ const day=past?`<div class="pastbar" style="margin-top:18px"><span><b>${esc(m.day)}</b> · this muse has passed</span><button class="btn small" data-act="today">${T("muse.past.back","Back to today’s muses")}</button></div>`:`<div class="m-dayrow"><div class="m-dayl"><span class="type muted">${esc(dateStr)}</span><div class="m-themewrap">${themeW}</div>${maximHTML()}</div>${u.tplace==="title"&&dev==="desk"?"":`<div class="m-dayr">${threeHTML(threeSize(),false,true)}</div>`}</div>${reading}`;
  const info=u.storyMode==="info"?`<button class="m-infob" type="button" data-info aria-expanded="${!!S.info}" aria-label="About this work" data-tip="${T("muse.info.label","About this work")}">i</button>`:"";
  const cueside=(!past&&U().cue!=="off")?`<span class="m-cueside">${cueHTML()}</span>`:"";
  const head=`<div class="m-head"><div class="m-htop"><div class="m-hl"><span class="type kind">${esc(m.kind)}</span><div class="m-tl"><h2 class="mtitle">${esc(m.title)}</h2>${info}</div><div class="byline">${esc(m.maker)} · ${esc(m.date)}</div></div>${cueside}</div></div>`;
@@ -1009,6 +1025,7 @@ function renderMuse(v){
   if(a==="phome"){ S.phome=true; S.info=false; save(); render(); scrollTo({top:0}); }
   if(a==="why"){ e.preventDefault(); go("why"); }
   if(a==="reading"){ S.reading=!S.reading; save(); render(); }
+   if(a==="keepmaxim"){ keepMaxim(); }
   if(a==="nokeep"){ S.keepAsk=null; save(); render(); toast("You can keep one from any muse you’ve answered, until midnight."); }
   if(a==="closesyn"){ S.openSyn=null; save(); render(); }
   if(a==="pubsyn") publishSyn(S.openSyn);

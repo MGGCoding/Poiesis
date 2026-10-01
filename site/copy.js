@@ -358,4 +358,9 @@ phone.all.done: All three are together
 phone.back: ‹ Today
 phone.next: Next work ›
 phone.others.suffix:  others wrote today
+
+# THE DAY'S SAYING — one line under the theme word
+maxim.keep: keep it
+maxim.kept: kept
+toast.maxim.kept: Kept in your notebook.
 `;
