@@ -860,11 +860,6 @@ function scriptureHTML(m){
   ${studyHTML(m.painting)}`;
 }
 /* The ✝ beside the day's word: what else is read today, never the third work again */
-function readingPanelHTML(){
- if(BANK) return `<div class="m-reading"><div class="r">${T("muse.reading.also","Also read today")}</div>
-  <div class="v2">${esc(DAY.reading)}</div><p>${esc(DAY.readingNote)}</p></div>`;
- return `<div class="m-reading"><div class="v">“${esc(DAY.verse)}”</div><div class="r">${esc(DAY.verseRef)} · ${T("muse.reading.connector","today’s reading, ")}${esc(DAY.reading)}</div><p>${esc(DAY.readingNote)}</p></div>`;
-}
 function noteHTML(m){
  const txt=m.poemNote||(m.plate?m.where:m.cite?"":m.date)||"";
  const sw=m.palette?`<span class="pal">${m.palette.map(c=>`<span style="background:${c}"></span>`).join("")}</span>`:"";
@@ -940,10 +935,12 @@ function constitutionHTML(){
   ${["p1","p2","p3"].map(k=>`<p>${T("whybottom."+k,"")}</p>`).join("")}</section>`;
 }
 function keepMaxim(){ if(S.maximKept===today()) return; const c=DAY.maximCite.split(" · ")[0].split(", "); addLine({text:DAY.maxim, who:c[0], where:c.slice(1).join(", "), from:"muse"}); S.maximKept=today(); save(); render(); toast(T("toast.maxim.kept","Kept in your notebook.")); }
+const COLUMN=`<svg class="mx-col" viewBox="0 0 28 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5h22M4.5 4.5c0 2 1.5 3 3 3h13c1.5 0 3-1 3-3"/><path d="M6 9h16M7 9v31M21 9v31M11.7 10.5v28M16.3 10.5v28"/><path d="M5.5 40.5h17M3.5 44h21"/></svg>`;
+function wisdomBtn(){ return `<button class="m-colbtn" type="button" data-act="reading" aria-expanded="${!!S.reading}" aria-label="${T("maxim.button","The day’s wisdom")}" data-tip="${T("maxim.button","The day’s wisdom")}">${COLUMN}</button>`; }
 function maximHTML(){
  if(!DAY.maxim) return "";
  const kept=S.maximKept===today();
- return `<div class="m-maxim"><svg class="mx-col" viewBox="0 0 28 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5h22M4.5 4.5c0 2 1.5 3 3 3h13c1.5 0 3-1 3-3"/><path d="M6 9h16M7 9v31M21 9v31M11.7 10.5v28M16.3 10.5v28"/><path d="M5.5 40.5h17M3.5 44h21"/></svg><div class="mx-t"><span class="mx-q">“${esc(DAY.maxim)}”</span><span class="mx-c">${esc(DAY.maximCite)}</span><button type="button" class="mx-keep" data-act="keepmaxim" ${kept?"disabled":""}>${kept?T("maxim.kept","kept"):T("maxim.keep","keep it")}</button></div></div>`;
+ return `<div class="m-reading m-maxim"><span class="mx-q">“${esc(DAY.maxim)}”</span><span class="mx-c">${esc(DAY.maximCite)}</span><button type="button" class="mx-keep" data-act="keepmaxim" ${kept?"disabled":""}>${kept?T("maxim.kept","kept"):T("maxim.keep","keep it")}</button></div>`;
 }
 function phoneHomeHTML(){
  const dateStr=new Date().toLocaleDateString(undefined,{weekday:"long", month:"long", day:"numeric"});
@@ -953,11 +950,11 @@ function phoneHomeHTML(){
    const nextSeg=i<MUSES.length-1?seg(w.id,MUSES[i+1].id,LINKS.find(l=>(l.a===w.id&&l.b===MUSES[i+1].id)||(l.b===w.id&&l.a===MUSES[i+1].id))?.id):"";
    return `<button type="button" class="ph-row" data-popen="${w.id}"><span class="ph-ic" aria-hidden="true">${PICON[iconFor(w)]}</span><span class="ph-rt"><span class="k">${esc(w.kind.toLowerCase())}</span><b>${esc(w.title)}</b><span class="mk">${esc(w.maker)}</span></span>${st}${none&&first===w?`<span class="ph-begin">${T("phone.begin","begin here")}</span>`:""}</button>${nextSeg||""}`; }).join("");
  const knot=true?`<button type="button" class="ph-knot" data-side="whole"><span>◇</span>${S.syn.whole?T("phone.all.done","You tied all three together"):T("phone.all.write","Tie all three together")}</button>`:"";
- const reading=S.reading?readingPanelHTML():"";
+ const reading=S.reading?maximHTML():"";
  const cols=TODAY.slice(0,4).map(p=>`<span style="background:${PEOPLE[p.n].c}">${esc(initials(p.n))}</span>`).join("");
  return `<div class="ph-home"><p class="ph-date">${esc(dateStr)}</p>
-  <div class="ph-theme"><h1 class="ph-tw">${esc(DAY.theme)}</h1><button class="m-cross" type="button" data-act="reading" aria-expanded="${!!S.reading}" aria-label="The day’s reading">✝</button></div>
-  ${maximHTML()}${reading}
+  <div class="ph-theme"><h1 class="ph-tw">${esc(DAY.theme)}</h1>${wisdomBtn()}</div>
+  ${reading}
   <div class="ph-three">${rows}${knot}</div>
   ${TODAY.length?`<div class="ph-others"><span class="ph-avs">${cols}</span>${TODAY.length}${T("phone.others.suffix"," others wrote today")}</div>`
    :`<div class="ph-others">${mineParts().length?T("cue.onlyyou.some","Only you here so far today"):T("cue.onlyyou","Nobody here yet today")}</div>`}</div>`;
@@ -984,9 +981,9 @@ function renderMuse(v){
  }
  const m=curMuse(), u=U(), dev=DEV(), past=!!m.closed;
  const dateStr=new Date().toLocaleDateString(undefined,{weekday:"long", month:"long", day:"numeric"});
- const themeW=`<h1 class="m-themebig">${esc(DAY.theme)}</h1><button class="m-cross" type="button" data-act="reading" aria-expanded="${!!S.reading}" aria-label="The day’s reading" data-tip="The day’s reading · ${esc(DAY.reading)}">✝</button>`;
- const reading=(S.reading&&!past)?readingPanelHTML():"";
- const day=past?`<div class="pastbar" style="margin-top:18px"><span><b>${esc(m.day)}</b> · this muse has passed</span><button class="btn small" data-act="today">${T("muse.past.back","Back to today’s muses")}</button></div>`:`<div class="m-dayrow"><div class="m-dayl"><span class="type muted">${esc(dateStr)}</span><div class="m-themewrap">${themeW}</div>${maximHTML()}</div>${u.tplace==="title"&&dev==="desk"?"":`<div class="m-dayr">${threeHTML(threeSize(),false,true)}</div>`}</div>${reading}`;
+ const themeW=`<h1 class="m-themebig">${esc(DAY.theme)}</h1>${wisdomBtn()}`;
+ const reading=(S.reading&&!past)?maximHTML():"";
+ const day=past?`<div class="pastbar" style="margin-top:18px"><span><b>${esc(m.day)}</b> · this muse has passed</span><button class="btn small" data-act="today">${T("muse.past.back","Back to today’s muses")}</button></div>`:`<div class="m-dayrow"><div class="m-dayl"><span class="type muted">${esc(dateStr)}</span><div class="m-themewrap">${themeW}</div></div>${u.tplace==="title"&&dev==="desk"?"":`<div class="m-dayr">${threeHTML(threeSize(),false,true)}</div>`}</div>${reading}`;
  const info=u.storyMode==="info"?`<button class="m-infob" type="button" data-info aria-expanded="${!!S.info}" aria-label="About this work" data-tip="${T("muse.info.label","About this work")}">i</button>`:"";
  const cueside=(!past&&U().cue!=="off")?`<span class="m-cueside">${cueHTML()}</span>`:"";
  const head=`<div class="m-head"><div class="m-htop"><div class="m-hl"><span class="type kind">${esc(m.kind)}</span><div class="m-tl"><h2 class="mtitle">${esc(m.title)}</h2>${info}</div><div class="byline">${esc(m.maker)} · ${esc(m.date)}</div></div>${cueside}</div></div>`;

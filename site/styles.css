@@ -1234,7 +1234,10 @@ html[data-dev="phone"] .m-writer.notecard{transform:rotate(.3deg)}
 .mx-keep{border:0; background:none; padding:0; margin-top:3px; font-family:var(--f-hand); font-size:.95rem; color:var(--accent); cursor:pointer; text-decoration:underline dotted}
 .mx-keep[disabled]{color:var(--muted-ground); text-decoration:none; cursor:default}
 
-.m-maxim{display:flex; gap:10px; align-items:flex-start}
-.mx-col{flex:none; width:22px; height:38px; margin-top:3px; color:var(--accent); opacity:.85}
-.mx-t{min-width:0}
-.ph-home .m-maxim{margin:14px 0 10px}
+.m-colbtn{border:0; background:transparent; color:var(--accent); padding:2px 4px; cursor:pointer; opacity:.8; vertical-align:middle; line-height:0}
+.m-colbtn:hover,.m-colbtn[aria-expanded="true"]{opacity:1}
+.m-colbtn .mx-col{width:14px; height:24px}
+.ph-theme .m-colbtn .mx-col{width:13px; height:22px}
+.m-reading.m-maxim{max-width:34rem; color:var(--card-ink); font-style:italic}
+.m-reading.m-maxim .mx-c{color:#8a7b68}
+.ph-home .m-reading.m-maxim{margin:12px 0 10px}

@@ -49,7 +49,6 @@ muse.later.placeholder: Add anything else
 muse.later.button: Add
 muse.deeper.label: Go deeper
 muse.reading.connector: today’s reading, 
-muse.reading.also: Also read today
 muse.past.heading: This muse has passed
 muse.past.line: This muse’s conversation has closed. It is still yours to answer in your notebook.
 muse.past.back: Back to today’s muses
@@ -360,6 +359,7 @@ phone.next: Next work ›
 phone.others.suffix:  others wrote today
 
 # THE DAY'S SAYING — one line under the theme word
+maxim.button: The day’s wisdom
 maxim.keep: keep it
 maxim.kept: kept
 toast.maxim.kept: Kept in your notebook.

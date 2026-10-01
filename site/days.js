@@ -224,162 +224,142 @@ window.POIESIS_DAYS = {
   ]
  },
  "2026-10-03": {
-  "theme": "near",
-  "line": "The speech Dionysius heard: in him we live and move; the traffic of Jacob's ladder at Charing Cross; the cloud of unknowing that Dionysius's own writings inspired.",
-  "letter": "C",
-  "verse": "that they should seek the Lord, if perhaps they might reach out for him and find him, though he is not far from each one of us. 'For in him we live, move, and have our being.'",
-  "verseRef": "Acts 17:27–28a · World English Bible",
-  "reading": "Saturday of Week 26 · Mass: Job 42:1–3, 5–6, 12–17; Psalm 119; Luke 10:17–24",
-  "readingNote": "The day's reading at Catholic Mass.",
-  "spine": "Letter 2 (Viareggio, 5 Apr 1903): the few companions",
+  "theme": "rock",
+  "line": "A house dug deep on rock; Brontë: no coward soul is mine; Thoreau: if you have built castles in the air, now put foundations under them.",
+  "letter": "A",
+  "verse": "He is like a man building a house, who dug and went deep and laid a foundation on the rock.",
+  "verseRef": "Luke 6:48 · World English Bible",
+  "reading": "",
+  "readingNote": "",
+  "spine": "",
   "muses": [
    {
-    "id": "thompson-kingdom-of-god",
-    "mk": "francis-thompson",
+    "id": "bronte-no-coward-soul",
+    "mk": "emily-bronte",
     "kind": "Poem",
-    "title": "The Kingdom of God (“In No Strange Land”)",
-    "maker": "Francis Thompson",
-    "date": "found among his papers at his death; first published 1908 (Selected Poems, ed. Wilfrid Meynell)",
-    "poem": "O world invisible, we view thee,\nO world intangible, we touch thee,\nO world unknowable, we know thee,\nInapprehensible, we clutch thee!\n\nDoes the fish soar to find the ocean,\nThe eagle plunge to find the air—\nThat we ask of the stars in motion\nIf they have rumour of thee there?\n\nNot where the wheeling systems darken,\nAnd our benumbed conceiving soars!—\nThe drift of pinions, would we hearken,\nBeats at our own clay-shuttered doors.\n\nThe angels keep their ancient places;—\nTurn but a stone, and start a wing!\n'Tis ye, 'tis your estranged faces,\nThat miss the many-splendoured thing.\n\nBut (when so sad thou canst not sadder)\nCry;—and upon thy so sore loss\nShall shine the traffic of Jacob's ladder\nPitched betwixt Heaven and Charing Cross.\n\nYea, in the night, my Soul, my daughter,\nCry,—clinging Heaven by the hems;\nAnd lo, Christ walking on the water\nNot of Genesareth, but Thames!",
-    "poemNote": "whole",
-    "deeper": "He pitches the ladder at Charing Cross, where he had slept rough. Name the least likely place in your own life for that ladder, and say why you think so.",
-    "story": [],
-    "gloss": {
-     "inapprehensible": "Beyond our grasp.",
-     "pinions": "Wings.",
-     "Charing Cross": "A busy London crossroads and station.",
-     "Genesareth": "The Sea of Galilee."
-    }
+    "title": "No Coward Soul Is Mine",
+    "maker": "Emily Brontë",
+    "date": "2 Jan 1846; published 1850",
+    "poem": "No coward soul is mine\nNo trembler in the world's storm-troubled sphere\nI see Heaven's glories shine\nAnd Faith shines equal arming me from Fear\n\nO God within my breast\nAlmighty ever-present Deity\nLife, that in me hast rest,\nAs I Undying Life, have power in Thee\n\nVain are the thousand creeds\nThat move men's hearts, unutterably vain,\nWorthless as withered weeds\nOr idlest froth amid the boundless main\n\nTo waken doubt in one\nHolding so fast by thy infinity,\nSo surely anchored on\nThe steadfast rock of Immortality.\n\nWith wide-embracing love\nThy spirit animates eternal years\nPervades and broods above,\nChanges, sustains, dissolves, creates and rears\n\nThough earth and moon were gone\nAnd suns and universes ceased to be\nAnd Thou wert left alone\nEvery Existence would exist in thee\n\nThere is not room for Death\nNor atom that his might could render void\nSince thou art Being and Breath\nAnd what thou art may never be destroyed.",
+    "poemNote": "",
+    "deeper": "",
+    "story": [
+     "Charlotte Brontë printed it in 1850 as the last lines her sister wrote, and edited it as she did. The manuscript shows it was written in January 1846, and Emily wrote at least one poem after it."
+    ],
+    "gloss": {}
    },
    {
-    "id": "cloud-of-unknowing-lift-up",
-    "mk": "anonymous-14th-century-english",
+    "id": "thoreau-castles-in-the-air",
+    "mk": "thoreau",
     "kind": "Passage",
-    "title": "The Cloud of Unknowing",
-    "maker": "Anonymous (14th-century English)",
-    "date": "c. 1375 (Middle English); Underhill's modernized edition 1912 (2nd ed. 1922)",
-    "quote": "LIFT up thine heart unto God with a meek stirring of love; and mean Himself, and none of His goods. … So that nought work in thy wit, nor in thy will, but only Himself. And do that in thee is to forget all the creatures that ever God made and the works of them; so that thy thought nor thy desire be not directed nor stretched to any of them, neither in general nor in special, but let them be, and take no heed to them. This is the work of the soul that most pleaseth God. …\n\nLet not, therefore, but travail therein till thou feel list. For at the first time when thou dost it, thou findest but a darkness; and as it were a cloud of unknowing, thou knowest not what, saving that thou feelest in thy will a naked intent unto God. This darkness and this cloud is, howsoever thou dost, betwixt thee and thy God, and letteth thee that thou mayest neither see Him clearly by light of understanding in thy reason, nor feel Him in sweetness of love in thine affection.",
-    "cite": "The Cloud of Unknowing, c. 1375 (Middle English); Underhill's modernized edition 1912 (2nd ed. 1922)",
-    "deeper": "He asks for a meek stirring of love, not a strong one. Try it for the length of one breath, and notice what your mind does instead.",
-    "story": [],
-    "gloss": {
-     "mean": "Intend, aim at.",
-     "travail": "Labor, toil.",
-     "list": "Desire, delight.",
-     "letteth": "Hinders."
-    }
+    "title": "Walden, Conclusion",
+    "maker": "Henry David Thoreau",
+    "date": "1854",
+    "quote": "I learned this, at least, by my experiment: that if one advances confidently in the direction of his dreams, and endeavors to live the life which he has imagined, he will meet with a success unexpected in common hours. He will put some things behind, will pass an invisible boundary; new, universal, and more liberal laws will begin to establish themselves around and within him; or the old laws be expanded, and interpreted in his favor in a more liberal sense, and he will live with the license of a higher order of beings. In proportion as he simplifies his life, the laws of the universe will appear less complex, and solitude will not be solitude, nor poverty poverty, nor weakness weakness. If you have built castles in the air, your work need not be lost; that is where they should be. Now put the foundations under them.",
+    "cite": "Walden, Conclusion, 1854",
+    "deeper": "",
+    "story": [
+     "Thoreau lived at Walden Pond from 4 July 1845 to 6 September 1847, then spent seven years revising it into the book."
+    ],
+    "gloss": {}
    },
    {
     "id": "scripture-2026-10-03",
     "mk": "scripture",
     "kind": "Scripture",
-    "title": "Acts 17:27–28a",
+    "title": "Luke 6:48",
     "maker": "World English Bible",
-    "date": "Orthodox commemoration of St Dionysius the Areopagite",
-    "quote": "that they should seek the Lord, if perhaps they might reach out for him and find him, though he is not far from each one of us. 'For in him we live, move, and have our being.'",
-    "cite": "Orthodox commemoration of St Dionysius the Areopagite",
+    "date": "Evergreen · Orthodox Divine Liturgy Gospel (7 Oct)",
+    "quote": "He is like a man building a house, who dug and went deep and laid a foundation on the rock.",
+    "cite": "Evergreen · Orthodox Divine Liturgy Gospel (7 Oct)",
     "painting": {
-     "artist": "Raphael",
-     "era": "High Renaissance, 1515",
-     "title": "St Paul Preaching in Athens",
-     "palette": [
-      "#c07a53",
-      "#b8b0a0",
-      "#5a6e86"
-     ]
+     "artist": "Johannes Vermeer",
+     "era": "Dutch Golden Age, c. 1658",
+     "title": "The Little Street",
+     "palette": null
     },
     "deeper": "",
     "story": [
-     "orthocal.info/readings/gregorian/2026/10/3/ lists Hieromartyr Dionysius the Areopagite (noting Acts 17:19–34) on 3 Oct; the day's appointed readings there are 1 Cor 15:39–45 and Luke 5:17–26, not Acts 17..",
+     "Read at Evergreen · Orthodox Divine Liturgy Gospel (7 Oct) on this day.",
      "The text is the World English Bible, a public-domain revision of the American Standard Version of 1901. It is used here because it can be printed freely.",
-     "<i>St Paul Preaching in Athens</i> by Raphael (High Renaissance, 1515) stands beside the reading. It appears as a colour study until the museum image is licensed and hosted."
+     "<i>The Little Street</i> by Johannes Vermeer (Dutch Golden Age, c. 1658) stands beside the reading. It appears as a colour study until the museum image is licensed and hosted."
     ]
    }
   ]
  },
  "2026-10-04": {
-  "theme": "praise",
-  "line": "Praise him, sun and moon; Brother Sun and Sister Moon; Francis preaching to the birds.",
-  "letter": "C",
-  "verse": "Praise him, sun and moon! Praise him, all you shining stars! … Praise Yahweh from the earth, you great sea creatures, and all depths, lightning and hail, snow and clouds, stormy wind, fulfilling his word, mountains and all hills, fruit trees and all cedars, wild animals and all livestock, small creatures and flying birds,",
-  "verseRef": "Psalm 148:3, 7–10 · World English Bible",
-  "reading": "18th Sunday after Pentecost; Hieromartyr Hierotheos · Liturgy: 2 Corinthians 9:6–11, Luke 6:31–36 · Matins Gospel John 20:1–10",
-  "readingNote": "The day's reading in the Greek Orthodox calendar.",
-  "spine": "Letter 7: love is difficult",
+  "theme": "enemy",
+  "line": "Love your enemies; Blake's anger that grew into a poison tree because he hid it; Lincoln at war's end: with malice toward none.",
+  "letter": "A",
+  "verse": "But I tell you who hear: love your enemies, do good to those who hate you, bless those who curse you, and pray for those who mistreat you.",
+  "verseRef": "Luke 6:27–28 · World English Bible",
+  "reading": "",
+  "readingNote": "",
+  "spine": "",
   "muses": [
    {
-    "id": "francis-canticle-of-the-sun",
-    "mk": "st-francis-of-assisi-translated-by-paschal-robinson-o-f-m",
+    "id": "blake-a-poison-tree",
+    "mk": "william-blake",
     "kind": "Poem",
-    "title": "The Canticle of the Sun",
-    "maker": "St Francis of Assisi, translated by Paschal Robinson, O.F.M.",
-    "date": "Composed c. 1224–1226; this translation published 1905 (The Writings of St. Francis of Assisi, Dolphin Press, Philadelphia; title page 1905, Wikipedia gives 1906)",
-    "poem": "Most high, omnipotent, good Lord,\nPraise, glory and honor and benediction all, are Thine.\nTo Thee alone do they belong, most High,\nAnd there is no man fit to mention Thee.\n\nPraise be to Thee, my Lord, with all Thy creatures,\nEspecially to my worshipful brother sun,\nThe which lights up the day, and through him dost Thou brightness give;\nAnd beautiful is he and radiant with splendor great;\nOf Thee, most High, signification gives.\n\nPraised be my Lord, for sister moon and for the stars,\nIn heaven Thou hast formed them clear and precious and fair.\n\nPraised be my Lord for brother wind\nAnd for the air and clouds and fair and every kind of weather,\nBy the which Thou givest to Thy creatures nourishment.\nPraised be my Lord for sister water,\nThe which is greatly helpful and humble and precious and pure.\n\nPraised be my Lord for brother fire,\nBy the which Thou lightest up the dark.\nAnd fair is he and gay and mighty and strong.\n\nPraised be my Lord for our sister, mother earth,\nThe which sustains and keeps us\nAnd brings forth diverse fruits with grass and flowers bright.\n\nPraised be my Lord for those who for Thy love forgive\nAnd weakness bear and tribulation.\nBlessed those who shall in peace endure,\nFor by Thee, most High, shall they be crowned.\nPraised be my Lord for our sister, the bodily death,\nFrom the which no living man can flee.\nWoe to them who die in mortal sin;\nBlessed those who shall find themselves in Thy most holy will,\nFor the second death shall do them no ill.\n\nPraise ye and bless ye my Lord, and give Him thanks,\nAnd be subject unto Him with great humility.",
-    "poemNote": "whole",
-    "deeper": "He made it nearly blind, in a dark hut, and later added a verse to death. Name the thing you would find hardest to call brother or sister, and say it once.",
-    "story": [],
-    "gloss": {
-     "benediction": "Blessing.",
-     "worshipful": "Worthy of honour.",
-     "signification gives": "Is a sign, a meaning, of.",
-     "fair (weather)": "Calm, bright weather."
-    }
+    "title": "A Poison Tree",
+    "maker": "William Blake",
+    "date": "1794",
+    "poem": "I was angry with my friend;\nI told my wrath, my wrath did end.\nI was angry with my foe:\nI told it not, my wrath did grow.\n\nAnd I waterd it in fears,\nNight & morning with my tears:\nAnd I sunned it with smiles,\nAnd with soft deceitful wiles.\n\nAnd it grew both day and night.\nTill it bore an apple bright.\nAnd my foe beheld it shine,\nAnd he knew that it was mine.\n\nAnd into my garden stole,\nWhen the night had veild the pole;\nIn the morning glad I see;\nMy foe outstretched beneath the tree.",
+    "poemNote": "",
+    "deeper": "",
+    "story": [
+     "From Songs of Experience (1794), which Blake engraved, printed and hand-coloured himself. In his notebook the draft was titled ‘Christian Forbearance’."
+    ],
+    "gloss": {}
    },
    {
-    "id": "heywood-sermon-to-the-birds",
-    "mk": "the-little-flowers-of-st-francis-fioretti-attributed-to-ugolino-brunforte-translated-by-w-william-heywood",
+    "id": "lincoln-malice-toward-none",
+    "mk": "abraham-lincoln",
     "kind": "Passage",
-    "title": "The Sermon to the Birds (The Little Flowers of St Francis, ch. XVI)",
-    "maker": "The Little Flowers of St Francis (Fioretti), attributed to Ugolino Brunforte, translated by W. (William) Heywood",
-    "date": "Fioretti compiled late 14th century from the Latin Actus (c. 1327–1340); Heywood translation 1906",
-    "quote": "\"My sisters the birds, much are ye beholden unto God your creator, and alway and in every place ought ye to praise Him, because He hath given you liberty to fly wheresoever ye will, and hath clothed you on with twofold and threefold raiment. Moreover, He preserved your seed in the ark of Noah that your race might not be destroyed. Again, ye are beholden unto Him for the element of the air which He hath appointed for you; furthermore, ye sow not neither do ye reap; yet God feedeth you and giveth you rivers and fountains wherefrom to drink; He giveth you mountains and valleys for your refuge, and high trees wherein to build your nests; and, in that ye know not how to sew nor spin, God clotheth you and your little ones; wherefore doth your Creator love you seeing that He giveth you so many benefits. Guard yourselves, therefore, my sisters the birds, from the sin of ingratitude and be ye ever mindful to give praise to God.\"\n\nAnd, as St. Francis spake these words unto them, all those birds began to open their beaks, and to stretch out their necks, and to open their wings, and reverently to bow their heads even unto the ground …",
-    "cite": "The Sermon to the Birds (The Little Flowers of St Francis, ch. XVI), Fioretti compiled late 14th century from the Latin Actus (c. 1327–1340); Heywood translation 1906",
-    "deeper": "The story ends with the birds leaving, not with a lesson. What have you listened to lately without trying to get anything out of it?",
-    "story": [],
-    "gloss": {
-     "on this wise": "In this way.",
-     "beholden": "Indebted.",
-     "alway": "Always.",
-     "raiment": "Clothing."
-    }
+    "title": "Second Inaugural Address (closing)",
+    "maker": "Abraham Lincoln",
+    "date": "4 March 1865",
+    "quote": "With malice toward none, with charity for all, with firmness in the right as God gives us to see the right, let us strive on to finish the work we are in, to bind up the nation's wounds, to care for him who shall have borne the battle and for his widow and his orphan, to do all which may achieve and cherish a just and lasting peace among ourselves and with all nations.",
+    "cite": "Second Inaugural Address (closing), 4 March 1865",
+    "deeper": "",
+    "story": [
+     "Given five weeks before the war ended and six weeks before Lincoln was killed. Frederick Douglass, in the crowd, called it ‘a sacred effort’."
+    ],
+    "gloss": {}
    },
    {
     "id": "scripture-2026-10-04",
     "mk": "scripture",
     "kind": "Scripture",
-    "title": "Psalm 148:3, 7–10",
+    "title": "Luke 6:27–28",
     "maker": "World English Bible",
-    "date": "Liturgy of the Hours · Sunday Morning Prayer (St Francis's day)",
-    "quote": "Praise him, sun and moon! Praise him, all you shining stars! … Praise Yahweh from the earth, you great sea creatures, and all depths, lightning and hail, snow and clouds, stormy wind, fulfilling his word, mountains and all hills, fruit trees and all cedars, wild animals and all livestock, small creatures and flying birds,",
-    "cite": "Liturgy of the Hours · Sunday Morning Prayer (St Francis's day)",
+    "date": "Orthodox Gospel of the Sunday (Luke 6:31–36, 'love your enemies'); verses from the same sermon",
+    "quote": "But I tell you who hear: love your enemies, do good to those who hate you, bless those who curse you, and pray for those who mistreat you.",
+    "cite": "Orthodox Gospel of the Sunday (Luke 6:31–36, 'love your enemies'); verses from the same sermon",
     "painting": {
-     "artist": "Giotto (attributed)",
-     "era": "Proto-Renaissance, c. 1297–1300",
-     "title": "St Francis Preaching to the Birds",
-     "palette": [
-      "#c9a24a",
-      "#4a6a8a",
-      "#6f8355"
-     ]
+     "artist": "Winslow Homer",
+     "era": "American Realism, 1866",
+     "title": "Prisoners from the Front",
+     "palette": null
     },
     "deeper": "",
     "story": [
-     "Liturgy of the Hours, Lauds for Sun 4 Oct 2026 (27th Sunday in Ordinary Time, psalter Week III): Ps 93, Dan 3 canticle, Ps 148.",
+     "Read at Orthodox Gospel of the Sunday (Luke 6:31–36, 'love your enemies'); verses from the same sermon on this day.",
      "The text is the World English Bible, a public-domain revision of the American Standard Version of 1901. It is used here because it can be printed freely.",
-     "<i>St Francis Preaching to the Birds</i> by Giotto (attributed) (Proto-Renaissance, c. 1297–1300) stands beside the reading. It appears as a colour study until the museum image is licensed and hosted."
+     "<i>Prisoners from the Front</i> by Winslow Homer (American Realism, 1866) stands beside the reading. It appears as a colour study until the museum image is licensed and hosted."
     ]
    }
   ]
  },
  "2026-10-05": {
   "theme": "neighbor",
-  "line": "The Samaritan moved with compassion; one who loves his fellow men; Jane Addams moving in on Halsted Street.",
-  "letter": "B",
+  "line": "The Samaritan moved with compassion; Abou Ben Adhem, written down as one who loves his fellow men; Jane Addams moving in among strangers on Halsted Street.",
+  "letter": "A",
   "verse": "But a certain Samaritan, as he traveled, came where he was. When he saw him, he was moved with compassion, came to him, and bound up his wounds, pouring on oil and wine. He set him on his own animal, brought him to an inn, and took care of him.",
   "verseRef": "Luke 10:33–34 · World English Bible",
-  "reading": "Martyr Charitina; St Methodia of Kimolos · Liturgy: Philippians 1:1–7, Luke 6:24–30",
-  "readingNote": "The day's reading in the Greek Orthodox calendar.",
-  "spine": "Letter 7: the work for which all other work is preparation",
+  "reading": "",
+  "readingNote": "",
+  "spine": "",
   "muses": [
    {
     "id": "hunt-abou-ben-adhem",
@@ -391,7 +371,10 @@ window.POIESIS_DAYS = {
     "poem": "Abou Ben Adhem (may his tribe increase!)\nAwoke one night from a deep dream of peace,\nAnd saw, within the moonlight in his room,\nMaking it rich, and like a lily in bloom,\nAn angel writing in a book of gold:—\nExceeding peace had made Ben Adhem bold,\nAnd to the presence in the room he said,\n\"What writest thou?\"—The vision raised its head,\nAnd with a look made of all sweet accord,\nAnswered, \"The names of those who love the Lord.\"\n\"And is mine one?\" said Abou. \"Nay, not so,\"\nReplied the angel. Abou spoke more low,\nBut cheerly still; and said, \"I pray thee, then,\nWrite me as one that loves his fellow men.\"\nThe angel wrote, and vanished. The next night\nIt came again with a great wakening light,\nAnd showed the names whom love of God had blest,\nAnd lo! Ben Adhem's name led all the rest.",
     "poemNote": "whole",
     "deeper": "Abou asks to be written down as one who loves his fellow men, not as one who loves God. Say whether you think Hunt is right, and what it costs if he is.",
-    "story": [],
+    "story": [
+     "Leigh Hunt was an editor and essayist who once paid dearly for his opinions: after his paper, The Examiner, mocked the Prince Regent, he spent two years in prison and went on editing from his cell. He was a friend and champion of Keats and Shelley. Years later he wrote this short poem about Abou Ben Adhem, a figure drawn from Ibrahim ibn Adham, the medieval Muslim prince who gave up his throne. It became one of the best loved things he ever wrote.",
+     "Sources: https://en.wikipedia.org/wiki/Leigh_Hunt · https://www.poetryfoundation.org/poets/leigh-hunt · https://en.wikipedia.org/wiki/Abou_Ben_Adhem"
+    ],
     "gloss": {
      "tribe": "His people, his descendants.",
      "accord": "Harmony, agreement.",
@@ -408,7 +391,10 @@ window.POIESIS_DAYS = {
     "quote": "In those early days we were often asked why we had come to live on Halsted Street when we could afford to live somewhere else. I remember one man who used to shake his head and say it was \"the strangest thing he had met in his experience,\" but who was finally convinced that it was \"not strange but natural.\" In time it came to seem natural to all of us that the Settlement should be there. If it is natural to feed the hungry and care for the sick, it is certainly natural to give pleasure to the young, comfort to the aged, and to minister to the deep-seated craving for social intercourse that all men feel. Whoever does it is rewarded by something which, if not gratitude, is at least spontaneous and vital and lacks that irksome sense of obligation with which a substantial benefit is too often acknowledged.",
     "cite": "First Days at Hull-House (from Twenty Years at Hull-House), 1910 (Twenty Years at Hull-House)",
     "deeper": "The first things asked of them were washing new-born babies and preparing the dead. Name what your own street would ask of you first.",
-    "story": [],
+    "story": [
+     "After college, Jane Addams felt adrift. Traveling in Europe with her friend Ellen Gates Starr, she watched a bullfight in Madrid and was troubled that she did not feel more horror. In London in 1888 she visited Toynbee Hall, where university men lived among the poor, and the idea took hold. She told Starr, who joined her at once. In 1889 the two moved into a run-down mansion on Halsted Street in Chicago, built by Charles Hull, and opened its doors to their immigrant neighbors.",
+     "Sources: https://en.wikipedia.org/wiki/Jane_Addams · https://en.wikipedia.org/wiki/Hull_House"
+    ],
     "gloss": {
      "Halsted Street": "A crowded immigrant street on Chicago's West Side, where Hull-House stood.",
      "Settlement": "A house where educated volunteers lived among the poor as neighbors.",
@@ -422,9 +408,9 @@ window.POIESIS_DAYS = {
     "kind": "Scripture",
     "title": "Luke 10:33–34",
     "maker": "World English Bible",
-    "date": "Catholic Mass · Gospel",
+    "date": "Catholic Mass Gospel, Monday of Week 27",
     "quote": "But a certain Samaritan, as he traveled, came where he was. When he saw him, he was moved with compassion, came to him, and bound up his wounds, pouring on oil and wine. He set him on his own animal, brought him to an inn, and took care of him.",
-    "cite": "Catholic Mass · Gospel",
+    "cite": "Catholic Mass Gospel, Monday of Week 27",
     "painting": {
      "artist": "Eugène Delacroix",
      "era": "French Romanticism, 1849",
@@ -437,7 +423,7 @@ window.POIESIS_DAYS = {
     },
     "deeper": "",
     "story": [
-     "Catholic Mass, Monday of the 27th Week in Ordinary Time, 5 Oct 2026: Gal 1:6–12; Ps 111; Gospel Luke 10:25–37, per catholicgallery.org (as supplied in the brief; not re-fetched here)..",
+     "Read at Catholic Mass Gospel, Monday of Week 27 on this day.",
      "The text is the World English Bible, a public-domain revision of the American Standard Version of 1901. It is used here because it can be printed freely.",
      "<i>The Good Samaritan</i> by Eugène Delacroix (French Romanticism, 1849) stands beside the reading. It appears as a colour study until the museum image is licensed and hosted."
     ]
@@ -445,229 +431,227 @@ window.POIESIS_DAYS = {
   ]
  },
  "2026-10-06": {
-  "theme": "needful",
-  "line": "Martha, Martha, one thing is needed; Kipling's defence of Martha's sons; Brother Lawrence at prayer in his kitchen.",
-  "letter": "B",
-  "verse": "Jesus answered her, \"Martha, Martha, you are anxious and troubled about many things, but one thing is needed. Mary has chosen the good part, which will not be taken away from her.\"",
-  "verseRef": "Luke 10:41–42 · World English Bible",
-  "reading": "Holy Apostle Thomas; St Innocent of Alaska · Liturgy: Philippians 1:8–14, Luke 6:37–45 · feast: John 20:19–31",
-  "readingNote": "The day's reading in the Greek Orthodox calendar.",
-  "spine": "Letter 9 (Furuborg, 4 Nov 1904): doubt can become a good quality",
+  "theme": "doubt",
+  "line": "Thomas needs to touch the wounds; Tennyson: there lives more faith in honest doubt; Keats on living with uncertainty without reaching irritably after answers.",
+  "letter": "A",
+  "verse": "Jesus said to him, “Because you have seen me, you have believed. Blessed are those who have not seen and have believed.”",
+  "verseRef": "John 20:29 · World English Bible",
+  "reading": "",
+  "readingNote": "",
+  "spine": "",
   "muses": [
    {
-    "id": "kipling-sons-of-martha",
-    "mk": "rudyard-kipling",
+    "id": "tennyson-in-memoriam-96",
+    "mk": "alfred-lord-tennyson",
     "kind": "Poem",
-    "title": "The Sons of Martha",
-    "maker": "Rudyard Kipling",
-    "date": "1907 (first printed in the London Standard, 29 April 1907, per poetryloverspage.com; collected in The Years Between, Methuen, 1919)",
-    "poem": "The Sons of Mary seldom bother, for they have inherited that good part,\nBut the Sons of Martha favour their Mother of the careful soul and the troubled heart.\nAnd because she lost her temper once, and because she was rude to the Lord her Guest,\nHer Sons must wait upon Mary's Sons, world without end, reprieve, or rest.\n\nIt is their care in all the ages to take the buffet and cushion the shock.\nIt is their care that the gear engages; it is their care that the switches lock.\nIt is their care that the wheels run truly; it is their care to embark and entrain,\nTally, transport, and deliver duly the Sons of Mary by land and main.\n\nThey say to mountains, 'Be ye removèd.' They say to the lesser floods, 'Be dry.'\nUnder their rods are the rocks reprovèd—they are not afraid of that which is high.\nThen do the hill-tops shake to the summit—then is the bed of the deep laid bare,\nThat the Sons of Mary may overcome it, pleasantly sleeping and unaware.\n\nThey finger death at their gloves' end where they piece and repiece the living wires.\nHe rears against the gates they tend: they feed him hungry behind their fires.\nEarly at dawn, ere men see clear, they stumble into his terrible stall,\nAnd hale him forth like a haltered steer, and goad and turn him till evenfall.\n\nTo these from birth is Belief forbidden; from these till death is Relief afar.\nThey are concerned with matters hidden—under the earth-line their altars are.\nThe secret fountains to follow up, waters withdrawn to restore to the mouth,\nAnd gather the floods as in a cup, and pour them again at a city's drouth.\n\nThey do not preach that their God will rouse them a little before the nuts work loose.\nThey do not teach that His Pity allows them to leave their work when they damn-well choose.\nAs in the thronged and the lighted ways, so in the dark and the desert they stand,\nWary and watchful all their days that their brethren's days may be long in the land.\n\nRaise ye the stone or cleave the wood to make a path more fair or flat,\nLo, it is black already with blood some Son of Martha spilled for that!\nNot as a ladder from earth to Heaven, not as a witness to any creed,\nBut simple service simply given to his own kind in their common need.\n\nAnd the Sons of Mary smile and are blessèd—they know the angels are on their side.\nThey know in them is the Grace confessèd, and for them are the Mercies multiplied.\nThey sit at the Feet—they hear the Word—they see how truly the Promise runs:\nThey have cast their burden upon the Lord, and—the Lord He lays it on Martha's Sons!",
-    "poemNote": "whole",
-    "deeper": "Kipling takes the side the Gospel does not. Name the work you do that nobody thanks you for, and say whether you want to be thanked.",
-    "story": [],
-    "gloss": {
-     "buffet": "A blow.",
-     "entrain": "Put (people) aboard a train.",
-     "hale": "Haul, drag.",
-     "drouth": "Drought, thirst."
-    }
+    "title": "In Memoriam A. H. H., 96",
+    "maker": "Alfred, Lord Tennyson",
+    "date": "published 1850",
+    "poem": "You say, but with no touch of scorn,\nSweet-hearted, you, whose light-blue eyes\nAre tender over drowning flies,\nYou tell me, doubt is Devil-born.\n\nI know not: one indeed I knew\nIn many a subtle question versed,\nWho touch'd a jarring lyre at first,\nBut ever strove to make it true:\n\nPerplext in faith, but pure in deeds,\nAt last he beat his music out.\nThere lives more faith in honest doubt,\nBelieve me, than in half the creeds.\n\nHe fought his doubts and gather'd strength,\nHe would not make his judgment blind,\nHe faced the spectres of the mind\nAnd laid them: thus he came at length\n\nTo find a stronger faith his own;\nAnd Power was with him in the night,\nWhich makes the darkness and the light,\nAnd dwells not in the light alone,\n\nBut in the darkness and the cloud,\nAs over Sinaï's peaks of old,\nWhile Israel made their gods of gold,\nAltho' the trumpet blew so loud.",
+    "poemNote": "",
+    "deeper": "",
+    "story": [
+     "In Memoriam took Tennyson seventeen years, written after his closest friend Arthur Hallam died suddenly in 1833 at 22. It was published anonymously in 1850."
+    ],
+    "gloss": {}
    },
    {
-    "id": "lawrence-practice-presence",
-    "mk": "brother-lawrence-of-the-resurrection-nicolas-herman",
+    "id": "keats-negative-capability",
+    "mk": "keats",
     "kind": "Passage",
-    "title": "The Practice of the Presence of God (Fourth Conversation)",
-    "maker": "Brother Lawrence of the Resurrection (Nicolas Herman)",
-    "date": "Conversations first published 1692 (French); this English translation published 1895",
-    "quote": "As Bro. Lawrence had found such an advantage in walking in the presence of GOD, it was natural for him to recommend it earnestly to others; but his example was a stronger inducement than any arguments he could propose. His very countenance was edifying; such a sweet and calm devotion appearing in it, as could not but affect the beholders. And it was observed, that in the greatest hurry of business in the kitchen, he still preserved his recollection and heavenly-mindedness. He was never hasty nor loitering, but did each thing in its season, with an even uninterrupted composure and tranquillity of spirit. \"The time of business,\" said he, \"does not with me differ from the time of prayer; and in the noise and clutter of my kitchen, while several persons are at the same time calling for different things, I possess GOD in as great tranquillity as if I were upon my knees at the Blessed Sacrament.\"",
-    "cite": "The Practice of the Presence of God (Fourth Conversation), Conversations first published 1692 (French); this English translation published 1895",
-    "deeper": "He rolled himself over the wine casks and called it God's business. Take the next dull thing on your list and try saying that about it.",
-    "story": [],
-    "gloss": {
-     "recollection": "Inward gathering of attention on God.",
-     "tranquillity": "Calm, stillness."
-    }
+    "title": "Letter to George and Tom Keats (Negative Capability)",
+    "maker": "John Keats",
+    "date": "December 1817",
+    "quote": "several things dovetailed in my mind, at once it struck me, what quality went to form a Man of Achievement especially in Literature & which Shakespeare possessed so enormously—I mean Negative Capability, that is when man is capable of being in uncertainties, Mysteries, doubts, without any irritable reaching after fact & reason—Coleridge, for instance, would let go by a fine isolated verisimilitude caught from the Penetralium of mystery, from being incapable of remaining content with half knowledge. This pursued through Volumes would perhaps take us no further than this, that with a great poet the sense of Beauty overcomes every other consideration, or rather obliterates all consideration.",
+    "cite": "Letter to George and Tom Keats (Negative Capability), December 1817",
+    "deeper": "",
+    "story": [
+     "Written to his brothers after walking home from a Christmas pantomime with friends, arguing all the way. Keats was 22 and had three years left to live."
+    ],
+    "gloss": {}
    },
    {
     "id": "scripture-2026-10-06",
     "mk": "scripture",
     "kind": "Scripture",
-    "title": "Luke 10:41–42",
+    "title": "John 20:29",
     "maker": "World English Bible",
-    "date": "Catholic Mass · Gospel",
-    "quote": "Jesus answered her, \"Martha, Martha, you are anxious and troubled about many things, but one thing is needed. Mary has chosen the good part, which will not be taken away from her.\"",
-    "cite": "Catholic Mass · Gospel",
+    "date": "Orthodox feast of the Apostle Thomas",
+    "quote": "Jesus said to him, “Because you have seen me, you have believed. Blessed are those who have not seen and have believed.”",
+    "cite": "Orthodox feast of the Apostle Thomas",
     "painting": {
-     "artist": "Diego Velázquez",
-     "era": "Spanish Golden Age, 1618",
-     "title": "Kitchen Scene with Christ in the House of Martha and Mary",
-     "palette": [
-      "#6b4a30",
-      "#e5dcc4",
-      "#b5624f"
-     ]
+     "artist": "Hendrick ter Brugghen",
+     "era": "Utrecht Caravaggism, c. 1622",
+     "title": "The Incredulity of Saint Thomas",
+     "palette": null
     },
     "deeper": "",
     "story": [
-     "Gospel at Mass, Tuesday 6 Oct 2026 (Tue of Week 27 in Ordinary Time): Luke 10:38–42 — per catholicgallery.org as given in the brief (Gal 1:13–24; Ps 139; Luke 10:38–42); not independently re-fetched by me..",
+     "Read at Orthodox feast of the Apostle Thomas on this day.",
      "The text is the World English Bible, a public-domain revision of the American Standard Version of 1901. It is used here because it can be printed freely.",
-     "<i>Kitchen Scene with Christ in the House of Martha and Mary</i> by Diego Velázquez (Spanish Golden Age, 1618) stands beside the reading. It appears as a colour study until the museum image is licensed and hosted."
+     "<i>The Incredulity of Saint Thomas</i> by Hendrick ter Brugghen (Utrecht Caravaggism, c. 1622) stands beside the reading. It appears as a colour study until the museum image is licensed and hosted."
     ]
    }
   ]
  },
  "2026-10-07": {
-  "theme": "wait",
-  "line": "More than watchmen for the morning; they also serve who only stand and wait; Newman on watching for a friend.",
-  "letter": "D",
-  "verse": "I wait for Yahweh. My soul waits. I hope in his word. My soul longs for the Lord more than watchmen long for the morning, more than watchmen for the morning.",
-  "verseRef": "Psalm 130:5–6 · World English Bible",
-  "reading": "Martyrs Sergius and Bacchus · Liturgy: Philippians 1:12–20, Luke 6:46–7:1",
-  "readingNote": "The day's reading in the Greek Orthodox calendar.",
-  "spine": "Letter 3 (Viareggio, 23 Apr 1903): ripening like the tree",
+  "theme": "free",
+  "line": "Paul in chains, yet the good news runs free; Lovelace in prison: stone walls do not a prison make; Boethius awaiting death, visited by Philosophy.",
+  "letter": "A",
+  "verse": "Now I desire to have you know, brothers, that the things which happened to me have turned out rather to the progress of the Good News, so that it became evident to the whole palace guard, and to all the rest, that my bonds are in Christ, and that most of the brothers in the Lord, being confident through my bonds, are more abundantly bold to speak the word of God without fear.",
+  "verseRef": "Philippians 1:12–14 · World English Bible",
+  "reading": "",
+  "readingNote": "",
+  "spine": "",
   "muses": [
    {
-    "id": "milton-when-i-consider",
-    "mk": "john-milton",
+    "id": "lovelace-to-althea",
+    "mk": "richard-lovelace",
     "kind": "Poem",
-    "title": "Sonnet 19: When I consider how my light is spent",
-    "maker": "John Milton",
-    "date": "written c. 1652–55; published 1673 (Poems, &c. upon Several Occasions)",
-    "poem": "When I consider how my light is spent,\nEre half my days, in this dark world and wide,\nAnd that one Talent which is death to hide\nLodged with me useless, though my Soul more bent\nTo serve therewith my Maker, and present\nMy true account, lest he returning chide;\n\"Doth God exact day-labour, light denied?\"\nI fondly ask. But patience, to prevent\nThat murmur, soon replies, \"God doth not need\nEither man's work or his own gifts; who best\nBear his mild yoke, they serve him best. His state\nIs Kingly. Thousands at his bidding speed\nAnd post o'er Land and Ocean without rest:\nThey also serve who only stand and wait.\"",
+    "title": "To Althea, from Prison",
+    "maker": "Richard Lovelace",
+    "date": "written 1642; published 1649 (Lucasta)",
+    "poem": "When Love with unconfinèd wings\nHovers within my Gates,\nAnd my divine Althea brings\nTo whisper at the Grates;\nWhen I lie tangled in her hair,\nAnd fettered to her eye,\nThe Gods that wanton in the Air,\nKnow no such Liberty.\n\nWhen flowing Cups run swiftly round\nWith no allaying Thames,\nOur careless heads with Roses bound,\nOur hearts with Loyal Flames;\nWhen thirsty grief in Wine we steep,\nWhen Healths and draughts go free,\nFishes that tipple in the Deep\nKnow no such Liberty.\n\nWhen (like committed linnets) I\nWith shriller throat shall sing\nThe sweetness, Mercy, Majesty,\nAnd glories of my King;\nWhen I shall voice aloud how good\nHe is, how Great should be,\nEnlargèd Winds, that curl the Flood,\nKnow no such Liberty.\n\nStone Walls do not a Prison make,\nNor Iron bars a Cage;\nMinds innocent and quiet take\nThat for an Hermitage.\nIf I have freedom in my Love,\nAnd in my soul am free,\nAngels alone that soar above,\nEnjoy such Liberty.",
     "poemNote": "whole",
-    "deeper": "Patience cuts in before he finishes the question. Write out the question you would have asked, then read the last line again.",
-    "story": [],
+    "deeper": "",
+    "story": [
+     "In 1642, as England slid toward civil war, the young Royalist Richard Lovelace presented a petition to Parliament in support of the king's side. For that he was locked in the Gatehouse prison at Westminster. There he wrote this song to Althea, a woman whose identity is still uncertain. It was published in 1649 in his collection Lucasta. Its line \"Stone walls do not a prison make, / Nor iron bars a cage\" has outlived nearly everything else about him.",
+     "Sources: https://www.britannica.com/biography/Richard-Lovelace · https://en.wikipedia.org/wiki/To_Althea,_from_Prison"
+    ],
     "gloss": {
-     "Talent": "A coin (Matthew 25), and a gift.",
-     "fondly": "Foolishly.",
-     "post": "Travel in haste."
+     "wanton": "Frolic, play freely.",
+     "allaying Thames": "I.e. no water to dilute the wine.",
+     "committed linnets": "Caged songbirds.",
+     "curl the flood": "Ruffle the sea."
     }
    },
    {
-    "id": "newman-watching",
-    "mk": "john-henry-newman",
+    "id": "boethius-consolation-i",
+    "mk": "boethius-translated-by-h-r-james",
     "kind": "Passage",
-    "title": "Watching (Parochial and Plain Sermons IV, 22)",
-    "maker": "John Henry Newman",
-    "date": "Parochial Sermons vol. IV (volume dedication dated 19 Nov 1838; first published c. 1839)",
-    "quote": "Do you know the feeling in matters of this life, of expecting a friend, expecting him to come, and he delays? Do you know what it is to be in unpleasant company, and to wish for the time to pass away, and the hour strike when you may be at liberty? … Do you know what it is to have a friend in a distant country, to expect news of him, and to wonder from day to day what he is now doing, and whether he is well? Do you know what it is so to live upon a person who is present with you, that your eyes follow his, that you read his soul, that you see all its changes in his countenance, that you anticipate his wishes, that you smile in his smile, and are sad in his sadness, and are downcast when he is vexed, and rejoice in his successes? To watch for Christ is a feeling such as all these; as far as feelings of this world are fit to shadow out those of another.",
-    "cite": "Watching (Parochial and Plain Sermons IV, 22), Parochial Sermons vol. IV (volume dedication dated 19 Nov 1838; first published c. 1839)",
-    "deeper": "He explains watching by asking whether you know what it is to expect a friend who delays. Answer him: who?",
-    "story": [],
+    "title": "The Consolation of Philosophy",
+    "maker": "Boethius, translated by H. R. James",
+    "date": "written c. 523–524; James translation published 1897 (London: Elliot Stock)",
+    "quote": "While I was thus mutely pondering within myself, and recording my sorrowful complainings with my pen, it seemed to me that there appeared above my head a woman of a countenance exceeding venerable. Her eyes were bright as fire, and of a more than human keenness; her complexion was lively, her vigour showed no trace of enfeeblement; and yet her years were right full, and she plainly seemed not of our age and time. Her stature was difficult to judge. At one moment it exceeded not the common height, at another her forehead seemed to strike the sky; and whenever she raised her head higher, she began to pierce within the very heavens, and to baffle the eyes of them that looked upon her. Her garments were of an imperishable fabric, wrought with the finest threads and of the most delicate workmanship; and these, as her own lips afterwards assured me, she had herself woven with her own hands.",
+    "cite": "The Consolation of Philosophy, written c. 523–524; James translation published 1897 (London: Elliot Stock)",
+    "deeper": "",
+    "story": [
+     "Boethius was a Roman senator and scholar who served the Gothic king Theodoric at the height of his career. Then he was accused of treason, stripped of everything, and imprisoned in Pavia to await death. There he wrote The Consolation of Philosophy, alternating prose with verse. In it, Philosophy herself comes to him as a woman to talk him out of despair. He was executed, but the book became one of the most read works of the Middle Ages.",
+     "Sources: https://plato.stanford.edu/entries/boethius/ · https://en.wikipedia.org/wiki/Boethius"
+    ],
     "gloss": {
-     "shadow out": "Faintly picture, prefigure."
+     "venerable": "Worthy of reverence.",
+     "right full": "Very full, advanced.",
+     "enfeeblement": "Weakening."
     }
    },
    {
     "id": "scripture-2026-10-07",
     "mk": "scripture",
     "kind": "Scripture",
-    "title": "Psalm 130:5–6",
+    "title": "Philippians 1:12–14",
     "maker": "World English Bible",
-    "date": "Night Prayer (Compline)",
-    "quote": "I wait for Yahweh. My soul waits. I hope in his word. My soul longs for the Lord more than watchmen long for the morning, more than watchmen for the morning.",
-    "cite": "Night Prayer (Compline)",
+    "date": "Orthodox Divine Liturgy Epistle (Sts Sergius and Bacchus)",
+    "quote": "Now I desire to have you know, brothers, that the things which happened to me have turned out rather to the progress of the Good News, so that it became evident to the whole palace guard, and to all the rest, that my bonds are in Christ, and that most of the brothers in the Lord, being confident through my bonds, are more abundantly bold to speak the word of God without fear.",
+    "cite": "Orthodox Divine Liturgy Epistle (Sts Sergius and Bacchus)",
     "painting": {
-     "artist": "Caspar David Friedrich",
-     "era": "German Romanticism, 1822",
-     "title": "Woman at a Window",
-     "palette": [
-      "#8d9285",
-      "#cfd6d3",
-      "#6b533c"
-     ]
+     "artist": "Rembrandt van Rijn",
+     "era": "Dutch Golden Age, 1627",
+     "title": "The Apostle Paul in Prison",
+     "palette": null
     },
     "deeper": "",
     "story": [
-     "Night Prayer (Compline), Wednesday 7 Oct 2026 (Wed of Week 27 in Ordinary Time): psalms are Ps 30(31) and Ps 129(130) 'Out of the depths' — checked at https://universalis.com/20261007/compline.htm (the /comp.htm URL 404s)..",
+     "Read at Orthodox Divine Liturgy Epistle (Sts Sergius and Bacchus) on this day.",
      "The text is the World English Bible, a public-domain revision of the American Standard Version of 1901. It is used here because it can be printed freely.",
-     "<i>Woman at a Window</i> by Caspar David Friedrich (German Romanticism, 1822) stands beside the reading. It appears as a colour study until the museum image is licensed and hosted."
+     "<i>The Apostle Paul in Prison</i> by Rembrandt van Rijn (Dutch Golden Age, 1627) stands beside the reading. It appears as a colour study until the museum image is licensed and hosted."
     ]
    }
   ]
  },
  "2026-10-08": {
-  "theme": "knock",
-  "line": "Knock and it will be opened; Donne begging God to do more than knock; Christian at the wicket gate.",
-  "letter": "B",
-  "verse": "I tell you, keep asking, and it will be given you. Keep seeking, and you will find. Keep knocking, and it will be opened to you. For everyone who asks receives. He who seeks finds. To him who knocks it will be opened.",
-  "verseRef": "Luke 11:9–10 · World English Bible",
-  "reading": "Venerable Pelagia the Penitent · Liturgy: Philippians 1:20–27, Luke 7:17–30",
-  "readingNote": "The day's reading in the Greek Orthodox calendar.",
-  "spine": "Letter 6: God as the one who is coming",
+  "theme": "tended",
+  "line": "God gathers the lambs and carries them; Meynell's shepherdess keeps her thoughts like a flock; Gabriel Oak warms a newborn lamb through the night.",
+  "letter": "A",
+  "verse": "He will feed his flock like a shepherd. He will gather the lambs in his arm, and carry them in his bosom. He will gently lead those who have their young.",
+  "verseRef": "Isaiah 40:11 · World English Bible",
+  "reading": "",
+  "readingNote": "",
+  "spine": "",
   "muses": [
    {
-    "id": "donne-batter-my-heart",
-    "mk": "john-donne",
+    "id": "meynell-shepherdess",
+    "mk": "alice-meynell",
     "kind": "Poem",
-    "title": "Holy Sonnets: Batter my heart, three-person'd God",
-    "maker": "John Donne",
-    "date": "1633 (Poems, by J. D., published posthumously)",
-    "poem": "Batter my heart, three-person'd God, for you\nAs yet but knock, breathe, shine, and seek to mend;\nThat I may rise and stand, o'erthrow me, and bend\nYour force to break, blow, burn, and make me new.\nI, like an usurp'd town to another due,\nLabor to admit you, but oh, to no end;\nReason, your viceroy in me, me should defend,\nBut is captiv'd, and proves weak or untrue.\nYet dearly I love you, and would be lov'd fain,\nBut am betroth'd unto your enemy;\nDivorce me, untie or break that knot again,\nTake me to you, imprison me, for I,\nExcept you enthrall me, never shall be free,\nNor ever chaste, except you ravish me.",
+    "title": "The Shepherdess",
+    "maker": "Alice Meynell",
+    "date": "1902 (Later Poems)",
+    "poem": "She walks—the lady of my delight—\nA shepherdess of sheep.\nHer flocks are thoughts. She keeps them white;\nShe guards them from the steep.\nShe feeds them on the fragrant height,\nAnd folds them in for sleep.\n\nShe roams maternal hills and bright,\nDark valleys safe and deep.\nInto that tender breast at night\nThe chastest stars may peep.\nShe walks—the lady of my delight—\nA shepherdess of sheep.\n\nShe holds her little thoughts in sight,\nThough gay they run and leap.\nShe is so circumspect and right;\nShe has her soul to keep.\nShe walks—the lady of my delight—\nA shepherdess of sheep.",
     "poemNote": "whole",
-    "deeper": "He asks to be broken rather than mended. Say why you think he does, and whether you would ask the same.",
-    "story": [],
+    "deeper": "",
+    "story": [
+     "Alice Meynell spent part of her childhood in Italy, became a Catholic as a young woman, and married the editor Wilfrid Meynell. Together they edited magazines while raising a large family in London. She wrote essays and poems, and her verse was admired by Tennyson and Patmore. \"The Shepherdess\" opens her Later Poems of 1902. The lady it praises keeps no real sheep: her flocks are thoughts.",
+     "Sources: https://www.poetryfoundation.org/poets/alice-meynell · https://en.wikipedia.org/wiki/Alice_Meynell · https://www.gutenberg.org/files/22032/22032-h/22032-h.htm"
+    ],
     "gloss": {
-     "usurp'd": "Seized by force.",
-     "viceroy": "Governor ruling in a king's place.",
-     "fain": "Gladly.",
-     "enthrall": "Hold captive."
+     "the steep": "A steep slope or cliff edge.",
+     "folds them in": "Pens them in the sheepfold.",
+     "circumspect": "Watchful, careful."
     }
    },
    {
-    "id": "bunyan-wicket-gate",
-    "mk": "john-bunyan",
+    "id": "hardy-madding-crowd-lamb",
+    "mk": "thomas-hardy",
     "kind": "Passage",
-    "title": "The Pilgrim's Progress",
-    "maker": "John Bunyan",
-    "date": "1678",
-    "quote": "So, in process of time, Christian got up to the gate. Now, over the gate there was written, 'Knock, and it shall be opened unto you.'\n\nHe that will enter in must first without\nStand knocking at the Gate, nor need he doubt\nThat is A KNOCKER but to enter in;\nFor God can love him, and forgive his sin.\n\nHe knocked, therefore, more than once or twice, saying--\n\nMay I now enter here? Will he within\nOpen to sorry me, though I have been\nAn undeserving rebel? Then shall I\nNot fail to sing his lasting praise on high.\n\nAt last there came a grave person to the gate, named Good-will, who asked who was there? and whence he came? and what he would have?\n\nCHR. Here is a poor burdened sinner. I come from the City of Destruction, but am going to Mount Zion, that I may be delivered from the wrath to come. I would therefore, Sir, since I am informed that by this gate is the way thither, know if you are willing to let me in?\n\nGOOD-WILL. I am willing with all my heart, said he; and with that he opened the gate.",
-    "cite": "The Pilgrim's Progress, 1678",
-    "deeper": "Goodwill says no objection is made to anyone, whatever they did before they came. Name what you assumed would be objected to.",
-    "story": [],
+    "title": "Far from the Madding Crowd",
+    "maker": "Thomas Hardy",
+    "date": "1874",
+    "quote": "He returned to the hut, bringing in his arms a new-born lamb, consisting of four legs large enough for a full-grown sheep, united by a seemingly inconsiderable membrane about half the substance of the legs collectively, which constituted the animal's entire body just at present.\n\nThe little speck of life he placed on a wisp of hay before the small stove, where a can of milk was simmering. … \n\nThe lamb, revived by the warmth, began to bleat, and the sound entered Gabriel's ears and brain with an instant meaning, as expected sounds will. Passing from the profoundest sleep to the most alert wakefulness with the same ease that had accompanied the reverse operation, he looked at his watch, found that the hour-hand had shifted again, put on his hat, took the lamb in his arms, and carried it into the darkness. After placing the little creature with its mother, he stood and carefully examined the sky, to ascertain the time of night from the altitudes of the stars.",
+    "cite": "Far from the Madding Crowd, 1874",
+    "deeper": "",
+    "story": [
+     "Thomas Hardy trained as an architect before he made his name as a writer. Far from the Madding Crowd first ran anonymously as a serial in the Cornhill Magazine, and it was the book that first named his imagined countryside \"Wessex.\" Published in 1874, it was his first real success. It let him give up architecture for writing, and he married Emma Gifford that same year.",
+     "Sources: https://en.wikipedia.org/wiki/Far_from_the_Madding_Crowd · https://en.wikipedia.org/wiki/Thomas_Hardy"
+    ],
     "gloss": {
-     "whence": "From where.",
-     "thither": "To that place.",
-     "Good-will": "The gatekeeper, named for God's goodwill."
+     "inconsiderable": "Very small.",
+     "ascertain": "Work out for certain.",
+     "altitudes": "Heights above the horizon."
     }
    },
    {
     "id": "scripture-2026-10-08",
     "mk": "scripture",
     "kind": "Scripture",
-    "title": "Luke 11:9–10",
+    "title": "Isaiah 40:11",
     "maker": "World English Bible",
-    "date": "Catholic Mass · Gospel",
-    "quote": "I tell you, keep asking, and it will be given you. Keep seeking, and you will find. Keep knocking, and it will be opened to you. For everyone who asks receives. He who seeks finds. To him who knocks it will be opened.",
-    "cite": "Catholic Mass · Gospel",
+    "date": "Morning Prayer canticle, Thursday of Psalter Week III",
+    "quote": "He will feed his flock like a shepherd. He will gather the lambs in his arm, and carry them in his bosom. He will gently lead those who have their young.",
+    "cite": "Morning Prayer canticle, Thursday of Psalter Week III",
     "painting": {
-     "artist": "William Holman Hunt",
-     "era": "Pre-Raphaelite, 1851–53",
-     "title": "The Light of the World",
-     "palette": [
-      "#e0b357",
-      "#2b3a34",
-      "#e8e2d2"
-     ]
+     "artist": "Anton Mauve",
+     "era": "Hague School, c. 1880s",
+     "title": "Changing Pasture",
+     "palette": null
     },
     "deeper": "",
     "story": [
-     "Luke 11:5–13 is the Gospel at Mass for Thursday 8 Oct 2026 (Thursday of Week 27 in Ordinary Time), per catholicgallery.org as supplied in the brief; not re-checked by me..",
+     "Read at Morning Prayer canticle, Thursday of Psalter Week III on this day.",
      "The text is the World English Bible, a public-domain revision of the American Standard Version of 1901. It is used here because it can be printed freely.",
-     "<i>The Light of the World</i> by William Holman Hunt (Pre-Raphaelite, 1851–53) stands beside the reading. It appears as a colour study until the museum image is licensed and hosted."
+     "<i>Changing Pasture</i> by Anton Mauve (Hague School, c. 1880s) stands beside the reading. It appears as a colour study until the museum image is licensed and hosted."
     ]
    }
   ]
  },
  "2026-10-09": {
   "theme": "others",
-  "line": "Nothing from rivalry, count others better; Sonnet 29, envy turned by love; Bacon: envy is ever joined with comparing.",
-  "letter": "B",
+  "line": "Nothing from rivalry, count others better; Shakespeare envies this man's art and that man's scope until love changes everything; Bacon: envy is always comparing.",
+  "letter": "A",
   "verse": "doing nothing through rivalry or through conceit, but in humility, each counting others better than himself; each of you not just looking to his own things, but each of you also to the things of others.",
   "verseRef": "Philippians 2:3–4 · World English Bible",
-  "reading": "St Denis and companions; St John Leonardi; St John Henry Newman's feast day · Mass: Galatians 3:7–14; Psalm 111; Luke 11:15–26",
-  "readingNote": "The day's reading at Catholic Mass.",
-  "spine": "Letter 10 (Paris, 26 Dec 1908): art too is only a way of living",
+  "reading": "",
+  "readingNote": "",
+  "spine": "",
   "muses": [
    {
     "id": "shakespeare-sonnet-29",
@@ -679,7 +663,10 @@ window.POIESIS_DAYS = {
     "poem": "When, in disgrace with fortune and men's eyes,\nI all alone beweep my outcast state,\nAnd trouble deaf heaven with my bootless cries,\nAnd look upon myself and curse my fate,\nWishing me like to one more rich in hope,\nFeatured like him, like him with friends possessed,\nDesiring this man's art and that man's scope,\nWith what I most enjoy contented least;\nYet in these thoughts myself almost despising,\nHaply I think on thee, and then my state,\n(Like to the lark at break of day arising\nFrom sullen earth) sings hymns at heaven's gate;\nFor thy sweet love remembered such wealth brings\nThat then I scorn to change my state with kings.",
     "poemNote": "whole",
     "deeper": "Everything turns on one word: haply. Name the person whose existence changes your state, and whether you have ever told them.",
-    "story": [],
+    "story": [
+     "Shakespeare's sonnets were printed together in 1609 by the publisher Thomas Thorpe, under the title Shake-speares Sonnets: Never Before Imprinted. No one knows exactly when each was written. Sonnet 29 belongs to the first long group, addressed to a young man scholars call the Fair Youth. Some guess it dates from the early 1590s, when plague closed London's theaters, but that is only a guess. The 1609 printing is still the text editors trust.",
+     "Sources: https://en.wikipedia.org/wiki/Sonnet_29 · https://www.folger.edu/explore/shakespeares-works/shakespeares-sonnets/"
+    ],
     "gloss": {
      "beweep": "Weep over.",
      "bootless": "Useless.",
@@ -697,7 +684,10 @@ window.POIESIS_DAYS = {
     "quote": "A man that hath no virtue in himself, ever envieth virtue in others. For men's minds, will either feed upon their own good, or upon others' evil; and who wanteth the one, will prey upon the other; and whoso is out of hope, to attain to another's virtue, will seek to come at even hand, by depressing another's fortune.\n\nA man that is busy, and inquisitive, is commonly envious. For to know much of other men's matters, cannot be because all that ado may concern his own estate; therefore it must needs be, that he taketh a kind of play-pleasure, in looking upon the fortunes of others. Neither can he, that mindeth but his own business, find much matter for envy. For envy is a gadding passion, and walketh the streets, and doth not keep home: Non est curiosus, quin idem sit malevolus.\n\n… Again, envy is ever joined with the comparing of a man's self; and where there is no comparison, no envy; and therefore kings are not envied, but by kings.",
     "cite": "Of Envy, 1625 (Essays, final edition)",
     "deeper": "Bacon allows envy one use: a bridle on the great. Name the last thing you envied, and what it was telling you about what you want.",
-    "story": [],
+    "story": [
+     "Francis Bacon called his essays a recreation from his other studies. The first edition of 1597 held just ten. In 1621 Bacon, then Lord Chancellor, was charged with corruption, fined, briefly held in the Tower, and barred from office. In the quiet years after his fall he returned to the essays, and the final edition of 1625 held fifty-eight, \"Of Envy\" among them. He died the next year.",
+     "Sources: https://en.wikipedia.org/wiki/Essays_(Francis_Bacon) · https://en.wikipedia.org/wiki/Francis_Bacon"
+    ],
     "gloss": {
      "come at even hand": "Get level with.",
      "gadding": "Roaming restlessly.",
@@ -711,9 +701,9 @@ window.POIESIS_DAYS = {
     "kind": "Scripture",
     "title": "Philippians 2:3–4",
     "maker": "World English Bible",
-    "date": "Orthodox Divine Liturgy · Epistle",
+    "date": "Orthodox Divine Liturgy Epistle",
     "quote": "doing nothing through rivalry or through conceit, but in humility, each counting others better than himself; each of you not just looking to his own things, but each of you also to the things of others.",
-    "cite": "Orthodox Divine Liturgy · Epistle",
+    "cite": "Orthodox Divine Liturgy Epistle",
     "painting": {
      "artist": "Ford Madox Brown",
      "era": "Pre-Raphaelite, 1852–56",
@@ -726,7 +716,7 @@ window.POIESIS_DAYS = {
     },
     "deeper": "",
     "story": [
-     "Phil 1:27–2:4 is the Orthodox Epistle for 9 Oct 2026, per orthocal.info as supplied in the brief (https://orthocal.info/readings/gregorian/2026/10/9/); not re-checked by me..",
+     "Read at Orthodox Divine Liturgy Epistle on this day.",
      "The text is the World English Bible, a public-domain revision of the American Standard Version of 1901. It is used here because it can be printed freely.",
      "<i>Jesus Washing Peter's Feet</i> by Ford Madox Brown (Pre-Raphaelite, 1852–56) stands beside the reading. It appears as a colour study until the museum image is licensed and hosted."
     ]
