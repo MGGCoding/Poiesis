@@ -43,6 +43,10 @@ lexicon.two: Making as active reception: the maker labors, and inspiration is gi
 # THE MUSE PAGE ========================================================
 muse.prompt: What is your first impression? An idea, a poem, a connection, a reference, a question, etc.
 muse.prompt.placeholder: One sentence is enough.
+muse.q.heading: Questions the day puts to all three works
+muse.q.back: or write about something else
+muse.three.cue: These three were chosen to answer the same question.
+muse.curator.label: The curator's note
 muse.first.button: Leave my first impression
 muse.first.label: Your first impression
 muse.first.stays: Your first impression stays as you wrote it

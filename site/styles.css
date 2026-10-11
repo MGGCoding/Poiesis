@@ -211,6 +211,22 @@ h1,h2,h3,h4{font-family:var(--f-display); font-weight:400; text-wrap:balance; ma
 .selpop .sp-x{font-size:1rem; line-height:1; padding:4px 7px; opacity:.7; border-left:1px solid rgba(255,255,255,.18); margin-left:2px; border-radius:0 3px 3px 0}
 .selpop .sp-x:hover{opacity:1}
 
+/* Round 15: the day's questions as guidance, and the curator's note */
+.m-qguide{margin:6px 0 12px; display:flex; flex-direction:column; gap:2px}
+.m-qguide .m-qlab{margin:0 0 4px; font-family:var(--f-type,inherit); font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; color:#8a7b68}
+.m-qguide .m-q{display:block; width:100%; text-align:left; border:0; background:transparent; cursor:pointer;
+ font-family:var(--f-display,Georgia,serif); font-size:.95rem; line-height:1.4; color:#6b5d4d;
+ padding:5px 0 5px 14px; border-radius:3px; position:relative}
+.m-qguide .m-q::before{content:"\203a"; position:absolute; left:2px; top:5px; opacity:.5}
+.m-qguide .m-q:hover,.m-qguide .m-q:focus-visible{color:var(--ink,#2a2420); background:rgba(0,0,0,.03)}
+.m-nbhead.asked{font-style:italic}
+.m-qback{margin:4px 0 10px}
+.m-qback button{border:0; background:transparent; padding:0; cursor:pointer; font-size:.82rem; color:#8a7b68; text-decoration:underline; text-underline-offset:2px}
+.m-qback button:hover{color:var(--ink,#2a2420)}
+.m-cue3{margin:8px 0 0; font-size:.86rem; font-style:italic; color:#8a7b68}
+.m-curator{margin:12px 0 0; padding:10px 12px; border-left:2px solid rgba(0,0,0,.16); background:rgba(0,0,0,.025); border-radius:0 3px 3px 0; font-size:.9rem; line-height:1.5; color:#5c5043}
+.m-curator span{display:block; font-family:var(--f-type,inherit); font-size:.66rem; letter-spacing:.06em; text-transform:uppercase; color:#8a7b68; margin-bottom:4px}
+
 /* Writing surfaces */
 .writer{background:var(--card); color:var(--card-ink); box-shadow:var(--shadow); padding:16px 18px}
 .writer h4{font-size:1.25rem}
