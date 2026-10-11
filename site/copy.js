@@ -67,6 +67,8 @@ others.folded.button: Write yours first, then dialogue with others
 others.gate.heading: First, your own impression.
 others.gate.line: A fruitful dialogue with others starts between the muse and oneself
 others.gate.scripture: What you write first stays yours, before anyone else’s voice gets in. It also draws you the day’s seal.
+others.peek.left: left first impressions here.
+others.peek.closes: The conversation closes 
 others.gate.button: Write my first impression
 others.closed.line: This conversation has closed to new writing. Nothing said here was lost.
 others.linkfeed.heading: Where this work meets the others

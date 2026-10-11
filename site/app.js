@@ -809,6 +809,32 @@ function postHTML(p, m, mine, closed){
   ${shown.length?`<div class="comments">${shown.map(c=>`<div class="cm">${personAv(c.n)}<div><b>${esc(c.n==="You"?(S.profile.name||"You"):c.n)}</b> ${PEOPLE[c.n]?stickerHTML(PEOPLE[c.n].top,16):""} ${esc(c.t)}</div></div>`).join("")}</div>`:""}
   <div class="slot2"></div></article>`;
 }
+/* ---------- Round 15 (E): partial visibility at the gate ------------------
+   A hidden impression shows its first seven words sharp and the rest
+   blurred, with who wrote it and when. From the start only, never the last
+   line and never the best one, so there is nothing to gain by writing a
+   hook; and never more than half of a short impression, for the same
+   reason. No counts anywhere on these cards. The gate does not move: you
+   still write before you read. */
+function teaseHTML(p){
+ const words=String(p.first||"").trim().split(/\s+/).filter(Boolean);
+ const cut=Math.min(7, Math.max(1, Math.ceil(words.length/2)));
+ const open=words.slice(0,cut).join(" "), rest=words.slice(cut).join(" ");
+ return `<article class="tease"><div class="who">${personAv(p.name)}<div><b>${esc(p.name)}</b><small>${esc(p.at)}</small></div></div>
+  <p class="tz"><span class="tz-open">${esc(open)}${rest?"\u2026":""}</span>${rest?`<span class="tz-rest" aria-hidden="true">${esc(rest)}</span>`:""}</p></article>`;
+}
+function gateCardHTML(m){
+ const btn=U().gate==="folded"?T("others.folded.button","Write yours first, then unfold theirs")
+                              :T("others.gate.button","Write my first impression");
+ return `<div class="firsthere gatecard"><b>${T("others.gate.heading","Leave your first impression to read theirs.")}</b>
+  <p class="muted" style="margin:6px 0 12px;font-size:.9rem">${gateLine(m)}</p>
+  ${btn?`<button class="btn primary" data-act="towrite">${btn}</button>`:""}</div>`;
+}
+function gateWithTeasesHTML(m, posts, peek){
+ return `<section class="responses" id="responses"><h3>${T("others.heading","How it sang in others")}</h3>${peek||""}
+  <div class="teases ${U().gate==="folded"?"folded":""}">${posts.map(teaseHTML).join("")}</div>
+  ${gateCardHTML(m)}</section>`;
+}
 function linkTag(id){ return id==="whole"?"all three":synSubjects(id).map(x=>MUSE[x].kind.toLowerCase()).join(" & "); }
 function responsesHTML(m){
  const posts=postsFor(m.id), s=S.sealed[WK(m.id)];
@@ -833,15 +859,8 @@ function responsesHTML(m){
  const names=posts.map(p=>p.name.split(" ")[0]);
  const who=names.length>2?`${names.slice(0,2).join(", ")} and ${names.length-2} other${names.length-2>1?"s":""}`:names.join(" and ");
  const closes=new Date(); closes.setDate(closes.getDate()+3); const cl=closes.toLocaleDateString(undefined,{weekday:"long"});
- if(!s&&U().gate==="folded") return `<section class="responses" id="responses"><h3>${T("others.heading","How it sang in others")}</h3>
-   <div class="m-folds">${posts.map(p=>`<div class="m-fold">${personAv(p.name)}<span class="line"></span></div>`).join("")}</div>
-   <div class="rowbtns"><button class="btn primary" data-act="towrite">${T("others.folded.button","Write yours first, then unfold theirs")}</button></div></section>`;
- if(!s) return `<section class="responses" id="responses"><h3>${T("others.heading","How it sang in others")}</h3>
-   <div class="peek">${posts.map(p=>personAv(p.name)).join("")}<span><b>${esc(who)}</b> left first impressions here. <span class="muted">${posts.length} impressions · ${otherLinks.length} links from other works · closes ${cl}</span></span></div>
-   <div class="locked"><div class="ghost" aria-hidden="true">${posts.map(p=>postHTML(p,m)).join("")}</div>
-   <div class="veil"><div><b style="font-family:var(--f-display);font-weight:400;font-size:1.25rem">${T("others.gate.heading","Leave your first impression to read theirs.")}</b>
-    <p class="muted" style="margin:6px 0 12px;font-size:.9rem">${gateLine(m)}</p>
-    <button class="btn primary" data-act="towrite">${T("others.gate.button","Write my first impression")}</button></div></div></div></section>`;
+ if(!s) return gateWithTeasesHTML(m, posts,
+   `<div class="peek">${posts.map(p=>personAv(p.name)).join("")}<span><b>${esc(who)}</b> ${T("others.peek.left","left first impressions here.")} <span class="muted">${T("others.peek.closes","The conversation closes ")}${cl}.</span></span></div>`);
  const linkPosts=[...myLinks.map(p=>postHTML(p,m,true)), ...otherLinks.map(y=>postHTML({id:y.id, name:y.name, at:y.at, first:y.text, linkOf:y.on, replies:y.replies, moved:y.moved}, m))];
  return `<section class="responses" id="responses"><h3>${T("others.heading","How it sang in others")}</h3><p class="muted" style="margin:0 0 8px;font-size:.9rem">${posts.length+1} impressions · ${linkPosts.length} links that touch this work · the conversation closes ${cl}</p>
   <div>${postHTML({id:"me_"+m.id, at:when(s.at), first:s.text},m,true)}${posts.map(p=>postHTML(p,m)).join("")}</div>

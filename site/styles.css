@@ -225,6 +225,18 @@ h1,h2,h3,h4{font-family:var(--f-display); font-weight:400; text-wrap:balance; ma
 .m-qback button:hover{color:var(--ink,#2a2420)}
 .m-cue3{margin:8px 0 0; font-size:.86rem; font-style:italic; color:#8a7b68}
 .m-curator{margin:12px 0 0; padding:10px 12px; border-left:2px solid rgba(0,0,0,.16); background:rgba(0,0,0,.025); border-radius:0 3px 3px 0; font-size:.9rem; line-height:1.5; color:#5c5043}
+/* Round 15 (E): the first seven words sharp, the rest blurred */
+.teases{display:flex; flex-direction:column; gap:10px; margin:12px 0 14px}
+.tease{background:var(--card); color:var(--card-ink); box-shadow:var(--shadow); border-radius:3px; padding:12px 14px}
+.tease .who{display:flex; align-items:center; gap:8px; margin:0 0 6px}
+.tease .who b{font-weight:600; font-size:.92rem}
+.tease .who small{display:block; color:#8a7b68; font-size:.74rem}
+.tease .tz{margin:0; font-size:1rem; line-height:1.5}
+.tease .tz-open{color:inherit}
+.tease .tz-rest{filter:blur(4.2px); opacity:.5; user-select:none; pointer-events:none}
+.teases.folded .tease{position:relative; overflow:hidden}
+.teases.folded .tease::after{content:""; position:absolute; right:0; top:0; border-width:0 18px 18px 0; border-style:solid; border-color:var(--ground) var(--ground) #d8ccb4 #d8ccb4}
+.gatecard{margin-top:2px}
 .m-keepwrap{position:relative; display:inline-flex}
 .m-keepw svg{width:15px; height:15px}
 .m-keepw.on{background:var(--ink,#2a2420); color:var(--ground,#faf9f5); border-color:var(--ink,#2a2420)}
