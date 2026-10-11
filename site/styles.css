@@ -208,6 +208,8 @@ h1,h2,h3,h4{font-family:var(--f-display); font-weight:400; text-wrap:balance; ma
 .selpop{position:absolute; z-index:45; display:flex; gap:4px; background:var(--on-ground); color:var(--ground); padding:4px; border-radius:4px; box-shadow:var(--shadow)}
 .selpop button{border:0; background:transparent; color:inherit; font-size:.82rem; padding:4px 8px; border-radius:3px}
 .selpop button:hover{background:rgba(255,255,255,.12)}
+.selpop .sp-x{font-size:1rem; line-height:1; padding:4px 7px; opacity:.7; border-left:1px solid rgba(255,255,255,.18); margin-left:2px; border-radius:0 3px 3px 0}
+.selpop .sp-x:hover{opacity:1}
 
 /* Writing surfaces */
 .writer{background:var(--card); color:var(--card-ink); box-shadow:var(--shadow); padding:16px 18px}

@@ -1109,6 +1109,11 @@ function postAction(b){
 /* highlight to quote */
 const sp=$("#selpop"); let selText="";
 function hideSel(){ sp.hidden=true; }
+/* the highlight menu always has a way out: the \u00d7, Escape, or a click off it */
+function dropSel(){ hideSel(); try{ getSelection().removeAllRanges(); }catch(e){} }
+document.addEventListener("keydown", e=>{ if(e.key==="Escape"&&!sp.hidden){ dropSel(); } });
+document.addEventListener("mousedown", e=>{ if(!sp.hidden&&!sp.contains(e.target)) hideSel(); }, true);
+document.addEventListener("touchstart", e=>{ if(!sp.hidden&&!sp.contains(e.target)) hideSel(); }, true);
 function selCheck(e){ setTimeout(()=>{
  if(S.tab!=="muse" || (e&&sp.contains(e.target))) return;
  const sel=getSelection(); const t=sel?.toString().trim();
@@ -1117,12 +1122,15 @@ function selCheck(e){ setTimeout(()=>{
  if(!n||!n.closest(".museText")){ hideSel(); return; }
  selText=t.replace(/\s+/g," "); const r=sel.getRangeAt(0).getBoundingClientRect(); const m=curMuse();
  const canQuote=!S.sealed[m.id]&&!m.closed;
- sp.innerHTML=`${canQuote?`<button data-q="thought">${T("keep.quote","Quote in my impression")}</button>`:""}<button data-q="board">${T("keep.menu.line","Keep the line")}</button><button data-q="journal">${T("keep.menu.page","Write a page under it")}</button>`;
+ const closeLbl=T("keep.close","Close");
+ sp.innerHTML=`${canQuote?`<button data-q="thought">${T("keep.quote","Quote in my impression")}</button>`:""}<button data-q="board">${T("keep.menu.line","Keep the line")}</button><button data-q="journal">${T("keep.menu.page","Write a page under it")}</button>${closeLbl?`<button class="sp-x" data-q="close" aria-label="${esc(closeLbl)}" title="${esc(closeLbl)}">\u00d7</button>`:""}`;
  sp.hidden=false; sp.style.left=Math.max(8,Math.min(innerWidth-sp.offsetWidth-8, r.left+scrollX+r.width/2-sp.offsetWidth/2))+"px"; sp.style.top=(r.top+scrollY-sp.offsetHeight-8)+"px";
 },10); }
 document.addEventListener("mouseup", selCheck); document.addEventListener("touchend", selCheck);
 sp.addEventListener("click", e=>{
- const q=e.target.closest("[data-q]")?.dataset.q; if(!q) return; const m=curMuse();
+ const q=e.target.closest("[data-q]")?.dataset.q; if(!q) return;
+ if(q==="close"){ dropSel(); return; }
+ const m=curMuse();
  if(q==="thought"){ S.drafts[m.id]=((S.drafts[m.id]||"").trim()?S.drafts[m.id].trimEnd()+" ":"")+`“${selText}” `; save(); getSelection().removeAllRanges(); hideSel(); render(); setTimeout(()=>{ const d=$("#draft"); if(d){ d.focus(); d.setSelectionRange(d.value.length,d.value.length); } },30); toast(T("toast.quoted","Quoted. Write beside it.")); }
  if(q==="board"){ addPin({text:selText, cite:m.maker, where:m.title, muse:m.id}); getSelection().removeAllRanges(); hideSel(); }
  if(q==="journal"){ const lid=addLine({text:selText, who:m.maker, where:m.title, from:"muse", muse:m.id}); newPage([lid]); toast(T("toast.page.under","A page is open under it in your notebook.")); getSelection().removeAllRanges(); hideSel(); if(S.tab==="notebook") render(); }

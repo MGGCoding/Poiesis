@@ -76,6 +76,7 @@ post.reply.send: Send
 keep.menu.line: Keep the line
 keep.menu.page: Write a page under it
 keep.quote: Quote in my impression
+keep.close: Close
 cue.note:  others<br>wrote today
 cue.tip: Contributions today
 cue.onlyyou: Nobody here yet today
