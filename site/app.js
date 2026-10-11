@@ -820,8 +820,15 @@ function teaseHTML(p){
  const words=String(p.first||"").trim().split(/\s+/).filter(Boolean);
  const cut=Math.min(7, Math.max(1, Math.ceil(words.length/2)));
  const open=words.slice(0,cut).join(" "), rest=words.slice(cut).join(" ");
+ /* The remainder is REDACTED, not merely blurred: blurring real text leaves it
+    in the page for anyone who opens the inspector or selects the line, which
+    would make the gate decoration. We emit blocks of the same word lengths, so
+    it reads as blurred writing and there is nothing behind it to recover.
+    When the conversation is served from an account this moves to the server,
+    which simply never sends the rest. */
+ const shape=words.slice(cut).map(w=>"\u2588".repeat(Math.min(w.length,14))).join(" ");
  return `<article class="tease"><div class="who">${personAv(p.name)}<div><b>${esc(p.name)}</b><small>${esc(p.at)}</small></div></div>
-  <p class="tz"><span class="tz-open">${esc(open)}${rest?"\u2026":""}</span>${rest?`<span class="tz-rest" aria-hidden="true">${esc(rest)}</span>`:""}</p></article>`;
+  <p class="tz"><span class="tz-open">${esc(open)}${rest?"\u2026":""}</span>${rest?`<span class="tz-rest" aria-hidden="true">${shape}</span>`:""}</p></article>`;
 }
 function gateCardHTML(m){
  const btn=U().gate==="folded"?T("others.folded.button","Write yours first, then unfold theirs")
@@ -923,12 +930,14 @@ function itemBox(size,vert){ const u=U();
 function cueHTML(){
  const u=U(); if(u.cue==="off") return "";
  const n=dayCount();
- if(!TODAY.length) return mineParts().length?`<span class="m-cue"><span class="m-pnote">${T("cue.onlyyou.some","Only you here so far today")}</span></span>`
+ const live=MUSES.reduce((k,m)=>k+Table.others(WK(m.id)).length,0);  /* people writing in this browser */
+ const here=TODAY.length+live;
+ if(!here) return mineParts().length?`<span class="m-cue"><span class="m-pnote">${T("cue.onlyyou.some","Only you here so far today")}</span></span>`
   :`<span class="m-cue"><span class="m-pnote">${T("cue.onlyyou","Nobody here yet today")}</span></span>`;
  const faces=`<span class="m-faces">${TODAY.slice(0,5).map(p=>`<i style="background:${PEOPLE[p.n].c}"></i>`).join("")}</span>`;
  if(u.cue==="bubble") return `<span class="m-cue" data-tip="${T("cue.tip","Contributions today")}">${faces}<span class="m-bubble">${n}</span></span>`;
  if(u.cue==="faces") return `<span class="m-cue" data-tip="${T("cue.tip","Contributions today")}">${faces}<span class="m-badge">${n}</span></span>`;
- return `<span class="m-cue">${faces}<span class="m-pnote">${TODAY.length}${T("cue.note"," others<br>wrote today")}</span></span>`;
+ return `<span class="m-cue">${faces}<span class="m-pnote">${here}${here===1?T("cue.note.one"," other<br>wrote today"):T("cue.note"," others<br>wrote today")}</span></span>`;
 }
 function threeHTML(size,vert,nocue){
  const u=U(), ns=stepNext(), box=itemBox(size,vert), labels=u.labels==="on", T=30, K=30;
@@ -1108,7 +1117,7 @@ function phoneHomeHTML(){
   ${reading}
   ${threadCueHTML()}
   <div class="ph-three">${rows}${knot}</div>
-  ${TODAY.length?`<div class="ph-others"><span class="ph-avs">${cols}</span>${TODAY.length}${T("phone.others.suffix"," others wrote today")}</div>`
+  ${(TODAY.length+MUSES.reduce((k,m)=>k+Table.others(WK(m.id)).length,0))?`<div class="ph-others"><span class="ph-avs">${cols}</span>${TODAY.length+MUSES.reduce((k,m)=>k+Table.others(WK(m.id)).length,0)}${T("phone.others.suffix"," others wrote today")}</div>`
    :`<div class="ph-others">${mineParts().length?T("cue.onlyyou.some","Only you here so far today"):T("cue.onlyyou","Nobody here yet today")}</div>`}</div>`;
 }
 function renderMuse(v){

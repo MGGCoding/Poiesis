@@ -94,6 +94,7 @@ keep.work.nothingyet: Kept before I had written anything here.
 toast.work.kept: Kept. The work and what you wrote are one page in your notebook.
 toast.work.already: Already kept. Open the page to read it again.
 cue.note:  others<br>wrote today
+cue.note.one:  other\nwrote today
 cue.tip: Contributions today
 cue.onlyyou: Nobody here yet today
 cue.onlyyou.some: Only you here so far today
