@@ -18,6 +18,7 @@
 window.POIESIS_COPY = `
 
 # THE FRAME ============================================================
+journal.undated.title: Kept from an earlier day
 site.tab.muse: Muse
 site.tab.notebook: Notebook
 site.why.link: Why Poiesis ›
@@ -53,6 +54,8 @@ muse.past.heading: This muse has passed
 muse.past.line: This muse’s conversation has closed. It is still yours to answer in your notebook.
 muse.past.back: Back to today’s muses
 muse.info.label: How this was made
+muse.history.heading: A day already past
+muse.history.line: You are reading an earlier day. Its conversation is closed; what you write today belongs to today.
 
 # READING OTHERS
 others.heading: What others thought
