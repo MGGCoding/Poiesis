@@ -84,6 +84,13 @@ keep.menu.line: Keep the line
 keep.menu.page: Write a page under it
 keep.quote: Quote in my impression
 keep.close: Close
+keep.work.label: Keep for my notebook
+keep.work.kept: Already kept in your notebook
+keep.work.open: Open the page
+keep.work.mine: My first impression:
+keep.work.nothingyet: Kept before I had written anything here.
+toast.work.kept: Kept. The work and what you wrote are one page in your notebook.
+toast.work.already: Already kept. Open the page to read it again.
 cue.note:  others<br>wrote today
 cue.tip: Contributions today
 cue.onlyyou: Nobody here yet today

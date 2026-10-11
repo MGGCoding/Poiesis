@@ -225,6 +225,10 @@ h1,h2,h3,h4{font-family:var(--f-display); font-weight:400; text-wrap:balance; ma
 .m-qback button:hover{color:var(--ink,#2a2420)}
 .m-cue3{margin:8px 0 0; font-size:.86rem; font-style:italic; color:#8a7b68}
 .m-curator{margin:12px 0 0; padding:10px 12px; border-left:2px solid rgba(0,0,0,.16); background:rgba(0,0,0,.025); border-radius:0 3px 3px 0; font-size:.9rem; line-height:1.5; color:#5c5043}
+.m-keepwrap{position:relative; display:inline-flex}
+.m-keepw svg{width:15px; height:15px}
+.m-keepw.on{background:var(--ink,#2a2420); color:var(--ground,#faf9f5); border-color:var(--ink,#2a2420)}
+.m-keepwrap .bmenu{top:calc(100% + 4px); right:auto; left:0}
 .m-curator span{display:block; font-family:var(--f-type,inherit); font-size:.66rem; letter-spacing:.06em; text-transform:uppercase; color:#8a7b68; margin-bottom:4px}
 
 /* Writing surfaces */

@@ -436,7 +436,7 @@ function fresh(){ return {look:null, font:"book", tab:"muse", mi:0, past:null, d
  drawn:{hopkins:"hopkins", handel:"handel"}, reading:false,
  journal:clone(DEF_PAGES), lines:clone(DEF_LINES), questions:clone(DEF_QUESTIONS), trash:[],
  nb:{way:"page", sel:"j2", pick:[], sort:"date", search:"", adding:false, closer:false, voice:"muse", answer:"", pocket:"", thread:null},
- qpick:{}, season:"gathering", recent:[], visits:{}, log:[], page:{title:"",body:""}, pen:"",
+ qpick:{}, kept:{}, season:"gathering", recent:[], visits:{}, log:[], page:{title:"",body:""}, pen:"",
  profile:{name:WHONAME, line:"", makes:"", photo:null, ring:"laurel", badge:"Apprentice", top:"handel", formed:["Homer","Henry James"]}}; }
 let S; try{ S=Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY)||"null")||{}); }catch(e){ S=fresh(); }
 function save(quiet){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ toast(T("toast.storage","This browser is out of room for pictures. Your words are still here.")); }
@@ -746,6 +746,42 @@ function writerHTML(m){
   <textarea class="grow" id="draft" rows="1" aria-label="Your first impression" placeholder="One sentence is enough.">${esc(d)}</textarea>
   <div class="wrow"><span class="type" style="color:#8a7b68">Stays as you first wrote it</span><button class="btn primary" data-act="seal" ${d.trim()?"":"disabled"}>Leave my first impression</button></div></div>`;
 }
+/* ---------- Round 15 (D): keep the work, and what you wrote under it ------
+   A favourite you cannot read again is a dead end, so this keeps the work
+   AND your own impression as one page in the Journal. It uses the same
+   bookmark menu and the same addLine/newPage plumbing as everything else
+   you keep; there is no second system. */
+function keptPage(mid){ const id=(S.kept||{})[WK(mid)]; return (id&&(S.journal||[]).some(j=>j.id===id))?id:null; }
+function keepWorkBtn(m){
+ const kept=!!keptPage(m.id);
+ const lab=kept?T("keep.work.kept","Already kept in your notebook"):T("keep.work.label","Keep for my notebook");
+ if(!lab) return "";
+ return `<span class="bm m-keepwrap"><button class="m-infob m-keepw ${kept?"on":""}" type="button" data-act="keepwork" aria-expanded="false" aria-pressed="${kept}" aria-label="${esc(lab)}" data-tip="${esc(lab)}">${BOOKMARK}</button>
+  <span class="bmenu" hidden><button type="button" data-act="keepopen">${T("keep.work.open","Open the page")}</button></span></span>`;
+}
+function workPageBody(m, s){
+ return [`${m.kind} \u00b7 ${m.maker}${m.date?", "+m.date:""}`,
+  s?`${T("keep.work.mine","My first impression:")} ${s.text}`:T("keep.work.nothingyet","Kept before I had written anything here.")]
+  .filter(Boolean).join("\n\n");
+}
+function keepWork(m, btn){
+ const have=keptPage(m.id);
+ if(have){ const menu=btn&&btn.parentElement.querySelector(".bmenu");
+  if(menu){ menu.hidden=!menu.hidden; if(btn) btn.setAttribute("aria-expanded",String(!menu.hidden)); }
+  toast(T("toast.work.already","Already kept. Open the page to read it again."));
+  return; }
+ const s=S.sealed[WK(m.id)];
+ const quote=(m.poem?m.poem.split("\n").filter(Boolean).slice(0,4).join("\n"):(m.quote||"")).slice(0,400);
+ const lid=quote?addLine({text:quote, who:m.maker, where:m.title, from:"muse", muse:m.id}):null;
+ const jid=newPage(lid?[lid]:[]);
+ const pg=S.journal.find(j=>j.id===jid);
+ if(pg){ pg.title=m.title; pg.muse=m.id; pg.body=workPageBody(m,s); }
+ (S.kept=S.kept||{})[WK(m.id)]=jid;
+ remember("journal",jid,m.title);
+ save(); render(); toast(T("toast.work.kept","Kept. The work and what you wrote are one page in your notebook."));
+}
+function openKeptPage(m){ const id=keptPage(m.id); if(!id) return;
+ S.nb.way="page"; S.nb.sel=id; go("notebook"); }
 function bmMenu(){ return `<span class="bm"><button class="btn icon" data-pa="bm" aria-label="Keep this" aria-expanded="false" title="Keep this">${BOOKMARK}</button>
  <span class="bmenu" hidden><button data-pa="save" data-to="line">${T("keep.menu.line","Keep the line")}</button><button data-pa="save" data-to="page">${T("keep.menu.page","Write a page under it")}</button></span></span>`; }
 /* others.gate.line ends in "… from " so the maker's name can follow it.
@@ -1081,7 +1117,7 @@ function renderMuse(v){
  const themeW=`<h1 class="m-themebig">${esc(DAY.theme)}</h1>${wisdomBtn()}`;
  const reading=(S.reading&&!past)?maximHTML():"";
  const day=past?`<div class="pastbar" style="margin-top:18px"><span><b>${esc(m.day)}</b> · this muse has passed</span><button class="btn small" data-act="today">${T("muse.past.back","Back to today’s muses")}</button></div>`:`<div class="m-dayrow"><div class="m-dayl"><span class="type muted">${esc(dateStr)}</span><div class="m-themewrap">${themeW}</div></div>${u.tplace==="title"&&dev==="desk"?"":`<div class="m-dayr">${threeHTML(threeSize(),false,true)}</div>`}</div>${threadCueHTML()}${reading}`;
- const info=u.storyMode==="info"?`<button class="m-infob" type="button" data-info aria-expanded="${!!S.info}" aria-label="About this work" data-tip="${T("muse.info.label","About this work")}">i</button>`:"";
+ const info=(u.storyMode==="info"?`<button class="m-infob" type="button" data-info aria-expanded="${!!S.info}" aria-label="About this work" data-tip="${T("muse.info.label","About this work")}">i</button>`:"")+keepWorkBtn(m);
  const cueside=(!past&&U().cue!=="off")?`<span class="m-cueside">${cueHTML()}</span>`:"";
  const head=`<div class="m-head"><div class="m-htop"><div class="m-hl"><span class="type kind">${esc(m.kind)}</span><div class="m-tl"><h2 class="mtitle">${esc(m.title)}</h2>${info}</div><div class="byline">${esc(m.maker)} · ${esc(m.date)}</div></div>${cueside}</div></div>`;
  const story=u.storyMode==="under"?`<div class="m-story">${storyBody(m,false)}</div>`:"";
@@ -1125,6 +1161,8 @@ function renderMuse(v){
   if(a==="nokeep"){ S.keepAsk=null; save(); render(); toast("You can keep one from any muse you’ve answered, until midnight."); }
   if(a==="closesyn"){ S.openSyn=null; save(); render(); }
   if(a==="pubsyn") publishSyn(S.openSyn);
+  if(a==="keepwork"){ keepWork(m, e.target.closest("[data-act]")); return; }
+  if(a==="keepopen"){ openKeptPage(m); return; }
   if(a==="towrite"){ const t=$("#draft"); $("#writerBox")?.scrollIntoView({block:"center", behavior:reduce?"auto":"smooth"}); setTimeout(()=>t?.focus({preventScroll:true}),350); }
   if(a==="seal") seal(m);
  };
@@ -1191,6 +1229,7 @@ function seal(m){
  S.journal.unshift({id:jid, date:today(), title:`First impression: ${m.maker}`, lines:[], q:null, muse:m.id, body:t}); remember("journal",jid,`First impression: ${m.maker}`);
  S.drafts[WK(m.id)]=""; const all=MUSES.every(x=>S.sealed[WK(x.id)]);
  Table.put({id:"t_"+WHO+"_"+WK(m.id), on:WK(m.id), by:WHO, name:S.profile.name||WHONAME, at:Date.now(), day:DAYK(), text:t});
+ const kp=keptPage(m.id); if(kp){ const pg=S.journal.find(j=>j.id===kp); if(pg) pg.body=workPageBody(m, S.sealed[WK(m.id)]); }
  const drew=drawSticker(m.id); if(drew) setCheck(drew); S.keepAsk=drew?m.id:null; save(); render();
  toast(all?"All three. The knot after the painting is open, and the day’s word is uncovered.":drew?`You drew ${STICKERS[drew].name}.`:"Kept. Here’s how it sang in others.");
  setTimeout(()=>$("#responses")?.scrollIntoView({behavior:reduce?"auto":"smooth", block:"start"}),60);
