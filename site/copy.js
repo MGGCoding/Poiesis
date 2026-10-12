@@ -23,20 +23,16 @@ site.tab.muse: Muse
 site.tab.notebook: Notebook
 site.why.link: Why Poiesis ›
 site.footer: A working sketch, 2026.
-# Round 19: the room and type pickers are retired; one picker of five looks.
-site.looks.title: Looks
-site.looks.line: How every page looks. Your choice is kept on every screen.
-look.a.name: Vignette
-look.b.name: Manuscript
-look.c.name: Gallery
-look.d.name: Scrapbook
-look.e.name: Open Book
-# the colour sits on top of any look
+# Round 20: one look (Manuscript); colour is one of Mary's four themes.
+# Her names exactly as she typed them.
 site.colors.title: Colour
-look.paper.name: The look’s own
-# small words inside two of the looks
+color.dark.name: dark mode
+color.forest.name: forest
+color.rose.name: rose
+color.xcx.name: marys favroite xcx
+color.credit: Colours by Mary
+# the small words at the head of the Manuscript page
 look.b.runhead: the day’s word
-look.e.folio: your page
 
 # THE HERO (shown on the Why page)
 hero.eyebrow: Poiesis, a place to receive and to make

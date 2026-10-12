@@ -15,8 +15,7 @@ function applyStaticCopy(){
  const set=(sel,k,d)=>{ const el=document.querySelector(sel); if(el) el.textContent=T(k,d); };
  const tab=(k,key,d,ic)=>{ const el=document.querySelector(`#switch [data-tab="${k}"]`); if(el) el.innerHTML=`${ic}<span>${esc(T(key,d))}</span>`; };
  tab("muse","site.tab.muse","Muse",IC_MUSE); tab("notebook","site.tab.notebook","Notebook",IC_NOTEBOOK);
- set("#lookPop h3","site.looks.title","Looks"); set("#lookPop p","site.looks.line","How every page looks. Your choice is kept on every screen.");
- set("#lookPop h4","site.colors.title","Colour");
+ set("#colorPop h3","site.colors.title","Colour"); set("#colorPop .pop-credit","color.credit","Colours by Mary");
  set("#whyLink","site.why.link","Why Poiesis \u203a");
  set("footer span","site.footer","A working sketch, 2026. Other members are examples; what you write stays in this browser. Paintings appear as color studies.");
 }
@@ -342,32 +341,25 @@ const SEASONS={
  weaving:{name:"Weaving", line:"Bringing things that have never met into the same room.", how:"A writing page stays open beside your board, so two ideas can meet on the page.", prompt:"Pick two things you kept that have nothing to do with each other. Write the paragraph that introduces them.", lead:"board"},
  giving:{name:"Giving", line:"Letting something finished go out into the world.", how:"A writing page stays open for finishing. Beside it, your journal of drafts.", prompt:"Finish one small thing today, even a paragraph, and give it to one person.", lead:"journal"}};
 const SPACES={journal:"Journal", scrap:"Scrapbook", board:"Idea board"};
-const LOOKS=[{id:"study",name:"Study",sw:["#e4d9c6","#b88a5c","#fdf9ef","#2f5d50"]},{id:"night",name:"Night desk",sw:["#1a1613","#3b2a1e","#efe2c4","#e2a64e"]},{id:"monastery",name:"Monastery",sw:["#ece2cb","#5e1a17","#f8f0dc","#b8913a"]},{id:"roman",name:"Roman terracotta",sw:["#e7c79c","#c0714a","#f7eddc","#2f5f8a"]},{id:"garden",name:"Garden",sw:["#dbe2cf","#6f7f55","#fbfaf2","#7d3f71"]},{id:"cafe",name:"Café",sw:["#eeebe6","#d6cfc3","#ffffff","#5b3a26"]},{id:"library",name:"Library",sw:["#1f2d24","#5a3d27","#f1e9d4","#c9a152"]}];
-/* ---------- Round 19: five looks for the whole site ----------
-   One setting, mlook (a–e), shared by phone and desktop like the room was.
-   Each look fixes its own paper, ink and type, so the room and type pickers
-   are retired and old saved room / font values are ignored. The look also
-   decides some of the Muse page's layout settings (LOOKFIX); Settings hides
-   those and keeps the rest. */
-const MLOOKS=[
- {id:"a", key:"look.a.name", name:"Vignette",   sw:["#e6dbc5","#fffbf2","#9b2d20"]},
- {id:"b", key:"look.b.name", name:"Manuscript", sw:["#ebe4d4","#fbf6ea","#9b2d20"]},
- {id:"c", key:"look.c.name", name:"Gallery",    sw:["#d6cfbd","#f9f3e5","#b08a4a"]},
- {id:"d", key:"look.d.name", name:"Scrapbook",  sw:["#e6dcc8","#fffdf6","#9b2d20"]},
- {id:"e", key:"look.e.name", name:"Open Book",  sw:["#ddd1b8","#fbf6ea","#9b2d20"]}];
-const LOOK_DEFAULT="d";
-const lookName=l=>T(l.key,l.name);
-const LOOKFIX={
- all:{room:"monastery", font:"book", three:"icons", tplace:"top", pplace:"row", backing:"none", tsize:"m", labels:"off",
-      cueplace:"small", nb:"look", nbpaper:"lined", paper:"look", fill:"none", wtab:"off", wlook:"look", numSide:"left"},
- a:{arch:"under", nums:"off"}, b:{arch:"under", nums:"five"}, c:{arch:"under", nums:"off"},
- d:{arch:"arch", nums:"five"}, e:{arch:"arch", nums:"off"}};
-const LOOK_DECIDES=Object.keys(Object.assign({}, LOOKFIX.all, LOOKFIX.a));
-/* the colour sits on top of the look: the look's own paper, or one of the rooms */
-function curColor(){ const v=S&&S.ui&&S.ui.desk&&S.ui.desk.color; return LOOKS.some(l=>l.id===v)?v:"paper"; }
-function curLook(){ const v=S&&S.ui&&S.ui.desk&&S.ui.desk.mlook; return MLOOKS.some(l=>l.id===v)?v:LOOK_DEFAULT; }
-/* the type picker is retired; FONTS stays only so nothing that names it breaks */
-const FONTS=[{id:"book",name:"Book (as it is)",f:"'IM Fell English', Georgia, serif"},{id:"garamond",name:"Garamond",f:"'EB Garamond', Garamond, serif"},{id:"typewriter",name:"Typewriter",f:"'Courier Prime', monospace"},{id:"modern",name:"Modern",f:"'Work Sans', Arial, sans-serif"},{id:"hand",name:"By hand",f:"'Kalam', cursive"}];
+/* ---------- Round 20: Manuscript only, coloured by Mary's themes ----------
+   Look B (Manuscript) is the only look, on the Muse page and the Notebook;
+   nobody can change the layout. Colour is one of Mary's four themes, one
+   setting shared by phone and desktop. A saved look or colour that is no
+   longer offered is left in the person's state, unused. */
+const THEMES=[
+ {id:"dark",   key:"color.dark.name",   name:"dark mode",          sw:["#1f160f","#faebc9","#2a2420","#8c3600","#e9dba7","#b88a5c"]},
+ {id:"forest", key:"color.forest.name", name:"forest",             sw:["#202f19","#faebc9","#59221d","#59221d","#f4ceb8","#66463e"]},
+ {id:"rose",   key:"color.rose.name",   name:"rose",               sw:["#952d3d","#faebc9","#3d1700","#632600","#e2b983","#b88a5c"]},
+ {id:"xcx",    key:"color.xcx.name",    name:"marys favroite xcx", sw:["#a5ff9e","#faebc9","#1b1640","#ff6200","#ff66fe","#1f15ff"]}];
+const THEME_DEFAULT="dark";
+const themeName=t=>T(t.key,t.name);
+/* what Manuscript fixes, and the settings that no longer change the layout */
+const LOOKFIX={three:"icons", tplace:"top", pplace:"row", backing:"none", tsize:"m", labels:"off", cueplace:"small",
+ nb:"look", nbpaper:"lined", paper:"look", fill:"none", wtab:"off", wlook:"look", numSide:"left", arch:"under", nums:"five"};
+const RETIRED=["room","font","density","turner","storyMode","infoStyle","story"];   /* fixed at the house value */
+const LOOK_DECIDES=[...Object.keys(LOOKFIX), ...RETIRED];
+function curColor(){ const v=S&&S.ui&&S.ui.desk&&S.ui.desk.color; return THEMES.some(t=>t.id===v)?v:THEME_DEFAULT; }
+function curLook(){ return "b"; }
 
 const DEF_BOARDS=[{id:"light",name:"Light"},{id:"hosp",name:"Essay on hospitality"},{id:"morn",name:"Mornings"}];
 const DEF_PINS=[
@@ -541,14 +533,12 @@ const initials=n=>n.split(" ").map(w=>w[0]).join("").slice(0,2);
 
 /* ---------- Settings: one set for wide screens, one for phones ---------- */
 const HOUSE={
- desk:{mlook:LOOK_DEFAULT,color:"paper",room:"monastery",font:"modern",density:"airy",theme:"start",three:"tabs",tplace:"top",backing:"none",tsize:"m",labels:"off",sides:"faint",arch:"under",guide:"pulse",cue:"note",cueplace:"hang",shade:"writer",shadeStyle:"pencil",reveal:"ink",turner:"strip",nb:"spread",nbpaper:"lined",prompt:"focus",fill:"drawing",paper:"fascicle",nums:"hand",numSide:"left",stanza:"space",gloss:"dots",psize:"m",storyMode:"info",infoStyle:"pop",story:"tag",gate:"folded",pplace:"row",wtab:"off",wlook:"notecard"},
- phone:{mlook:LOOK_DEFAULT,color:"paper",room:"monastery",font:"modern",density:"snug",theme:"start",three:"stickers",tplace:"top",pplace:"row",backing:"none",tsize:"s",labels:"off",sides:"faint",arch:"arch",guide:"none",cue:"note",cueplace:"hang",shade:"writer",shadeStyle:"pencil",reveal:"ink",turner:"strip",wtab:"off",wlook:"notecard",prompt:"focus",fill:"drawing",paper:"card",nums:"off",numSide:"left",stanza:"space",gloss:"sup",psize:"m",storyMode:"info",infoStyle:"pop",story:"label",gate:"blur",nb:"card",nbpaper:"lined"}
+ desk:{color:THEME_DEFAULT,room:"monastery",font:"modern",density:"airy",theme:"start",three:"tabs",tplace:"top",backing:"none",tsize:"m",labels:"off",sides:"faint",arch:"under",guide:"pulse",cue:"note",cueplace:"hang",shade:"writer",shadeStyle:"pencil",reveal:"ink",turner:"strip",nb:"spread",nbpaper:"lined",prompt:"focus",fill:"drawing",paper:"fascicle",nums:"hand",numSide:"left",stanza:"space",gloss:"dots",psize:"m",storyMode:"info",infoStyle:"pop",story:"tag",gate:"folded",pplace:"row",wtab:"off",wlook:"notecard"},
+ phone:{color:THEME_DEFAULT,room:"monastery",font:"modern",density:"snug",theme:"start",three:"stickers",tplace:"top",pplace:"row",backing:"none",tsize:"s",labels:"off",sides:"faint",arch:"arch",guide:"none",cue:"note",cueplace:"hang",shade:"writer",shadeStyle:"pencil",reveal:"ink",turner:"strip",wtab:"off",wlook:"notecard",prompt:"focus",fill:"drawing",paper:"card",nums:"off",numSide:"left",stanza:"space",gloss:"sup",psize:"m",storyMode:"info",infoStyle:"pop",story:"label",gate:"blur",nb:"card",nbpaper:"lined"}
 };
 const SETTINGS=[
  {name:"Page", ctrls:[
-  {k:"color", label:"Colour (same on every screen)", opts:[["paper","The look’s own"], ...LOOKS.map(l=>[l.id,l.name])]},
-  {k:"room", label:"Room (same on every screen)", opts:LOOKS.map(l=>[l.id,l.name])},
-  {k:"font", label:"Type (same on every screen)", opts:FONTS.map(f=>[f.id,f.name])},
+  {k:"color", label:"Colour (same on every screen)", opts:THEMES.map(t=>[t.id,themeName(t)])},
   {k:"density", label:"Breathing room", opts:[["snug","Snug"],["airy","Airy"]]},
   ]},
  {name:"The three", ctrls:[
@@ -597,18 +587,18 @@ const SETTINGS=[
 ];
 if(!S.ui) S.ui={};
 ["desk","phone"].forEach(d=>{ S.ui[d]=Object.assign(clone(HOUSE[d]), S.ui[d]||{}); });
-const SHARED=["room","font","mlook","color"];
+const SHARED=["color"];
 function setPref(k,v,d){ if(SHARED.includes(k)) ["desk","phone"].forEach(x=>S.ui[x][k]=v); else S.ui[d||DEV()][k]=v; }
 if(!S.sharedLook){ SHARED.forEach(k=>S.ui.phone[k]=S.ui.desk[k]); S.sharedLook=1; }
 const phoneMQ=matchMedia("(max-width: 700px)");
 const DEV=()=>phoneMQ.matches?"phone":"desk";
 /* what the page should do: your settings, with what the look decides on top */
-const U=()=>Object.assign({}, S.ui[DEV()], LOOKFIX.all, LOOKFIX[curLook()]);
+const U=()=>{ const d=DEV(), fixed={}; RETIRED.forEach(k=>fixed[k]=HOUSE[d][k]); return Object.assign({}, S.ui[d], fixed, LOOKFIX); };
 
 /* ---------- Avatars, stickers ---------- */
 function stickerHTML(id, size, tip, gilt){ const s=STICKERS[id]; if(!s) return ""; return `<span class="stk${gilt?" gilt":""}" style="width:${size}px;height:${size}px" tabindex="0" data-tip="${esc(tip||`${s.series} · ${s.name}`)}">${s.svg}</span>`; }
-function avatarHTML(o){ const ring=RINGS[o.ring]||RINGS.none; return `<span class="av" style="background:${o.photo?`url('${o.photo}') center/cover`:o.c};box-shadow:${ring.css}">${o.photo?"":esc(o.initials)}</span>`; }
-function me(){ const p=S.profile; return {c:"var(--accent)", initials:initials(p.name||"You"), photo:p.photo, ring:p.ring}; }
+function avatarHTML(o){ const ring=RINGS[o.ring]||RINGS.none; return `<span class="av" style="background:${o.photo?`url('${o.photo}') center/cover`:o.c};${o.ink?`color:${o.ink};`:""}box-shadow:${ring.css}">${o.photo?"":esc(o.initials)}</span>`; }
+function me(){ const p=S.profile; return {c:"var(--accent)", ink:"var(--on-accent)", initials:initials(p.name||"You"), photo:p.photo, ring:p.ring}; }
 const COLOURS=["#3d5d86","#6b4a7d","#8a5a3b","#2f5d50","#8a2f22","#5f7f45","#2c4a58"];
 function personAv(n){ const P=PEOPLE[n]; if(P) return avatarHTML({c:P.c, initials:initials(n), ring:P.ring});
  if(!n||n==="You") return avatarHTML(me());
@@ -619,28 +609,17 @@ function myTop(){ return S.profile.top && S.owned[S.profile.top] ? S.profile.top
 /* ---------- Rooms & type ---------- */
 function applyPrefs(){
  const R=document.documentElement;
- const u=U(), C=curColor(); R.setAttribute("data-look",C==="paper"?"monastery":C); R.removeAttribute("data-font");
+ const u=U(), C=curColor(); R.removeAttribute("data-look"); R.removeAttribute("data-font");
  R.setAttribute("data-mlook",curLook()); R.setAttribute("data-color",C);
  R.setAttribute("data-dev",DEV()); R.setAttribute("data-density",u.density); R.setAttribute("data-gloss",u.gloss); R.setAttribute("data-psize",u.psize);
- const L=curLook(), mark=l=>`<span class="lkm-rib" aria-hidden="true" style="--c1:${l.sw[0]};--c2:${l.sw[1]};--c3:${l.sw[2]}"></span>`;
- const marks=$("#lookMarks");
- if(marks) marks.innerHTML=MLOOKS.map(l=>`<button type="button" class="lkm" data-mlook="${l.id}" aria-pressed="${l.id===L}" aria-label="${esc(lookName(l))}" data-tip="${esc(lookName(l))}">${mark(l)}</button>`).join("");
- const one=$("#lookBtn"), cur=MLOOKS.find(l=>l.id===L);
- if(one){ one.innerHTML=mark(cur); one.setAttribute("aria-label",`${T("site.looks.title","Looks")}: ${lookName(cur)}`); }
- $("#lookList").innerHTML=MLOOKS.map(l=>`<button class="pbtn lkpick" data-mlook="${l.id}" aria-pressed="${l.id===L}">${mark(l)}${esc(lookName(l))}</button>`).join("");
- const cl=$("#colorList");
- if(cl) cl.innerHTML=[{id:"paper", name:T("look.paper.name","The look’s own"), sw:cur.sw}, ...LOOKS].map(l=>`<button class="pbtn" data-color="${l.id}" aria-pressed="${l.id===C}"><span class="sw">${l.sw.map(c=>`<span style="background:${c}"></span>`).join("")}</span>${esc(l.name)}</button>`).join("");
+ $("#colorList").innerHTML=THEMES.map(t=>`<button type="button" class="thpick" data-color="${t.id}" aria-pressed="${t.id===C}"><span class="thname">${esc(themeName(t))}</span><span class="thstrip" aria-hidden="true">${t.sw.map(c=>`<span style="background:${c}"></span>`).join("")}</span></button>`).join("");
  $("#profBtn").innerHTML=avatarHTML(me());
 }
-function setLook(id){ if(!MLOOKS.some(l=>l.id===id)) return; setPref("mlook",id); save(); applyPrefs(); render(); }
+function setColor(id){ if(!THEMES.some(t=>t.id===id)) return; setPref("color",id); save(); applyPrefs(); render(); }
 function pop(btn,p){ p.hidden=!p.hidden; btn.setAttribute("aria-expanded",String(!p.hidden)); }
-$("#lookBtn").onclick=e=>{e.stopPropagation(); pop(e.currentTarget,$("#lookPop"));};
-$("#lookMarks").onclick=e=>{const b=e.target.closest("[data-mlook]"); if(b) setLook(b.dataset.mlook);};
-function setColor(id){ setPref("color",id); save(); applyPrefs(); render(); }
-$("#colorBtn").onclick=e=>{e.stopPropagation(); pop(e.currentTarget,$("#lookPop"));};
+$("#colorBtn").onclick=e=>{e.stopPropagation(); pop(e.currentTarget,$("#colorPop"));};
 $("#colorList").onclick=e=>{const b=e.target.closest("[data-color]"); if(b) setColor(b.dataset.color);};
-$("#lookList").onclick=e=>{const b=e.target.closest("[data-mlook]"); if(b){ $("#lookPop").hidden=true; $("#lookBtn").setAttribute("aria-expanded","false"); setLook(b.dataset.mlook);} };
-document.addEventListener("click",e=>{ for(const p of [$("#lookPop")]) if(!p.hidden&&!p.contains(e.target)) p.hidden=true;
+document.addEventListener("click",e=>{ for(const p of [$("#colorPop")]) if(!p.hidden&&!p.contains(e.target)) p.hidden=true;
  if(!e.target.closest(".bm")) document.querySelectorAll(".bmenu:not([hidden])").forEach(m=>m.hidden=true); });
 
 /* ---------- Navigation ---------- */
@@ -703,11 +682,11 @@ function synBoxHTML(id){
   ${synThreadHTML(id)}</div>
   <div class="sy-pin">
   ${mine?`<div class="writer seal" ><span class="wax" aria-hidden="true">P</span><small>${id==="whole"?T("link.yours.whole","Your thought on all three"):`Your ${esc(synName(id))} link`} · ${when(mine.at)}</small><div class="first">${esc(mine.text)}</div>
-     <p class="type" style="color:#8a7b68;margin:10px 0 0;font-size:.62rem">${T("link.published.under","Published under ")}${ids.map(x=>esc(MUSE[x].kind.toLowerCase())).join(", ")}${T("link.published.journal"," · also in your journal")}</p></div>`:
+     <p class="type" style="color:var(--paper-mute);margin:10px 0 0;font-size:.62rem">${T("link.published.under","Published under ")}${ids.map(x=>esc(MUSE[x].kind.toLowerCase())).join(", ")}${T("link.published.journal"," · also in your journal")}</p></div>`:
    `<div class="writer" ><h4>${id==="whole"?T("link.whole.heading","One thought that holds all three"):T("link.pair.heading","What do these two say to each other?")}</h4>
     <div class="sub">${id==="whole"?T("link.whole.line","Where do they meet, where do they argue — and what does the day leave you with?"):T("link.pair.line","Agreement is not required. Disagreement is often better.")}</div>
     <textarea class="grow" id="synDraft" rows="1" aria-label="Your link" placeholder="${T("link.placeholder","Two or three sentences is plenty.")}">${esc(d)}</textarea>
-    <div class="wrow"><span class="type" style="color:#8a7b68">${T("link.appears","Appears under the ")}${esc(andList(ids.map(x=>MUSE[x].kind.toLowerCase())))}</span>
+    <div class="wrow"><span class="type" style="color:var(--paper-mute)">${T("link.appears","Appears under the ")}${esc(andList(ids.map(x=>MUSE[x].kind.toLowerCase())))}</span>
      <button class="btn primary" data-act="pubsyn" ${d.trim()?"":"disabled"}>${T("link.publish","Publish this link")}</button></div></div>`}
   </div>
  </div>`;
@@ -724,7 +703,7 @@ function synPostHTML(y,id){
  const P=PEOPLE[y.name], reps=[...(y.replies||[]), ...(S.replies[WK(y.id)]||[])];
  return `<article class="post" data-p="${y.id}" data-m="${id}" data-syn="1">
   <div class="who">${personAv(y.name)}<div><b>${esc(y.name)}</b> ${P?stickerHTML(P.top,20):""} ${P?`<span class="badge">${esc(P.badge)}</span>`:""} <span class="sample">sample</span><small>${esc(P?P.role:"")}</small></div></div>
-  <div class="thought link"><small class="type" style="color:#8a7b68;font-size:.64rem">A link · ${esc(y.at)}</small><div class="first">${esc(y.text)}</div></div>
+  <div class="thought link"><small class="type" style="color:var(--paper-mute);font-size:.64rem">A link · ${esc(y.at)}</small><div class="first">${esc(y.text)}</div></div>
   <div class="pact"><button class="btn" data-pa="like" aria-pressed="${!!S.likes[y.id]}">${S.likes[y.id]?T("post.moved.on","♥ Moved me"):T("post.moved.off","♡ Moved me")}</button><button class="btn" data-pa="reply">${T("post.writeback","Write back")}${reps.length?` · ${reps.length}`:""}</button>${bmMenu()}</div>
   ${reps.length?`<div class="comments">${reps.map(c=>`<div class="cm">${personAv(c.n)}<div><b>${esc(c.n==="You"?(S.profile.name||"You"):c.n)}</b> ${PEOPLE[c.n]?stickerHTML(PEOPLE[c.n].top,16):""} ${esc(c.t)}</div></div>`).join("")}</div>`:""}
   <div class="slot2"></div></article>`;
@@ -787,13 +766,13 @@ function writerHTML(m){
  if(s) return `<div class="writer seal"><span class="wax" aria-hidden="true">P</span><small>Your first impression · ${when(s.at)}</small><div class="first">${esc(s.text)}</div>
    ${myLayers(m.id).map(l=>`<div class="layer"><small>${esc(l.w||"later")}</small>${esc(l.t)}</div>`).join("")}
    ${m.closed?"":`<form class="addlayer" id="laterF"><input id="layerIn" aria-label="${T("post.reply.mine.placeholder","Add another thought")}" placeholder="Add another thought…"><button class="btn small">Add</button></form>
-   <p class="type" style="color:#8a7b68;margin:8px 0 0;font-size:.62rem">Your first impression stays as written. Thoughts after it: as many as you like.</p>`}
-   <p class="type" style="color:#8a7b68;margin:6px 0 0;font-size:.62rem">Also kept in your journal</p></div>`;
+   <p class="type" style="color:var(--paper-mute);margin:8px 0 0;font-size:.62rem">Your first impression stays as written. Thoughts after it: as many as you like.</p>`}
+   <p class="type" style="color:var(--paper-mute);margin:6px 0 0;font-size:.62rem">Also kept in your journal</p></div>`;
  if(m.closed) return `<div class="writer"><h4>This muse has passed</h4><p class="sub">Its conversation closed before you left an impression. You can still write about it in your notebook.</p></div>`;
  const d=S.drafts[WK(m.id)]||"";
  return `<div class="writer"><h4>Your first impression</h4><div class="sub">${esc(PROMPT)}</div>
   <textarea class="grow" id="draft" rows="1" aria-label="Your first impression" placeholder="One sentence is enough.">${esc(d)}</textarea>
-  <div class="wrow"><span class="type" style="color:#8a7b68">Stays as you first wrote it</span><button class="btn primary" data-act="seal" ${d.trim()?"":"disabled"}>Leave my first impression</button></div></div>`;
+  <div class="wrow"><span class="type" style="color:var(--paper-mute)">Stays as you first wrote it</span><button class="btn primary" data-act="seal" ${d.trim()?"":"disabled"}>Leave my first impression</button></div></div>`;
 }
 /* ---------- Round 15 (D): keep the work, and what you wrote under it ------
    A favourite you cannot read again is a dead end, so this keeps the work
@@ -850,7 +829,7 @@ function postHTML(p, m, mine, closed){
  const shown=closed?reps.slice(0,3):reps;
  return `<article class="post" data-p="${p.id}" data-m="${m.id}"${p.linkOf?` data-syn="1" data-link="${p.linkOf}"`:""}>
   <div class="who">${mine?avatarHTML(me()):personAv(p.name)}<div><b>${mine?esc(S.profile.name||"You"):esc(p.name)}</b> ${top?stickerHTML(top,20,topTip):""} ${badge?`<span class="badge">${esc(badge)}</span>`:""} ${P?'<span class="sample">sample</span>':""}${role?`<small>${esc(role)}</small>`:""}</div></div>
-  <div class="thought${p.linkOf?" link":""}"><span class="wax" aria-hidden="true"></span><small class="type" style="color:#8a7b68;font-size:.64rem">${p.linkOf?`A link · ${esc(linkTag(p.linkOf))}`:"First impression"} · ${esc(p.at)}</small>
+  <div class="thought${p.linkOf?" link":""}"><span class="wax" aria-hidden="true"></span><small class="type" style="color:var(--paper-mute);font-size:.64rem">${p.linkOf?`A link · ${esc(linkTag(p.linkOf))}`:"First impression"} · ${esc(p.at)}</small>
    <div class="first">${esc(p.first)}</div>
    ${p.later?`<div class="layer"><small>${esc(p.later.when)}</small>${p.later.poem?`<div class="poem">${esc(p.later.poem)}</div>`:""}${p.later.sketch?`<div class="sk s-garage" role="img" aria-label="Sketch"></div>`:""}${p.later.text?esc(p.later.text):""}</div>`:""}
   </div>
@@ -978,9 +957,7 @@ function itemHTML(m,size,labels,vert){
  return `<button type="button" class="m-it st" data-mgo="${m.id}" aria-current="${cur}" aria-label="${esc(t)}" style="width:${labels&&!vert?Math.max(size+8,66):size+8}px">${shadeHTML(m.id,size)}${labels&&!vert?`<small>${esc(m.kind)}</small>`:""}</button>`;
 }
 function itemBox(size,vert){ const u=U();
- if(u.three==="icons"){ const ph=DEV()==="phone", L=curLook();
-  if(vert) return {w:272, h:46};
-  if(L==="e") return {w:ph?82:96, h:ph?60:68};
+ if(u.three==="icons"){ const ph=DEV()==="phone";
   return {w:ph?88:128, h:ph?40:46}; }
  if(u.three==="thumbs") return {w:Math.max(Math.round(size*1.25), u.labels==="on"&&!vert?64:0), h:Math.round(size*1.5)};
  if(u.three==="tabs") return {w:vert?Math.round(size*.62)+22:Math.round(size*.62)+86, h:Math.round(size*.62)+16};
@@ -1085,8 +1062,8 @@ function noteHTML(m){
 /* writing */
 function writerInnerM(m, nb){
  const s=S.sealed[WK(m.id)], u=U();
- if(!s&&readOnlyDay()) return `<p class="m-nbhead">${T("muse.history.heading","A day already past")}</p><p style="margin:0;font-size:.92rem;color:#6b5d4d">${T("muse.history.line","You are reading an earlier day. Its conversation is closed; what you write today belongs to today.")}</p>`;
- if(!s&&m.closed) return `<p class="m-nbhead">${T("muse.past.heading","This muse has passed")}</p><p style="margin:0;font-size:.92rem;color:#6b5d4d">${T("muse.past.line","Its conversation closed before you left an impression. You can still write about it in your notebook.")}</p>`;
+ if(!s&&readOnlyDay()) return `<p class="m-nbhead">${T("muse.history.heading","A day already past")}</p><p style="margin:0;font-size:.92rem;color:var(--paper-mute)">${T("muse.history.line","You are reading an earlier day. Its conversation is closed; what you write today belongs to today.")}</p>`;
+ if(!s&&m.closed) return `<p class="m-nbhead">${T("muse.past.heading","This muse has passed")}</p><p style="margin:0;font-size:.92rem;color:var(--paper-mute)">${T("muse.past.line","Its conversation closed before you left an impression. You can still write about it in your notebook.")}</p>`;
  if(s) return `<div class="m-mine"><small>${s.via?`${T("muse.first.via","Your first impression, written as a link with the ")}${esc(synSubjects(s.via).filter(x=>x!==m.id).map(x=>MUSE[x].kind.toLowerCase()).join(" and "))}`:T("muse.first.mine","Your first impression")} · ${when(s.at)}</small>${esc(s.text)}</div>
   ${curatorNoteHTML()}
   ${m.deeper?`<div class="m-deeper"><span>${T("muse.deeper.label","Go deeper")}</span>${esc(m.deeper)}</div>`:""}
@@ -1261,29 +1238,23 @@ function renderMuse(v){
    wide screen always sits beside the work. On a phone the day lives on the
    Today page, so a work page starts at the buttons. */
 function lookHTML(m,o){
- const L=curLook(), ph=DEV()==="phone", past=o.past, dayOn=!ph&&!past;
+ const ph=DEV()==="phone", past=o.past, dayOn=!ph&&!past;
  /* on a phone the links live on the Today list, so a work page has the three
     buttons only; on a wide screen the threads and ◇ sit between them */
  const row=vert=>past?"":ph?`<div class="lk-row"><nav class="lk-wkrow" aria-label="Today’s three">${MUSES.map(x=>itemHTML(x,threeSize(),false,false)).join("")}</nav></div>`
   :`<div class="lk-row">${threeHTML(threeSize(), !!vert, true)}</div>`;
- const title=`<header class="lk-head">${L==="c"?`<p class="lk-kind">${esc(m.kind)}</p>`:""}<div class="m-tl"><h2 class="mtitle lk-title">${esc(m.title)}</h2>${o.info}</div><p class="lk-by">${esc(m.maker)}${m.date?` · ${esc(m.date)}`:""}</p></header>`;
+ const title=`<header class="lk-head"><div class="m-tl"><h2 class="mtitle lk-title">${esc(m.title)}</h2>${o.info}</div><p class="lk-by">${esc(m.maker)}${m.date?` · ${esc(m.date)}`:""}</p></header>`;
  const work=`<div class="m-wwrap">${workHTML(m,false)}</div>${noteHTML(m)}`;
  const write=`<div class="m-nb lk-write${(S.drafts[WK(m.id)]||"").trim()||S.sealed[WK(m.id)]?" has":""}" id="writerBox">${writerInnerM(m,false)}${curlHTML(m)}</div>`;
  const date=dayOn?`<div class="lk-date">${esc(o.dateStr)}</div>`:"";
  const theme=dayOn?`<div class="lk-themewrap"><h1 class="lk-theme">${esc(DAY.theme)}</h1>${wisdomBtn()}</div>`:"";
  const cue=dayOn&&U().cue!=="off"?`<div class="lk-cue">${cueHTML()}</div>`:"";
  const reading=dayOn?o.reading:"", pastbar=past?o.day:"";
- const W={
-  a:()=>`${pastbar}${dayOn?`<div class="lk-top">${date}${theme}${reading}${cue}</div>`:""}${row()}<div class="lk-grid"><article class="lk-sheet">${title}${work}</article>${write}</div>`,
-  b:()=>`${pastbar}${dayOn?`<div class="lk-rh"><span class="lk-rl">${esc(T("look.b.runhead","the day’s word"))}</span>${theme}<div class="lk-rhr">${date}${cue}</div></div>${reading}`:""}<div class="lk-page"><article class="lk-text">${row()}${title}${work}</article><aside class="lk-margin">${write}</aside></div>`,
-  c:()=>`${pastbar}<div class="lk-lamp" aria-hidden="true"></div><div class="lk-wall"><div class="lk-fw"><div class="lk-framed">${title}${work}</div></div><div class="lk-info">${date}${theme}${reading}${cue}${row(true)}</div><div class="lk-card">${write}${dayOn?`<span class="lk-ticket" aria-hidden="true">${esc(DAY.theme)} · i–iii</span>`:""}</div></div>`,
-  d:()=>`${pastbar}${dayOn?`<div class="lk-day"><div class="lk-themewrap"><h1 class="lk-theme lk-stamp">${esc(DAY.theme)}</h1>${wisdomBtn()}</div>${date}${cue}</div>${reading}`:""}<div class="lk-board${past?" past":""}">${past?"":`<div class="lk-tabs">${row()}</div>`}<article class="lk-leaf">${title}${work}</article><div class="lk-card">${write}</div></div>`,
-  e:()=>`${pastbar}${dayOn?`<div class="lk-head2">${date}${theme}${cue}</div>${reading}`:""}<div class="lk-ribbons">${row()}</div><div class="lk-book"><article class="lk-pg l">${title}${work}<span class="lk-folio">${esc(m.kind)}</span></article><aside class="lk-pg r">${write}<span class="lk-folio">${esc(T("look.e.folio","your page"))}</span></aside></div>`
- };
- return `<div class="lk lk-${L}">${W[L]()}</div>`;
+ /* Manuscript: a running head, then the text block and its margin at 1.618 : 1 */
+ return `<div class="lk lk-b">${pastbar}${dayOn?`<div class="lk-rh"><span class="lk-rl">${esc(T("look.b.runhead","the day’s word"))}</span>${theme}<div class="lk-rhr">${date}${cue}</div></div>${reading}`:""}<div class="lk-page"><article class="lk-text">${row()}${title}${work}</article><aside class="lk-margin">${write}</aside></div></div>`;
 }
 /* B and D rubricate: the first two words of the work in red small capitals */
-function rubric(){ return ["b","d"].includes(curLook()); }
+function rubric(){ return true; }
 function incHTML(t){ const mm=String(t).match(/^(\s*\S+\s+\S+)([\s\S]*)$/); return mm?`<span class="inc">${esc(mm[1])}</span>${esc(mm[2])}`:esc(t); }
 function pickQuestion(mid, i){
  S.qpick=S.qpick||{}; const k=WK(mid);
@@ -1319,7 +1290,7 @@ function renderSettings(v){
   const pt=e.target.closest("[data-ptab]"); if(pt){ S.ptab=pt.dataset.ptab; save(); render(); return; }
   const sd=e.target.closest("[data-setdev]"); if(sd){ S.setDev=sd.dataset.setdev; save(); renderSettings(v); return; }
   const b=e.target.closest("[data-set]"); if(b){ const d=S.setDev||DEV(); setPref(b.dataset.set,b.dataset.val,d); save(); applyPrefs(); renderSettings(v); return; }
-  if(e.target.closest("[data-sethouse]")){ const d=S.setDev||DEV(); const keep={mlook:S.ui[d].mlook}; S.ui[d]=Object.assign(clone(HOUSE[d]),keep); save(); applyPrefs(); renderSettings(v); toast(`Back to the house style for ${d==="desk"?"wide screens":"phones"}.`); }
+  if(e.target.closest("[data-sethouse]")){ const d=S.setDev||DEV(); const keep={color:S.ui[d].color}; S.ui[d]=Object.assign(clone(HOUSE[d]),keep); save(); applyPrefs(); renderSettings(v); toast(`Back to the house style for ${d==="desk"?"wide screens":"phones"}.`); }
  };
 }
 
@@ -1705,7 +1676,7 @@ function renderWhy(v){
 function penInit(){
  const btn=document.createElement("button"); btn.className="pen"; btn.setAttribute("aria-label",T("pen.label","Write something down")); btn.title=T("pen.label","Write something down"); btn.innerHTML=PENCIL;
  const box=document.createElement("div"); box.className="penbox"; box.hidden=true;
- box.innerHTML=`<p class="type" style="color:#8a7b68;margin:0 0 4px">${T("pen.before","Before it goes")}</p><textarea class="lined" id="penTxt" aria-label="Quick note" placeholder="${T("pen.placeholder","Write it down…")}" style="min-height:160px"></textarea>
+ box.innerHTML=`<p class="type" style="color:var(--paper-mute);margin:0 0 4px">${T("pen.before","Before it goes")}</p><textarea class="lined" id="penTxt" aria-label="Quick note" placeholder="${T("pen.placeholder","Write it down…")}" style="min-height:160px"></textarea>
   <div class="wrow"><button class="btn ghost" id="penX">${T("pen.close","Close")}</button><button class="btn primary" id="penKeep">${T("pen.keep","Keep in my journal")}</button></div>`;
  document.body.append(box, btn);
  const t=box.querySelector("#penTxt"); t.value=S.pen||"";
