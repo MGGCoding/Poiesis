@@ -23,10 +23,17 @@ site.tab.muse: Muse
 site.tab.notebook: Notebook
 site.why.link: Why Poiesis ›
 site.footer: A working sketch, 2026.
-site.rooms.title: Rooms
-site.rooms.line: Where feels most at home?
-site.type.title: Type
-site.type.line: The letters you read and write in. Any type suits any room.
+# Round 19: the room and type pickers are retired; one picker of five looks.
+site.looks.title: Looks
+site.looks.line: How every page looks. Your choice is kept on every screen.
+look.a.name: Vignette
+look.b.name: Manuscript
+look.c.name: Gallery
+look.d.name: Scrapbook
+look.e.name: Open Book
+# small words inside two of the looks
+look.b.runhead: the day’s word
+look.e.folio: your page
 
 # THE HERO (shown on the Why page)
 hero.eyebrow: Poiesis, a place to receive and to make
@@ -41,13 +48,14 @@ lexicon.one: The act of bringing into being what was not there before, in imitat
 lexicon.two: Making as active reception: the maker labors, and inspiration is given.
 
 # THE MUSE PAGE ========================================================
-muse.prompt: What is your first impression? An idea, a poem, a connection, a reference, a question, etc.
+muse.first.label: First impression
+muse.prompt: An idea, a feeling, a poem, a connection, a reference, a question.
 muse.prompt.placeholder: One sentence is enough.
-muse.q.heading: Questions the day puts to all three works
+muse.q.heading:
 muse.q.back: or write about something else
 # Round 17: the curator's note and the line before it are off the site.
 muse.first.button: Leave my first impression
-muse.first.label: Your first impression
+muse.first.mine: Your first impression
 muse.first.stays: Your first impression stays as you wrote it
 muse.later.placeholder: Add anything else
 muse.later.button: Add

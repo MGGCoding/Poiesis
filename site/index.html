@@ -10,13 +10,12 @@
       <button role="tab" data-tab="muse">Muse</button><button role="tab" data-tab="notebook">Notebook</button>
     </div>
     <div class="icons">
-      <button class="ibtn" id="lookBtn" aria-label="Change the room" title="Change the room" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.8 1.8-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 0 0 5-5C21 6.4 17 3 12 3z"/><circle cx="7.5" cy="11" r="1.1" fill="currentColor"/><circle cx="10.5" cy="7" r="1.1" fill="currentColor"/><circle cx="15" cy="7.5" r="1.1" fill="currentColor"/></svg></button>
-      <button class="ibtn" id="fontBtn" aria-label="Change the type" title="Change the type" aria-expanded="false"><span class="aa" aria-hidden="true">Aa</span></button>
+      <div class="lkmarks" id="lookMarks" role="group" aria-label="Looks"></div>
+      <button class="ibtn lkone" id="lookBtn" aria-label="Change the look" aria-expanded="false"></button>
     </div>
   </div>
 </header>
-<div class="pop" id="lookPop" hidden><h3>Rooms</h3><p>Where would you like to work today?</p><div class="plist" id="lookList"></div></div>
-<div class="pop" id="fontPop" hidden><h3>Type</h3><p>Choose the letters you read and write in. Any type goes with any room.</p><div class="plist" id="fontList"></div></div>
+<div class="pop" id="lookPop" hidden><h3>Looks</h3><p>How every page looks.</p><div class="plist" id="lookList"></div></div>
 <main class="wrap">
   <div class="view" id="view"></div>
   <footer><a href="#" id="whyLink" class="whylink">Why Poiesis ›</a><span>A working sketch, 2026. Other members are examples; what you write stays in this browser. Paintings appear as color studies.</span></footer>

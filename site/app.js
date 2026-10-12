@@ -13,20 +13,28 @@ function T(k,d){ const v=COPY[k]; return v===undefined?d:v; }
 function blank(k){ return COPY[k]===""; }
 function applyStaticCopy(){
  const set=(sel,k,d)=>{ const el=document.querySelector(sel); if(el) el.textContent=T(k,d); };
- set('#switch [data-tab="muse"]',"site.tab.muse","Muse");
- set('#switch [data-tab="notebook"]',"site.tab.notebook","Notebook");
- set("#lookPop h3","site.rooms.title","Rooms"); set("#lookPop p","site.rooms.line","Where would you like to work today?");
- set("#fontPop h3","site.type.title","Type"); set("#fontPop p","site.type.line","Choose the letters you read and write in. Any type goes with any room.");
+ const tab=(k,key,d,ic)=>{ const el=document.querySelector(`#switch [data-tab="${k}"]`); if(el) el.innerHTML=`${ic}<span>${esc(T(key,d))}</span>`; };
+ tab("muse","site.tab.muse","Muse",IC_MUSE); tab("notebook","site.tab.notebook","Notebook",IC_NOTEBOOK);
+ set("#lookPop h3","site.looks.title","Looks"); set("#lookPop p","site.looks.line","How every page looks. Your choice is kept on every screen.");
  set("#whyLink","site.why.link","Why Poiesis \u203a");
  set("footer span","site.footer","A working sketch, 2026. Other members are examples; what you write stays in this browser. Paintings appear as color studies.");
 }
 const $=(s,r=document)=>r.querySelector(s);
+/* Round 19 icons: a column for Muse, a notebook and pen for Notebook, and a
+   pencil, an open book and a cross for the day's three works */
+const IC_MUSE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4.5h16M5 4.5c0 1.3 1 2 2 2h10c1 0 2-.7 2-2"/><path d="M7 8.5v10M17 8.5v10M10.3 9.5v8.5M13.7 9.5v8.5M6 19h12M4.5 21.5h15"/></svg>';
+const IC_NOTEBOOK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3.5h10.5a2 2 0 0 1 2 2V20a.5.5 0 0 1-.5.5H5z"/><path d="M8 3.5v17M10.5 8h4M10.5 11h4"/><path d="M19.5 7.5l1.5 1.5-5 5-2 .5.5-2z"/></svg>';
+const IC_KIND={
+ Poem:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 3.5l4 4L9 19l-5 1.2L5.2 15z"/><path d="M14.5 5.5l4 4"/></svg>',
+ Passage:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5.5c3-1 6-1 9 1 3-2 6-2 9-1V19c-3-1-6-1-9 1-3-2-6-2-9-1z"/><path d="M12 6.5V20"/></svg>',
+ Scripture:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 3h5v6.5H21v5h-6.5V21h-5v-6.5H3v-5h6.5z"/></svg>'};
+IC_KIND.Painting=IC_KIND.Passage;
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const today=()=>new Date().toISOString().slice(0,10);
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 const PENCIL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 3.5l4 4L8 20H4v-4z"/><path d="M14 6l4 4"/></svg>';
 const BOOKMARK='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg>';
-const PROMPT=T("muse.prompt","How does this muse call to your own experience? What do you hear it singing?");
+const PROMPT=T("muse.prompt","An idea, a feeling, a poem, a connection, a reference, a question.");
 
 /* ---------- Muses ---------- */
 /* ---------- Muses: the built-in day, used when the bank has no entry ---------- */
@@ -334,6 +342,28 @@ const SEASONS={
  giving:{name:"Giving", line:"Letting something finished go out into the world.", how:"A writing page stays open for finishing. Beside it, your journal of drafts.", prompt:"Finish one small thing today, even a paragraph, and give it to one person.", lead:"journal"}};
 const SPACES={journal:"Journal", scrap:"Scrapbook", board:"Idea board"};
 const LOOKS=[{id:"study",name:"Study",sw:["#e4d9c6","#b88a5c","#fdf9ef","#2f5d50"]},{id:"night",name:"Night desk",sw:["#1a1613","#3b2a1e","#efe2c4","#e2a64e"]},{id:"monastery",name:"Monastery",sw:["#ece2cb","#5e1a17","#f8f0dc","#b8913a"]},{id:"roman",name:"Roman terracotta",sw:["#e7c79c","#c0714a","#f7eddc","#2f5f8a"]},{id:"garden",name:"Garden",sw:["#dbe2cf","#6f7f55","#fbfaf2","#7d3f71"]},{id:"cafe",name:"Café",sw:["#eeebe6","#d6cfc3","#ffffff","#5b3a26"]},{id:"library",name:"Library",sw:["#1f2d24","#5a3d27","#f1e9d4","#c9a152"]}];
+/* ---------- Round 19: five looks for the whole site ----------
+   One setting, mlook (a–e), shared by phone and desktop like the room was.
+   Each look fixes its own paper, ink and type, so the room and type pickers
+   are retired and old saved room / font values are ignored. The look also
+   decides some of the Muse page's layout settings (LOOKFIX); Settings hides
+   those and keeps the rest. */
+const MLOOKS=[
+ {id:"a", key:"look.a.name", name:"Vignette",   sw:["#e6dbc5","#fffbf2","#9b2d20"]},
+ {id:"b", key:"look.b.name", name:"Manuscript", sw:["#ebe4d4","#fbf6ea","#9b2d20"]},
+ {id:"c", key:"look.c.name", name:"Gallery",    sw:["#d6cfbd","#f9f3e5","#b08a4a"]},
+ {id:"d", key:"look.d.name", name:"Scrapbook",  sw:["#e6dcc8","#fffdf6","#9b2d20"]},
+ {id:"e", key:"look.e.name", name:"Open Book",  sw:["#ddd1b8","#fbf6ea","#9b2d20"]}];
+const LOOK_DEFAULT="d";
+const lookName=l=>T(l.key,l.name);
+const LOOKFIX={
+ all:{room:"monastery", font:"book", three:"icons", tplace:"top", pplace:"row", backing:"none", tsize:"m", labels:"off",
+      cueplace:"small", nb:"look", nbpaper:"lined", paper:"look", fill:"none", wtab:"off", wlook:"look", numSide:"left"},
+ a:{arch:"under", nums:"off"}, b:{arch:"under", nums:"five"}, c:{arch:"under", nums:"off"},
+ d:{arch:"arch", nums:"five"}, e:{arch:"arch", nums:"off"}};
+const LOOK_DECIDES=Object.keys(Object.assign({}, LOOKFIX.all, LOOKFIX.a));
+function curLook(){ const v=S&&S.ui&&S.ui.desk&&S.ui.desk.mlook; return MLOOKS.some(l=>l.id===v)?v:LOOK_DEFAULT; }
+/* the type picker is retired; FONTS stays only so nothing that names it breaks */
 const FONTS=[{id:"book",name:"Book (as it is)",f:"'IM Fell English', Georgia, serif"},{id:"garamond",name:"Garamond",f:"'EB Garamond', Garamond, serif"},{id:"typewriter",name:"Typewriter",f:"'Courier Prime', monospace"},{id:"modern",name:"Modern",f:"'Work Sans', Arial, sans-serif"},{id:"hand",name:"By hand",f:"'Kalam', cursive"}];
 
 const DEF_BOARDS=[{id:"light",name:"Light"},{id:"hosp",name:"Essay on hospitality"},{id:"morn",name:"Mornings"}];
@@ -508,8 +538,8 @@ const initials=n=>n.split(" ").map(w=>w[0]).join("").slice(0,2);
 
 /* ---------- Settings: one set for wide screens, one for phones ---------- */
 const HOUSE={
- desk:{room:"monastery",font:"modern",density:"airy",theme:"start",three:"tabs",tplace:"top",backing:"none",tsize:"m",labels:"off",sides:"faint",arch:"under",guide:"pulse",cue:"note",cueplace:"hang",shade:"writer",shadeStyle:"pencil",reveal:"ink",turner:"strip",nb:"spread",nbpaper:"lined",prompt:"focus",fill:"drawing",paper:"fascicle",nums:"hand",numSide:"left",stanza:"space",gloss:"dots",psize:"m",storyMode:"info",infoStyle:"pop",story:"tag",gate:"folded",pplace:"row",wtab:"off",wlook:"notecard"},
- phone:{room:"monastery",font:"modern",density:"snug",theme:"start",three:"stickers",tplace:"top",pplace:"row",backing:"none",tsize:"s",labels:"off",sides:"faint",arch:"arch",guide:"none",cue:"note",cueplace:"hang",shade:"writer",shadeStyle:"pencil",reveal:"ink",turner:"strip",wtab:"off",wlook:"notecard",prompt:"focus",fill:"drawing",paper:"card",nums:"off",numSide:"left",stanza:"space",gloss:"sup",psize:"m",storyMode:"info",infoStyle:"pop",story:"label",gate:"blur",nb:"card",nbpaper:"lined"}
+ desk:{mlook:LOOK_DEFAULT,room:"monastery",font:"modern",density:"airy",theme:"start",three:"tabs",tplace:"top",backing:"none",tsize:"m",labels:"off",sides:"faint",arch:"under",guide:"pulse",cue:"note",cueplace:"hang",shade:"writer",shadeStyle:"pencil",reveal:"ink",turner:"strip",nb:"spread",nbpaper:"lined",prompt:"focus",fill:"drawing",paper:"fascicle",nums:"hand",numSide:"left",stanza:"space",gloss:"dots",psize:"m",storyMode:"info",infoStyle:"pop",story:"tag",gate:"folded",pplace:"row",wtab:"off",wlook:"notecard"},
+ phone:{mlook:LOOK_DEFAULT,room:"monastery",font:"modern",density:"snug",theme:"start",three:"stickers",tplace:"top",pplace:"row",backing:"none",tsize:"s",labels:"off",sides:"faint",arch:"arch",guide:"none",cue:"note",cueplace:"hang",shade:"writer",shadeStyle:"pencil",reveal:"ink",turner:"strip",wtab:"off",wlook:"notecard",prompt:"focus",fill:"drawing",paper:"card",nums:"off",numSide:"left",stanza:"space",gloss:"sup",psize:"m",storyMode:"info",infoStyle:"pop",story:"label",gate:"blur",nb:"card",nbpaper:"lined"}
 };
 const SETTINGS=[
  {name:"Page", ctrls:[
@@ -563,12 +593,13 @@ const SETTINGS=[
 ];
 if(!S.ui) S.ui={};
 ["desk","phone"].forEach(d=>{ S.ui[d]=Object.assign(clone(HOUSE[d]), S.ui[d]||{}); });
-const SHARED=["room","font"];
+const SHARED=["room","font","mlook"];
 function setPref(k,v,d){ if(SHARED.includes(k)) ["desk","phone"].forEach(x=>S.ui[x][k]=v); else S.ui[d||DEV()][k]=v; }
 if(!S.sharedLook){ SHARED.forEach(k=>S.ui.phone[k]=S.ui.desk[k]); S.sharedLook=1; }
 const phoneMQ=matchMedia("(max-width: 700px)");
 const DEV=()=>phoneMQ.matches?"phone":"desk";
-const U=()=>S.ui[DEV()];
+/* what the page should do: your settings, with what the look decides on top */
+const U=()=>Object.assign({}, S.ui[DEV()], LOOKFIX.all, LOOKFIX[curLook()]);
 
 /* ---------- Avatars, stickers ---------- */
 function stickerHTML(id, size, tip, gilt){ const s=STICKERS[id]; if(!s) return ""; return `<span class="stk${gilt?" gilt":""}" style="width:${size}px;height:${size}px" tabindex="0" data-tip="${esc(tip||`${s.series} · ${s.name}`)}">${s.svg}</span>`; }
@@ -584,20 +615,23 @@ function myTop(){ return S.profile.top && S.owned[S.profile.top] ? S.profile.top
 /* ---------- Rooms & type ---------- */
 function applyPrefs(){
  const R=document.documentElement;
- const u=U(); R.setAttribute("data-look",u.room);
- u.font&&u.font!=="book"?R.setAttribute("data-font",u.font):R.removeAttribute("data-font");
+ const u=U(); R.setAttribute("data-look",u.room); R.removeAttribute("data-font");
+ R.setAttribute("data-mlook",curLook());
  R.setAttribute("data-dev",DEV()); R.setAttribute("data-density",u.density); R.setAttribute("data-gloss",u.gloss); R.setAttribute("data-psize",u.psize);
- const eff=u.room;
- $("#lookList").innerHTML=LOOKS.map(l=>`<button class="pbtn" data-look="${l.id}" aria-pressed="${l.id===eff}"><span class="sw">${l.sw.map(c=>`<span style="background:${c}"></span>`).join("")}</span>${esc(l.name)}</button>`).join("");
- $("#fontList").innerHTML=FONTS.map(f=>`<button class="pbtn" data-font="${f.id}" aria-pressed="${f.id===(u.font||"book")}"><span class="spec" style="font-family:${f.f}">Muse</span>${esc(f.name)}</button>`).join("");
+ const L=curLook(), mark=l=>`<span class="lkm-rib" aria-hidden="true" style="--c1:${l.sw[0]};--c2:${l.sw[1]};--c3:${l.sw[2]}"></span>`;
+ const marks=$("#lookMarks");
+ if(marks) marks.innerHTML=MLOOKS.map(l=>`<button type="button" class="lkm" data-mlook="${l.id}" aria-pressed="${l.id===L}" aria-label="${esc(lookName(l))}" data-tip="${esc(lookName(l))}">${mark(l)}</button>`).join("");
+ const one=$("#lookBtn"), cur=MLOOKS.find(l=>l.id===L);
+ if(one){ one.innerHTML=mark(cur); one.setAttribute("aria-label",`${T("site.looks.title","Looks")}: ${lookName(cur)}`); }
+ $("#lookList").innerHTML=MLOOKS.map(l=>`<button class="pbtn lkpick" data-mlook="${l.id}" aria-pressed="${l.id===L}">${mark(l)}${esc(lookName(l))}</button>`).join("");
  $("#profBtn").innerHTML=avatarHTML(me());
 }
-function pop(btn,p){ const other=p.id==="lookPop"?$("#fontPop"):$("#lookPop"); other.hidden=true; p.hidden=!p.hidden; btn.setAttribute("aria-expanded",String(!p.hidden)); }
+function setLook(id){ if(!MLOOKS.some(l=>l.id===id)) return; setPref("mlook",id); save(); applyPrefs(); render(); }
+function pop(btn,p){ p.hidden=!p.hidden; btn.setAttribute("aria-expanded",String(!p.hidden)); }
 $("#lookBtn").onclick=e=>{e.stopPropagation(); pop(e.currentTarget,$("#lookPop"));};
-$("#fontBtn").onclick=e=>{e.stopPropagation(); pop(e.currentTarget,$("#fontPop"));};
-$("#lookList").onclick=e=>{const b=e.target.closest("[data-look]"); if(b){setPref("room",b.dataset.look); save(); applyPrefs(); if(S.tab==="profile") render();}};
-$("#fontList").onclick=e=>{const b=e.target.closest("[data-font]"); if(b){setPref("font",b.dataset.font); save(); applyPrefs(); render();}};
-document.addEventListener("click",e=>{ for(const p of [$("#lookPop"),$("#fontPop")]) if(!p.hidden&&!p.contains(e.target)) p.hidden=true;
+$("#lookMarks").onclick=e=>{const b=e.target.closest("[data-mlook]"); if(b) setLook(b.dataset.mlook);};
+$("#lookList").onclick=e=>{const b=e.target.closest("[data-mlook]"); if(b){ $("#lookPop").hidden=true; $("#lookBtn").setAttribute("aria-expanded","false"); setLook(b.dataset.mlook);} };
+document.addEventListener("click",e=>{ for(const p of [$("#lookPop")]) if(!p.hidden&&!p.contains(e.target)) p.hidden=true;
  if(!e.target.closest(".bm")) document.querySelectorAll(".bmenu:not([hidden])").forEach(m=>m.hidden=true); });
 
 /* ---------- Navigation ---------- */
@@ -921,6 +955,11 @@ function linkState(id){ const open=synOpen(id), w=!!S.syn[WK(id)]; return w?"wri
 function threeSize(){ const d=DEV()==="desk"; return ({s:d?40:34, m:d?52:40, l:d?64:48})[U().tsize]; }
 function itemHTML(m,size,labels,vert){
  const u=U(), cur=curMuse().id===m.id, t=`${m.kind}: ${m.title}`;
+ /* Round 19: a button with an icon and a readable name; ✓ once written, and
+    the drawn sticker (tappable, with today's tick) beside it */
+ if(u.three==="icons"){ const bx=itemBox(size,vert), done=!!S.sealed[WK(m.id)], drawn=!!S.drawn[WK(m.id)];
+  const stk=(drawn||u.shade==="corner")?shadeHTML(m.id, DEV()==="phone"?18:22):"";
+  return `<button type="button" class="m-it ic${done?" done":""}" data-mgo="${m.id}" aria-current="${cur}" aria-label="${esc(t)}${done?" (written)":""}" style="width:${bx.w}px;height:${bx.h}px">${IC_KIND[m.kind]||""}<span class="ic-l">${esc(m.kind)}</span>${done?`<span class="ck" aria-hidden="true">✓</span>`:""}${stk}</button>`; }
  if(u.three==="thumbs"){
   const w=Math.round(size*1.25), h=Math.round(size*1.5);
   const inner=m.plate?"":`<span class="tx">${esc(FIRSTLINE[m.id]||m.title)}</span>`;
@@ -930,6 +969,10 @@ function itemHTML(m,size,labels,vert){
  return `<button type="button" class="m-it st" data-mgo="${m.id}" aria-current="${cur}" aria-label="${esc(t)}" style="width:${labels&&!vert?Math.max(size+8,66):size+8}px">${shadeHTML(m.id,size)}${labels&&!vert?`<small>${esc(m.kind)}</small>`:""}</button>`;
 }
 function itemBox(size,vert){ const u=U();
+ if(u.three==="icons"){ const ph=DEV()==="phone", L=curLook();
+  if(vert) return {w:272, h:46};
+  if(L==="e") return {w:ph?82:96, h:ph?60:68};
+  return {w:ph?88:128, h:ph?40:46}; }
  if(u.three==="thumbs") return {w:Math.max(Math.round(size*1.25), u.labels==="on"&&!vert?64:0), h:Math.round(size*1.5)};
  if(u.three==="tabs") return {w:vert?Math.round(size*.62)+22:Math.round(size*.62)+86, h:Math.round(size*.62)+16};
  return {w:u.labels==="on"&&!vert?Math.max(size+8,66):size+8, h:size};
@@ -979,7 +1022,7 @@ function poemHTML(m){
   if(si>0) h+=u.stanza==="fleuron"?`<div class="m-gap fl" aria-hidden="true">❧</div>`:`<div class="m-gap"></div>`;
   st.forEach((ln,li)=>{ n++;
    const show=u.nums==="all"||((u.nums==="five"||u.nums==="hand")&&n%5===0)||(u.nums==="stanza"&&li===0);
-   h+=`<div class="m-pl"><span class="n">${show?n:""}</span><span class="tx">${esc(ln)}</span><span class="mg">${u.fill==="gloss"?glossLine(ln):""}</span></div>`; });
+   h+=`<div class="m-pl"><span class="n">${show?n:""}</span><span class="tx">${n===1&&rubric()?incHTML(ln):esc(ln)}</span><span class="mg">${u.fill==="gloss"?glossLine(ln):""}</span></div>`; });
  });
  return `<div class="m-poem museText ${u.nums==="off"?"nonum":""} ${u.numSide==="right"?"nr":""} ${u.nums==="hand"?"hand":""} ${u.fill==="gloss"?"gl":""}">${h}</div>`;
 }
@@ -1003,7 +1046,7 @@ function workHTML(m, inBook){
  if(m.kind==="Scripture") return `<div class="m-work scripture">${scriptureHTML(m)}</div>`;
  let inner;
  if(m.poem) inner=poemHTML(m);
- else { const paras=(m.quote||"").split(/(?<=…)\s+/); inner=`<div class="m-prose museText">${paras.map(p=>`<p>${esc(p)}</p>`).join("")}${m.cite?`<div class="cite">${esc(m.cite)}</div>`:""}</div>${m.notebook?`<div class="notebook-plate museText" style="margin:14px 0 0;position:relative;z-index:1">${m.notebook.map(esc).join("<br>")}<small>${esc(m.notebookNote)}</small></div>`:""}`; }
+ else { const paras=(m.quote||"").split(/(?<=…)\s+/); inner=`<div class="m-prose museText">${paras.map((p,i)=>`<p>${i===0&&rubric()?incHTML(p):esc(p)}</p>`).join("")}${m.cite?`<div class="cite">${esc(m.cite)}</div>`:""}</div>${m.notebook?`<div class="notebook-plate museText" style="margin:14px 0 0;position:relative;z-index:1">${m.notebook.map(esc).join("<br>")}<small>${esc(m.notebookNote)}</small></div>`:""}`; }
  return `<div class="m-work ${inBook?"inbook":u.paper}">${m.plate?"":fillHTML(m)}${inner}</div>`;
 }
 /* The third work is the day's Scripture. The painting stands beside it as a
@@ -1020,7 +1063,7 @@ function studyHTML(p){
 }
 function scriptureHTML(m){
  const lines=(m.quote||"").split("\n").filter(x=>x.trim());
- return `<blockquote class="m-verse museText">${lines.map(l=>`<span>${esc(l)}</span>`).join("")}</blockquote>
+ return `<blockquote class="m-verse museText">${lines.map((l,i)=>`<span>${i===0&&rubric()?incHTML(l):esc(l)}</span>`).join("")}</blockquote>
   ${studyHTML(m.painting)}`;
 }
 /* The ✝ beside the day's word: what else is read today, never the third work again */
@@ -1035,15 +1078,16 @@ function writerInnerM(m, nb){
  const s=S.sealed[WK(m.id)], u=U();
  if(!s&&readOnlyDay()) return `<p class="m-nbhead">${T("muse.history.heading","A day already past")}</p><p style="margin:0;font-size:.92rem;color:#6b5d4d">${T("muse.history.line","You are reading an earlier day. Its conversation is closed; what you write today belongs to today.")}</p>`;
  if(!s&&m.closed) return `<p class="m-nbhead">${T("muse.past.heading","This muse has passed")}</p><p style="margin:0;font-size:.92rem;color:#6b5d4d">${T("muse.past.line","Its conversation closed before you left an impression. You can still write about it in your notebook.")}</p>`;
- if(s) return `<div class="m-mine"><small>${s.via?`${T("muse.first.via","Your first impression, written as a link with the ")}${esc(synSubjects(s.via).filter(x=>x!==m.id).map(x=>MUSE[x].kind.toLowerCase()).join(" and "))}`:T("muse.first.label","Your first impression")} · ${when(s.at)}</small>${esc(s.text)}</div>
+ if(s) return `<div class="m-mine"><small>${s.via?`${T("muse.first.via","Your first impression, written as a link with the ")}${esc(synSubjects(s.via).filter(x=>x!==m.id).map(x=>MUSE[x].kind.toLowerCase()).join(" and "))}`:T("muse.first.mine","Your first impression")} · ${when(s.at)}</small>${esc(s.text)}</div>
   ${curatorNoteHTML()}
   ${m.deeper?`<div class="m-deeper"><span>${T("muse.deeper.label","Go deeper")}</span>${esc(m.deeper)}</div>`:""}
   ${myLayers(m.id).map(l=>`<div class="m-layer"><small>${esc(l.w||"later")}</small>${esc(l.t)}</div>`).join("")}
   ${(m.closed||readOnlyDay())?"":`<form class="m-later" id="laterF"><textarea id="layerIn" class="${nb?"":"m-wbox"}" aria-label="${T("post.reply.mine.placeholder","Add another thought")}" placeholder="${T("muse.later.placeholder","Add another thought, or reply to yourself.")}"></textarea><div class="m-foot"><span class="m-note">${T("muse.first.stays","Your first impression stays as written")}</span><button class="btn small">${T("muse.later.button","Add")}</button></div></form>`}`;
  const d=S.drafts[WK(m.id)]||"", dim=u.prompt==="focus"&&d.length>0;
  const q=qChosen(m.id), ask=q||PROMPT;
- return `<p class="m-nbhead ${dim?"dim":""} ${q?"asked":""}">${esc(ask)}</p>${qGuideHTML(m.id)}<textarea id="draft" class="${nb?"m-grow":"m-wbox"}" aria-label="${esc(ask)}" placeholder="${T("muse.prompt.placeholder","One sentence is enough.")}">${esc(d)}</textarea>
-  <div class="m-foot"><span>${u.shade==="writer"?shadeHTML(m.id,34):""}</span><button class="btn primary" data-act="seal" ${d.trim()?"":"disabled"}>${T("muse.first.button","Leave my first impression")}</button></div>`;
+ const lab=T("muse.first.label","First impression");
+ return `${lab?`<p class="fi-l">${esc(lab)}</p>`:""}<p class="m-nbhead fi-s ${dim?"dim":""} ${q?"asked":""}">${esc(ask)}</p><textarea id="draft" class="${nb?"m-grow":"m-wbox"}" aria-label="${esc(lab||ask)}" placeholder="${T("muse.prompt.placeholder","One sentence is enough.")}">${esc(d)}</textarea>
+  <div class="m-foot"><span>${u.shade==="writer"?shadeHTML(m.id,34):""}</span><button class="btn primary" data-act="seal" ${d.trim()?"":"disabled"}>${T("muse.first.button","Leave my first impression")}</button></div>${qGuideHTML(m.id)}`;
 }
 function curlHTML(m){
  if(U().turner!=="curl"||m.closed) return "";
@@ -1168,24 +1212,10 @@ function renderMuse(v){
  const cueside=(!past&&U().cue!=="off")?`<span class="m-cueside">${cueHTML()}</span>`:"";
  const head=`<div class="m-head"><div class="m-htop"><div class="m-hl"><span class="type kind">${esc(m.kind)}</span><div class="m-tl"><h2 class="mtitle">${esc(m.title)}</h2>${info}</div><div class="byline">${esc(m.maker)} · ${esc(m.date)}</div></div>${cueside}</div></div>`;
  const story=u.storyMode==="under"?`<div class="m-story">${storyBody(m,false)}</div>`:"";
- let body;
- if(dev==="desk"){
-  const beside=!past&&u.tplace==="title", design=u.nb, spread=design==="spread";
-  const nb=`<div class="m-nb d-${design} paper-${u.nbpaper}" id="writerBox">${writerInnerM(m,true)}${spread?"":curlHTML(m)}</div>`;
-  const colL=`<div class="m-colL">${head}<div class="m-wwrap">${workHTML(m,spread)}</div>${noteHTML(m)}</div>`;
-  const colR=`<div class="m-colR">${beside?threeHTML(threeSize(),false):""}${nb}</div>`;
-  let duo=`<div class="m-duo">${colL}${colR}</div>`;
-  /* the folio is the page mark, not a second printing of the note above it */
-  if(spread) duo=`<div class="m-book">${duo}<span class="m-folio">${esc(m.kind)} · ${MUSES.indexOf(m)+1} of ${MUSES.length}</span>${curlHTML(m)}</div>`;
-  body=`${day}${duo}${bottomTurnerM(m)}${story}`;
- } else {
-  const titleRow=head;
-  const tab=(!S.sealed[WK(m.id)]&&!past&&u.wtab!=="off")?`<div class="m-tabrail"><button type="button" class="m-wtab ${u.wtab==="edge"?"edge":""}" data-act="towrite" aria-label="Write your first impression">${PENCIL}</button></div>`:"";
-  const look=u.wlook==="line"&&S.sealed[WK(m.id)]?"notecard":u.wlook;
-  body=`${day}<div class="m-stack">${titleRow}<div class="m-wscope">${tab}<div class="m-wwrap">${workHTML(m,false)}${curlHTML(m)}</div>${noteHTML(m)}<div style="height:var(--gap)"></div><div class="m-writer ${look}" id="writerBox">${writerInnerM(m,false)}</div></div></div>${story}${bottomTurnerM(m)}`;
- }
+ /* Round 19: the look composes the page; the pieces are the same in all five */
+ let body=`${lookHTML(m,{past, dateStr, reading, info, day})}${bottomTurnerM(m)}${story}`;
  if(dev==="phone"&&!past){ const i=MUSES.indexOf(m), nx=MUSES[(i+1)%MUSES.length];
-  body=`<div class="ph-bar"><button type="button" class="ph-back" data-act="phome">${T("phone.back","‹ Today")}</button><span class="ph-mini">${esc(DAY.theme)}</span></div>${body.replace(day,"")}<p class="ph-nextw"><button type="button" class="ph-back" data-mgo="${nx.id}">${T("phone.next","Next work ›")}</button></p>`; }
+  body=`<div class="ph-bar"><button type="button" class="ph-back" data-act="phome">${T("phone.back","‹ Today")}</button><span class="ph-mini">${esc(DAY.theme)}</span></div>${body}<p class="ph-nextw"><button type="button" class="ph-back" data-mgo="${nx.id}">${T("phone.next","Next work ›")}</button></p>`; }
  v.innerHTML=`${body}${responsesHTML(m)}${infoLayer(m)}${synOverlay()}${keepAskHTML()}`;
  wireBoard(v); wireWriterM(m); if(u.gloss!=="none") applyGloss(v);
  v.onclick=e=>{
@@ -1215,6 +1245,37 @@ function renderMuse(v){
   if(a==="seal") seal(m);
  };
 }
+/* ---------- Round 19: the five looks compose the Muse page ----------
+   Every look carries the same pieces: the day (date, the day's word with its
+   column, who is here), the three works as buttons with the threads between
+   them, the work with its ⓘ and bookmark, and the writing box, which on a
+   wide screen always sits beside the work. On a phone the day lives on the
+   Today page, so a work page starts at the buttons. */
+function lookHTML(m,o){
+ const L=curLook(), ph=DEV()==="phone", past=o.past, dayOn=!ph&&!past;
+ /* on a phone the links live on the Today list, so a work page has the three
+    buttons only; on a wide screen the threads and ◇ sit between them */
+ const row=vert=>past?"":ph?`<div class="lk-row"><nav class="lk-wkrow" aria-label="Today’s three">${MUSES.map(x=>itemHTML(x,threeSize(),false,false)).join("")}</nav></div>`
+  :`<div class="lk-row">${threeHTML(threeSize(), !!vert, true)}</div>`;
+ const title=`<header class="lk-head">${L==="c"?`<p class="lk-kind">${esc(m.kind)}</p>`:""}<div class="m-tl"><h2 class="mtitle lk-title">${esc(m.title)}</h2>${o.info}</div><p class="lk-by">${esc(m.maker)}${m.date?` · ${esc(m.date)}`:""}</p></header>`;
+ const work=`<div class="m-wwrap">${workHTML(m,false)}</div>${noteHTML(m)}`;
+ const write=`<div class="m-nb lk-write${(S.drafts[WK(m.id)]||"").trim()||S.sealed[WK(m.id)]?" has":""}" id="writerBox">${writerInnerM(m,false)}${curlHTML(m)}</div>`;
+ const date=dayOn?`<div class="lk-date">${esc(o.dateStr)}</div>`:"";
+ const theme=dayOn?`<div class="lk-themewrap"><h1 class="lk-theme">${esc(DAY.theme)}</h1>${wisdomBtn()}</div>`:"";
+ const cue=dayOn&&U().cue!=="off"?`<div class="lk-cue">${cueHTML()}</div>`:"";
+ const reading=dayOn?o.reading:"", pastbar=past?o.day:"";
+ const W={
+  a:()=>`${pastbar}${dayOn?`<div class="lk-top">${date}${theme}${reading}${cue}</div>`:""}${row()}<div class="lk-grid"><article class="lk-sheet">${title}${work}</article>${write}</div>`,
+  b:()=>`${pastbar}${dayOn?`<div class="lk-rh"><span class="lk-rl">${esc(T("look.b.runhead","the day’s word"))}</span>${theme}<div class="lk-rhr">${date}${cue}</div></div>${reading}`:""}<div class="lk-page"><article class="lk-text">${row()}${title}${work}</article><aside class="lk-margin">${write}</aside></div>`,
+  c:()=>`${pastbar}<div class="lk-lamp" aria-hidden="true"></div><div class="lk-wall"><div class="lk-fw"><div class="lk-framed">${title}${work}</div></div><div class="lk-info">${date}${theme}${reading}${cue}${row(true)}</div><div class="lk-card">${write}${dayOn?`<span class="lk-ticket" aria-hidden="true">${esc(DAY.theme)} · i–iii</span>`:""}</div></div>`,
+  d:()=>`${pastbar}${dayOn?`<div class="lk-day"><div class="lk-themewrap"><h1 class="lk-theme lk-stamp">${esc(DAY.theme)}</h1>${wisdomBtn()}</div>${date}${cue}</div>${reading}`:""}<div class="lk-board${past?" past":""}">${past?"":`<div class="lk-tabs">${row()}</div>`}<article class="lk-leaf">${title}${work}</article><div class="lk-card">${write}</div></div>`,
+  e:()=>`${pastbar}${dayOn?`<div class="lk-head2">${date}${theme}${cue}</div>${reading}`:""}<div class="lk-ribbons">${row()}</div><div class="lk-book"><article class="lk-pg l">${title}${work}<span class="lk-folio">${esc(m.kind)}</span></article><aside class="lk-pg r">${write}<span class="lk-folio">${esc(T("look.e.folio","your page"))}</span></aside></div>`
+ };
+ return `<div class="lk lk-${L}">${W[L]()}</div>`;
+}
+/* B and D rubricate: the first two words of the work in red small capitals */
+function rubric(){ return ["b","d"].includes(curLook()); }
+function incHTML(t){ const mm=String(t).match(/^(\s*\S+\s+\S+)([\s\S]*)$/); return mm?`<span class="inc">${esc(mm[1])}</span>${esc(mm[2])}`:esc(t); }
 function pickQuestion(mid, i){
  S.qpick=S.qpick||{}; const k=WK(mid);
  if(i==null) delete S.qpick[k]; else S.qpick[k]=i;
@@ -1225,6 +1286,7 @@ function wireWriterM(m){
  const d=$("#draft");
  if(d){ const fill=d.classList.contains("m-grow"); if(!fill) autogrow(d);
   d.oninput=()=>{ S.drafts[WK(m.id)]=d.value; save(); if(!fill) autogrow(d);
+   d.closest(".lk-write")?.classList.toggle("has", !!d.value.trim());
    const b=document.querySelector('[data-act="seal"]'); if(b) b.disabled=!d.value.trim();
    const q=d.parentElement.querySelector(".m-nbhead"); if(q&&U().prompt==="focus") q.classList.toggle("dim", d.value.length>0);
    if(U().reveal==="ink"){ const a=revealAmt(m.id); document.querySelectorAll(`.m-stk[data-sid="${m.id}"] .full`).forEach(el=>el.style.opacity=a); } }; }
@@ -1238,7 +1300,7 @@ function settingsHTML(){
  const d=S.setDev||DEV(), u=S.ui[d];
  return `<div class="panel"><div class="m-sethead"><div><h3>${T("profile.settings.heading","Settings")}</h3><p class="muted">${T("profile.settings.line","How the Muse page looks for you. Wide screens and phones keep their own settings; you’re on ")}${DEV()==="desk"?"a wide screen":"a phone"} now.</p></div>
   <div class="viewt" role="group" aria-label="Which screen"><button data-setdev="desk" aria-pressed="${d==="desk"}">Wide screens</button><button data-setdev="phone" aria-pressed="${d==="phone"}">Phones</button></div></div>
-  ${SETTINGS.filter(g=>!g.dev||g.dev===d).map(g=>`<fieldset class="m-grp"><legend>${esc(g.name)}</legend>${g.ctrls.filter(c=>!c.dev||c.dev===d).map(c=>{ const on=!c.when||c.when(u,d);
+  ${SETTINGS.filter(g=>(!g.dev||g.dev===d)&&g.ctrls.some(c=>(!c.dev||c.dev===d)&&!LOOK_DECIDES.includes(c.k))).map(g=>`<fieldset class="m-grp"><legend>${esc(g.name)}</legend>${g.ctrls.filter(c=>(!c.dev||c.dev===d)&&!LOOK_DECIDES.includes(c.k)).map(c=>{ const on=!c.when||c.when(u,d);
    return `<div class="m-ctrl ${on?"":"off"}"><span class="m-cl">${esc(c.label)}</span><div class="m-seg" role="group" aria-label="${esc(c.label)}">${c.opts.map(([val,l])=>`<button type="button" data-set="${c.k}" data-val="${val}" aria-pressed="${u[c.k]===val}" ${on?"":"disabled"}>${esc(l)}</button>`).join("")}</div></div>`; }).join("")}</fieldset>`).join("")}
   <div class="rowbtns" style="margin-top:16px"><button class="btn" data-sethouse>Put back the house style for ${d==="desk"?"wide screens":"phones"}</button></div></div>`;
 }
@@ -1248,7 +1310,7 @@ function renderSettings(v){
   const pt=e.target.closest("[data-ptab]"); if(pt){ S.ptab=pt.dataset.ptab; save(); render(); return; }
   const sd=e.target.closest("[data-setdev]"); if(sd){ S.setDev=sd.dataset.setdev; save(); renderSettings(v); return; }
   const b=e.target.closest("[data-set]"); if(b){ const d=S.setDev||DEV(); setPref(b.dataset.set,b.dataset.val,d); save(); applyPrefs(); renderSettings(v); return; }
-  if(e.target.closest("[data-sethouse]")){ const d=S.setDev||DEV(); const keep={room:S.ui[d].room,font:S.ui[d].font}; S.ui[d]=Object.assign(clone(HOUSE[d]),keep); save(); applyPrefs(); renderSettings(v); toast(`Back to the house style for ${d==="desk"?"wide screens":"phones"}.`); }
+  if(e.target.closest("[data-sethouse]")){ const d=S.setDev||DEV(); const keep={mlook:S.ui[d].mlook}; S.ui[d]=Object.assign(clone(HOUSE[d]),keep); save(); applyPrefs(); renderSettings(v); toast(`Back to the house style for ${d==="desk"?"wide screens":"phones"}.`); }
  };
 }
 
@@ -1689,7 +1751,7 @@ function editorInit(){
  const b=document.createElement("button"); b.type="button"; b.id="edBtn"; b.className="edbtn";
  b.innerHTML=`<span class="ed-ic" aria-hidden="true">↺</span><span class="ed-tx">${esc(T("editor.reset","Reset today"))}</span>`;
  b.setAttribute("aria-label",T("editor.reset","Reset today")); b.title=T("editor.reset.ask","Clear today's writing on this browser?");
- icons.insertBefore(b, icons.firstChild);
+ icons.insertBefore(b, icons.firstChild); $("header.top")?.classList.add("extra");
  const card=document.createElement("div"); card.id="edCard"; card.className="edcard"; card.hidden=true;
  card.setAttribute("role","dialog"); card.setAttribute("aria-label",T("editor.reset","Reset today"));
  const line=T("editor.reset.line","First impressions, later thoughts, drafts, links, replies, today's stickers and today's check. Your notebook stays as it is.");
@@ -1704,7 +1766,7 @@ function testerInit(){
  if(!TESTER||$("#fbBtn")) return;
  const icons=$("header .icons"); if(!icons) return;
  const a=document.createElement("a"); a.id="fbBtn"; a.className="edbtn fbbtn"; a.href="feedback.html";
- a.textContent=T("tester.feedback","Feedback ›"); icons.insertBefore(a, icons.firstChild);
+ a.textContent=T("tester.feedback","Feedback ›"); icons.insertBefore(a, icons.firstChild); $("header.top")?.classList.add("extra");
 }
 /* config.js loads after this file, so look once the page has finished loading */
 function headerInit(){ editorInit(); testerInit(); }
