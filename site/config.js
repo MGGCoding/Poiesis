@@ -22,5 +22,5 @@ window.POIESIS_CONFIG = {
   // feedbackEmail: an address for an "Email them" button. This file is public
   //   on GitHub, so only put an address here you are happy to publish.
   feedbackEndpoint: "",
-  feedbackEmail: "",
+  feedbackEmail: "moderngreekgod@gmail.com",
 };
