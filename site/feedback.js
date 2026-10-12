@@ -5,9 +5,10 @@
  * 2. The form asks how it went. Nothing in it is prefilled: the only things
  *    filled in for them are facts (the day, and how many impressions, links
  *    and notebook pages their fresh Poiesis holds — never what they wrote).
- * 3. Sending: if config.js has a feedbackEndpoint (the Google Sheet script in
- *    tools/feedback/), the answers are posted there and land as one row.
- *    Either way the friend can share, copy or email them to Niko.
+ * 3. Sending: with a feedbackEmail in config.js the answers are emailed straight
+ *    to Niko through FormSubmit (formsubmit.co). With a feedbackEndpoint (the
+ *    Google Sheet script in tools/feedback/) they land as one row instead.
+ *    If neither works the friend can still share, copy or email them.
  * Every word is in copy.js under "THE FEEDBACK PAGE".
  */
 (function(){
@@ -168,6 +169,18 @@ async function submit(a){
  if(CFG.feedbackEndpoint){
   try{ await fetch(CFG.feedbackEndpoint, {method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(row)}); logged=true; }
   catch(err){ logged=false; }
+ } else if(CFG.feedbackEmail && CFG.feedbackEmailDirect!==false){
+  /* straight to Niko's inbox through FormSubmit (formsubmit.co): free, no
+     account. The very first submission makes FormSubmit email Niko an
+     "Activate" link; until he clicks it this falls back to share / copy. */
+  try{
+   const r=await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(CFG.feedbackEmail)}`, {method:"POST",
+    headers:{"Content-Type":"application/json", "Accept":"application/json"},
+    body:JSON.stringify({_subject:`Poiesis feedback from ${a.name||ID}`, _template:"table", _captcha:"false",
+     name:a.name||"(no name)", tester:ID, day:iso, works:row.works, answers:text})});
+   const j=await r.json().catch(()=>({}));
+   logged=r.ok&&String(j.success)==="true";
+  }catch(err){ logged=false; }
  }
  const sent={text, logged, at:Date.now()};
  store.set("poiesis.feedback.sent", (store.get("poiesis.feedback.sent")||[]).concat([{at:sent.at, row}]));

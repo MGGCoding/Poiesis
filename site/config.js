@@ -19,8 +19,12 @@ window.POIESIS_CONFIG = {
   // their answers to you themselves (share, copy, or email).
   // feedbackEndpoint: the web-app address of the Google Sheet script in
   //   tools/feedback/ — every submission then lands as a row in your sheet.
-  // feedbackEmail: an address for an "Email them" button. This file is public
-  //   on GitHub, so only put an address here you are happy to publish.
+  // feedbackEmail: where the answers are emailed, straight from the form,
+  //   through FormSubmit (formsubmit.co, free, no account). The first
+  //   submission sends you an "Activate" email: click it once. This file is
+  //   public on GitHub, so the address is public too.
+  // feedbackEmailDirect: false keeps only the "Email them" button instead.
   feedbackEndpoint: "",
   feedbackEmail: "moderngreekgod@gmail.com",
+  feedbackEmailDirect: true,
 };
