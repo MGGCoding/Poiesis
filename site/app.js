@@ -16,6 +16,7 @@ function applyStaticCopy(){
  const tab=(k,key,d,ic)=>{ const el=document.querySelector(`#switch [data-tab="${k}"]`); if(el) el.innerHTML=`${ic}<span>${esc(T(key,d))}</span>`; };
  tab("muse","site.tab.muse","Muse",IC_MUSE); tab("notebook","site.tab.notebook","Notebook",IC_NOTEBOOK);
  set("#lookPop h3","site.looks.title","Looks"); set("#lookPop p","site.looks.line","How every page looks. Your choice is kept on every screen.");
+ set("#lookPop h4","site.colors.title","Colour");
  set("#whyLink","site.why.link","Why Poiesis \u203a");
  set("footer span","site.footer","A working sketch, 2026. Other members are examples; what you write stays in this browser. Paintings appear as color studies.");
 }
@@ -362,6 +363,8 @@ const LOOKFIX={
  a:{arch:"under", nums:"off"}, b:{arch:"under", nums:"five"}, c:{arch:"under", nums:"off"},
  d:{arch:"arch", nums:"five"}, e:{arch:"arch", nums:"off"}};
 const LOOK_DECIDES=Object.keys(Object.assign({}, LOOKFIX.all, LOOKFIX.a));
+/* the colour sits on top of the look: the look's own paper, or one of the rooms */
+function curColor(){ const v=S&&S.ui&&S.ui.desk&&S.ui.desk.color; return LOOKS.some(l=>l.id===v)?v:"paper"; }
 function curLook(){ const v=S&&S.ui&&S.ui.desk&&S.ui.desk.mlook; return MLOOKS.some(l=>l.id===v)?v:LOOK_DEFAULT; }
 /* the type picker is retired; FONTS stays only so nothing that names it breaks */
 const FONTS=[{id:"book",name:"Book (as it is)",f:"'IM Fell English', Georgia, serif"},{id:"garamond",name:"Garamond",f:"'EB Garamond', Garamond, serif"},{id:"typewriter",name:"Typewriter",f:"'Courier Prime', monospace"},{id:"modern",name:"Modern",f:"'Work Sans', Arial, sans-serif"},{id:"hand",name:"By hand",f:"'Kalam', cursive"}];
@@ -538,11 +541,12 @@ const initials=n=>n.split(" ").map(w=>w[0]).join("").slice(0,2);
 
 /* ---------- Settings: one set for wide screens, one for phones ---------- */
 const HOUSE={
- desk:{mlook:LOOK_DEFAULT,room:"monastery",font:"modern",density:"airy",theme:"start",three:"tabs",tplace:"top",backing:"none",tsize:"m",labels:"off",sides:"faint",arch:"under",guide:"pulse",cue:"note",cueplace:"hang",shade:"writer",shadeStyle:"pencil",reveal:"ink",turner:"strip",nb:"spread",nbpaper:"lined",prompt:"focus",fill:"drawing",paper:"fascicle",nums:"hand",numSide:"left",stanza:"space",gloss:"dots",psize:"m",storyMode:"info",infoStyle:"pop",story:"tag",gate:"folded",pplace:"row",wtab:"off",wlook:"notecard"},
- phone:{mlook:LOOK_DEFAULT,room:"monastery",font:"modern",density:"snug",theme:"start",three:"stickers",tplace:"top",pplace:"row",backing:"none",tsize:"s",labels:"off",sides:"faint",arch:"arch",guide:"none",cue:"note",cueplace:"hang",shade:"writer",shadeStyle:"pencil",reveal:"ink",turner:"strip",wtab:"off",wlook:"notecard",prompt:"focus",fill:"drawing",paper:"card",nums:"off",numSide:"left",stanza:"space",gloss:"sup",psize:"m",storyMode:"info",infoStyle:"pop",story:"label",gate:"blur",nb:"card",nbpaper:"lined"}
+ desk:{mlook:LOOK_DEFAULT,color:"paper",room:"monastery",font:"modern",density:"airy",theme:"start",three:"tabs",tplace:"top",backing:"none",tsize:"m",labels:"off",sides:"faint",arch:"under",guide:"pulse",cue:"note",cueplace:"hang",shade:"writer",shadeStyle:"pencil",reveal:"ink",turner:"strip",nb:"spread",nbpaper:"lined",prompt:"focus",fill:"drawing",paper:"fascicle",nums:"hand",numSide:"left",stanza:"space",gloss:"dots",psize:"m",storyMode:"info",infoStyle:"pop",story:"tag",gate:"folded",pplace:"row",wtab:"off",wlook:"notecard"},
+ phone:{mlook:LOOK_DEFAULT,color:"paper",room:"monastery",font:"modern",density:"snug",theme:"start",three:"stickers",tplace:"top",pplace:"row",backing:"none",tsize:"s",labels:"off",sides:"faint",arch:"arch",guide:"none",cue:"note",cueplace:"hang",shade:"writer",shadeStyle:"pencil",reveal:"ink",turner:"strip",wtab:"off",wlook:"notecard",prompt:"focus",fill:"drawing",paper:"card",nums:"off",numSide:"left",stanza:"space",gloss:"sup",psize:"m",storyMode:"info",infoStyle:"pop",story:"label",gate:"blur",nb:"card",nbpaper:"lined"}
 };
 const SETTINGS=[
  {name:"Page", ctrls:[
+  {k:"color", label:"Colour (same on every screen)", opts:[["paper","The look’s own"], ...LOOKS.map(l=>[l.id,l.name])]},
   {k:"room", label:"Room (same on every screen)", opts:LOOKS.map(l=>[l.id,l.name])},
   {k:"font", label:"Type (same on every screen)", opts:FONTS.map(f=>[f.id,f.name])},
   {k:"density", label:"Breathing room", opts:[["snug","Snug"],["airy","Airy"]]},
@@ -593,7 +597,7 @@ const SETTINGS=[
 ];
 if(!S.ui) S.ui={};
 ["desk","phone"].forEach(d=>{ S.ui[d]=Object.assign(clone(HOUSE[d]), S.ui[d]||{}); });
-const SHARED=["room","font","mlook"];
+const SHARED=["room","font","mlook","color"];
 function setPref(k,v,d){ if(SHARED.includes(k)) ["desk","phone"].forEach(x=>S.ui[x][k]=v); else S.ui[d||DEV()][k]=v; }
 if(!S.sharedLook){ SHARED.forEach(k=>S.ui.phone[k]=S.ui.desk[k]); S.sharedLook=1; }
 const phoneMQ=matchMedia("(max-width: 700px)");
@@ -615,8 +619,8 @@ function myTop(){ return S.profile.top && S.owned[S.profile.top] ? S.profile.top
 /* ---------- Rooms & type ---------- */
 function applyPrefs(){
  const R=document.documentElement;
- const u=U(); R.setAttribute("data-look",u.room); R.removeAttribute("data-font");
- R.setAttribute("data-mlook",curLook());
+ const u=U(), C=curColor(); R.setAttribute("data-look",C==="paper"?"monastery":C); R.removeAttribute("data-font");
+ R.setAttribute("data-mlook",curLook()); R.setAttribute("data-color",C);
  R.setAttribute("data-dev",DEV()); R.setAttribute("data-density",u.density); R.setAttribute("data-gloss",u.gloss); R.setAttribute("data-psize",u.psize);
  const L=curLook(), mark=l=>`<span class="lkm-rib" aria-hidden="true" style="--c1:${l.sw[0]};--c2:${l.sw[1]};--c3:${l.sw[2]}"></span>`;
  const marks=$("#lookMarks");
@@ -624,12 +628,17 @@ function applyPrefs(){
  const one=$("#lookBtn"), cur=MLOOKS.find(l=>l.id===L);
  if(one){ one.innerHTML=mark(cur); one.setAttribute("aria-label",`${T("site.looks.title","Looks")}: ${lookName(cur)}`); }
  $("#lookList").innerHTML=MLOOKS.map(l=>`<button class="pbtn lkpick" data-mlook="${l.id}" aria-pressed="${l.id===L}">${mark(l)}${esc(lookName(l))}</button>`).join("");
+ const cl=$("#colorList");
+ if(cl) cl.innerHTML=[{id:"paper", name:T("look.paper.name","The look’s own"), sw:cur.sw}, ...LOOKS].map(l=>`<button class="pbtn" data-color="${l.id}" aria-pressed="${l.id===C}"><span class="sw">${l.sw.map(c=>`<span style="background:${c}"></span>`).join("")}</span>${esc(l.name)}</button>`).join("");
  $("#profBtn").innerHTML=avatarHTML(me());
 }
 function setLook(id){ if(!MLOOKS.some(l=>l.id===id)) return; setPref("mlook",id); save(); applyPrefs(); render(); }
 function pop(btn,p){ p.hidden=!p.hidden; btn.setAttribute("aria-expanded",String(!p.hidden)); }
 $("#lookBtn").onclick=e=>{e.stopPropagation(); pop(e.currentTarget,$("#lookPop"));};
 $("#lookMarks").onclick=e=>{const b=e.target.closest("[data-mlook]"); if(b) setLook(b.dataset.mlook);};
+function setColor(id){ setPref("color",id); save(); applyPrefs(); render(); }
+$("#colorBtn").onclick=e=>{e.stopPropagation(); pop(e.currentTarget,$("#lookPop"));};
+$("#colorList").onclick=e=>{const b=e.target.closest("[data-color]"); if(b) setColor(b.dataset.color);};
 $("#lookList").onclick=e=>{const b=e.target.closest("[data-mlook]"); if(b){ $("#lookPop").hidden=true; $("#lookBtn").setAttribute("aria-expanded","false"); setLook(b.dataset.mlook);} };
 document.addEventListener("click",e=>{ for(const p of [$("#lookPop")]) if(!p.hidden&&!p.contains(e.target)) p.hidden=true;
  if(!e.target.closest(".bm")) document.querySelectorAll(".bmenu:not([hidden])").forEach(m=>m.hidden=true); });

@@ -1354,25 +1354,29 @@ html[data-dev="phone"] .m-writer.notecard{transform:rotate(.3deg)}
    ===================================================================== */
 html[data-mlook]{
   --lk-ink:#2a2420; --lk-mute:#5f5245; --lk-soft:#7a6b5a; --lk-red:#9b2d20; --lk-paper:#fbf6ea;
+  --lk-wink:#2a2420; --lk-wmute:#5f5245;
   --f-display:"Young Serif", Georgia, serif; --f-body:"EB Garamond", Garamond, Georgia, serif;
   --f-read:"EB Garamond", Garamond, Georgia, serif; --f-ui:"Work Sans", system-ui, sans-serif;
   --f-hand:"Kalam", "Segoe Print", cursive; --f-type:"Courier Prime", "Courier New", monospace;
+}
+/* the look's own paper (data-color="paper"); any other colour is one of the rooms */
+html[data-mlook][data-color="paper"]{
   --on-ground:#2a2420; --muted-ground:#5f5245; --on-surface:#2a2420; --muted:#6f6152;
   --card-ink:#2a2420; --accent:#9b2d20; --on-accent:#fbf3e8; --tape:rgba(246,235,196,.85); --note:#f3e3a6;
   --card-rule:#c9d6e2; --card-margin:#e3a59b; --frame:#6a4a31; --board:#b89a6e; --board-dot:#8e7048;
   --shadow:0 1px 2px rgba(60,40,20,.12), 0 8px 18px -8px rgba(60,40,20,.32);
   --lk-wall:var(--ground);
 }
-html[data-mlook="a"]{ --ground:#ebe1cd; --surface:#f6efe1; --card:#fffbf2; --line:#d6c9af;
+html[data-mlook="a"][data-color="paper"]{ --ground:#ebe1cd; --surface:#f6efe1; --card:#fffbf2; --line:#d6c9af;
   --lk-wall:radial-gradient(ellipse 75% 80% at 50% 38%,#f2e9d8 0%,#e6dbc5 58%,#cfc0a3 100%) fixed; }
-html[data-mlook="b"]{ --ground:#ebe4d4; --surface:#f4eee1; --card:#fbf6ea; --line:#cdbfa6;
+html[data-mlook="b"][data-color="paper"]{ --ground:#ebe4d4; --surface:#f4eee1; --card:#fbf6ea; --line:#cdbfa6;
   --f-display:"IM Fell English", Georgia, serif; }
-html[data-mlook="c"]{ --ground:#e6e0d1; --surface:#efeadf; --card:#f9f3e5; --line:#c9c1ac; --gold:#b08a4a;
+html[data-mlook="c"][data-color="paper"]{ --ground:#e6e0d1; --surface:#efeadf; --card:#f9f3e5; --line:#c9c1ac; --gold:#b08a4a;
   --lk-wall:linear-gradient(180deg,#ece7da 0%,#ddd7c6 45%,#cbc4b0 100%) fixed; }
-html[data-mlook="d"]{ --ground:#e6dcc8; --surface:#f1e8d6; --card:#fffdf6; --line:#d3c5ab;
+html[data-mlook="d"][data-color="paper"]{ --ground:#e6dcc8; --surface:#f1e8d6; --card:#fffdf6; --line:#d3c5ab;
   --f-display:"IM Fell English", Georgia, serif;
   --lk-wall:#e6dcc8 repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 2px,transparent 2px 4px); }
-html[data-mlook="e"]{ --ground:#e4d9c3; --surface:#efe6d3; --card:#fbf6ea; --line:#d2c4a6;
+html[data-mlook="e"][data-color="paper"]{ --ground:#e4d9c3; --surface:#efe6d3; --card:#fbf6ea; --line:#d2c4a6;
   --lk-wall:radial-gradient(ellipse 80% 70% at 50% 45%,#ece3d0,#ddd1b8 70%,#cdbf9f) fixed; }
 html[data-mlook] body{background:var(--lk-wall); color:var(--lk-ink)}
 html[data-mlook] .btn{font-family:var(--f-ui)}
@@ -1543,10 +1547,10 @@ html[data-psize="l"] .lk{--psz:23px}
 
 /* ---- the phone: one paper tone from the header down; pages stack ---- */
 @media (max-width:700px){
-  html[data-mlook]{ --lk-wall:var(--ground); }
-  html[data-mlook="a"]{ --ground:#efe6d4; --lk-wall:linear-gradient(180deg,#efe6d4 0%,#f2e9d8 30%,#ebe0cb 100%); }
-  html[data-mlook="c"]{ --ground:#ece7da; --lk-wall:linear-gradient(180deg,#ece7da 0%,#e4dece 50%,#d8d1bf 100%); }
-  html[data-mlook="e"]{ --ground:#ebe2cf; --lk-wall:linear-gradient(180deg,#ebe2cf,#e2d7c0); }
+  html[data-mlook][data-color="paper"]{ --lk-wall:var(--ground); }
+  html[data-mlook="a"][data-color="paper"]{ --ground:#efe6d4; --lk-wall:linear-gradient(180deg,#efe6d4 0%,#f2e9d8 30%,#ebe0cb 100%); }
+  html[data-mlook="c"][data-color="paper"]{ --ground:#ece7da; --lk-wall:linear-gradient(180deg,#ece7da 0%,#e4dece 50%,#d8d1bf 100%); }
+  html[data-mlook="e"][data-color="paper"]{ --ground:#ebe2cf; --lk-wall:linear-gradient(180deg,#ebe2cf,#e2d7c0); }
   .lk{--psz:19px}
   html[data-psize="l"] .lk{--psz:21px}
   .lk-theme{font-size:52px}
@@ -1623,3 +1627,47 @@ html[data-mlook] .switch button[aria-selected="true"]::after{display:none}
   html[data-mlook] .top.extra .icons{grid-area:i}
   html[data-mlook] .top.extra .switch{grid-area:s; justify-self:center}
 }
+
+/* ---- a colour on top of any look: the room's paper, wall and ink ----
+   Papers are light in every room, so text on the page keeps its dark ink;
+   only what sits on the wall takes the room's own ink. */
+html[data-mlook]:not([data-color="paper"]){
+  --lk-paper:var(--card); --lk-wall:var(--ground); --lk-red:var(--accent);
+  --lk-wink:var(--on-ground); --lk-wmute:var(--muted-ground);
+  --lk-ink:var(--card-ink); --lk-mute:color-mix(in srgb,var(--card-ink) 72%,var(--card)); --lk-soft:color-mix(in srgb,var(--card-ink) 55%,var(--card));
+}
+/* the dark rooms' accents are light; on paper the rubrication stays red */
+html[data-mlook][data-color="night"] .lk .inc, html[data-mlook][data-color="library"] .lk .inc,
+html[data-mlook][data-color="night"] .lk .m-pl .n, html[data-mlook][data-color="library"] .lk .m-pl .n,
+html[data-mlook][data-color="night"] .lk .fi-l, html[data-mlook][data-color="library"] .lk .fi-l{color:#9b2d20}
+html[data-mlook]:not([data-color="paper"]) .mark{color:var(--lk-wink)}
+html[data-mlook]:not([data-color="paper"]) .switch{background:color-mix(in srgb,var(--lk-paper) 35%,transparent)}
+html[data-mlook]:not([data-color="paper"]) .switch button{color:var(--lk-wmute)}
+html[data-mlook]:not([data-color="paper"]) .switch button[aria-selected="true"]{color:var(--lk-ink)}
+html[data-mlook]:not([data-color="paper"]) .lk-date, html[data-mlook]:not([data-color="paper"]) .lk-b .lk-rl{color:var(--lk-wmute)}
+html[data-mlook]:not([data-color="paper"]) .lk-a .lk-theme, html[data-mlook]:not([data-color="paper"]) .lk-c .lk-theme,
+html[data-mlook]:not([data-color="paper"]) .lk-e .lk-theme, html[data-mlook]:not([data-color="paper"]) .ph-tw{color:var(--lk-wink)}
+html[data-mlook]:not([data-color="paper"]) .ph-home, html[data-mlook]:not([data-color="paper"]) .ph-bar, html[data-mlook]:not([data-color="paper"]) footer{color:var(--lk-wink)}
+html[data-mlook]:not([data-color="paper"]) .m-it.ic{background:color-mix(in srgb,var(--lk-paper) 78%,transparent); color:var(--lk-mute)}
+html[data-mlook]:not([data-color="paper"]) .m-it.ic[aria-current="true"]{background:var(--lk-paper); color:var(--lk-ink)}
+html[data-mlook]:not([data-color="paper"]) .lk-a .lk-sheet{background:var(--lk-paper)}
+html[data-mlook]:not([data-color="paper"]) .lk-b .lk-rh{border-bottom-color:color-mix(in srgb,var(--lk-wink) 25%,transparent)}
+html[data-mlook]:not([data-color="paper"]) .lk-b .lk-text{border-right-color:color-mix(in srgb,var(--lk-ink) 12%,var(--lk-paper))}
+html[data-mlook]:not([data-color="paper"]) .lk-c .lk-framed{background:var(--lk-paper); border-color:color-mix(in srgb,var(--lk-paper) 94%,#000)}
+html[data-mlook]:not([data-color="paper"]) .lk-c .lk-card, html[data-mlook]:not([data-color="paper"]) .lk-d .lk-card{background-color:var(--lk-paper)}
+html[data-mlook]:not([data-color="paper"]) .lk-d .lk-tabs .m-it.ic{background:color-mix(in srgb,var(--lk-paper) 86%,var(--ground))}
+html[data-mlook]:not([data-color="paper"]) .lk-d .lk-tabs .m-it.ic[aria-current="true"]{background:var(--lk-paper)}
+html[data-mlook]:not([data-color="paper"]) .lk-e .lk-pg.l{background:linear-gradient(90deg,var(--lk-paper) 82%,color-mix(in srgb,var(--lk-paper) 88%,#000) 100%)}
+html[data-mlook]:not([data-color="paper"]) .lk-e .lk-pg.r{background:linear-gradient(270deg,var(--lk-paper) 86%,color-mix(in srgb,var(--lk-paper) 88%,#000) 100%)}
+html[data-mlook]:not([data-color="paper"]) .lk-e .m-it.ic{background:color-mix(in srgb,var(--lk-paper) 80%,var(--ground))}
+html[data-mlook]:not([data-color="paper"]) .lk-e .m-it.ic[aria-current="true"]{background:var(--lk-red); color:var(--on-accent)}
+@media (max-width:700px){
+  html[data-mlook]:not([data-color="paper"]) .lk-e .lk-pg.l, html[data-mlook]:not([data-color="paper"]) .lk-e .lk-pg.r{background:var(--lk-paper)}
+}
+/* the colour button sits beside the ribbons; on a phone colours live in the look card */
+.lkcolor{margin-left:4px}
+.pop-h4{margin:14px 0 6px; font:400 1rem var(--f-display)}
+@media (max-width:700px){ .lkcolor{display:none} }
+/* Vignette's writing column sits on the wall; with a room colour it gets its own sheet */
+html[data-mlook]:not([data-color="paper"]) .lk-a .lk-write{background:var(--lk-paper); padding:30px 28px 24px; box-shadow:0 14px 34px -18px rgba(0,0,0,.4); opacity:1}
+html[data-mlook]:not([data-color="paper"]) .lk-d .lk-stamp, html[data-mlook]:not([data-color="paper"]) .ph-tw{mix-blend-mode:normal}

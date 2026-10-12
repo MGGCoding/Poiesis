@@ -31,6 +31,9 @@ look.b.name: Manuscript
 look.c.name: Gallery
 look.d.name: Scrapbook
 look.e.name: Open Book
+# the colour sits on top of any look
+site.colors.title: Colour
+look.paper.name: The look’s own
 # small words inside two of the looks
 look.b.runhead: the day’s word
 look.e.folio: your page
