@@ -86,7 +86,7 @@ function bankMuses(b){
   /* Round 17: what the bank says beyond title, maker and year lives in ⓘ */
   if(m.fullTitle) o.fullTitle=m.fullTitle;
   if(m.translator) o.translator=m.translator;
-  if(m.dateNote) o.dateNote=m.dateNote;
+  if(m.dateLine) o.dateLine=m.dateLine;
   if(m.poem){ o.poem=m.poem; if(m.poemNote) o.poemNote=m.poemNote; }
   if(m.quote){ o.quote=m.quote; o.cite=m.cite||""; }
   if(m.painting) o.painting=m.painting;
@@ -1053,12 +1053,12 @@ function bottomTurnerM(m){
 
 /* the story */
 /* Round 17 A1: the work shows the English title, the maker and the year.
-   ⓘ shows the title as the bank has it, the translator and the rest of the date. */
-function dateFull(m){ return [m.date, m.dateNote].filter(Boolean).join(" · "); }
+   ⓘ shows the title as the bank has it, the translator and the whole date line. */
+function dateFull(m){ return m.dateLine||m.date||""; }
 function translatorHTML(m){ return m.translator?`<div class="ld m-trans">${T("info.translated","Translated by ")}${esc(m.translator)}</div>`:""; }
 function factsHTML(m){
- if(!m.fullTitle&&!m.translator&&!m.dateNote) return "";
- return `<div class="m-facts">${m.fullTitle?`<b>${esc(m.fullTitle)}</b>`:""}${m.translator?`<span>${T("info.translated","Translated by ")}${esc(m.translator)}</span>`:""}${m.dateNote?`<span>${esc(dateFull(m))}</span>`:""}</div>`;
+ if(!m.fullTitle&&!m.translator&&!m.dateLine) return "";
+ return `<div class="m-facts">${m.fullTitle?`<b>${esc(m.fullTitle)}</b>`:""}${m.translator?`<span>${T("info.translated","Translated by ")}${esc(m.translator)}</span>`:""}${m.dateLine?`<span>${esc(dateFull(m))}</span>`:""}</div>`;
 }
 function labelHTML(m, withDetails){
  const L=LABELS[m.id]||{life:"", medium:m.where||"", ref:m.poemNote||m.cite||"", blurb:""};
