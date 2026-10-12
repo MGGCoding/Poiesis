@@ -1275,3 +1275,33 @@ html[data-dev="phone"] .m-writer.notecard{transform:rotate(.3deg)}
 .m-reading.m-maxim{max-width:34rem; color:var(--card-ink); font-style:italic}
 .m-reading.m-maxim .mx-c{color:#8a7b68}
 .ph-home .m-reading.m-maxim{margin:12px 0 10px}
+
+/* ---------- Round 17 ---------- */
+/* A1: the sticker card puts the maker on its own line and the title under it */
+.m-keep .dr{display:block; margin-bottom:3px}
+.m-keep b{display:block}
+.m-keep .m-keptnote{color:var(--accent); font-weight:500}
+/* A1: ⓘ's facts — the full title, the translator, the rest of the date */
+.m-label .m-trans{margin-top:2px}
+.m-facts{display:flex; flex-direction:column; gap:3px; margin:0 0 12px; font-size:.88rem; color:#6b5d4d}
+.m-facts b{font-family:var(--f-display); font-weight:400; font-size:1.05rem; color:inherit}
+/* D: a drawn sticker can be tapped to open its card (desktop) */
+.m-stk.drawn{cursor:pointer; transition:transform .15s ease}
+.m-stk.drawn:hover{transform:translateY(-1px) scale(1.06)}
+.m-stk.drawn:hover::after{content:""; position:absolute; inset:-4px; border-radius:50%; border:1px dashed var(--accent); opacity:.7; pointer-events:none}
+/* D: the sticker kept today wears a small paper tick, not a red alert dot
+   (Niko chose the tick over the dot and a ribbon, 12 Oct). */
+.m-stk.kept::before{content:"✓"; right:-5px; top:-5px; width:15px; height:15px; border-radius:50%; background:var(--ground,#faf9f5); border:1.5px solid var(--accent); color:var(--accent); font:700 9px/12px var(--f-body,sans-serif); text-align:center; box-shadow:0 1px 2px rgba(0,0,0,.18)}
+/* B: where a kept line came from, small, under who said it */
+.nb-line .nb-src{display:block; font-family:var(--f-type); font-size:.55rem; letter-spacing:.05em; color:var(--muted); opacity:.8; margin-top:2px}
+.nb-more{background:none; border:0; padding:2px 0; font:inherit; font-size:.8rem; color:var(--accent); cursor:pointer; text-decoration:underline; text-underline-offset:3px}
+/* F: editors-only reset (?editor) — a quiet button, and a notecard to confirm */
+.edbtn{background:none; border:1px dashed #b3a892; color:#8a7b68; border-radius:999px; padding:4px 10px; font:500 .72rem/1.2 var(--f-type,monospace); letter-spacing:.04em; cursor:pointer; white-space:nowrap; margin-right:6px}
+.edbtn:hover{color:var(--accent); border-color:var(--accent)}
+.edcard{position:fixed; top:74px; right:max(16px, calc((100vw - 1100px)/2)); z-index:60; width:min(320px, calc(100vw - 32px)); background:var(--card,#f7efdd); color:var(--card-ink,#2a2420); box-shadow:0 22px 44px -18px rgba(0,0,0,.5); padding:14px 16px; transform:rotate(.5deg)}
+.edcard b{display:block; font-family:var(--f-display); font-weight:400; font-size:1.1rem; line-height:1.25}
+.edcard p{margin:6px 0 10px; font-size:.84rem; color:#6b5d4d; line-height:1.45}
+.edcard .edrow{display:flex; gap:6px}
+.edcard .btn.ghost{background:transparent; color:var(--card-ink,#2a2420); border-color:#cdbfa6}
+.edbtn .ed-ic{margin-right:5px}
+@media (max-width:700px){ .edbtn{padding:4px 9px; margin-right:2px} .edbtn .ed-ic{margin:0; font-size:.95rem} .edbtn .ed-tx{display:none} .edcard{top:64px} }

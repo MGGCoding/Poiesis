@@ -74,7 +74,7 @@ function bankSticker(m){
  const ini=m.kind==="Scripture"?"✝":((m.maker||"?").replace(/[^A-Za-zÀ-ÿ ]/g,"").trim().split(/\s+/).slice(-1)[0][0]||"?");
  const grounds={Poem:"#2f4030", Passage:"#3d5d86", Scripture:"#6b4a7d"};
  const id="seal-"+mk;
- STICKERS[id]={series:m.maker, ed:1, name:m.title, source:[m.title,m.date].filter(Boolean).join(" · "),
+ STICKERS[id]={series:m.maker, ed:1, name:m.title, source:m.kind==="Scripture"?"":(m.date||""),
   svg:`<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="23" fill="${grounds[m.kind]||"#3a2f26"}"/><circle cx="24" cy="24" r="18" fill="none" stroke="#e8dcbf" stroke-width="1.1" opacity=".7"/><text x="24" y="31" text-anchor="middle" font-family="Georgia,serif" font-size="19" fill="#e8dcbf">${ini}</text></svg>`};
  SETS[mk]=[id];
  MAKERNAME[mk]=m.maker;
@@ -83,6 +83,10 @@ function bankMuses(b){
  return b.muses.map(m=>{
   const o={id:m.id, mk:m.mk, kind:m.kind, title:m.title, maker:m.maker, date:m.date,
    deeper:m.deeper||"", story:m.story||[], gloss:m.gloss||null};
+  /* Round 17: what the bank says beyond title, maker and year lives in ⓘ */
+  if(m.fullTitle) o.fullTitle=m.fullTitle;
+  if(m.translator) o.translator=m.translator;
+  if(m.dateNote) o.dateNote=m.dateNote;
   if(m.poem){ o.poem=m.poem; if(m.poemNote) o.poemNote=m.poemNote; }
   if(m.quote){ o.quote=m.quote; o.cite=m.cite||""; }
   if(m.painting) o.painting=m.painting;
@@ -720,19 +724,12 @@ function qGuideHTML(mid){
  return `<div class="m-qguide">${lab?`<p class="m-qlab">${esc(lab)}</p>`:""}
   ${qs.map((q,i)=>`<button type="button" class="m-q" data-qpick="${i}">${esc(q)}</button>`).join("")}</div>`;
 }
-/* A3, the before-cue: that a thread exists, and nothing of what it says */
-function threadCueHTML(){
- const cue=T("muse.three.cue","These three were chosen to answer the same question.");
- if(!DAY.howTheySpeak||!cue) return "";
- if(MUSES.every(m=>S.sealed[WK(m.id)])) return "";
- return `<p class="m-cue3">${esc(cue)}</p>`;
-}
-/* A3, the after-note: the curator's reading, once your own is written */
-function curatorNoteHTML(){
- if(!DAY.howTheySpeak) return "";
- const lab=T("muse.curator.label","The curator's note");
- return `<div class="m-curator">${lab?`<span>${esc(lab)}</span>`:""}${esc(DAY.howTheySpeak)}</div>`;
-}
+/* Round 17 A2: the curator's note (howTheySpeak) is off the site, and so is
+   the neutral line that stood in for it before you wrote (Niko: remove it).
+   days.js still carries the field for the curriculum chat. Both stay as
+   empty functions so every place that called them prints nothing. */
+function threadCueHTML(){ return ""; }
+function curatorNoteHTML(){ return ""; }
 function writerHTML(m){
  const s=S.sealed[WK(m.id)];
  if(s) return `<div class="writer seal"><span class="wax" aria-hidden="true">P</span><small>Your first impression · ${when(s.at)}</small><div class="first">${esc(s.text)}</div>
@@ -796,11 +793,11 @@ function postHTML(p, m, mine, closed){
  const top=mine?myTop():(P?P.top:null);
  const topTip=top?(mine?`${STICKERS[top].series} · ${STICKERS[top].name}`:`${STICKERS[top].name} · ${p.name.split(" ")[0]} collected this ${GOT[p.name]||"earlier"}`):"";
  const badge=mine?S.profile.badge:(P?P.badge:"");
- const role=mine?"Your circle sees this":(P?P.role:T("post.alsohere","Also writing in this browser"));
+ const role=mine?[S.profile.line,S.profile.makes].filter(Boolean).join(" · "):(P?P.role:T("post.alsohere","Also writing in this browser"));
  const reps=[...(p.replies||[]), ...(S.replies[WK(p.id)]||[])];
  const shown=closed?reps.slice(0,3):reps;
  return `<article class="post" data-p="${p.id}" data-m="${m.id}"${p.linkOf?` data-syn="1" data-link="${p.linkOf}"`:""}>
-  <div class="who">${mine?avatarHTML(me()):personAv(p.name)}<div><b>${mine?esc(S.profile.name||"You"):esc(p.name)}</b> ${top?stickerHTML(top,20,topTip):""} ${badge?`<span class="badge">${esc(badge)}</span>`:""} ${P?'<span class="sample">sample</span>':""}<small>${esc(role)}</small></div></div>
+  <div class="who">${mine?avatarHTML(me()):personAv(p.name)}<div><b>${mine?esc(S.profile.name||"You"):esc(p.name)}</b> ${top?stickerHTML(top,20,topTip):""} ${badge?`<span class="badge">${esc(badge)}</span>`:""} ${P?'<span class="sample">sample</span>':""}${role?`<small>${esc(role)}</small>`:""}</div></div>
   <div class="thought${p.linkOf?" link":""}"><span class="wax" aria-hidden="true"></span><small class="type" style="color:#8a7b68;font-size:.64rem">${p.linkOf?`A link · ${esc(linkTag(p.linkOf))}`:"First impression"} · ${esc(p.at)}</small>
    <div class="first">${esc(p.first)}</div>
    ${p.later?`<div class="layer"><small>${esc(p.later.when)}</small>${p.later.poem?`<div class="poem">${esc(p.later.poem)}</div>`:""}${p.later.sketch?`<div class="sk s-garage" role="img" aria-label="Sketch"></div>`:""}${p.later.text?esc(p.later.text):""}</div>`:""}
@@ -899,8 +896,9 @@ function shadeHTML(id,size){
  const a=revealAmt(id), st=U().shadeStyle;
  const checked=!!sid&&checkedToday()===sid, gilt=!!sid&&!!(S.owned[sid]||{}).gilt;
  const artwork=s?s.svg:placeholderSvg(id);
- const tipT=s?`${s.series} · ${s.name}${checked?" · today’s sticker":""}`:`${T("sticker.locked.tip","A first impression draws one sticker from ")}${MAKERNAME[makerOf(id)]||"this maker"}`;
- return `<span class="m-stk ${a<1?"sh-"+st:""} ${gilt?"gilt":""} ${checked?"kept":""}" data-sid="${id}" data-tip="${esc(tipT)}" style="width:${size}px;height:${size}px">${a<1?`<span class="sh sh-${st}">${clipSvg(artwork)}</span>`:""}<span class="full" style="opacity:${a}">${clipSvg(artwork)}</span></span>`;
+ const tap=!!sid&&!readOnlyDay()&&DEV()==="desk";   /* Round 17 D: desktop only */
+ const tipT=s?`${s.series} · ${s.name}${tap?(checked?T("sticker.tip.kept"," · kept today"):T("sticker.tip.tap"," · tap to keep it today")):""}`:`${T("sticker.locked.tip","A first impression draws one sticker from ")}${MAKERNAME[makerOf(id)]||"this maker"}`;
+ return `<span class="m-stk ${a<1?"sh-"+st:""} ${gilt?"gilt":""} ${checked?"kept":""} ${tap?"drawn":""}" data-sid="${id}" data-tip="${esc(tipT)}"${tap?` data-stkcard="${id}"`:""} style="width:${size}px;height:${size}px">${a<1?`<span class="sh sh-${st}">${clipSvg(artwork)}</span>`:""}<span class="full" style="opacity:${a}">${clipSvg(artwork)}</span></span>`;
 }
 function stepNext(){
  const cur=curMuse();
@@ -1054,17 +1052,26 @@ function bottomTurnerM(m){
 }
 
 /* the story */
+/* Round 17 A1: the work shows the English title, the maker and the year.
+   ⓘ shows the title as the bank has it, the translator and the rest of the date. */
+function dateFull(m){ return [m.date, m.dateNote].filter(Boolean).join(" · "); }
+function translatorHTML(m){ return m.translator?`<div class="ld m-trans">${T("info.translated","Translated by ")}${esc(m.translator)}</div>`:""; }
+function factsHTML(m){
+ if(!m.fullTitle&&!m.translator&&!m.dateNote) return "";
+ return `<div class="m-facts">${m.fullTitle?`<b>${esc(m.fullTitle)}</b>`:""}${m.translator?`<span>${T("info.translated","Translated by ")}${esc(m.translator)}</span>`:""}${m.dateNote?`<span>${esc(dateFull(m))}</span>`:""}</div>`;
+}
 function labelHTML(m, withDetails){
  const L=LABELS[m.id]||{life:"", medium:m.where||"", ref:m.poemNote||m.cite||"", blurb:""};
  const rest=m.story.map(p=>`<p>${p}</p>`).join("");
- return `<div class="m-label ${U().story==="tag"?"tag":""}"><div class="lm">${esc(m.maker)} ${L.life?`<span class="ld">(${esc(L.life)})</span>`:""}</div><div class="lt">${esc(m.title)}</div><div class="ld">${esc(m.date)}${L.medium?` · ${esc(L.medium)}`:""}</div>
+ return `<div class="m-label ${U().story==="tag"?"tag":""}"><div class="lm">${esc(m.maker)} ${L.life?`<span class="ld">(${esc(L.life)})</span>`:""}</div>${translatorHTML(m)}<div class="lt">${esc(m.fullTitle||m.title)}</div><div class="ld">${esc(dateFull(m))}${L.medium?` · ${esc(L.medium)}`:""}</div>
   <div class="lx museText">${L.blurb?`<p>${esc(L.blurb)}</p>`:""}${withDetails&&L.blurb?`<details><summary class="lr">Read more</summary><div style="margin-top:8px">${rest}</div></details>`:rest}</div>${L.ref?`<div class="lr">${esc(L.ref)}</div>`:""}</div>`;
 }
 function storyBody(m, inOverlay){
  const s=U().story;
  if(s==="label"||s==="tag") return labelHTML(m, !inOverlay);
- if(s==="cards"){ const i=(S.card||0)%m.story.length; return `<div class="m-cards"><div class="m-icard"><p class="museText">${m.story[i]}</p><div class="cn"><span>${i+1} of ${m.story.length}</span><button type="button" data-card>${i+1<m.story.length?"Next card":"Back to the first"}</button></div></div></div>`; }
- return `<div class="m-cardrow">${m.story.map((p,i)=>`<div class="m-icard"><p class="museText">${p}</p><div class="cn"><span>${i+1} of ${m.story.length}</span></div></div>`).join("")}</div>`;
+ if(!m.story.length) return factsHTML(m);
+ if(s==="cards"){ const i=(S.card||0)%m.story.length; return `${factsHTML(m)}<div class="m-cards"><div class="m-icard"><p class="museText">${m.story[i]}</p><div class="cn"><span>${i+1} of ${m.story.length}</span><button type="button" data-card>${i+1<m.story.length?"Next card":"Back to the first"}</button></div></div></div>`; }
+ return `${factsHTML(m)}<div class="m-cardrow">${m.story.map((p,i)=>`<div class="m-icard"><p class="museText">${p}</p><div class="cn"><span>${i+1} of ${m.story.length}</span></div></div>`).join("")}</div>`;
 }
 function infoLayer(m){
  const u=U(); if(u.storyMode!=="info"||!S.info) return "";
@@ -1075,10 +1082,13 @@ function infoLayer(m){
 function keepAskHTML(){
  const mid=S.keepAsk, sid=mid?S.drawn[WK(mid)]:null; if(!sid) return "";
  const s=STICKERS[sid], checked=checkedToday()===sid;
+ const src=(s.source&&s.source!==s.name&&s.source.indexOf(s.name)!==0)?s.source:"";
  return `<div class="m-keep" role="dialog" aria-label="A sticker from this maker">${shadeHTML(mid,56)}<div><span class="dr">${T("sticker.drawnfrom","Drawn from ")}${esc(MAKERNAME[makerOf(mid)]||"")}</span><b>${esc(s.name)}</b>
-  <p>${esc(s.source||"")}${checked?" · it carries today’s check until you move it":""}</p>
-  <div class="m-keepb">${checked?"":`<button class="btn primary" data-keep="${sid}">${T("sticker.givecheck","Give it today’s check")}</button>`}<button class="btn ghost" data-act="nokeep">${T("sticker.card.close","Close")}</button></div></div></div>`;
+  ${src?`<p>${esc(src)}</p>`:""}${checked?`<p class="m-keptnote">${T("sticker.kepttoday","✓ Kept today. It settles at midnight.")}</p>`:""}
+  <div class="m-keepb">${checked?"":`<button class="btn primary" data-keep="${sid}">${T("sticker.keeptoday","Keep this one today")}</button>`}<button class="btn ghost" data-act="nokeep">${T("sticker.card.close","Close")}</button></div></div></div>`;
 }
+/* Round 17 D: tapping a drawn sticker (desktop) opens its card, on its own work */
+function openStickerCard(mid){ S.keepAsk=mid; const k=MUSES.findIndex(x=>x.id===mid); if(k>=0&&!S.past&&S.mi!==k){ S.mi=k; S.info=false; S.openSyn=null; } save(); render(); }
 function keepSticker(id){ setCheck(id); S.keepAsk=null; render(); toast(`${STICKERS[id].name}${T("toast.sticker.check"," carries today’s check. It settles at midnight.")}`); }
 function synOverlay(){ if(!S.openSyn) return ""; return `<div class="m-overlay sy-ov" data-synbg><div>${synBoxHTML(S.openSyn)}</div></div>`; }
 
@@ -1116,7 +1126,7 @@ function phoneHomeHTML(){
   <div class="ph-theme"><h1 class="ph-tw">${esc(DAY.theme)}</h1>${wisdomBtn()}</div>
   ${reading}
   ${threadCueHTML()}
-  <div class="ph-three">${rows}${knot}</div>
+  <div class="ph-three">${rows}${seg(MUSES[0].id,MUSES[2].id,"vp")}${knot}</div>
   ${(TODAY.length+MUSES.reduce((k,m)=>k+Table.others(WK(m.id)).length,0))?`<div class="ph-others"><span class="ph-avs">${cols}</span>${TODAY.length+MUSES.reduce((k,m)=>k+Table.others(WK(m.id)).length,0)}${T("phone.others.suffix"," others wrote today")}</div>`
    :`<div class="ph-others">${mineParts().length?T("cue.onlyyou.some","Only you here so far today"):T("cue.onlyyou","Nobody here yet today")}</div>`}</div>`;
 }
@@ -1170,6 +1180,7 @@ function renderMuse(v){
  v.innerHTML=`${body}${responsesHTML(m)}${infoLayer(m)}${synOverlay()}${keepAskHTML()}`;
  wireBoard(v); wireWriterM(m); if(u.gloss!=="none") applyGloss(v);
  v.onclick=e=>{
+  const sc=DEV()==="desk"&&e.target.closest("[data-stkcard]"); if(sc){ e.preventDefault(); openStickerCard(sc.dataset.sid); return; }
   const g=e.target.closest("[data-mgo]"); if(g){ goMuse(g.dataset.mgo); return; }
   const vt=e.target.closest("[data-vertgo]"); if(vt){ goMuse(vt.dataset.vertgo); setTimeout(()=>$("#draft")?.focus({preventScroll:true}),200); return; }
   const sd=e.target.closest("[data-mside],[data-side]"); if(sd){ openSyn(sd.dataset.mside||sd.dataset.side); return; }
@@ -1186,7 +1197,7 @@ function renderMuse(v){
   if(a==="why"){ e.preventDefault(); go("why"); }
   if(a==="reading"){ S.reading=!S.reading; save(); render(); }
    if(a==="keepmaxim"){ keepMaxim(); }
-  if(a==="nokeep"){ S.keepAsk=null; save(); render(); toast("You can keep one from any muse you’ve answered, until midnight."); }
+  if(a==="nokeep"){ const had=checkedToday(); S.keepAsk=null; save(); render(); if(!had) toast("You can keep one from any muse you’ve answered, until midnight."); }
   if(a==="closesyn"){ S.openSyn=null; save(); render(); }
   if(a==="pubsyn") publishSyn(S.openSyn);
   if(a==="keepwork"){ keepWork(m, e.target.closest("[data-act]")); return; }
@@ -1344,14 +1355,20 @@ function lastOn(qid){ const p=S.journal.find(p=>p.q===qid); return p?(pageLines(
 function pagesOn(qid){ return S.journal.filter(p=>p.q===qid); }
 function daysSince(d){ return Math.round((Date.now()-new Date(d+"T12:00").getTime())/864e5); }
 
+/* Round 17 B: two groups. Today shows every line kept today; Before shows the
+   six most recent, with the rest one tap away. Where a line came from stays,
+   in small type beside it. */
+function lineSource(l){ return l.from==="phone"?T("nb.tray.phone","From your phone"):l.from==="you"?T("nb.tray.yours","Your own"):l.carried?T("nb.tray.carried","Carried"):T("nb.tray.kept","Kept"); }
 function trayHTML(){
- const groups=[["phone",T("nb.tray.phone","From your phone")],["you",T("nb.tray.yours","Your own")],["muse",T("nb.tray.today","Kept today")],["carried",T("nb.tray.carried","Carried")],["before",T("nb.tray.before","Before")]];
- const bucket=l=>l.from==="phone"?"phone":l.from==="you"?"you":l.date===today()?"muse":l.carried?"carried":"before";
+ const groups=[["today",T("nb.tray.today","Today")],["before",T("nb.tray.before","Before")]];
+ const bucket=l=>l.date===today()?"today":"before";
  const shown=S.lines.filter(l=>!l.rest);
  return `<div class="nb-tray"><div class="nb-trayhead"><p class="type" style="margin:0">${T("nb.tray.heading","Lines you kept")}</p><button class="btn small" data-nbact="addline">${T("nb.tray.add","+ Add a line")}</button></div>
   ${S.nb.adding?`<form class="nb-addline" id="addLineF"><input class="field" id="alText" placeholder="${T("nb.line.placeholder","The line")}" aria-label="The line"><div class="nb-addrow"><input class="field" id="alWho" placeholder="${T("nb.who.placeholder","Who said it")}" aria-label="Who"><input class="field" id="alWhere" placeholder="${T("nb.where.placeholder","Where from")}" aria-label="Where from"><button class="btn primary small">${T("nb.keepit","Keep it")}</button></div></form>`:""}
   ${groups.map(([k,label])=>{ const ls=shown.filter(l=>bucket(l)===k); if(!ls.length) return "";
-   return `<div class="nb-group"><span class="nb-glabel">${label}</span>${ls.slice(0,6).map(l=>`<button class="nb-line ${S.nb.pick.includes(l.id)?"picked":""}" data-nbline="${l.id}" title="Tap to use this line">${esc(l.text)}${l.who?`<i>— ${esc(l.who)}</i>`:""}</button>`).join("")}</div>`; }).join("")}
+   const cap=k==="before"&&!S.nb.trayAll?6:Infinity, more=ls.length>6&&k==="before";
+   const src=l=>{ const t=lineSource(l); return t?`<small class="nb-src">${esc(t)}</small>`:""; };
+   return `<div class="nb-group"><span class="nb-glabel">${label}</span>${ls.slice(0,cap).map(l=>`<button class="nb-line ${S.nb.pick.includes(l.id)?"picked":""}" data-nbline="${l.id}" title="Tap to use this line">${esc(l.text)}${l.who?`<i>— ${esc(l.who)}</i>`:""}${src(l)}</button>`).join("")}${more?`<button class="nb-more" data-nbact="traymore">${S.nb.trayAll?T("nb.tray.fewer","Show fewer"):T("nb.tray.more","Show earlier")}</button>`:""}</div>`; }).join("")}
   ${S.nb.pick.length?`<div class="nb-picked"><span>${S.nb.pick.length} line${S.nb.pick.length>1?"s":""} chosen</span><button class="btn small primary" data-nbact="writeunder">${T("nb.writeunder","Write under ")}${S.nb.pick.length>1?"these":"this"}</button><button class="btn small ghost" data-nbact="clearpick">${T("nb.clear","Clear")}</button></div>`:""}</div>`;
 }
 function artHTML(p){
@@ -1493,6 +1510,7 @@ function wireNotebook(v){
   const vc=e.target.closest("[data-nbvoice]"); if(vc){ S.nb.voice=vc.dataset.nbvoice; save(); renderNotebook(v); return; }
   const a=e.target.closest("[data-nbact]")?.dataset.nbact; if(!a) return;
   if(a==="addline"){ S.nb.adding=!S.nb.adding; save(); renderNotebook(v); setTimeout(()=>$("#alText")?.focus(),40); }
+  if(a==="traymore"){ S.nb.trayAll=!S.nb.trayAll; save(); renderNotebook(v); }
   if(a==="closer"){ S.nb.closer=!S.nb.closer; save(); renderNotebook(v); }
   if(a==="writeunder"){ newPage([...S.nb.pick]); renderNotebook(v); setTimeout(()=>$("#nbBody")?.focus(),60); }
   if(a==="clearpick"){ S.nb.pick=[]; save(); renderNotebook(v); }
@@ -1555,7 +1573,7 @@ function renderProfile(v){
   <div>${todayPanel}<div class="panel"><h3>${T("profile.makers.heading","Your makers")}</h3><p class="muted" style="margin:2px 0 4px;font-size:.9rem">${T("profile.makers.line","Each maker has a set of six, each one tied to something they really made or did. A first impression draws one you don’t have yet — never a repeat. Only makers you have met are shown.")}</p>
     <p class="muted" style="margin:0 0 6px;font-size:.84rem">${T("profile.gilding.line","Gilding is a finish, not a prize: gild anything you own, and take it off again.")}</p>
     ${shelfHTML()}</div>
-   <div class="panel" style="margin-top:16px"><h3>${T("profile.formed.heading","Who formed you")}</h3><p class="muted" style="margin:2px 0 10px;font-size:.9rem">${T("profile.formed.line","The writers, artists and teachers you apprentice to. Your circle sees these.")}</p>
+   <div class="panel" style="margin-top:16px"><h3>${T("profile.formed.heading","Who formed you")}</h3>${T("profile.formed.line","The writers, artists and teachers you apprentice to. Your circle sees these.")?`<p class="muted" style="margin:2px 0 10px;font-size:.9rem">${T("profile.formed.line","")}</p>`:""}
     <div class="formed">${p.formed.map((f,i)=>`<span class="fchip">${esc(f)}<button data-unform="${i}" aria-label="Remove ${esc(f)}">×</button></span>`).join("")}</div>
     <form class="cform" id="formF"><input class="field" id="formIn" placeholder="${T("profile.formed.placeholder","Add a name")}" aria-label="Add someone who formed you"><button class="btn">${T("profile.formed.add","Add")}</button></form></div>
    <div class="panel" style="margin-top:16px"><h3>${T("profile.circle.heading","How your circle sees you")}</h3>
@@ -1628,6 +1646,54 @@ function pruneBlankControls(root){
   if(el.querySelector("svg,img")||el.getAttribute("aria-label")||el.textContent.trim()) return;
   el.hidden=true; });
 }
+/* ---------- Editors only: reset today (Round 17 F) ----------
+   A small button at the top right, only when the address has ?editor in it
+   and never once accounts are switched on (config.js filled in). It clears
+   TODAY's writing for whoever is at this keyboard (?user= picks who): first
+   impressions, later thoughts, drafts, links, replies, the stickers today's
+   impressions drew and today's check, plus their own rows in the shared table
+   for today. The Notebook is not touched: journal pages, kept lines and every
+   other day stay exactly as they are. It asks first, on a notecard. */
+function editorMode(){
+ try{ if(!new URLSearchParams(location.search).has("editor")) return false; }catch(e){ return false; }
+ const c=window.POIESIS_CONFIG||{};
+ return !(c.supabaseUrl&&c.supabaseAnonKey);
+}
+function resetToday(){
+ const d=today(), mine=k=>String(k).indexOf(d+":")===0;
+ const drop=o=>{ Object.keys(o||{}).forEach(k=>{ if(mine(k)) delete o[k]; }); };
+ /* today's draws leave the collection too, so the next impression can draw again */
+ Object.keys(S.drawn||{}).forEach(k=>{ if(!mine(k)) return; const id=S.drawn[k], o=(S.owned||{})[id];
+  if(o&&o.date===d) delete S.owned[id]; });
+ [S.sealed, S.drafts, S.syn, S.synDrafts, S.replies, S.drawn, S.qpick].forEach(drop);
+ if(S.pick&&S.pick.date===d) S.pick={date:null, id:null};
+ S.keepAsk=null; S.openSyn=null; S.info=false; S.dayView=null; S.past=null; S.mi=0; S.phome=true;
+ if(WHO){ const t=Table.all(); let ch=false;
+  Object.keys(t).forEach(on=>{ if(!mine(on)) return; const keep=(t[on]||[]).filter(r=>(r.by||"")!==WHO);
+   if(keep.length!==(t[on]||[]).length){ ch=true; if(keep.length) t[on]=keep; else delete t[on]; } });
+  if(ch) try{ localStorage.setItem(TABLE_KEY, JSON.stringify(t)); }catch(e){} }
+ save(); S.tab="muse"; render(); scrollTo({top:0});
+}
+function editorInit(){
+ if(!editorMode()||$("#edBtn")) return;
+ const icons=$("header .icons"); if(!icons) return;
+ const b=document.createElement("button"); b.type="button"; b.id="edBtn"; b.className="edbtn";
+ b.innerHTML=`<span class="ed-ic" aria-hidden="true">↺</span><span class="ed-tx">${esc(T("editor.reset","Reset today"))}</span>`;
+ b.setAttribute("aria-label",T("editor.reset","Reset today")); b.title=T("editor.reset.ask","Clear today's writing on this browser?");
+ icons.insertBefore(b, icons.firstChild);
+ const card=document.createElement("div"); card.id="edCard"; card.className="edcard"; card.hidden=true;
+ card.setAttribute("role","dialog"); card.setAttribute("aria-label",T("editor.reset","Reset today"));
+ const line=T("editor.reset.line","First impressions, later thoughts, drafts, links, replies, today's stickers and today's check. Your notebook stays as it is.");
+ card.innerHTML=`<b>${esc(T("editor.reset.ask","Clear today's writing on this browser?"))}</b>${line?`<p>${esc(line)}</p>`:""}<div class="edrow"><button type="button" class="btn primary" data-ed="yes">${esc(T("editor.reset.yes","Clear it"))}</button><button type="button" class="btn ghost" data-ed="no">${esc(T("editor.reset.no","Keep it"))}</button></div>`;
+ document.body.appendChild(card);
+ b.onclick=e=>{ e.stopPropagation(); card.hidden=!card.hidden; };
+ card.onclick=e=>{ const a=e.target.closest("[data-ed]")?.dataset.ed; if(!a) return;
+  card.hidden=true; if(a==="yes"){ resetToday(); toast(T("editor.reset.done","Today is blank again.")); } };
+ document.addEventListener("keydown", e=>{ if(e.key==="Escape") card.hidden=true; });
+}
+/* config.js loads after this file, so look once the page has finished loading */
+if(document.readyState==="complete") editorInit(); else window.addEventListener("load", editorInit);
+
 window.PoiesisApp={ T, toast, today, state:()=>S,
  // New data arrived from the account: keep it, and redraw unless someone is mid-sentence.
  commit(){ save(true); applyPrefs(); if(typing()){ renderLater=true; return; } render(); },

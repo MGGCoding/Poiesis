@@ -45,8 +45,7 @@ muse.prompt: What is your first impression? An idea, a poem, a connection, a ref
 muse.prompt.placeholder: One sentence is enough.
 muse.q.heading: Questions the day puts to all three works
 muse.q.back: or write about something else
-muse.three.cue: These three were chosen to answer the same question.
-muse.curator.label: The curator's note
+# Round 17: the curator's note and the line before it are off the site.
 muse.first.button: Leave my first impression
 muse.first.label: Your first impression
 muse.first.stays: Your first impression stays as you wrote it
@@ -122,7 +121,10 @@ toast.link.counts: Your link is your first impression on the
 
 # STICKERS
 sticker.drawnfrom: Drawn from 
-sticker.givecheck: Give it today’s check
+sticker.keeptoday: Keep this one today
+sticker.kepttoday: ✓ Kept today. It settles at midnight.
+sticker.tip.tap:  · tap to keep it today
+sticker.tip.kept:  · kept today
 sticker.card.close: Close
 sticker.locked.tip: A first impression draws one sticker from 
 
@@ -134,11 +136,16 @@ nb.way.today: Today
 nb.way.index: Index
 nb.tray.heading: Lines that struck you
 nb.tray.add: + Add a line
+# Two groups, Today and Before. The four after them are the small source
+# under each line.
+nb.tray.today: Today
+nb.tray.before: Before
 nb.tray.phone: From your phone
 nb.tray.yours: Your own
-nb.tray.today: Kept today
+nb.tray.kept: Kept
 nb.tray.carried: Carried
-nb.tray.before: Before
+nb.tray.more: Show earlier
+nb.tray.fewer: Show fewer
 nb.line.placeholder: The line
 nb.who.placeholder: Who said it
 nb.where.placeholder: Where from
@@ -242,7 +249,7 @@ profile.ungild: Take the gilding off
 profile.wear: Wear it
 profile.worn: ★ Worn beside your name
 profile.formed.heading: Who formed you
-profile.formed.line: The masters you apprentice to: models, not rivals. Your circle sees these.
+profile.formed.line:
 profile.formed.placeholder: Add a name
 profile.formed.add: Add
 profile.circle.heading: How your circle sees you
@@ -375,6 +382,17 @@ phone.all.done: All three are together
 phone.back: ‹ Today
 phone.next: Next work ›
 phone.others.suffix:  others wrote today
+
+# ⓘ ABOUT A WORK — the title as the bank has it, the translator, the date
+info.translated: Translated by 
+
+# EDITORS ONLY — shown only when the address has ?editor in it
+editor.reset: Reset today
+editor.reset.ask: Clear today's writing on this browser?
+editor.reset.line: First impressions, later thoughts, drafts, links, replies, today's stickers and today's check. Your notebook stays as it is.
+editor.reset.yes: Clear it
+editor.reset.no: Keep it
+editor.reset.done: Today is blank again.
 
 # THE DAY'S SAYING — one line under the theme word
 maxim.button: The day’s wisdom
