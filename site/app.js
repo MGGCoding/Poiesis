@@ -442,7 +442,16 @@ function fresh(){ return {look:null, font:"book", tab:"muse", mi:0, past:null, d
  nb:{way:"page", sel:"j2", pick:[], sort:"date", search:"", adding:false, closer:false, voice:"muse", answer:"", pocket:"", thread:null},
  qpick:{}, kept:{}, season:"gathering", recent:[], visits:{}, log:[], page:{title:"",body:""}, pen:"",
  profile:{name:WHONAME, line:"", makes:"", photo:null, ring:"laurel", badge:"Apprentice", top:"handel", formed:["Homer","Henry James"]}}; }
-let S; try{ S=Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY)||"null")||{}); }catch(e){ S=fresh(); }
+/* ---------- ?tester: an empty first notebook for friends trying it (Round 18) ----------
+   feedback.html opens the site as ?user=<their own id>&tester. The first time,
+   they start with nothing in it: no sample pages, lines, stickers or earlier
+   impressions. A header button takes them back to the feedback form. */
+const TESTER=(()=>{ try{ return new URLSearchParams(location.search).has("tester"); }catch(e){ return false; } })();
+function emptyShell(){ const f=fresh();
+ Object.assign(f, {replies:{}, sealed:{}, owned:{}, drawn:{}, journal:[], lines:[], questions:[]});
+ f.nb.sel=null; Object.assign(f.profile, {name:"", badge:"", top:null, formed:[]});
+ return f; }
+let S; try{ const saved=JSON.parse(localStorage.getItem(KEY)||"null"); S=Object.assign((TESTER&&!saved)?emptyShell():fresh(), saved||{}); }catch(e){ S=TESTER?emptyShell():fresh(); }
 function save(quiet){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ toast(T("toast.storage","This browser is out of room for pictures. Your words are still here.")); }
  if(!quiet && window.PoiesisData) window.PoiesisData.changed(); /* data.js: sync to the account */ }
 if(S.pick.date && S.pick.date<today()) S.pick={date:null,id:null};
@@ -1691,8 +1700,15 @@ function editorInit(){
   card.hidden=true; if(a==="yes"){ resetToday(); toast(T("editor.reset.done","Today is blank again.")); } };
  document.addEventListener("keydown", e=>{ if(e.key==="Escape") card.hidden=true; });
 }
+function testerInit(){
+ if(!TESTER||$("#fbBtn")) return;
+ const icons=$("header .icons"); if(!icons) return;
+ const a=document.createElement("a"); a.id="fbBtn"; a.className="edbtn fbbtn"; a.href="feedback.html";
+ a.textContent=T("tester.feedback","Feedback ›"); icons.insertBefore(a, icons.firstChild);
+}
 /* config.js loads after this file, so look once the page has finished loading */
-if(document.readyState==="complete") editorInit(); else window.addEventListener("load", editorInit);
+function headerInit(){ editorInit(); testerInit(); }
+if(document.readyState==="complete") headerInit(); else window.addEventListener("load", headerInit);
 
 window.PoiesisApp={ T, toast, today, state:()=>S,
  // New data arrived from the account: keep it, and redraw unless someone is mid-sentence.

@@ -4,6 +4,7 @@
 !/site/
 !/.github/
 !/README.md
+!/index.html
 !/.gitignore
 .DS_Store
 node_modules/

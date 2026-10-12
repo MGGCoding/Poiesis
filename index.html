@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Poiesis</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<!-- The site lives in site/. This page only forwards there, keeping anything
+     after the address (?editor, ?user=…), so the bare address opens Poiesis. -->
+<script>location.replace("site/" + location.search + location.hash);</script>
+<meta http-equiv="refresh" content="0; url=site/">
+<style>body{margin:0;background:#e4d9c6;color:#2b231d;font:16px Georgia,serif;display:grid;place-items:center;min-height:100vh}a{color:inherit}</style>
+</head><body><p><a href="site/">Open Poiesis ›</a></p></body></html>

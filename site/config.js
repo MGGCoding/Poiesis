@@ -14,4 +14,13 @@ window.POIESIS_CONFIG = {
   // Sign-in buttons to show besides email. Add each one only after it is
   // switched on in Supabase (Authentication → Sign In / Providers).
   providers: [], // e.g. ["google"] or ["google", "apple"]
+
+  // The feedback page (feedback.html). Both may stay blank: friends then send
+  // their answers to you themselves (share, copy, or email).
+  // feedbackEndpoint: the web-app address of the Google Sheet script in
+  //   tools/feedback/ — every submission then lands as a row in your sheet.
+  // feedbackEmail: an address for an "Email them" button. This file is public
+  //   on GitHub, so only put an address here you are happy to publish.
+  feedbackEndpoint: "",
+  feedbackEmail: "",
 };

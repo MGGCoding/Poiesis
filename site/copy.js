@@ -394,6 +394,68 @@ editor.reset.yes: Clear it
 editor.reset.no: Keep it
 editor.reset.done: Today is blank again.
 
+# FRIENDS TRYING IT — the header button in a fresh Poiesis opened from the feedback page
+tester.feedback: Feedback ›
+
+# THE FEEDBACK PAGE (feedback.html) =====================================
+# Lists of choices are separated by  |  (a space, a bar, a space).
+fb.title: Help shape Poiesis
+fb.intro: Thank you for trying Poiesis. It is a working sketch, and your honest answers decide what it becomes. Ten minutes is plenty. Skip anything you like.
+fb.try.heading: 1. Try it
+fb.try.line: Open a fresh Poiesis: an empty notebook and today's three works. Write a first impression on at least one, look around, then come back to this page.
+fb.try.button: Open a fresh Poiesis ›
+fb.try.again: Open my Poiesis again ›
+fb.tell.heading: 2. Tell Niko how it went
+fb.included: Sent with your answers: the day you tried it, and how many impressions, links and notebook pages you made. Never what you wrote.
+fb.s.about: About you
+fb.q.name: Your name, so Niko knows who wrote (optional)
+fb.q.device: What did you use?
+fb.o.device: Phone | Laptop or desktop | Both
+fb.s.first: First look
+fb.q.firstclear: When you opened it, was it clear what to do?
+fb.q.firstconfused: What, if anything, confused you at first?
+fb.s.output: Was it clear?
+fb.q.outputclear: Was what Poiesis gave back to you clear: the works, the questions, what happened after you wrote?
+fb.q.unclear: Which parts were unclear? Tick any.
+fb.o.unclear: Why these three works are together | The questions under the prompt | Why other people's writing is hidden until you write | Stickers and today's check | Writing a link between two works | Tying all three together | The notebook | The little column beside the day's word | The ⓘ stories
+fb.q.unclearwhy: Say more about anything you ticked
+fb.s.incentive: Coming back, and writing back
+fb.q.wrote: Did you write a first impression?
+fb.o.wrote: Yes, on all three | Yes, on one or two | No
+fb.q.stopped: If you didn't write, or stopped early, what got in the way?
+fb.q.comeback: What would bring you back tomorrow? Tick any.
+fb.o.comeback: The works themselves | A daily reminder | Seeing what friends wrote | Someone writing back to me | Knowing my writing moved someone | Fewer works a day | A quieter, shorter page | Honestly, nothing yet
+fb.q.respond: What would make you write back to someone else's impression?
+fb.s.features: The features
+fb.q.features: How did each one land?
+fb.o.featurerows: The three works of the day | The questions that guide your first impression | Writing before you can read others | Links between two works | Tying all three together | Stickers | The notebook | The day's saying (the column) | The ⓘ stories about each work
+fb.o.featurecols: Loved it | Fine | Not for me | Didn't find it
+fb.q.add: One thing you would add
+fb.q.remove: One thing you would take away
+fb.s.curriculum: Today's works
+fb.q.works: How did each work land?
+fb.o.workcols: Moved me | Fine | Didn't land | Didn't read it
+fb.q.together: Did the three feel like they belonged together?
+fb.q.length: How much was there to read?
+fb.o.length: Too much | About right | I'd take more
+fb.q.scripture: Having Scripture as one of the three felt…
+fb.o.scripture: Natural | Fine | A bit odd | It put me off
+fb.q.suggest: A poem, passage or painting you would want to see here
+fb.s.else: Anything else
+fb.q.else: Anything else Niko should know?
+fb.scale.low: Not at all
+fb.scale.high: Completely
+fb.send: Send my answers
+fb.empty: Answer at least one question first.
+fb.sent.heading: Thank you.
+fb.sent.logged: Your answers reached Niko.
+fb.sent.share: Now send them to Niko, by text, WhatsApp or email, whichever you use with him.
+fb.share: Share my answers…
+fb.copy: Copy my answers
+fb.copied: Copied. Paste them into a message to Niko.
+fb.email: Email them
+fb.edit: Change my answers
+
 # THE DAY'S SAYING — one line under the theme word
 maxim.button: The day’s wisdom
 maxim.keep: keep it
