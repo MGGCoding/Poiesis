@@ -670,35 +670,66 @@ function synTextHTML(m){
  if(m.poem) return `<div class="sy-poem museText">${m.poem.split("\n\n").map(st=>`<p>${st.split("\n").map(esc).join("<br>")}</p>`).join("")}</div>`;
  return `<div class="sy-prose museText">${(m.quote||"").split(/(?<=…)\s+/).map(x=>`<p>${esc(x)}</p>`).join("")}${m.cite?`<small>${esc(m.cite)}</small>`:""}</div>`;
 }
-/* Round 21: one work is the main text; the other one (or two) sit smaller
-   beside it, still readable, and a tap makes any of them the main text */
-function synCard(x,main){ const m=MUSE[x], s=S.sealed[WK(x)];
+/* Round 22: the synthesis page. A switcher at the top picks what you are
+   joining; the works sit side by side on the desk (each in full, scrolling in
+   its own card) and one above another on the phone; below them, one writing
+   card: the optional questions, then the box, then publish. The questions go
+   once you type and come back if the box is emptied. */
+const SYN_CHOICES=()=>[...LINKS.map(l=>l.id),"whole"];
+const HOUSE_QS=["Where do they agree without meaning to?","What would one say to the other?","What does one see that the other misses?","Which line would you hand from one to the other?","What do both ask of you?","Where do they part ways, and who is right today?","What one word could stand for both?","If they met on the road, what would they talk about?"];
+function houseQs(){ return HOUSE_QS.map((q,i)=>T("synth.q."+(i+1),q)).filter(Boolean); }
+function synInOrder(id){ return synSubjects(id).slice().sort((x,y)=>MUSES.findIndex(m=>m.id===x)-MUSES.findIndex(m=>m.id===y)); }
+function synPickLabel(id){ return id==="whole"?T("syn.pick.whole","All three"):T("syn.pick."+id, synInOrder(id).map(x=>MUSE[x].kind).join(" + ")); }
+function synPairsHTML(id){
+ return `<div class="sy-pairs" role="group" aria-label="${esc(T("syn.pick.aria","What you are joining"))}">${SYN_CHOICES().map(c=>{ const done=!!S.syn[WK(c)];
+  return `<button type="button" class="sy-pair" data-synpick="${c}" aria-pressed="${c===id}">${esc(synPickLabel(c))}${done?`<span class="sy-tick" role="img" aria-label="${esc(T("syn.pick.done","written"))}">✓</span>`:""}</button>`; }).join("")}</div>`;
+}
+function synQList(){ return [...(DAY.questions||[]).map(q=>({q, day:true})), ...houseQs().map(q=>({q, day:false}))]; }
+function synQsHTML(id,d){
+ const all=synQList(), day=all.filter(x=>x.day), house=all.filter(x=>!x.day), more=!!S.synMore;
+ const pick=(S.synQ||{})[WK(id)];
+ const shown=[...day, ...(more?house:house.slice(0,2))];
+ const chip=x=>{ const k=all.indexOf(x); return `<button type="button" class="sy-chip${x.day?" day":""}${pick===x.q?" on":""}" data-synq="${k}" aria-pressed="${pick===x.q}">${esc(x.q)}</button>`; };
+ return `<div class="sy-qs${/\S/.test(d)?" typing":""}"><p class="sy-qlbl">${T("synth.q.label","A question to start from (optional)")}</p><div class="sy-chips">${shown.map(chip).join("")}${house.length>2?`<button type="button" class="sy-chip more" data-act="synmore">${more?T("synth.q.fewer","fewer"):T("synth.q.more","more questions…")}</button>`:""}</div></div>
+  ${pick?`<p class="sy-asked">${esc(pick)}</p>`:""}`;
+}
+function synCard(x){ const m=MUSE[x], s=S.sealed[WK(x)];
  const yours=s?`<p class="yours">“${esc(s.text)}”<small>${s.via?T("link.via.small","your synthesis, as your first impression"):T("link.first.small","your first impression")}</small></p>`:`<p class="yours locked2">${T("link.counts","Not written yet. This synthesis will count as your first impression here.")}</p>`;
- return `<div class="synw ${main?"sy-mainw":"sy-sidew"}"${main?"":` data-synmain="${x}" role="button" tabindex="0" aria-label="${esc(T("syn.swap","Read this one"))}: ${esc(m.kind)}"`}><span class="type kind">${esc(m.kind)}</span><b>${esc(m.title)}</b><small class="muted">${esc(m.maker)}</small><div class="sy-text">${synTextHTML(m)}</div>${yours}${main?"":`<span class="sy-swap">${esc(T("syn.swap","Read this one"))} ›</span>`}</div>`;
+ return `<div class="synw"><span class="type kind">${esc(m.kind)}</span><b>${esc(m.title)}</b><small class="muted">${esc(m.maker)}</small><div class="sy-text">${synTextHTML(m)}</div>${yours}</div>`;
 }
 function synBoxHTML(id){
- const ids=synSubjects(id), mine=S.syn[WK(id)], d=S.synDrafts[WK(id)]||"";
- const mainId=(S.synMain&&ids.includes(S.synMain[id]))?S.synMain[id]:ids[0];
- const missing=ids.filter(x=>!S.sealed[WK(x)]);
+ const ids=synInOrder(id), mine=S.syn[WK(id)], d=S.synDrafts[WK(id)]||"";
  return `<div class="synbox" id="synbox">
   <div class="synhead"><h3>${id==="whole"?"All three":`${esc(MUSE[ids[0]].kind)} <span class="j">and</span> ${esc(MUSE[ids[1]].kind)}`}</h3><button class="btn small ghost" data-act="closesyn">${T("link.close","Close")}</button></div>
-  <div class="sy-body"><div class="synworks sy-split"><div class="sy-main">${synCard(mainId,true)}</div><aside class="sy-side" aria-label="${T("syn.side","The others")}">${ids.filter(x=>x!==mainId).map(x=>synCard(x,false)).join("")}</aside></div>
+  ${synPairsHTML(id)}
+  <div class="sy-body"><div class="synworks sy-cols" style="--n:${ids.length}">${ids.map(x=>synCard(x)).join("")}</div>
   ${id==="whole"?curatorNoteHTML():""}
-  ${synThreadHTML(id)}</div>
-  <div class="sy-pin">
-  ${mine?`<div class="writer seal" ><span class="wax" aria-hidden="true">P</span><small>${id==="whole"?T("link.yours.whole","Your thought on all three"):`${T("link.yours.pair","Your synthesis of the ")}${esc(synName(id))}`} · ${when(mine.at)}</small><div class="first">${esc(mine.text)}</div>
+  ${mine?`<div class="writer seal sy-writer"><span class="wax" aria-hidden="true">P</span><small>${id==="whole"?T("link.yours.whole","Your thought on all three"):`${T("link.yours.pair","Your synthesis of the ")}${esc(synName(id))}`} · ${when(mine.at)}</small><div class="first">${esc(mine.text)}</div>
      <p class="type" style="color:var(--paper-mute);margin:10px 0 0;font-size:.62rem">${T("link.published.under","Published under ")}${ids.map(x=>esc(MUSE[x].kind.toLowerCase())).join(", ")}${T("link.published.journal"," · also in your journal")}</p></div>`:
-   `<div class="writer" ><h4>${id==="whole"?T("link.whole.heading","One thought that holds all three"):T("link.pair.heading","What do these two say to each other?")}</h4>
+   `<div class="writer sy-writer"><h4>${id==="whole"?T("link.whole.heading","One thought that holds all three"):T("link.pair.heading","What do these two say to each other?")}</h4>
     <div class="sub">${id==="whole"?T("link.whole.line","Where do they meet, where do they argue — and what does the day leave you with?"):T("link.pair.line","Agreement is not required. Disagreement is often better.")}</div>
-    <textarea class="grow" id="synDraft" rows="1" aria-label="Your synthesis" placeholder="${T("link.placeholder","Two or three sentences is plenty.")}">${esc(d)}</textarea>
+    ${synQsHTML(id,d)}
+    <textarea class="grow" id="synDraft" rows="3" aria-label="Your synthesis" placeholder="${T("link.placeholder","Two or three sentences is plenty.")}">${esc(d)}</textarea>
     <div class="wrow"><span class="type" style="color:var(--paper-mute)">${T("link.appears","Appears under the ")}${esc(andList(ids.map(x=>MUSE[x].kind.toLowerCase())))}</span>
      <button class="btn primary" data-act="pubsyn" ${d.trim()?"":"disabled"}>${T("link.publish","Publish this synthesis")}</button></div></div>`}
-  </div>
+  ${synThreadHTML(id)}</div>
  </div>`;
 }
-function synSwap(x){ if(!S.openSyn) return; S.synMain=S.synMain||{}; S.synMain[S.openSyn]=x; save(); render();
- setTimeout(()=>document.querySelector(".sy-main .sy-text")?.scrollTo({top:0}),30); }
-document.addEventListener("keydown", e=>{ if((e.key==="Enter"||e.key===" ")&&e.target.matches?.("[data-synmain]")){ e.preventDefault(); synSwap(e.target.dataset.synmain); } });
+/* switching keeps every choice's unsent draft (they live in S.synDrafts) */
+function synPick(c){ if(!S.openSyn||!SYN_CHOICES().includes(c)||c===S.openSyn) return; S.openSyn=c; S.nudgeDone=today(); save(); render(); }
+function synQ(k){ const x=synQList()[+k]; if(!x||!S.openSyn) return; S.synQ=S.synQ||{}; const key=WK(S.openSyn);
+ if(S.synQ[key]===x.q) delete S.synQ[key]; else S.synQ[key]=x.q; save(); render();
+ setTimeout(()=>{ const t=$("#synDraft"); if(t){ t.focus({preventScroll:true}); t.setSelectionRange(t.value.length,t.value.length); } },30); }
+/* one place for the synthesis page's own controls and the nudge; both views call it first */
+function synClick(e){
+ const p=e.target.closest("[data-synpick]"); if(p){ synPick(p.dataset.synpick); return true; }
+ const q=e.target.closest("[data-synq]"); if(q){ synQ(q.dataset.synq); return true; }
+ const a=e.target.closest("[data-act]")?.dataset.act;
+ if(a==="synmore"){ S.synMore=!S.synMore; save(); render(); return true; }
+ if(a==="nudgego"){ nudgeGo(); return true; }
+ if(a==="nudgex"){ S.nudgeDone=today(); save(); render(); return true; }
+ return false;
+}
 function synThreadHTML(id){
  const others=SYNS.filter(y=>y.on===id), mine=S.syn[WK(id)];
  if(!others.length) return "";
@@ -1177,7 +1208,7 @@ function phoneHomeHTML(){
   <div class="ph-theme"><h1 class="ph-tw">${esc(DAY.theme)}</h1>${wisdomBtn()}</div>
   ${reading}
   ${threadCueHTML()}
-  ${hintHTML(false)}
+  ${nudgeHTML()}${hintHTML(false)}
   <div class="ph-three">${rows}${seg(MUSES[0].id,MUSES[2].id,"vp")}${knot}</div>
   ${(TODAY.length+MUSES.reduce((k,m)=>k+Table.others(WK(m.id)).length,0))?`<div class="ph-others"><span class="ph-avs">${cols}</span>${TODAY.length+MUSES.reduce((k,m)=>k+Table.others(WK(m.id)).length,0)}${T("phone.others.suffix"," others wrote today")}</div>`
    :`<div class="ph-others">${mineParts().length?T("cue.onlyyou.some","Only you here so far today"):T("cue.onlyyou","Nobody here yet today")}</div>`}</div>`;
@@ -1187,7 +1218,7 @@ function renderMuse(v){
   v.innerHTML=`${phoneHomeHTML()}${synOverlay()}${keepAskHTML()}`;
   wireBoard(v);
   v.onclick=e=>{
-   const sm=e.target.closest("[data-synmain]"); if(sm){ synSwap(sm.dataset.synmain); return; }
+   if(synClick(e)) return;
    const o=e.target.closest("[data-popen]"); if(o){ S.phome=false; goMuse(o.dataset.popen); return; }
    const sd=e.target.closest("[data-side]"); if(sd){ openSyn(sd.dataset.side); return; }
    if(e.target.matches("[data-synbg]")){ S.openSyn=null; save(); render(); return; }
@@ -1219,7 +1250,7 @@ function renderMuse(v){
  v.innerHTML=`${body}${responsesHTML(m)}${infoLayer(m)}${synOverlay()}${keepAskHTML()}`;
  wireBoard(v); wireWriterM(m); if(u.gloss!=="none") applyGloss(v);
  v.onclick=e=>{
-  const sm=e.target.closest("[data-synmain]"); if(sm){ synSwap(sm.dataset.synmain); return; }
+  if(synClick(e)) return;
   const sc=DEV()==="desk"&&e.target.closest("[data-stkcard]"); if(sc){ e.preventDefault(); openStickerCard(sc.dataset.sid); return; }
   const g=e.target.closest("[data-mgo]"); if(g){ goMuse(g.dataset.mgo); return; }
   const vt=e.target.closest("[data-vertgo]"); if(vt){ goMuse(vt.dataset.vertgo); setTimeout(()=>$("#draft")?.focus({preventScroll:true}),200); return; }
@@ -1266,21 +1297,11 @@ function lookHTML(m,o){
  const cue=dayOn&&U().cue!=="off"?`<div class="lk-cue">${cueHTML()}</div>`:"";
  const reading=dayOn?o.reading:"", pastbar=past?o.day:"";
  /* Manuscript: a running head, then the text block and its margin at 1.618 : 1 */
- return `<div class="lk lk-b">${pastbar}${dayOn?`<div class="lk-rh"><span class="lk-rl lk-marks">${dayArtHTML()}${POIESIS_MARK}</span>${theme}<div class="lk-rhr">${date}${cue}</div></div>${reading}`:""}<div class="lk-page"><article class="lk-text">${past||ph?row():`<div class="lk-rowwrap">${hintHTML(true)}${row()}</div>`}${title}${work}</article><aside class="lk-margin">${write}</aside></div></div>`;
+ return `<div class="lk lk-b">${pastbar}${dayOn?`<div class="lk-rh"><span class="lk-rl lk-marks">${POIESIS_MARK}</span>${theme}<div class="lk-rhr">${date}${cue}</div></div>${reading}`:""}<div class="lk-page"><article class="lk-text">${past||ph?row():`<div class="lk-rowwrap">${nudgeHTML()}${hintHTML(true)}${row()}</div>`}${title}${work}</article><aside class="lk-margin">${write}</aside></div></div>`;
 }
-/* Round 21: where "the day's word" stood, two candidates side by side for
-   Niko to choose between: the day's painting as a little colour study, and
-   a drawn Poiesis mark (a quill across a cross). */
+/* Round 22: the Poiesis mark (circle, cross, quill) stands where "the day's
+   word" stood. Niko picked it over the day's-art candidate, which is gone. */
 const POIESIS_MARK=`<span class="lk-logo" role="img" aria-label="Poiesis" data-tip="Poiesis"><svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="21.5" stroke-width="1.2"/><path d="M24 9v30M15 18h18"/><path d="M36 10c-6 2-14 9-19 18l-4 10"/><path d="M36 10c-1 6-5 12-11 15M31 13c-2 3-5 5-9 6M33.5 17c-3 1-6 2-9 2"/></svg></span>`;
-function dayArtHTML(){
- const w=MUSES.find(m=>m.kind==="Scripture"&&m.painting)||MUSES.find(m=>m.palette), p=w&&w.painting;
- if(!w) return "";
- const pal=(p&&p.palette)||w.palette||["#cfcabc","#9a9384","#6b6355"];   /* the study's own fallback, as beside the Scripture */
- const title=p?p.title:w.title, artist=p?p.artist:w.maker;
- const [c1,c2,c3]=[pal[0], pal[1]||pal[0], pal[2]||pal[1]||pal[0]];
- const bg=`radial-gradient(ellipse 70% 55% at 22% 24%, ${c1} 0 40%, transparent 78%), radial-gradient(ellipse 80% 60% at 78% 72%, ${c3} 0 38%, transparent 76%), radial-gradient(ellipse 90% 70% at 50% 50%, ${c2} 0 45%, transparent 85%), ${c2}`;
- return `<span class="lk-art" role="img" aria-label="${esc(title)} by ${esc(artist)}" data-tip="${esc(title)} · ${esc(artist)}" style="background:${bg}"></span>`;
-}
 /* Round 21: "Synthesise, or comment on one", with an arrow down to the
    buttons and one to the ◇ */
 const ARROW_L=`<svg class="hint-ar" viewBox="0 0 34 26" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M30 4C18 3 8 8 6 22"/><path d="M2 17l4 6 5-5"/></svg>`;
@@ -1331,12 +1352,24 @@ function renderSettings(v){
 function goMuse(id){ const k=MUSES.findIndex(x=>x.id===id); if(k<0){ S.past=id; } else { S.past=null; S.mi=k; } S.openSyn=null; S.info=false; S.card=0; save(); render(); const top=$("#view").getBoundingClientRect().top; if(top<0) scrollTo({top:scrollY+top-70, behavior:reduce?"auto":"smooth"}); }
 function openSyn(id){
  S.info=false;
- S.openSyn=S.openSyn===id?null:id; save(); render();
- if(S.openSyn){ setTimeout(()=>{ $("#synbox")?.scrollIntoView({behavior:reduce?"auto":"smooth", block:"center"}); $("#synDraft")?.focus(); },80); }
+ S.openSyn=S.openSyn===id?null:id; if(S.openSyn) S.nudgeDone=today(); save(); render();
+ if(S.openSyn&&DEV()!=="phone"){ setTimeout(()=>{ $("#synDraft")?.focus({preventScroll:true}); },80); }
 }
+/* Round 22 (C): once a day, after a first impression, a handwritten note by
+   the hint line. It goes when synthesis opens or it is dismissed, and does
+   not come back that day. No counts, no streaks. */
+function nudgeOn(){ return !readOnlyDay()&&!S.past&&S.nudge&&S.nudge.day===today()&&S.nudgeDone!==today()&&!!T("nudge.line","How does it sit with the other two? →"); }
+function nudgeHTML(){ if(!nudgeOn()) return "";
+ return `<div class="lk-nudge" role="note"><button type="button" class="nudge-go" data-act="nudgego">${esc(T("nudge.line","How does it sit with the other two? →"))}</button><button type="button" class="nudge-x" data-act="nudgex" aria-label="${esc(T("nudge.dismiss","Not now"))}">×</button></div>`; }
+function nudgeGo(){ const mid=S.nudge&&S.nudge.mid, i=MUSES.findIndex(m=>m.id===mid);
+ const nx=i<0?null:MUSES[(i+1)%MUSES.length].id;
+ const l=nx&&LINKS.find(l=>(l.a===mid&&l.b===nx)||(l.b===mid&&l.a===nx));
+ S.nudgeDone=today(); if(S.openSyn) S.openSyn=null; openSyn(l?l.id:"whole"); }
 function wireBoard(v){
+ const spr=v.querySelector('.sy-pair[aria-pressed="true"]');   /* keep the pressed choice in sight on a narrow switcher */
+ if(spr){ const c=spr.parentElement, a=spr.getBoundingClientRect(), r=c.getBoundingClientRect(); if(a.right>r.right||a.left<r.left) c.scrollLeft+=a.left-r.left-12; }
  const sd=v.querySelector("#synDraft");
- if(sd){ autogrow(sd); sd.oninput=()=>{ S.synDrafts[WK(S.openSyn)]=sd.value; save(); autogrow(sd); const b=v.querySelector('[data-act="pubsyn"]'); if(b) b.disabled=!sd.value.trim(); }; }
+ if(sd){ autogrow(sd); sd.oninput=()=>{ S.synDrafts[WK(S.openSyn)]=sd.value; save(); autogrow(sd); v.querySelector(".sy-qs")?.classList.toggle("typing",/\S/.test(sd.value)); const b=v.querySelector('[data-act="pubsyn"]'); if(b) b.disabled=!sd.value.trim(); }; }
 }
 function autogrow(t){ t.style.height="auto"; t.style.height=Math.max(44,t.scrollHeight)+"px"; }
 function wireWriter(m){
@@ -1350,6 +1383,7 @@ function seal(m){
  if(readOnlyDay()) return;
  const t=(S.drafts[WK(m.id)]||"").trim(); if(!t) return;
  const jid=uid("j"); S.sealed[WK(m.id)]={text:t, at:Date.now(), jid};
+ if(S.nudgeDone!==today()&&!(S.nudge&&S.nudge.day===today())) S.nudge={day:today(), mid:m.id};
  S.journal.unshift({id:jid, date:today(), title:`First impression: ${m.maker}`, lines:[], q:null, muse:m.id, body:t}); remember("journal",jid,`First impression: ${m.maker}`);
  S.drafts[WK(m.id)]=""; const all=MUSES.every(x=>S.sealed[WK(x.id)]);
  Table.put({id:"t_"+WHO+"_"+WK(m.id), on:WK(m.id), by:WHO, name:S.profile.name||WHONAME, at:Date.now(), day:DAYK(), text:t});
@@ -1752,7 +1786,7 @@ function resetToday(){
   if(o&&o.date===d) delete S.owned[id]; });
  [S.sealed, S.drafts, S.syn, S.synDrafts, S.replies, S.drawn, S.qpick].forEach(drop);
  if(S.pick&&S.pick.date===d) S.pick={date:null, id:null};
- S.keepAsk=null; S.openSyn=null; S.info=false; S.dayView=null; S.past=null; S.mi=0; S.phome=true;
+ S.keepAsk=null; S.openSyn=null; S.info=false; S.dayView=null; S.past=null; S.mi=0; S.phome=true; S.nudge=null; S.nudgeDone=null; S.synQ={};
  if(WHO){ const t=Table.all(); let ch=false;
   Object.keys(t).forEach(on=>{ if(!mine(on)) return; const keep=(t[on]||[]).filter(r=>(r.by||"")!==WHO);
    if(keep.length!==(t[on]||[]).length){ ch=true; if(keep.length) t[on]=keep; else delete t[on]; } });

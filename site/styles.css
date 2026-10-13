@@ -1220,14 +1220,10 @@ html[data-dev="phone"] .m-writer.notecard{transform:rotate(.3deg)}
 .sy-text p{margin:0 0 .7em}
 .sy-text small{display:block; color:var(--muted); font-size:.75rem}
 .sy-text .plate{min-height:150px}
-.sy-pin{flex:none; border-top:1px dashed var(--line); padding-top:10px; margin-top:8px; max-height:40%; overflow:auto}
-.sy-pin .writer{margin:0}
 @media (max-width:700px){
  .m-overlay.sy-ov{padding:0}
  .m-overlay.sy-ov > div{height:100dvh; width:100%}
  .sy-ov .synbox{border-radius:0; border:0; padding:12px 12px 10px}
- .sy-ov .synworks{display:flex; overflow-x:auto; scroll-snap-type:x mandatory; gap:10px; padding-bottom:6px}
- .sy-ov .synw{flex:0 0 86%; scroll-snap-align:start; max-height:56dvh}
 }
 .m-maxim{margin:8px 0 2px; max-width:34rem; font-family:var(--f-body); font-style:italic; font-size:.95rem; line-height:1.45; color:var(--on-ground)}
 .m-maxim .mx-c{display:block; font-style:normal; font-size:.74rem; color:var(--muted-ground); margin-top:2px}
@@ -1501,9 +1497,8 @@ html[data-mlook] .nb-glabel, html[data-mlook] .nb-page .type, html[data-mlook] .
 .lk-themewrap .m-crossbtn{margin-bottom:16px}
 .m-verseday .mx-q{display:block; font-style:normal; font-family:var(--f-read,var(--f-body)); font-size:1.05rem; line-height:1.55}
 .m-verseday .mx-c{font-family:var(--f-type); letter-spacing:.06em; text-transform:uppercase; font-size:.68rem}
-/* where "the day's word" stood: the day's art and the Poiesis mark, side by side for now */
+/* where "the day's word" stood: the Poiesis mark (Round 22: the day's art is gone) */
 .lk-marks{display:flex; align-items:flex-end; gap:14px; padding-bottom:8px}
-.lk-art{display:block; width:66px; height:50px; border-radius:1px; box-shadow:0 0 0 3px var(--card), 0 0 0 4px color-mix(in srgb,var(--on-ground) 35%,transparent), 0 6px 14px -6px rgba(0,0,0,.5)}
 .lk-logo{display:block; width:46px; height:46px; color:var(--ground-accent)}
 .lk-logo svg{width:100%; height:100%}
 /* "Synthesise, or comment on one", pointing at the buttons and the ◇ */
@@ -1515,25 +1510,57 @@ html[data-mlook] .nb-glabel, html[data-mlook] .nb-page .type, html[data-mlook] .
 .lk-hint span:not(.hint-gap){padding-bottom:10px}
 .ph-home .lk-hint{margin:6px 0 -2px 4px; color:var(--on-ground)}
 .ph-home .lk-hint .hint-ar{color:var(--ground-accent)}
-/* the synthesis page: one main text, the others smaller beside it */
-.sy-ov .synworks.sy-split{display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:14px; align-items:start}
-.sy-ov .sy-split .synw{max-height:none}
-.sy-split .sy-mainw .sy-text{font-size:1.1rem; line-height:1.62; max-height:56vh; padding:14px 18px}
-.sy-split .sy-mainw b{font-size:1.35rem}
-.sy-side{display:flex; flex-direction:column; gap:10px; min-width:0}
-.sy-sidew{cursor:pointer; transition:border-color .2s, transform .2s}
-.sy-sidew:hover, .sy-sidew:focus-visible{border-color:var(--ink-accent); transform:translateY(-1px)}
-.sy-sidew .sy-text{font-size:.8rem; line-height:1.45; max-height:22vh}
-.sy-sidew b{font-size:.95rem}
-.sy-sidew .yours{font-size:.88rem}
-.sy-swap{display:block; margin-top:8px; text-align:right; font:500 .82rem var(--f-ui,sans-serif); color:var(--ink-accent)}
-@media (max-width:700px){
-  .sy-ov .synworks.sy-split{display:flex; flex-direction:column; overflow:visible; gap:10px}
-  .sy-ov .sy-split .synw{flex:none; max-height:none}
-  .sy-split .sy-mainw .sy-text{max-height:44dvh; font-size:1rem; padding:12px 14px}
-  .sy-sidew .sy-text{max-height:16dvh}
-}
 /* the verse sits on its own paper card, so it takes the paper's ink */
 .lk .m-verseday, .m-verseday{color:var(--card-ink)}
 .lk .m-verseday .mx-c, .m-verseday .mx-c{color:var(--paper-mute)}
 .m-verseday{--ink-accent:var(--card-accent)}
+
+/* ===== Round 22: the synthesis page ======================================
+   A switcher at the top (a tick on what you've published); the works side by
+   side on the desk, each in full and scrolling in its own card; one above
+   another on the phone; one writing card under them. */
+.m-overlay.sy-ov > div{width:min(1180px,100%)}
+.m-overlay.sy-ov{grid-template-columns:minmax(0,1fr)}
+.sy-ov .synbox, .sy-ov .sy-body{min-width:0}
+.m-overlay.sy-ov > div{min-width:0; max-width:100%}
+.sy-pairs{display:flex; flex:none; flex-wrap:wrap; gap:8px; margin:10px 0 12px}
+.sy-ov .synhead{flex:none}
+.sy-pair{display:inline-flex; align-items:center; gap:6px; flex:none; padding:6px 13px; border-radius:999px; border:1px solid color-mix(in srgb,var(--on-surface) 35%,transparent);
+ background:transparent; color:var(--on-surface); font:400 1rem/1.2 var(--f-body); cursor:pointer; white-space:nowrap}
+.sy-pair:hover{border-color:var(--ground-accent)}
+.sy-pair[aria-pressed="true"]{background:var(--card); color:var(--card-ink); border-color:var(--card); box-shadow:0 3px 10px -5px rgba(0,0,0,.45)}
+.sy-tick{font-size:.9em; color:var(--ground-accent)}
+.sy-pair[aria-pressed="true"] .sy-tick{color:var(--card-accent)}
+.sy-ov .synworks.sy-cols{display:grid; grid-template-columns:repeat(var(--n,2),minmax(0,1fr)); gap:14px; align-items:stretch; margin-top:0}
+.sy-cols .synw{display:flex; flex-direction:column; max-height:none; min-width:0; padding:12px 14px}
+.sy-cols .synw b{font-size:1.2rem}
+.sy-cols .sy-text{flex:1 1 auto; max-height:40vh; overflow:auto; font-size:1rem; line-height:1.6; padding:12px 16px}
+.sy-writer{margin-top:16px}
+.sy-writer h4{margin:0}
+.sy-qs{margin:4px 0 10px}
+.sy-qs.typing{display:none}
+.sy-qlbl{margin:0 0 6px; font-family:var(--f-type); font-size:.66rem; letter-spacing:.08em; text-transform:uppercase; color:var(--paper-mute)}
+.sy-chips{display:flex; flex-wrap:wrap; gap:6px}
+.sy-chip{text-align:left; border:1px solid color-mix(in srgb,var(--card-ink) 28%,transparent); background:transparent; color:var(--card-ink);
+ border-radius:16px; padding:5px 11px; font:400 .98rem/1.3 var(--f-body); cursor:pointer}
+.sy-chip.day{border-style:dashed}
+.sy-chip:hover{border-color:var(--card-accent)}
+.sy-chip.on{background:var(--card-accent); border-color:var(--card-accent); color:var(--card)}
+.sy-chip.more{border:0; padding-inline:4px; font-style:italic; color:var(--card-accent)}
+.sy-asked{margin:6px 0 2px; font:italic 400 1.15rem/1.35 var(--f-body); color:var(--card-ink)}
+.sy-writer textarea{min-height:5.5em}
+@media (max-width:700px){
+ .sy-pairs{flex-wrap:nowrap; overflow-x:auto; margin:8px -12px 10px; padding:0 12px 4px; scrollbar-width:none; -webkit-overflow-scrolling:touch}
+ .sy-pairs::-webkit-scrollbar{display:none}
+ .sy-pair{font-size:.94rem; padding:6px 11px}
+ .sy-ov .synworks.sy-cols{display:flex; flex-direction:column; gap:12px}
+ .sy-cols .sy-text{max-height:none; overflow:visible}
+}
+/* the once-a-day note by the hint line */
+.lk-nudge{display:flex; align-items:center; gap:2px; align-self:flex-start; margin:0 0 22px 18px; transform:rotate(-1.2deg);
+ background:var(--card); color:var(--card-ink); padding:4px 6px 4px 12px; box-shadow:0 6px 14px -8px rgba(0,0,0,.55); border-radius:2px}
+.lk-nudge .nudge-go{border:0; background:none; padding:2px 0; font:400 17px/1.25 "Kalam", cursive; color:var(--card-ink); cursor:pointer; text-align:left}
+.lk-nudge .nudge-go:hover{color:var(--card-accent)}
+.lk-nudge .nudge-x{border:0; background:none; width:28px; height:28px; font-size:18px; line-height:1; color:var(--paper-mute); cursor:pointer}
+.ph-home .lk-nudge{margin:10px 0 14px 2px}
+html[data-color="xcx"] .lk-nudge{box-shadow:0 0 0 2px var(--card-edge), 0 6px 14px -8px rgba(0,0,0,.55)}

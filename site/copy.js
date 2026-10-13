@@ -37,9 +37,31 @@ link.yours.pair: Your synthesis of the
 link.tag: A synthesis
 link.page.title: Synthesis: 
 link.aria: Synthesis: 
-# the synthesis page: one work large, the others smaller beside it
-syn.swap: Read this one
-syn.side: The others
+# Round 22: the switcher at the top of the synthesis page.
+# A tick shows on a choice you've already published.
+syn.pick.pp: Poem + Passage
+syn.pick.pv: Passage + Scripture
+syn.pick.vp: Poem + Scripture
+syn.pick.whole: All three
+syn.pick.aria: What you are joining
+syn.pick.done: written
+# the optional questions above the box (they hide once you start typing).
+# The day's three come from the bank; these are the house questions.
+# The first two show; "more questions…" opens the rest.
+synth.q.label: A question to start from (optional)
+synth.q.1: Where do they agree without meaning to?
+synth.q.2: What would one say to the other?
+synth.q.3: What does one see that the other misses?
+synth.q.4: Which line would you hand from one to the other?
+synth.q.5: What do both ask of you?
+synth.q.6: Where do they part ways, and who is right today?
+synth.q.7: What one word could stand for both?
+synth.q.8: If they met on the road, what would they talk about?
+synth.q.more: more questions…
+synth.q.fewer: fewer
+# the once-a-day note after your first impression, by the hint line
+nudge.line: How does it sit with the other two? →
+nudge.dismiss: Not now
 
 # THE HERO (shown on the Why page)
 hero.eyebrow: Poiesis, a place to receive and to make
