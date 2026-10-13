@@ -1183,7 +1183,7 @@ html[data-dev="phone"] .m-writer.notecard{transform:rotate(.3deg)}
 .m-whyb h2{font-family:var(--f-display); font-size:clamp(1.5rem,3vw,2rem); margin:2px 0 0}
 .m-whyfrom{font-style:italic; color:var(--muted); margin:4px 0 14px}
 .m-whyb p{margin:0 0 12px; line-height:1.65}
-.m-whyb > p:not(.type):not(.m-whyfrom):first-of-type::first-letter{font-family:var(--f-display); font-size:2.6em; float:left; line-height:.9; margin:4px 6px 0 0; color:var(--ink-accent)}
+.m-whyb > p:not(.type):not(.m-whyfrom):not(.es-by):first-of-type::first-letter{font-family:var(--f-display); font-size:2.6em; float:left; line-height:.9; margin:4px 6px 0 0; color:var(--ink-accent)}
 
 /* Round 13: Constitution lives on the Why page */
 #constitution{max-width:40rem; margin:34px auto 38px}
@@ -1564,3 +1564,22 @@ html[data-mlook] .nb-glabel, html[data-mlook] .nb-page .type, html[data-mlook] .
 .lk-nudge .nudge-x{border:0; background:none; width:28px; height:28px; font-size:18px; line-height:1; color:var(--paper-mute); cursor:pointer}
 .ph-home .lk-nudge{margin:10px 0 14px 2px}
 html[data-color="xcx"] .lk-nudge{box-shadow:0 0 0 2px var(--card-edge), 0 6px 14px -8px rgba(0,0,0,.55)}
+
+/* ===== Founder's essays (Why page, after the Discourse) ===================
+   Titles like a table of contents; each unfolds in place. */
+.es-by{margin:2px 0 14px!important; font:italic 400 1.05rem var(--f-body); color:var(--muted-ground)}
+.es-list{display:flex; flex-direction:column; border-top:1px solid var(--line)}
+.es-one{border-bottom:1px solid var(--line)}
+.es-one summary{list-style:none; display:flex; align-items:baseline; gap:14px; padding:14px 2px; cursor:pointer}
+.es-one summary::-webkit-details-marker{display:none}
+.es-one summary::after{content:"+"; margin-left:auto; font:400 1.3rem/1 var(--f-body); color:var(--ground-accent)}
+.es-one[open] summary::after{content:"–"}
+.es-n{flex:none; min-width:2.2em; font:400 .75rem var(--f-type); letter-spacing:.12em; color:var(--ground-accent)}
+.es-t{font-family:var(--f-display); font-size:1.3rem; line-height:1.25}
+.es-one summary:hover .es-t, .es-one summary:focus-visible .es-t{color:var(--ground-accent)}
+.es-body{background:var(--card); color:var(--card-ink); --ink-accent:var(--card-accent); --muted:var(--paper-mute); box-shadow:var(--shadow); padding:22px 26px 10px; margin:0 0 18px}
+.es-body p{margin:0 0 14px; line-height:1.7; font-size:1.05rem}
+.es-body p:first-child::first-letter{font-family:var(--f-display); font-size:2.6em; float:left; line-height:.9; margin:4px 7px 0 0; color:var(--card-accent)}
+.es-body .es-coda{font-style:italic; padding-left:1.2em}
+html[data-color="xcx"] .es-body{box-shadow:0 0 0 2px var(--card-edge), var(--shadow)}
+@media (max-width:700px){ .es-body{padding:18px 18px 6px; margin-inline:-4px} .es-t{font-size:1.15rem} }
