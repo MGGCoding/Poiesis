@@ -548,9 +548,9 @@ const SETTINGS=[
   {k:"backing", label:"Sits on", opts:[["none","The page"],["strip","A paper strip"]]},
   {k:"tsize", label:"Size", opts:[["s","Small"],["m","Medium"],["l","Large"]]},
   {k:"labels", label:"Names under them", opts:[["off","None"],["on","Poem · Passage · Painting"]]}]},
- {name:"Links between works", ctrls:[
+ {name:"Syntheses between works", ctrls:[
   {k:"sides", label:"Threads before they open", opts:[["faint","Faint dots"],["hidden","Invisible"],["drawn","Drawn"]]},
-  {k:"arch", label:"Poem & painting link", opts:[["under","A loop under the row"],["arch","An arch over the row"]]},
+  {k:"arch", label:"Poem & Scripture synthesis", opts:[["under","A loop under the row"],["arch","An arch over the row"]]},
   {k:"guide", label:"Nudge toward the next step", opts:[["pulse","Breathes"],["none","None"]]}]},
  {name:"Others were here", ctrls:[
   {k:"cueplace", label:"Where it sits", opts:[["hang","Hanging on the right, slanted"],["inside","Inside the row"],["small","Smaller, underneath"]]},
@@ -670,40 +670,48 @@ function synTextHTML(m){
  if(m.poem) return `<div class="sy-poem museText">${m.poem.split("\n\n").map(st=>`<p>${st.split("\n").map(esc).join("<br>")}</p>`).join("")}</div>`;
  return `<div class="sy-prose museText">${(m.quote||"").split(/(?<=…)\s+/).map(x=>`<p>${esc(x)}</p>`).join("")}${m.cite?`<small>${esc(m.cite)}</small>`:""}</div>`;
 }
+/* Round 21: one work is the main text; the other one (or two) sit smaller
+   beside it, still readable, and a tap makes any of them the main text */
+function synCard(x,main){ const m=MUSE[x], s=S.sealed[WK(x)];
+ const yours=s?`<p class="yours">“${esc(s.text)}”<small>${s.via?T("link.via.small","your synthesis, as your first impression"):T("link.first.small","your first impression")}</small></p>`:`<p class="yours locked2">${T("link.counts","Not written yet. This synthesis will count as your first impression here.")}</p>`;
+ return `<div class="synw ${main?"sy-mainw":"sy-sidew"}"${main?"":` data-synmain="${x}" role="button" tabindex="0" aria-label="${esc(T("syn.swap","Read this one"))}: ${esc(m.kind)}"`}><span class="type kind">${esc(m.kind)}</span><b>${esc(m.title)}</b><small class="muted">${esc(m.maker)}</small><div class="sy-text">${synTextHTML(m)}</div>${yours}${main?"":`<span class="sy-swap">${esc(T("syn.swap","Read this one"))} ›</span>`}</div>`;
+}
 function synBoxHTML(id){
  const ids=synSubjects(id), mine=S.syn[WK(id)], d=S.synDrafts[WK(id)]||"";
+ const mainId=(S.synMain&&ids.includes(S.synMain[id]))?S.synMain[id]:ids[0];
  const missing=ids.filter(x=>!S.sealed[WK(x)]);
  return `<div class="synbox" id="synbox">
   <div class="synhead"><h3>${id==="whole"?"All three":`${esc(MUSE[ids[0]].kind)} <span class="j">and</span> ${esc(MUSE[ids[1]].kind)}`}</h3><button class="btn small ghost" data-act="closesyn">${T("link.close","Close")}</button></div>
-  <div class="sy-body"><div class="synworks">${ids.map(x=>{ const m=MUSE[x], s=S.sealed[WK(x)];
-    return `<div class="synw"><span class="type kind">${esc(m.kind)}</span><b>${esc(m.title)}</b><small class="muted">${esc(m.maker)}</small><div class="sy-text">${synTextHTML(m)}</div>
-     ${s?`<p class="yours">“${esc(s.text)}”<small>${s.via?T("link.via.small","your link, as your first impression"):T("link.first.small","your first impression")}</small></p>`:`<p class="yours locked2">${T("link.counts","Not written yet. This link will count as your first impression here.")}</p>`}</div>`; }).join("")}</div>
+  <div class="sy-body"><div class="synworks sy-split"><div class="sy-main">${synCard(mainId,true)}</div><aside class="sy-side" aria-label="${T("syn.side","The others")}">${ids.filter(x=>x!==mainId).map(x=>synCard(x,false)).join("")}</aside></div>
   ${id==="whole"?curatorNoteHTML():""}
   ${synThreadHTML(id)}</div>
   <div class="sy-pin">
-  ${mine?`<div class="writer seal" ><span class="wax" aria-hidden="true">P</span><small>${id==="whole"?T("link.yours.whole","Your thought on all three"):`Your ${esc(synName(id))} link`} · ${when(mine.at)}</small><div class="first">${esc(mine.text)}</div>
+  ${mine?`<div class="writer seal" ><span class="wax" aria-hidden="true">P</span><small>${id==="whole"?T("link.yours.whole","Your thought on all three"):`${T("link.yours.pair","Your synthesis of the ")}${esc(synName(id))}`} · ${when(mine.at)}</small><div class="first">${esc(mine.text)}</div>
      <p class="type" style="color:var(--paper-mute);margin:10px 0 0;font-size:.62rem">${T("link.published.under","Published under ")}${ids.map(x=>esc(MUSE[x].kind.toLowerCase())).join(", ")}${T("link.published.journal"," · also in your journal")}</p></div>`:
    `<div class="writer" ><h4>${id==="whole"?T("link.whole.heading","One thought that holds all three"):T("link.pair.heading","What do these two say to each other?")}</h4>
     <div class="sub">${id==="whole"?T("link.whole.line","Where do they meet, where do they argue — and what does the day leave you with?"):T("link.pair.line","Agreement is not required. Disagreement is often better.")}</div>
-    <textarea class="grow" id="synDraft" rows="1" aria-label="Your link" placeholder="${T("link.placeholder","Two or three sentences is plenty.")}">${esc(d)}</textarea>
+    <textarea class="grow" id="synDraft" rows="1" aria-label="Your synthesis" placeholder="${T("link.placeholder","Two or three sentences is plenty.")}">${esc(d)}</textarea>
     <div class="wrow"><span class="type" style="color:var(--paper-mute)">${T("link.appears","Appears under the ")}${esc(andList(ids.map(x=>MUSE[x].kind.toLowerCase())))}</span>
-     <button class="btn primary" data-act="pubsyn" ${d.trim()?"":"disabled"}>${T("link.publish","Publish this link")}</button></div></div>`}
+     <button class="btn primary" data-act="pubsyn" ${d.trim()?"":"disabled"}>${T("link.publish","Publish this synthesis")}</button></div></div>`}
   </div>
  </div>`;
 }
+function synSwap(x){ if(!S.openSyn) return; S.synMain=S.synMain||{}; S.synMain[S.openSyn]=x; save(); render();
+ setTimeout(()=>document.querySelector(".sy-main .sy-text")?.scrollTo({top:0}),30); }
+document.addEventListener("keydown", e=>{ if((e.key==="Enter"||e.key===" ")&&e.target.matches?.("[data-synmain]")){ e.preventDefault(); synSwap(e.target.dataset.synmain); } });
 function synThreadHTML(id){
  const others=SYNS.filter(y=>y.on===id), mine=S.syn[WK(id)];
  if(!others.length) return "";
  if(!mine) return `<div class="locked" style="margin-top:14px"><div class="ghost" aria-hidden="true">${others.slice(0,2).map(y=>synPostHTML(y,id)).join("")}</div>
   <div class="veil"><div><b style="font-family:var(--f-display);font-weight:400;font-size:1.15rem">${others.length} ${others.length>1?"people have":"person has"} connected these.</b>
-   <p class="muted" style="margin:6px 0 0;font-size:.9rem">${T("link.gate.line","Write your own link first — yours, before theirs.")}</p></div></div></div>`;
+   <p class="muted" style="margin:6px 0 0;font-size:.9rem">${T("link.gate.line","Write your own synthesis first — yours, before theirs.")}</p></div></div></div>`;
  return `<div class="synthread"><p class="type muted" style="margin:14px 0 4px">${T("link.others.heading","How others connected them")}</p>${others.map(y=>synPostHTML(y,id)).join("")}</div>`;
 }
 function synPostHTML(y,id){
  const P=PEOPLE[y.name], reps=[...(y.replies||[]), ...(S.replies[WK(y.id)]||[])];
  return `<article class="post" data-p="${y.id}" data-m="${id}" data-syn="1">
   <div class="who">${personAv(y.name)}<div><b>${esc(y.name)}</b> ${P?stickerHTML(P.top,20):""} ${P?`<span class="badge">${esc(P.badge)}</span>`:""} <span class="sample">sample</span><small>${esc(P?P.role:"")}</small></div></div>
-  <div class="thought link"><small class="type" style="color:var(--paper-mute);font-size:.64rem">A link · ${esc(y.at)}</small><div class="first">${esc(y.text)}</div></div>
+  <div class="thought link"><small class="type" style="color:var(--paper-mute);font-size:.64rem">${T("link.tag","A synthesis")} · ${esc(y.at)}</small><div class="first">${esc(y.text)}</div></div>
   <div class="pact"><button class="btn" data-pa="like" aria-pressed="${!!S.likes[y.id]}">${S.likes[y.id]?T("post.moved.on","♥ Moved me"):T("post.moved.off","♡ Moved me")}</button><button class="btn" data-pa="reply">${T("post.writeback","Write back")}${reps.length?` · ${reps.length}`:""}</button>${bmMenu()}</div>
   ${reps.length?`<div class="comments">${reps.map(c=>`<div class="cm">${personAv(c.n)}<div><b>${esc(c.n==="You"?(S.profile.name||"You"):c.n)}</b> ${PEOPLE[c.n]?stickerHTML(PEOPLE[c.n].top,16):""} ${esc(c.t)}</div></div>`).join("")}</div>`:""}
   <div class="slot2"></div></article>`;
@@ -711,7 +719,7 @@ function synPostHTML(y,id){
 function synListHTML(){
  const mine=[...LINKS.map(l=>l.id),"whole"].filter(id=>S.syn[WK(id)]);
  if(!mine.length) return "";
- return `<div class="synlist"><p class="type muted" style="margin:0 0 6px">${T("link.mine.heading","Your links today")}</p>
+ return `<div class="synlist"><p class="type muted" style="margin:0 0 6px">${T("link.mine.heading","Your syntheses today")}</p>
   ${mine.map(id=>`<button class="synchip" data-side="${id}"><b>${esc(synName(id))}</b><span>${esc(S.syn[WK(id)].text.slice(0,70))}${S.syn[WK(id)].text.length>70?"…":""}</span></button>`).join("")}</div>`;
 }
 function publishSyn(id){
@@ -722,8 +730,8 @@ function publishSyn(id){
  const fresh=ids.filter(x=>!S.sealed[WK(x)]&&!MUSE[x].closed); let drew=null;
  fresh.forEach(x=>{ S.sealed[WK(x)]={text:t, at:now, jid, via:id}; const d=drawSticker(x); if(d){ drew=d; S.keepAsk=x; } });
  if(drew) setCheck(drew);
- S.journal.unshift({id:jid, date:today(), title:`Link: ${synName(id)}`, lines:[], q:null, muse:ids[0], body:`${t}\n\n— on ${ids.map(x=>`${MUSE[x].maker}, ${MUSE[x].title}`).join(" · ")}`});
- remember("journal",jid,`Link: ${synName(id)}`);
+ S.journal.unshift({id:jid, date:today(), title:`${T("link.page.title","Synthesis: ")}${synName(id)}`, lines:[], q:null, muse:ids[0], body:`${t}\n\n— on ${ids.map(x=>`${MUSE[x].maker}, ${MUSE[x].title}`).join(" · ")}`});
+ remember("journal",jid,`${T("link.page.title","Synthesis: ")}${synName(id)}`);
  ids.forEach(x=>Table.put({id:"t_"+WHO+"_"+id+"_"+WK(x), on:WK(x), by:WHO, name:S.profile.name||WHONAME, at:now, day:DAYK(), text:t, via:id}));
  S.synDrafts[WK(id)]=""; save(); render();
  toast(fresh.length?`${T("toast.link.counts","Your link is your first impression on the ")}${andList(fresh.map(x=>MUSE[x].kind.toLowerCase()))}.`:`${T("toast.link.published","Published under the ")}${andList(ids.map(x=>MUSE[x].kind.toLowerCase()))}.`);
@@ -889,7 +897,7 @@ function responsesHTML(m){
   return `<section class="responses" id="responses"><h3>${T("others.heading","How it sang in others")}</h3>
    <p class="muted" style="margin:0 0 8px;font-size:.9rem">${T("others.first","Nobody else has written here yet. The conversation closes ")}${cl0.toLocaleDateString(undefined,{weekday:"long"})}.</p>
    <div>${postHTML({id:"me_"+m.id, at:when(s.at), first:s.text},m,true)}</div>
-   <div class="linkfeed"><p class="type muted" style="margin:18px 0 6px">${T("others.linkfeed.heading","Links that pass through this work")}</p>${[...myLinks.map(p=>postHTML(p,m,true))].join("")||`<p class="muted" style="margin:0;font-size:.9rem">${T("others.linkfeed.empty","None yet. Tap a thread between two works to connect them.")}</p>`}</div></section>`;
+   <div class="linkfeed"><p class="type muted" style="margin:18px 0 6px">${T("others.linkfeed.heading","Syntheses that pass through this work")}</p>${[...myLinks.map(p=>postHTML(p,m,true))].join("")||`<p class="muted" style="margin:0;font-size:.9rem">${T("others.linkfeed.empty","None yet. Tap a thread between two works to connect them.")}</p>`}</div></section>`;
  }
  const names=posts.map(p=>p.name.split(" ")[0]);
  const who=names.length>2?`${names.slice(0,2).join(", ")} and ${names.length-2} other${names.length-2>1?"s":""}`:names.join(" and ");
@@ -899,7 +907,7 @@ function responsesHTML(m){
  const linkPosts=[...myLinks.map(p=>postHTML(p,m,true)), ...otherLinks.map(y=>postHTML({id:y.id, name:y.name, at:y.at, first:y.text, linkOf:y.on, replies:y.replies, moved:y.moved}, m))];
  return `<section class="responses" id="responses"><h3>${T("others.heading","How it sang in others")}</h3><p class="muted" style="margin:0 0 8px;font-size:.9rem">${posts.length+1} impressions · ${linkPosts.length} links that touch this work · the conversation closes ${cl}</p>
   <div>${postHTML({id:"me_"+m.id, at:when(s.at), first:s.text},m,true)}${posts.map(p=>postHTML(p,m)).join("")}</div>
-  <div class="linkfeed"><p class="type muted" style="margin:18px 0 6px">${T("others.linkfeed.heading","Links that pass through this work")}</p>${linkPosts.join("")||`<p class="muted" style="margin:0;font-size:.9rem">${T("others.linkfeed.empty","None yet. Tap a thread between two works to connect them.")}</p>`}</div></section>`;
+  <div class="linkfeed"><p class="type muted" style="margin:18px 0 6px">${T("others.linkfeed.heading","Syntheses that pass through this work")}</p>${linkPosts.join("")||`<p class="muted" style="margin:0;font-size:.9rem">${T("others.linkfeed.empty","None yet. Tap a thread between two works to connect them.")}</p>`}</div></section>`;
 }
 
 /* ---------- The Muse page (Round 7: the three, not the triangle) ---------- */
@@ -976,17 +984,17 @@ function cueHTML(){
  return `<span class="m-cue">${faces}<span class="m-pnote">${here}${here===1?T("cue.note.one"," other<br>wrote today"):T("cue.note"," others<br>wrote today")}</span></span>`;
 }
 function threeHTML(size,vert,nocue){
- const u=U(), ns=stepNext(), box=itemBox(size,vert), labels=u.labels==="on", T=30, K=30;
+ const u=U(), ns=stepNext(), box=itemBox(size,vert), labels=u.labels==="on", TH=30, K=30;
  const pl=on=>(u.guide==="pulse"&&on)?" m-pulse":"";
  const why=id=>S.syn[WK(id)]?" (written)":"";
- const thr=k=>{ const st=linkState(k), nx=ns&&ns.t==="s"&&ns.id===k; return `<button type="button" class="m-thr s-${st}${pl(nx)}" data-mside="${k}" style="${vert?`height:${T}px;width:${box.w}px`:`width:${T}px;height:${box.h}px`}" aria-label="Link: ${esc(LINKS3[k].map(x=>MUSE[x].kind).join(" and "))}${why(k)}" data-tip="${esc(LINKS3[k].map(x=>MUSE[x].kind).join(" & "))}${why(k)}"><i></i></button>`; };
+ const thr=k=>{ const st=linkState(k), nx=ns&&ns.t==="s"&&ns.id===k; return `<button type="button" class="m-thr s-${st}${pl(nx)}" data-mside="${k}" style="${vert?`height:${TH}px;width:${box.w}px`:`width:${TH}px;height:${box.h}px`}" aria-label="${T("link.aria","Synthesis: ")}${esc(LINKS3[k].map(x=>MUSE[x].kind).join(" and "))}${why(k)}" data-tip="${esc(LINKS3[k].map(x=>MUSE[x].kind).join(" & "))}${why(k)}"><i></i></button>`; };
  const kst=linkState("whole"), knx=ns&&ns.t==="c";
  const knot=`<button type="button" class="m-knot s-${kst}${pl(knx)}" data-mside="whole" style="${vert?`height:${K}px;width:${box.w}px`:`width:${K}px;height:${box.h}px`}" aria-label="All three${why("whole")}" data-tip="All three${why("whole")}"><i></i></button>`;
  const ast=linkState("vp"), anx=ns&&ns.t==="s"&&ns.id==="vp";
- const span=vert?(box.h*2+T*2):(box.w*2+T*2), pad=DEV()==="desk"?14:10, under=u.arch==="under";
+ const span=vert?(box.h*2+TH*2):(box.w*2+TH*2), pad=DEV()==="desk"?14:10, under=u.arch==="under";
  const stroke=(ast==="written"||ast==="open")?"var(--accent)":"var(--muted)", sw=ast==="written"?4:ast==="open"?1.8:1.5;
  const dash=ast==="faint"?'stroke-dasharray="1 6" stroke-linecap="round"':"", op=ast==="hidden"?0:(ast==="drawn"?.35:ast==="faint"?.6:1);
- const alab=`aria-label="Link: Poem and Painting${why("vp")}" data-tip="Poem & Painting${why("vp")}"`;
+ const alab=`aria-label="${T("link.aria","Synthesis: ")}Poem and Scripture${why("vp")}" data-tip="Poem & Scripture${why("vp")}"`;
  let arch;
  if(!vert){ const left=pad+box.w/2, h=18;
   arch=`<button type="button" class="m-arch${pl(anx)}" data-mside="vp" ${alab} style="left:${left}px;width:${span}px;height:${h+6}px;${under?"bottom:2px":"top:2px"}"><svg viewBox="0 0 ${span} ${h+6}" width="${span}" height="${h+6}" style="${under?"transform:scaleY(-1)":""}"><path d="M2,${h+4} C2,2 ${span-2},2 ${span-2},${h+4}" fill="none" stroke="${stroke}" stroke-width="${sw}" ${dash} opacity="${op}"/>${ast==="open"?`<circle cx="${span/2}" cy="${h*.28+4}" r="5" fill="var(--surface)" stroke="var(--accent)" stroke-width="1.6"/>`:""}</svg></button>`;
@@ -1064,7 +1072,7 @@ function writerInnerM(m, nb){
  const s=S.sealed[WK(m.id)], u=U();
  if(!s&&readOnlyDay()) return `<p class="m-nbhead">${T("muse.history.heading","A day already past")}</p><p style="margin:0;font-size:.92rem;color:var(--paper-mute)">${T("muse.history.line","You are reading an earlier day. Its conversation is closed; what you write today belongs to today.")}</p>`;
  if(!s&&m.closed) return `<p class="m-nbhead">${T("muse.past.heading","This muse has passed")}</p><p style="margin:0;font-size:.92rem;color:var(--paper-mute)">${T("muse.past.line","Its conversation closed before you left an impression. You can still write about it in your notebook.")}</p>`;
- if(s) return `<div class="m-mine"><small>${s.via?`${T("muse.first.via","Your first impression, written as a link with the ")}${esc(synSubjects(s.via).filter(x=>x!==m.id).map(x=>MUSE[x].kind.toLowerCase()).join(" and "))}`:T("muse.first.mine","Your first impression")} · ${when(s.at)}</small>${esc(s.text)}</div>
+ if(s) return `<div class="m-mine"><small>${s.via?`${T("muse.first.via","Your first impression, written as a synthesis with the ")}${esc(synSubjects(s.via).filter(x=>x!==m.id).map(x=>MUSE[x].kind.toLowerCase()).join(" and "))}`:T("muse.first.mine","Your first impression")} · ${when(s.at)}</small>${esc(s.text)}</div>
   ${curatorNoteHTML()}
   ${m.deeper?`<div class="m-deeper"><span>${T("muse.deeper.label","Go deeper")}</span>${esc(m.deeper)}</div>`:""}
   ${myLayers(m.id).map(l=>`<div class="m-layer"><small>${esc(l.w||"later")}</small>${esc(l.t)}</div>`).join("")}
@@ -1143,13 +1151,17 @@ function constitutionHTML(){
  return `<section class="m-whyb" id="constitution"><p class="type muted" style="margin:0">${T("whybottom.from","From the Constitution of Poiesis")}</p><h2>${T("whybottom.heading","Discourse on Creation and the Muse")}</h2>
   ${["p1","p2","p3"].map(k=>`<p>${T("whybottom."+k,"")}</p>`).join("")}</section>`;
 }
-function keepMaxim(){ if(S.maximKept===today()) return; const c=DAY.maximCite.split(" · ")[0].split(", "); addLine({text:DAY.maxim, who:c[0], where:c.slice(1).join(", "), from:"muse"}); S.maximKept=today(); save(); render(); toast(T("toast.maxim.kept","Kept in your notebook.")); }
-const COLUMN=`<svg class="mx-col" viewBox="0 0 28 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5h22M4.5 4.5c0 2 1.5 3 3 3h13c1.5 0 3-1 3-3"/><path d="M6 9h16M7 9v31M21 9v31M11.7 10.5v28M16.3 10.5v28"/><path d="M5.5 40.5h17M3.5 44h21"/></svg>`;
-function wisdomBtn(){ return `<button class="m-colbtn" type="button" data-act="reading" aria-expanded="${!!S.reading}" aria-label="${T("maxim.button","The day’s wisdom")}" data-tip="${T("maxim.button","The day’s wisdom")}">${COLUMN}</button>`; }
+/* Round 21: the cross beside the day's word opens the day's Bible verse, with
+   "keep it". It replaces the column and the day's saying (Niko: "No more
+   modern wisdom, just the bible verse"). The saying fields stay in the data. */
+function keepVerse(){ if(S.verseKept===today()) return; const ref=(DAY.verseRef||"").split(" · ");
+ addLine({text:DAY.verse, who:ref[0]||"", where:ref.slice(1).join(" · "), from:"muse"}); S.verseKept=today(); save(); render(); toast(T("toast.verse.kept","Kept in your notebook.")); }
+const CROSS=`<svg class="mx-cross" viewBox="0 0 24 30" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M9.5 2h5v7.5H21v5h-6.5V28h-5V14.5H3v-5h6.5z"/></svg>`;
+function wisdomBtn(){ return `<button class="m-colbtn m-crossbtn" type="button" data-act="reading" aria-expanded="${!!S.reading}" aria-label="${T("verse.button","The day’s verse")}" data-tip="${T("verse.button","The day’s verse")}">${CROSS}</button>`; }
 function maximHTML(){
- if(!DAY.maxim) return "";
- const kept=S.maximKept===today();
- return `<div class="m-reading m-maxim"><span class="mx-q">“${esc(DAY.maxim)}”</span><span class="mx-c">${esc(DAY.maximCite)}</span><button type="button" class="mx-keep" data-act="keepmaxim" ${kept?"disabled":""}>${kept?T("maxim.kept","kept"):T("maxim.keep","keep it")}</button></div>`;
+ if(!DAY.verse) return "";
+ const kept=S.verseKept===today();
+ return `<div class="m-reading m-maxim m-verseday"><span class="mx-q">${esc(DAY.verse).replace(/\n/g,"<br>")}</span><span class="mx-c">${esc(DAY.verseRef||"")}</span><button type="button" class="mx-keep" data-act="keepmaxim" ${kept?"disabled":""}>${kept?T("verse.kept","kept"):T("verse.keep","keep it")}</button></div>`;
 }
 function phoneHomeHTML(){
  const dateStr=new Date().toLocaleDateString(undefined,{weekday:"long", month:"long", day:"numeric"});
@@ -1165,6 +1177,7 @@ function phoneHomeHTML(){
   <div class="ph-theme"><h1 class="ph-tw">${esc(DAY.theme)}</h1>${wisdomBtn()}</div>
   ${reading}
   ${threadCueHTML()}
+  ${hintHTML(false)}
   <div class="ph-three">${rows}${seg(MUSES[0].id,MUSES[2].id,"vp")}${knot}</div>
   ${(TODAY.length+MUSES.reduce((k,m)=>k+Table.others(WK(m.id)).length,0))?`<div class="ph-others"><span class="ph-avs">${cols}</span>${TODAY.length+MUSES.reduce((k,m)=>k+Table.others(WK(m.id)).length,0)}${T("phone.others.suffix"," others wrote today")}</div>`
    :`<div class="ph-others">${mineParts().length?T("cue.onlyyou.some","Only you here so far today"):T("cue.onlyyou","Nobody here yet today")}</div>`}</div>`;
@@ -1174,6 +1187,7 @@ function renderMuse(v){
   v.innerHTML=`${phoneHomeHTML()}${synOverlay()}${keepAskHTML()}`;
   wireBoard(v);
   v.onclick=e=>{
+   const sm=e.target.closest("[data-synmain]"); if(sm){ synSwap(sm.dataset.synmain); return; }
    const o=e.target.closest("[data-popen]"); if(o){ S.phome=false; goMuse(o.dataset.popen); return; }
    const sd=e.target.closest("[data-side]"); if(sd){ openSyn(sd.dataset.side); return; }
    if(e.target.matches("[data-synbg]")){ S.openSyn=null; save(); render(); return; }
@@ -1181,7 +1195,7 @@ function renderMuse(v){
    const vt=e.target.closest("[data-vertgo]"); if(vt){ S.phome=false; goMuse(vt.dataset.vertgo); return; }
    const a=e.target.closest("[data-act]")?.dataset.act; if(!a) return;
    if(a==="reading"){ S.reading=!S.reading; save(); render(); }
-   if(a==="keepmaxim"){ keepMaxim(); }
+   if(a==="keepmaxim"){ keepVerse(); }
    if(a==="why"){ e.preventDefault(); go("why"); }
    if(a==="closesyn"){ S.openSyn=null; save(); render(); }
    if(a==="pubsyn") publishSyn(S.openSyn);
@@ -1205,6 +1219,7 @@ function renderMuse(v){
  v.innerHTML=`${body}${responsesHTML(m)}${infoLayer(m)}${synOverlay()}${keepAskHTML()}`;
  wireBoard(v); wireWriterM(m); if(u.gloss!=="none") applyGloss(v);
  v.onclick=e=>{
+  const sm=e.target.closest("[data-synmain]"); if(sm){ synSwap(sm.dataset.synmain); return; }
   const sc=DEV()==="desk"&&e.target.closest("[data-stkcard]"); if(sc){ e.preventDefault(); openStickerCard(sc.dataset.sid); return; }
   const g=e.target.closest("[data-mgo]"); if(g){ goMuse(g.dataset.mgo); return; }
   const vt=e.target.closest("[data-vertgo]"); if(vt){ goMuse(vt.dataset.vertgo); setTimeout(()=>$("#draft")?.focus({preventScroll:true}),200); return; }
@@ -1221,7 +1236,7 @@ function renderMuse(v){
   if(a==="phome"){ S.phome=true; S.info=false; save(); render(); scrollTo({top:0}); }
   if(a==="why"){ e.preventDefault(); go("why"); }
   if(a==="reading"){ S.reading=!S.reading; save(); render(); }
-   if(a==="keepmaxim"){ keepMaxim(); }
+   if(a==="keepmaxim"){ keepVerse(); }
   if(a==="nokeep"){ const had=checkedToday(); S.keepAsk=null; save(); render(); if(!had) toast("You can keep one from any muse you’ve answered, until midnight."); }
   if(a==="closesyn"){ S.openSyn=null; save(); render(); }
   if(a==="pubsyn") publishSyn(S.openSyn);
@@ -1251,8 +1266,27 @@ function lookHTML(m,o){
  const cue=dayOn&&U().cue!=="off"?`<div class="lk-cue">${cueHTML()}</div>`:"";
  const reading=dayOn?o.reading:"", pastbar=past?o.day:"";
  /* Manuscript: a running head, then the text block and its margin at 1.618 : 1 */
- return `<div class="lk lk-b">${pastbar}${dayOn?`<div class="lk-rh"><span class="lk-rl">${esc(T("look.b.runhead","the day’s word"))}</span>${theme}<div class="lk-rhr">${date}${cue}</div></div>${reading}`:""}<div class="lk-page"><article class="lk-text">${row()}${title}${work}</article><aside class="lk-margin">${write}</aside></div></div>`;
+ return `<div class="lk lk-b">${pastbar}${dayOn?`<div class="lk-rh"><span class="lk-rl lk-marks">${dayArtHTML()}${POIESIS_MARK}</span>${theme}<div class="lk-rhr">${date}${cue}</div></div>${reading}`:""}<div class="lk-page"><article class="lk-text">${past||ph?row():`<div class="lk-rowwrap">${hintHTML(true)}${row()}</div>`}${title}${work}</article><aside class="lk-margin">${write}</aside></div></div>`;
 }
+/* Round 21: where "the day's word" stood, two candidates side by side for
+   Niko to choose between: the day's painting as a little colour study, and
+   a drawn Poiesis mark (a quill across a cross). */
+const POIESIS_MARK=`<span class="lk-logo" role="img" aria-label="Poiesis" data-tip="Poiesis"><svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="21.5" stroke-width="1.2"/><path d="M24 9v30M15 18h18"/><path d="M36 10c-6 2-14 9-19 18l-4 10"/><path d="M36 10c-1 6-5 12-11 15M31 13c-2 3-5 5-9 6M33.5 17c-3 1-6 2-9 2"/></svg></span>`;
+function dayArtHTML(){
+ const w=MUSES.find(m=>m.kind==="Scripture"&&m.painting)||MUSES.find(m=>m.palette), p=w&&w.painting;
+ if(!w) return "";
+ const pal=(p&&p.palette)||w.palette||["#cfcabc","#9a9384","#6b6355"];   /* the study's own fallback, as beside the Scripture */
+ const title=p?p.title:w.title, artist=p?p.artist:w.maker;
+ const [c1,c2,c3]=[pal[0], pal[1]||pal[0], pal[2]||pal[1]||pal[0]];
+ const bg=`radial-gradient(ellipse 70% 55% at 22% 24%, ${c1} 0 40%, transparent 78%), radial-gradient(ellipse 80% 60% at 78% 72%, ${c3} 0 38%, transparent 76%), radial-gradient(ellipse 90% 70% at 50% 50%, ${c2} 0 45%, transparent 85%), ${c2}`;
+ return `<span class="lk-art" role="img" aria-label="${esc(title)} by ${esc(artist)}" data-tip="${esc(title)} · ${esc(artist)}" style="background:${bg}"></span>`;
+}
+/* Round 21: "Synthesise, or comment on one", with an arrow down to the
+   buttons and one to the ◇ */
+const ARROW_L=`<svg class="hint-ar" viewBox="0 0 34 26" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M30 4C18 3 8 8 6 22"/><path d="M2 17l4 6 5-5"/></svg>`;
+const ARROW_R=`<svg class="hint-ar" viewBox="0 0 34 26" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4c12-1 22 4 24 18"/><path d="M23 18l5 5 4-6"/></svg>`;
+function hintHTML(right){ const t=T("muse.hint","Synthesise, or comment on one"); if(!t) return "";
+ return `<p class="lk-hint">${ARROW_L}<span>${esc(t)}</span>${right?`<span class="hint-gap"></span>${ARROW_R}`:""}</p>`; }
 /* B and D rubricate: the first two words of the work in red small capitals */
 function rubric(){ return true; }
 function incHTML(t){ const mm=String(t).match(/^(\s*\S+\s+\S+)([\s\S]*)$/); return mm?`<span class="inc">${esc(mm[1])}</span>${esc(mm[2])}`:esc(t); }

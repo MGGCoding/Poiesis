@@ -1492,3 +1492,48 @@ html[data-mlook] .nb-glabel, html[data-mlook] .nb-page .type, html[data-mlook] .
 }
 /* the phone notebook's kept lines sit on the ground inside the pocket */
 .nb-pocket .nb-line{--muted:var(--on-ground); --ink-accent:var(--ground-accent)}
+
+/* =====================================================================
+   Round 21 — the cross, synthesis, and the head of the page
+   ===================================================================== */
+/* the cross beside the day's word opens the day's verse */
+.m-crossbtn .mx-cross{width:17px; height:22px}
+.lk-themewrap .m-crossbtn{margin-bottom:16px}
+.m-verseday .mx-q{display:block; font-style:normal; font-family:var(--f-read,var(--f-body)); font-size:1.05rem; line-height:1.55}
+.m-verseday .mx-c{font-family:var(--f-type); letter-spacing:.06em; text-transform:uppercase; font-size:.68rem}
+/* where "the day's word" stood: the day's art and the Poiesis mark, side by side for now */
+.lk-marks{display:flex; align-items:flex-end; gap:14px; padding-bottom:8px}
+.lk-art{display:block; width:66px; height:50px; border-radius:1px; box-shadow:0 0 0 3px var(--card), 0 0 0 4px color-mix(in srgb,var(--on-ground) 35%,transparent), 0 6px 14px -6px rgba(0,0,0,.5)}
+.lk-logo{display:block; width:46px; height:46px; color:var(--ground-accent)}
+.lk-logo svg{width:100%; height:100%}
+/* "Synthesise, or comment on one", pointing at the buttons and the ◇ */
+.lk-b .lk-text > .lk-rowwrap{display:inline-flex; flex-direction:column; margin:0 0 20px -14px; max-width:100%}
+.lk-rowwrap > .lk-row{margin:0}
+.lk-hint{display:flex; align-items:flex-end; gap:4px; margin:0 0 -16px 22px; font:400 16px/1.2 "Kalam", cursive; color:var(--lk-mute)}
+.lk-hint .hint-ar{width:30px; height:23px; flex:none; color:var(--lk-red)}
+.lk-hint .hint-gap{flex:1 1 auto}
+.lk-hint span:not(.hint-gap){padding-bottom:10px}
+.ph-home .lk-hint{margin:6px 0 -2px 4px; color:var(--on-ground)}
+.ph-home .lk-hint .hint-ar{color:var(--ground-accent)}
+/* the synthesis page: one main text, the others smaller beside it */
+.sy-ov .synworks.sy-split{display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:14px; align-items:start}
+.sy-ov .sy-split .synw{max-height:none}
+.sy-split .sy-mainw .sy-text{font-size:1.1rem; line-height:1.62; max-height:56vh; padding:14px 18px}
+.sy-split .sy-mainw b{font-size:1.35rem}
+.sy-side{display:flex; flex-direction:column; gap:10px; min-width:0}
+.sy-sidew{cursor:pointer; transition:border-color .2s, transform .2s}
+.sy-sidew:hover, .sy-sidew:focus-visible{border-color:var(--ink-accent); transform:translateY(-1px)}
+.sy-sidew .sy-text{font-size:.8rem; line-height:1.45; max-height:22vh}
+.sy-sidew b{font-size:.95rem}
+.sy-sidew .yours{font-size:.88rem}
+.sy-swap{display:block; margin-top:8px; text-align:right; font:500 .82rem var(--f-ui,sans-serif); color:var(--ink-accent)}
+@media (max-width:700px){
+  .sy-ov .synworks.sy-split{display:flex; flex-direction:column; overflow:visible; gap:10px}
+  .sy-ov .sy-split .synw{flex:none; max-height:none}
+  .sy-split .sy-mainw .sy-text{max-height:44dvh; font-size:1rem; padding:12px 14px}
+  .sy-sidew .sy-text{max-height:16dvh}
+}
+/* the verse sits on its own paper card, so it takes the paper's ink */
+.lk .m-verseday, .m-verseday{color:var(--card-ink)}
+.lk .m-verseday .mx-c, .m-verseday .mx-c{color:var(--paper-mute)}
+.m-verseday{--ink-accent:var(--card-accent)}

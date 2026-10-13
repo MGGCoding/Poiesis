@@ -31,8 +31,15 @@ color.forest.name: forest
 color.rose.name: rose
 color.xcx.name: marys favroite xcx
 color.credit: Colours by Mary
-# the small words at the head of the Manuscript page
-look.b.runhead: the day’s word
+# the hint above Poem · Passage · Scripture, with arrows to the buttons and the ◇
+muse.hint: Synthesise, or comment on one
+link.yours.pair: Your synthesis of the 
+link.tag: A synthesis
+link.page.title: Synthesis: 
+link.aria: Synthesis: 
+# the synthesis page: one work large, the others smaller beside it
+syn.swap: Read this one
+syn.side: The others
 
 # THE HERO (shown on the Why page)
 hero.eyebrow: Poiesis, a place to receive and to make
@@ -105,26 +112,26 @@ cue.tip: Contributions today
 cue.onlyyou: Nobody here yet today
 cue.onlyyou.some: Only you here so far today
 
-# LINKS BETWEEN WORKS
+# SYNTHESES BETWEEN WORKS (Round 21: "link" became "synthesis"; the keys keep their old names)
 link.pair.heading: How do you contrast these two?
 link.pair.line: What do they both capture? even in different ways
 link.whole.heading: One thought that holds all three
 link.whole.line: Where do they meet? What one thing are all three looking toward?
 link.placeholder: Two or three sentences is plenty.
-link.publish: Publish this link
+link.publish: Publish this synthesis
 link.appears: Appears under the 
 link.close: Close
 link.others.heading: How others connected them
-link.gate.line: Write your own link first
+link.gate.line: Write your own synthesis first
 link.yours.whole: Your thought on all three
 link.published.under: Published under 
 link.published.journal:  · also in your notebook
-link.mine.heading: Your links today
-link.counts: Not written yet. This link will count as your first impression here.
-link.via.small: your link, as your first impression
+link.mine.heading: Your syntheses today
+link.counts: Not written yet. This synthesis will count as your first impression here.
+link.via.small: your synthesis, as your first impression
 link.first.small: your first impression
-muse.first.via: Your first impression, written as a link with the 
-toast.link.counts: Your link is your first impression on the 
+muse.first.via: Your first impression, written as a synthesis with the 
+toast.link.counts: Your synthesis is your first impression on the 
 
 # STICKERS
 sticker.drawnfrom: Drawn from 
@@ -382,8 +389,8 @@ whybottom.p3: Man is ultimately meant for communion with the Divine Essence, and
 # THE PHONE HOME — the list of today’s works on a phone
 phone.begin: begin here
 phone.written: written
-phone.link.write: write a link: 
-phone.link.done: linked: 
+phone.link.write: write a synthesis: 
+phone.link.done: synthesised: 
 phone.all.write: Tie all three together
 phone.all.done: All three are together
 phone.back: ‹ Today
@@ -396,7 +403,7 @@ info.translated: Translated by
 # EDITORS ONLY — shown only when the address has ?editor in it
 editor.reset: Reset today
 editor.reset.ask: Clear today's writing on this browser?
-editor.reset.line: First impressions, later thoughts, drafts, links, replies, today's stickers and today's check. Your notebook stays as it is.
+editor.reset.line: First impressions, later thoughts, drafts, syntheses, replies, today's stickers and today's check. Your notebook stays as it is.
 editor.reset.yes: Clear it
 editor.reset.no: Keep it
 editor.reset.done: Today is blank again.
@@ -413,7 +420,7 @@ fb.try.line: Open a fresh Poiesis: an empty notebook and today's three works. Wr
 fb.try.button: Open a fresh Poiesis ›
 fb.try.again: Open my Poiesis again ›
 fb.tell.heading: 2. Tell Niko how it went
-fb.included: Sent with your answers: the day you tried it, and how many impressions, links and notebook pages you made. Never what you wrote.
+fb.included: Sent with your answers: the day you tried it, and how many impressions, syntheses and notebook pages you made. Never what you wrote.
 fb.s.about: About you
 fb.q.name: Your name, so Niko knows who wrote (optional)
 fb.q.device: What did you use?
@@ -424,7 +431,7 @@ fb.q.firstconfused: What, if anything, confused you at first?
 fb.s.output: Was it clear?
 fb.q.outputclear: Was what Poiesis gave back to you clear: the works, the questions, what happened after you wrote?
 fb.q.unclear: Which parts were unclear? Tick any.
-fb.o.unclear: Why these three works are together | The questions under the prompt | Why other people's writing is hidden until you write | Stickers and today's check | Writing a link between two works | Tying all three together | The notebook | The little column beside the day's word | The ⓘ stories
+fb.o.unclear: Why these three works are together | The questions under the prompt | Why other people's writing is hidden until you write | Stickers and today's check | Writing a synthesis of two works | Tying all three together | The notebook | The cross beside the day's word | The ⓘ stories
 fb.q.unclearwhy: Say more about anything you ticked
 fb.s.incentive: Coming back, and writing back
 fb.q.wrote: Did you write a first impression?
@@ -435,7 +442,7 @@ fb.o.comeback: The works themselves | A daily reminder | Seeing what friends wro
 fb.q.respond: What would make you write back to someone else's impression?
 fb.s.features: The features
 fb.q.features: How did each one land?
-fb.o.featurerows: The three works of the day | The questions that guide your first impression | Writing before you can read others | Links between two works | Tying all three together | Stickers | The notebook | The day's saying (the column) | The ⓘ stories about each work
+fb.o.featurerows: The three works of the day | The questions that guide your first impression | Writing before you can read others | Syntheses of two works | Tying all three together | Stickers | The notebook | The day's verse (the cross) | The ⓘ stories about each work
 fb.o.featurecols: Loved it | Fine | Not for me | Didn't find it
 fb.q.add: One thing you would add
 fb.q.remove: One thing you would take away
@@ -463,9 +470,9 @@ fb.copied: Copied. Paste them into a message to Niko.
 fb.email: Email them
 fb.edit: Change my answers
 
-# THE DAY'S SAYING — one line under the theme word
-maxim.button: The day’s wisdom
-maxim.keep: keep it
-maxim.kept: kept
-toast.maxim.kept: Kept in your notebook.
+# THE CROSS beside the day's word opens the day's verse (Round 21: no more saying)
+verse.button: The day’s verse
+verse.keep: keep it
+verse.kept: kept
+toast.verse.kept: Kept in your notebook.
 `;
