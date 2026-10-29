@@ -23,13 +23,17 @@ site.tab.muse: Muse
 site.tab.notebook: Notebook
 site.why.link: Why Poiesis ›
 site.footer: A working sketch, 2026.
-# Round 20: one look (Manuscript); colour is one of Mary's four themes.
+# One look (Manuscript); colour is one of Mary's themes (four in Round 20, eight since 28 Oct).
 # Her names exactly as she typed them.
 site.colors.title: Colour
 color.dark.name: dark mode
 color.forest.name: forest
 color.rose.name: rose
 color.xcx.name: marys favroite xcx
+color.couple.name: a couple minutes
+color.leaves.name: leaves from the vine
+color.shirt.name: niko's shirt
+color.irene.name: irene
 color.credit: Colours by Mary
 # the hint above Poem · Passage · Scripture, with arrows to the buttons and the ◇
 muse.hint: Synthesise, or comment on one

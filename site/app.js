@@ -346,12 +346,18 @@ const SPACES={journal:"Journal", scrap:"Scrapbook", board:"Idea board"};
    nobody can change the layout. Colour is one of Mary's four themes, one
    setting shared by phone and desktop. A saved look or colour that is no
    longer offered is left in the person's state, unused. */
+/* MARY THEMES START: written by tools/mary-themes.mjs */
 const THEMES=[
- {id:"dark",   key:"color.dark.name",   name:"dark mode",          sw:["#1f160f","#faebc9","#2a2420","#8c3600","#e9dba7","#b88a5c"]},
- {id:"forest", key:"color.forest.name", name:"forest",             sw:["#202f19","#faebc9","#59221d","#59221d","#f4ceb8","#66463e"]},
- {id:"rose",   key:"color.rose.name",   name:"rose",               sw:["#952d3d","#faebc9","#3d1700","#632600","#e2b983","#b88a5c"]},
- {id:"xcx",    key:"color.xcx.name",    name:"marys favroite xcx", sw:["#a5ff9e","#faebc9","#1b1640","#ff6200","#ff66fe","#1f15ff"]}];
+ {"id":"dark","key":"color.dark.name","name":"dark mode","sw":["#1f160f","#faebc9","#2a2420","#8c3600","#e9dba7","#b88a5c"]},
+ {"id":"forest","key":"color.forest.name","name":"forest","sw":["#202f19","#faebc9","#59221d","#59221d","#f4ceb8","#66463e"]},
+ {"id":"rose","key":"color.rose.name","name":"rose","sw":["#952d3d","#faebc9","#3d1700","#632600","#e2b983","#b88a5c"],"tex":true},
+ {"id":"xcx","key":"color.xcx.name","name":"marys favroite xcx","sw":["#a5ff9e","#ffb3e3","#1b1640","#b3fff5","#b3fff5","#b3fff5"],"edge":true},
+ {"id":"couple","key":"color.couple.name","name":"a couple minutes","sw":["#002f4d","#faebc9","#3d1700","#b3006b","#ffb3ba","#b88a5c"],"tex":true},
+ {"id":"leaves","key":"color.leaves.name","name":"leaves from the vine","sw":["#cebc8d","#524523","#f5f6c1","#383215","#eae4c7","#b88a5c"],"tex":true},
+ {"id":"shirt","key":"color.shirt.name","name":"niko's shirt","sw":["#c4e7f3","#cdefc8","#392b0e","#392b0e","#d5cee9","#392b0e"],"edge":true},
+ {"id":"irene","key":"color.irene.name","name":"irene","sw":["#b94b18","#f4c3e2","#392b0e","#c7e0ef","#c7e0ef","#faeaf4"]}];
 const THEME_DEFAULT="dark";
+/* MARY THEMES END */
 const themeName=t=>T(t.key,t.name);
 /* what Manuscript fixes, and the settings that no longer change the layout */
 const LOOKFIX={three:"icons", tplace:"top", pplace:"row", backing:"none", tsize:"m", labels:"off", cueplace:"small",
@@ -610,7 +616,7 @@ function myTop(){ return S.profile.top && S.owned[S.profile.top] ? S.profile.top
 function applyPrefs(){
  const R=document.documentElement;
  const u=U(), C=curColor(); R.removeAttribute("data-look"); R.removeAttribute("data-font");
- R.setAttribute("data-mlook",curLook()); R.setAttribute("data-color",C);
+ R.setAttribute("data-mlook",curLook()); R.setAttribute("data-color",C); const th=THEMES.find(t=>t.id===C); R.setAttribute("data-edge",th?.edge?"on":"off"); R.setAttribute("data-tex",th?.tex?"on":"off");
  R.setAttribute("data-dev",DEV()); R.setAttribute("data-density",u.density); R.setAttribute("data-gloss",u.gloss); R.setAttribute("data-psize",u.psize);
  $("#colorList").innerHTML=THEMES.map(t=>`<button type="button" class="thpick" data-color="${t.id}" aria-pressed="${t.id===C}"><span class="thname">${esc(themeName(t))}</span><span class="thstrip" aria-hidden="true">${t.sw.map(c=>`<span style="background:${c}"></span>`).join("")}</span></button>`).join("");
  $("#profBtn").innerHTML=avatarHTML(me());
