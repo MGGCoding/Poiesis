@@ -1,0 +1,17 @@
+// Cloudflare deploy settings for poetdaily.org (read by `npx wrangler deploy`).
+// Only site/ is published, so the domain opens Poiesis directly and nothing
+// else in the repository (README, .github, git history) is served.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "poiesis",
+  "compatibility_date": "2026-10-23",
+  "assets": {
+    "directory": "./site",
+    "not_found_handling": "404-page"
+  },
+  "routes": [
+    { "pattern": "poetdaily.org", "custom_domain": true }
+  ],
+  "workers_dev": false,
+  "preview_urls": false
+}

@@ -3,9 +3,10 @@
 <title>Poiesis</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
-<!-- The site lives in site/. This page only forwards there, keeping anything
-     after the address (?editor, ?user=…), so the bare address opens Poiesis. -->
-<script>location.replace("site/" + location.search + location.hash);</script>
-<meta http-equiv="refresh" content="0; url=site/">
+<!-- Poiesis now lives at poetdaily.org (Cloudflare serves site/ there).
+     This page is only reached through the old GitHub Pages address, and
+     forwards to the new one, keeping ?editor, ?user=… and any #. -->
+<script>location.replace("https://poetdaily.org/" + location.search + location.hash);</script>
+<meta http-equiv="refresh" content="0; url=https://poetdaily.org/">
 <style>body{margin:0;background:#e4d9c6;color:#2b231d;font:16px Georgia,serif;display:grid;place-items:center;min-height:100vh}a{color:inherit}</style>
-</head><body><p><a href="site/">Open Poiesis ›</a></p></body></html>
+</head><body><p><a href="https://poetdaily.org/">Poiesis has moved to poetdaily.org ›</a></p></body></html>

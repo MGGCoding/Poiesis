@@ -6,6 +6,7 @@
 !/README.md
 !/index.html
 !/.gitignore
+!/wrangler.jsonc
 .DS_Store
 node_modules/
 *.log
