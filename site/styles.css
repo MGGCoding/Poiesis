@@ -13,7 +13,7 @@
   --surface:#2d241b; --on-surface:#e8daba; --muted:#948872; --line:#3f352a;
   --card:#faebc9; --card-ink:#2a2420; --card-rule:#dfd1b3; --card-margin:#b27546;
   --board:#b88a5c; --board-dot:#936e4a; --frame:#6b5035;
-  --accent:#8c3600; --on-accent:#faebc9; --note:#e9dba7;
+  --accent:#8c3600; --on-accent:#faebc9; --note:#e9dba7; --on-note:#2b1a12;
   --card-accent:#8c3600; --ground-accent:#e9dba7; --card-edge:transparent;
   /* text: on the ground by default; paper sets its own (below) */
   --ink-accent:var(--ground-accent); --paper-mute:color-mix(in srgb,var(--card-ink) 68%,var(--card));
@@ -116,6 +116,93 @@ html[data-color="irene"]{
   --paper-mute:color-mix(in srgb,var(--card-ink) 80%,var(--card));
   --mute-ink:80%;
 }
+/* Monastery 1 — by Poiesis · texture: quatrefoil · margin: gilt
+   made readable: quiet words on paper 70% ink, not 68% */
+html[data-color="monastery1"]{
+  --ground:#3a1018; --on-ground:#e4d5b6; --muted-ground:#a38a7a;
+  --surface:#482025; --on-surface:#e4d5b6; --muted:#a38a7a; --line:#553031;
+  --card:#f3e6c4; --card-ink:#2a1a10; --card-rule:#dbceae; --card-margin:#7e8a9b;
+  --board:#8a5a2b; --board-dot:#6e4822; --frame:#503419;
+  --accent:#1f3f7a; --on-accent:#f3e6c4; --note:#d9b45c;
+  --card-accent:#1f3f7a; --ground-accent:#d9b45c; --card-edge:transparent;
+  --tape:#d7c6aa80;
+  --paper-mute:color-mix(in srgb,var(--card-ink) 70%,var(--card));
+  --texture:url("data:image/svg+xml,%3Csvg%20opacity%3D%270.09%27%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2764%27%20height%3D%2764%27%20viewBox%3D%270%200%2064%2064%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23d9b45c%27%20stroke-width%3D%271%27%3E%3Cpath%20d%3D%27M32%2014a8%208%200%200%201%208%208%208%208%200%200%201%2010%2010%208%208%200%200%201-10%2010%208%208%200%200%201-8%208%208%208%200%200%201-8-8%208%208%200%200%201-10-10%208%208%200%200%201%2010-10%208%208%200%200%201%208-8z%27%2F%3E%3Cpath%20d%3D%27M0%200l8%208M64%200l-8%208M0%2064l8-8M64%2064l-8-8%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"); --tex-size:64px 64px;
+  --mcol:#d9b45c;
+}
+/* Monastery 2 — by Poiesis · texture: fleur
+   made readable: red letters on paper #a8321e → #a5311e; quiet words on paper 72% ink, not 68% */
+html[data-color="monastery2"]{
+  --ground:#22201e; --on-ground:#dfd3ba; --muted-ground:#978f7f;
+  --surface:#312e2a; --on-surface:#dfd3ba; --muted:#978f7f; --line:#403d37;
+  --card:#efe3c8; --card-ink:#2b2018; --card-rule:#d7ccb3; --card-margin:#c8826a;
+  --board:#6e5a44; --board-dot:#584836; --frame:#403427;
+  --accent:#a8321e; --on-accent:#efe3c8; --note:#f0b860;
+  --card-accent:#a5311e; --ground-accent:#f0b860; --card-edge:transparent;
+  --tape:#d0c6af80;
+  --paper-mute:color-mix(in srgb,var(--card-ink) 72%,var(--card));
+  --texture:url("data:image/svg+xml,%3Csvg%20opacity%3D%270.07%27%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2780%27%20height%3D%2780%27%20viewBox%3D%270%200%2080%2080%27%3E%3Cg%20fill%3D%27%23f0b860%27%3E%3Cpath%20d%3D%27M20%208c3%204%203%209%200%2014-3-5-3-10%200-14zM20%2024c-4-6-11-6-12-1%204%200%207%202%209%205zM20%2024c4-6%2011-6%2012-1-4%200-7%202-9%205zM16%2027h8v2h-8zM19%2029h2v6h-2z%27%2F%3E%3Cpath%20d%3D%27M60%2048c3%204%203%209%200%2014-3-5-3-10%200-14zM60%2064c-4-6-11-6-12-1%204%200%207%202%209%205zM60%2064c4-6%2011-6%2012-1-4%200-7%202-9%205zM56%2067h8v2h-8zM59%2069h2v6h-2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"); --tex-size:80px 80px;
+}
+/* Monastery 3 — by Poiesis · margin: ribbon
+   made readable: the day's word and pencilled notes #a33a22 → #983620; quiet words on paper 70% ink, not 68%; paper and ground too alike (1.3 : 1): a 2px edge in #c49a56 */
+html[data-color="monastery3"]{
+  --ground:#e8dcc6; --on-ground:#1b1640; --muted-ground:#696173;
+  --surface:#d8ccbb; --on-surface:#1b1640; --muted:#696173; --line:#c7bcb1;
+  --card:#fbf6ea; --card-ink:#2e2418; --card-rule:#e2ddd1; --card-margin:#cb8f7c;
+  --board:#c49a56; --board-dot:#9d7b45; --frame:#725932;
+  --accent:#a33a22; --on-accent:#fbf6ea; --note:#ecd59a;
+  --card-accent:#a33a22; --ground-accent:#983620; --card-edge:#c49a56;
+  --tape:#f8f2e580;
+  --paper-mute:color-mix(in srgb,var(--card-ink) 70%,var(--card));
+  --shadow:0 1px 2px rgba(20,20,40,.18), 0 8px 18px -8px rgba(20,20,40,.3);
+  --mcol:#a33a22;
+}
+/* Modern office — by Poiesis
+   made readable: paper and ground too alike (1.3 : 1): a 2px edge in #9a9da3 */
+html[data-color="office"]{
+  --ground:#e4e5e7; --on-ground:#1b1640; --muted-ground:#67657f;
+  --surface:#d4d4da; --on-surface:#1b1640; --muted:#67657f; --line:#c4c4cc;
+  --card:#ffffff; --card-ink:#1c1d1f; --card-rule:#e4e4e4; --card-margin:#929396;
+  --board:#9a9da3; --board-dot:#7b7e82; --frame:#595b5f;
+  --accent:#383b40; --on-accent:#ffffff; --note:#d3d5d9;
+  --card-accent:#383b40; --ground-accent:#383b40; --card-edge:#9a9da3;
+  --tape:#fbfbfb80;
+  --shadow:0 1px 2px rgba(20,20,40,.18), 0 8px 18px -8px rgba(20,20,40,.3);
+}
+/* Refined Scroller — by Poiesis
+   made readable: paper and ground too alike (1.1 : 1): a 2px edge in #414144 */
+html[data-color="scroller"]{
+  --ground:#121213; --on-ground:#f3ead8; --muted-ground:#9e988d;
+  --surface:#242323; --on-surface:#f3ead8; --muted:#9e988d; --line:#363533;
+  --card:#1f1f21; --card-ink:#e9e7e3; --card-rule:#373738; --card-margin:#9a471d;
+  --board:#2c2c2f; --board-dot:#232326; --frame:#1a1a1b;
+  --accent:#ff6719; --on-accent:#1f1f21; --note:#ff8a3d;
+  --card-accent:#ff6719; --ground-accent:#ff6719; --card-edge:#414144;
+  --tape:#1d1d1f80;
+}
+/* Forum — by Poiesis
+   made readable: red letters on paper #4752c4 → #8a91da; paper and ground too alike (1.1 : 1): a 2px edge in #5a5b5d */
+html[data-color="forum"]{
+  --ground:#313338; --on-ground:#f3ead8; --muted-ground:#a9a49b;
+  --surface:#414245; --on-surface:#f3ead8; --muted:#a9a49b; --line:#505052;
+  --card:#2b2d31; --card-ink:#dbdee1; --card-rule:#404246; --card-margin:#3a4182;
+  --board:#1e1f22; --board-dot:#18191b; --frame:#111214;
+  --accent:#4752c4; --on-accent:#dbdee1; --note:#c9cdfb;
+  --card-accent:#8a91da; --ground-accent:#c9cdfb; --card-edge:#5a5b5d;
+  --tape:#2c2e3280;
+}
+/* Lamplight — by Poiesis
+   made readable: quiet words on paper 70% ink, not 68% */
+html[data-color="lamplight"]{
+  --ground:#0f1626; --on-ground:#e2d9c4; --muted-ground:#928f88;
+  --surface:#202633; --on-surface:#e2d9c4; --muted:#928f88; --line:#31353f;
+  --card:#f4ead2; --card-ink:#241c14; --card-rule:#dbd1bb; --card-margin:#8692a2;
+  --board:#7a5a3a; --board-dot:#62482e; --frame:#473422;
+  --accent:#2c4a7a; --on-accent:#f4ead2; --note:#f0b65a;
+  --card-accent:#2c4a7a; --ground-accent:#f0b65a; --card-edge:transparent;
+  --tape:#d2cab880;
+  --paper-mute:color-mix(in srgb,var(--card-ink) 70%,var(--card));
+}
 /* margin: spine (rose) */
 html[data-color="rose"] .lk-b .lk-text{position:relative}
 html[data-color="rose"] .lk-b .lk-text::before{content:""; position:absolute; left:0; top:0; bottom:0; width:30px; background:linear-gradient(90deg,rgba(0,0,0,.35),rgba(0,0,0,.08) 55%,rgba(255,255,255,.12) 80%,rgba(0,0,0,.18)),var(--mcol); pointer-events:none}
@@ -125,6 +212,12 @@ html[data-color="rose"] .lk-b .lk-text::after{content:""; position:absolute; lef
 html[data-color="couple"] .lk-b .lk-text, html[data-color="leaves"] .lk-b .lk-text{position:relative}
 html[data-color="couple"] .lk-b .lk-text::before, html[data-color="leaves"] .lk-b .lk-text::before{content:""; position:absolute; left:14px; top:24px; bottom:24px; width:24px; background:var(--mcol); -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='90' viewBox='0 0 24 90'%3E%3Cg fill='none' stroke='black' stroke-width='1.4'%3E%3Cpath d='M12 0c-8 15 8 30 0 45s8 30 0 45'/%3E%3Cpath d='M10 20c-6-1-9 2-10 6 5 1 8-2 10-6zM14 65c6-1 9 2 10 6-5 1-8-2-10-6z' fill='black'/%3E%3Ccircle cx='19' cy='38' r='1.6' fill='black'/%3E%3C/g%3E%3C/svg%3E") repeat-y center/24px 90px; mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='90' viewBox='0 0 24 90'%3E%3Cg fill='none' stroke='black' stroke-width='1.4'%3E%3Cpath d='M12 0c-8 15 8 30 0 45s8 30 0 45'/%3E%3Cpath d='M10 20c-6-1-9 2-10 6 5 1 8-2 10-6zM14 65c6-1 9 2 10 6-5 1-8-2-10-6z' fill='black'/%3E%3Ccircle cx='19' cy='38' r='1.6' fill='black'/%3E%3C/g%3E%3C/svg%3E") repeat-y center/24px 90px; opacity:.8; pointer-events:none}
 @media (max-width:700px){ html[data-color="couple"] .lk-b .lk-text::before, html[data-color="leaves"] .lk-b .lk-text::before{left:8px; width:20px} }
+/* margin: gilt (monastery1) */
+html[data-color="monastery1"] .lk-b .lk-text{position:relative}
+html[data-color="monastery1"] .lk-b .lk-text::before{content:""; position:absolute; inset:14px; border:1px solid var(--mcol); outline:1px solid var(--mcol); outline-offset:4px; opacity:.75; pointer-events:none}
+/* margin: ribbon (monastery3) */
+html[data-color="monastery3"] .lk-b .lk-text{position:relative}
+html[data-color="monastery3"] .lk-b .lk-text::before{content:""; position:absolute; top:-10px; right:24px; width:22px; height:130px; background:linear-gradient(90deg,rgba(0,0,0,.18),transparent 40%,rgba(255,255,255,.15) 60%,rgba(0,0,0,.15)),var(--mcol); clip-path:polygon(0 0,100% 0,100% 100%,50% 88%,0 100%); pointer-events:none}
 /* MARY THEMES END */
 *{box-sizing:border-box}
 @media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
@@ -362,7 +455,7 @@ h1,h2,h3,h4{font-family:var(--f-display); font-weight:400; text-wrap:balance; ma
 .jitem[aria-current="true"]{border-left-color:var(--accent); background:var(--ground)}
 .jitem .d{font-family:var(--f-type); font-size:.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:.05em}
 .jitem .t{display:block; font-family:var(--f-display); font-size:1.05rem; line-height:1.25}
-.jprompt{background:var(--note); color:#2a2420; padding:10px 14px; font-family:var(--f-hand); font-size:1.1rem; margin-bottom:12px; transform:rotate(-.4deg); box-shadow:var(--shadow)}
+.jprompt{background:var(--note); color:var(--on-note); padding:10px 14px; font-family:var(--f-hand); font-size:1.1rem; margin-bottom:12px; transform:rotate(-.4deg); box-shadow:var(--shadow)}
 .jprompt span{display:block; font-family:var(--f-type); font-size:.66rem; letter-spacing:.06em; text-transform:uppercase; color:#6b5a3a}
 .jpaper{background:var(--card); color:var(--card-ink); box-shadow:var(--shadow); padding:16px 20px}
 .jpaper .ttl{width:100%; border:0; background:transparent; font-family:var(--f-display); font-size:1.5rem; color:var(--card-ink); padding:0}
@@ -410,7 +503,7 @@ h1,h2,h3,h4{font-family:var(--f-display); font-weight:400; text-wrap:balance; ma
 .bcard.pin::before{width:14px; height:14px; border-radius:50%; top:-5px; background:radial-gradient(circle at 35% 35%, #e46a5a, #9a2b22)}
 .bcard.quote{font-family:var(--f-display); font-size:1.02rem; line-height:1.4}
 .bcard.quote cite{display:block; font-family:var(--f-type); font-size:.64rem; margin-top:8px; font-style:normal; color:var(--paper-mute)}
-.bcard.sticky{background:var(--note); font-family:var(--f-hand); font-size:1.1rem; line-height:1.35; width:160px}
+.bcard.sticky{background:var(--note); color:var(--on-note); font-family:var(--f-hand); font-size:1.1rem; line-height:1.35; width:160px}
 .bcard.hand{font-family:var(--f-hand); font-size:1.08rem; line-height:1.35; background-image:repeating-linear-gradient(transparent 0 23px, var(--card-rule) 23px 24px); background-position:0 14px}
 .bcard.photo{padding:10px 10px 28px; width:170px}
 .bcard.photo .ph{aspect-ratio:1/1; background-size:cover; background-position:center}
@@ -595,7 +688,7 @@ footer{padding-block:34px 0; color:var(--muted-ground); font-size:.82rem; displa
 .pinc:hover{transform:translateY(-2px)}
 .pinc.quote{font-family:var(--f-display); font-size:1.05rem; line-height:1.4}
 .pinc.quote cite, .bcard.quote cite{display:block; font-family:var(--f-type); font-size:.64rem; margin-top:8px; font-style:normal; color:var(--paper-mute)}
-.pinc.sticky{background:var(--note); font-family:var(--f-hand); font-size:1.1rem; line-height:1.35}
+.pinc.sticky{background:var(--note); color:var(--on-note); font-family:var(--f-hand); font-size:1.1rem; line-height:1.35}
 .pinc.hand{font-family:var(--f-hand); font-size:1.08rem; line-height:1.35}
 .pinc.photo{padding:0 0 8px; overflow:hidden}
 .pinc.photo .ph{aspect-ratio:4/5; background-size:cover; background-position:center}
@@ -1243,7 +1336,7 @@ html[data-dev="phone"] .switch{background:transparent; border-color:transparent}
 .ph-seg{display:block; border:0; background:none; padding:0 0 8px 56px; text-align:left; font-family:var(--f-hand); font-size:.92rem; color:var(--ink-accent); margin-top:-4px; position:relative; z-index:1}
 .ph-knot{display:flex; align-items:center; gap:12px; border:0; border-top:1px solid var(--line); background:none; padding:12px 0; text-align:left; color:var(--ink-accent); font-style:italic; position:relative; z-index:1}
 .ph-knot span{width:40px; text-align:center; font-size:1.2rem; font-style:normal}
-.ph-others{display:flex; align-items:center; gap:10px; margin:22px 0 0; padding:10px 14px; background:var(--grain), var(--note); color:#2b1a12; transform:rotate(-1deg); box-shadow:0 2px 5px rgba(0,0,0,.14); font-family:var(--f-hand); font-size:1.02rem; width:92%}
+.ph-others{display:flex; align-items:center; gap:10px; margin:22px 0 0; padding:10px 14px; background:var(--grain), var(--note); color:var(--on-note); transform:rotate(-1deg); box-shadow:0 2px 5px rgba(0,0,0,.14); font-family:var(--f-hand); font-size:1.02rem; width:92%}
 .ph-avs{display:flex}
 .ph-avs span{width:24px; height:24px; border-radius:50%; border:2px solid var(--note); margin-left:-7px; display:grid; place-items:center; font-size:.56rem; color:#fff; font-family:"Work Sans",sans-serif}
 .ph-avs span:first-child{margin-left:0}
@@ -1662,3 +1755,121 @@ html[data-edge="on"] .es-body{box-shadow:0 0 0 2px var(--card-edge), var(--shado
 /* Mary's textures, faint on the ground (rose, a couple minutes, leaves from the vine).
    Only themes that have one; the others keep the plain ground and the phone's grain. */
 html[data-tex="on"] body, html[data-tex="on"][data-dev="phone"] body{background:var(--texture) 0 0/var(--tex-size) repeat, var(--ground)}
+
+/* the colour picker holds fifteen themes (29 Oct): it scrolls inside itself,
+   two columns on a wide screen, and the ones Poiesis made sit under a small heading */
+#colorPop{max-height:calc(100dvh - 76px); overflow-y:auto; overscroll-behavior:contain}
+.thgroup{grid-column:1/-1; margin:10px 0 0; font:400 .66rem var(--f-type); letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+@media (min-width:700px){ #colorPop{width:min(560px, calc(100vw - 32px))} #colorPop .thlist{display:grid; grid-template-columns:1fr 1fr} }
+
+/* ===== Round 23 (1 Nov): the Muse page from the Muse Art Studio ==========
+   Tabs on the paper box's top edge; in the box the kind, then the title;
+   "How it came to be", then "Synthesise with"; beside the box a column that
+   stays in view (the writing box, or in a synthesis the pair panel and the
+   notepad). Art is the third work from 1 November. */
+.lk-v2 .lk-desk{display:grid; grid-template-columns:minmax(0,1.618fr) minmax(0,1fr); gap:28px; align-items:start; margin:28px 0 40px}
+.lk-v2 .lk-col{min-width:0}
+.lk-b.lk-v2 .lk-page{display:block; margin:0; position:relative}
+.lk-b.lk-v2 .lk-text{border-right:0; padding:40px 56px 56px 64px}
+/* the ✝ rides on the last word of the day's word */
+.th-last{white-space:nowrap}
+.th-last .m-crossbtn{display:inline-flex; vertical-align:middle; margin:0 0 0 .18em; position:relative; top:-.12em}
+.lk-themewrap .th-last .m-crossbtn{margin-bottom:0}
+.lk-b.lk-v2 .lk-rh .lk-themewrap{display:block; text-align:center}
+.ph-theme{display:block}
+.ph-theme .ph-tw{display:block}
+/* tabs on the box */
+.lk-tabs{display:flex; align-items:flex-end; gap:4px; padding-left:22px}
+.lk-tab{display:inline-flex; align-items:center; gap:8px; border:0; border-radius:8px 8px 0 0; padding:9px 16px 8px; font:400 1.02rem var(--f-body);
+ background:color-mix(in srgb,var(--lk-paper) 82%,var(--ground)); color:color-mix(in srgb,var(--lk-ink) 90%,var(--lk-paper)); box-shadow:inset 0 -6px 8px -8px rgba(0,0,0,.35); cursor:pointer}
+.lk-tab svg{width:19px; height:19px; flex:none}
+.lk-tab .lk-tick{font-size:.82em; color:inherit}
+.lk-tab[aria-pressed="true"]{background:var(--lk-paper); color:var(--lk-ink); padding-bottom:12px; box-shadow:none}
+.lk-tab[aria-pressed="true"] svg{color:var(--lk-red)}
+.lk-tab:hover{color:var(--lk-ink)}
+.lk-tab.lk-tsyn{padding:8px 12px 7px; color:var(--lk-red)}
+.lk-tab.lk-tsyn .sym-c{width:24px; height:24px}
+/* in the box */
+.lk .lk-kind{margin:0 0 8px; font:400 .74rem var(--f-type); letter-spacing:.16em; text-transform:uppercase; color:var(--lk-red)}
+.lk-came{margin:30px 0 0; padding-top:16px; border-top:1px dashed var(--lk-rule); font-size:1.02rem; line-height:1.6; color:var(--lk-mute)}
+.lk-came p{margin:0 0 .6em; max-width:38em}
+.lk-came .lk-camel{margin:0 0 6px; font:400 .7rem var(--f-type); letter-spacing:.14em; text-transform:uppercase; color:var(--lk-mute)}
+.lk-go{margin-top:28px; display:grid; gap:10px}
+.lk-golab{display:flex; align-items:center; gap:8px; margin:0; font:400 .72rem var(--f-type); letter-spacing:.14em; text-transform:uppercase; color:var(--lk-red)}
+.lk-golab .sym-c{width:20px; height:20px}
+.lk-with{display:flex; flex-wrap:wrap; gap:8px; align-items:stretch}
+.lk-withb{display:grid; align-content:start; gap:1px; text-align:left; border:1px solid var(--lk-rule); border-radius:6px; padding:8px 14px; background:transparent; color:var(--lk-ink); max-width:100%; min-width:0; cursor:pointer}
+.lk-withb .k{font:400 .66rem var(--f-type); letter-spacing:.12em; text-transform:uppercase; color:var(--lk-red)}
+.lk-withb b{font:400 1.05rem/1.25 var(--f-display)}
+.lk-withb:hover{border-color:var(--lk-red)}
+.lk-synbig{display:inline-flex; align-items:center; gap:10px; border:0; border-radius:6px; padding:10px 20px 10px 14px; background:var(--accent); color:var(--on-accent); font:600 1.08rem var(--f-body); cursor:pointer; box-shadow:0 6px 14px -8px color-mix(in srgb,var(--accent) 80%,transparent)}
+.lk-synbig .sym-c{width:24px; height:24px}
+.lk-synbig .lk-tick{color:inherit}
+/* the column beside the box: it stays in view while you scroll */
+.lk-v2 .lk-side{position:sticky; top:84px; max-height:calc(100dvh - 100px); overflow:auto; display:grid; gap:14px; align-content:start; margin-top:46px; padding:2px 2px 6px; overscroll-behavior:contain}
+.lk-card{background:var(--lk-paper); color:var(--lk-ink); box-shadow:var(--shadow); padding:22px 24px;
+ --ink-accent:var(--card-accent); --muted:var(--paper-mute); --muted-ground:var(--paper-mute)}
+.lk-b.lk-v2 .lk-write{position:static; top:auto}
+html[data-edge="on"] :is(.lk-card, .lk-tab[aria-pressed="true"]){box-shadow:0 0 0 2px var(--card-edge), var(--shadow)}
+/* questions behind a button */
+.lk-qfold{margin-top:14px; border-top:1px dashed var(--lk-rule); padding-top:10px}
+.lk-qbtn{display:inline-flex; align-items:center; gap:8px; border:1px solid var(--lk-rule); border-radius:999px; background:transparent; color:var(--lk-ink); padding:5px 14px 5px 9px; font:400 .98rem var(--f-body); cursor:pointer}
+.lk-qbtn svg{width:18px; height:18px; color:var(--lk-red)}
+.lk-qbtn:hover, .lk-qbtn[aria-expanded="true"]{border-color:var(--lk-red)}
+.lk-qch{font-size:.8em; color:var(--lk-mute)}
+.lk-qbody{margin-top:10px}
+.lk-qbody .m-qguide{margin-top:0}
+/* synthesis: the panel and the notepad */
+.lk-synh{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px}
+.lk-synh b{display:flex; align-items:center; gap:8px; font:400 1.35rem var(--f-display)}
+.lk-synh .sym-c{width:24px; height:24px; color:var(--lk-red)}
+.lk-x{border:0; background:none; width:32px; height:32px; display:grid; place-items:center; border-radius:50%; color:var(--lk-mute); font-size:1.4rem; line-height:1; cursor:pointer}
+.lk-x:hover{background:color-mix(in srgb,var(--lk-ink) 8%,transparent); color:var(--lk-ink)}
+.lk-card .sy-pairs{margin:0 0 12px}
+.lk-card .sy-pair{border-color:var(--lk-rule); color:var(--lk-ink); background:transparent}
+.lk-card .sy-pair[aria-pressed="true"]{background:var(--lk-red); border-color:var(--lk-red); color:var(--lk-paper)}
+.lk-card .sy-pair .sy-tick, .lk-card .sy-pair[aria-pressed="true"] .sy-tick{color:inherit}
+.lk-syncards{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,130px),1fr)); gap:8px}
+.lk-syncard{border:1px solid var(--lk-rule); border-radius:4px; padding:8px 10px; min-width:0}
+.lk-syncard .k{display:block; font:400 .64rem var(--f-type); letter-spacing:.12em; text-transform:uppercase; color:var(--lk-red)}
+.lk-syncard b{display:block; font:400 1.02rem/1.2 var(--f-display)}
+.lk-syncard small{display:block; color:var(--lk-mute); font-size:.9rem}
+.lk-synnote{margin:0}
+.lk-synnote textarea{min-height:7em}
+.lk-synw.next{margin-top:44px; padding-top:34px; border-top:1px solid var(--lk-rule)}
+.lk-synw .lk-title{font-size:34px}
+/* the day's art: a fine frame round the colour study, the label under it */
+.lk-artwork{margin:6px 0 0}
+.lk-art{margin:0; display:grid; gap:10px; min-width:0}
+.lk-frame{position:relative; padding:7px; background:var(--lk-paper); border:1px solid color-mix(in srgb,var(--lk-ink) 30%,var(--lk-paper)); box-shadow:0 1px 0 color-mix(in srgb,var(--lk-ink) 12%,transparent), 0 12px 22px -14px rgba(0,0,0,.55)}
+.lk-frame::after{content:""; position:absolute; inset:6px; border:1px solid color-mix(in srgb,var(--lk-ink) 18%,transparent); pointer-events:none}
+.lk-frame svg{display:block; width:100%; height:auto}
+.lk-pstudy{width:100%; aspect-ratio:4/3}
+.lk-artlab{display:grid; gap:1px; font-size:1rem; color:var(--lk-mute)}
+.lk-artlab b{font:400 1.18rem/1.25 var(--f-display); color:var(--lk-ink)}
+.lk-artlab .lk-artnote{font-style:italic; color:var(--lk-ink); margin-top:4px}
+.lk-artlab .lk-cs{font:400 .66rem var(--f-type); letter-spacing:.08em; text-transform:uppercase; margin-top:4px}
+.lk-artlab a{color:var(--lk-red); font-size:.95rem; justify-self:start}
+.lk-arts{display:grid; grid-template-columns:minmax(0,1.55fr) minmax(0,1fr); gap:22px; align-items:start}
+/* narrow screens and phones: one column; the writing box under the work */
+@media (max-width:900px){
+ .lk-v2 .lk-desk{grid-template-columns:1fr; gap:18px; margin-top:16px}
+ .lk-v2 .lk-side{position:static; max-height:none; overflow:visible; margin-top:0; padding:0}
+ .lk-b.lk-v2 .lk-text{padding:24px 20px 30px 26px}
+ .lk-arts{grid-template-columns:1fr}
+}
+html[data-dev="phone"] .lk-v2 .lk-desk{grid-template-columns:1fr; gap:16px; margin-top:12px}
+html[data-dev="phone"] .lk-v2 .lk-side{position:static; max-height:none; overflow:visible; margin-top:0; padding:0}
+html[data-dev="phone"] .lk-v2 .lk-col > .lk-side{margin:0 0 16px}
+html[data-dev="phone"] .lk-b.lk-v2 .lk-page{margin:0 -6px}
+html[data-dev="phone"] .lk-b.lk-v2 .lk-text{padding:22px 18px 28px 24px}
+html[data-dev="phone"] .lk-tabs{padding-left:4px; gap:3px}
+html[data-dev="phone"] .lk-tab{padding:8px 11px 7px; gap:6px; font-size:.97rem}
+html[data-dev="phone"] .lk-tab svg{width:16px; height:16px}
+html[data-dev="phone"] .lk-card{padding:18px 18px}
+html[data-dev="phone"] .lk-arts{grid-template-columns:1fr}
+/* the veil over others' syntheses now sits on the paper, not the old overlay */
+.lk-synview .locked .veil > div{background:var(--lk-paper); color:var(--lk-ink); box-shadow:var(--shadow)}
+.lk-synview .locked .veil .muted{color:var(--lk-mute)}
+/* the sticker you drew sits small on its work's tab (Round 17 D: tap it to keep it today) */
+.lk-tab .m-stk{flex:none; margin-left:2px}

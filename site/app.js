@@ -80,7 +80,7 @@ const BANK=bankDay();
 function bankSticker(m){
  const mk=m.mk; if(SETS[mk]) return;                       /* a hand-drawn set already exists */
  const ini=m.kind==="Scripture"?"✝":((m.maker||"?").replace(/[^A-Za-zÀ-ÿ ]/g,"").trim().split(/\s+/).slice(-1)[0][0]||"?");
- const grounds={Poem:"#2f4030", Passage:"#3d5d86", Scripture:"#6b4a7d"};
+ const grounds={Poem:"#2f4030", Passage:"#3d5d86", Scripture:"#6b4a7d", Art:"#7a5a2b"};
  const id="seal-"+mk;
  STICKERS[id]={series:m.maker, ed:1, name:m.title, source:m.kind==="Scripture"?"":(m.date||""),
   svg:`<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="23" fill="${grounds[m.kind]||"#3a2f26"}"/><circle cx="24" cy="24" r="18" fill="none" stroke="#e8dcbf" stroke-width="1.1" opacity=".7"/><text x="24" y="31" text-anchor="middle" font-family="Georgia,serif" font-size="19" fill="#e8dcbf">${ini}</text></svg>`};
@@ -101,8 +101,28 @@ function bankMuses(b){
   return o;
  });
 }
-const MUSES = BANK ? bankMuses(BANK) : BUILTIN_MUSES;
-const DAY = BANK ? {theme:BANK.theme, line:BANK.line, verse:BANK.verse, verseRef:BANK.verseRef,
+/* Round 23 (1 Nov): from ART_FROM on, the third work is the day's Art and the
+   day's Scripture moves into the ✝ beside the day's word. Days before it keep
+   Poem · Passage · Scripture, so first impressions already written there stay
+   where they were. The paintings come from site/art.js. */
+const ART_FROM="2026-11-01";
+function isoToday(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
+function artMuse(iso, scr){
+ const A=((typeof window!=="undefined"&&window.POIESIS_ART)||{})[iso];
+ const sp=scr&&scr.painting;
+ const ps=(A&&A.paintings&&A.paintings.length)?A.paintings
+  :sp?[{title:sp.title, artist:sp.artist, date:sp.era||"", palette:sp.palette, placeholder:true}]
+  :[{title:"A painting for today", artist:"", date:"", placeholder:true}];
+ const p=ps[0];
+ return {id:"art-"+iso, mk:"art-"+String(p.artist||iso).toLowerCase().replace(/[^a-z0-9]+/g,"-"), kind:"Art",
+  title:p.title, maker:p.artist||"", date:p.date||"", story:[], deeper:"", gloss:null, paintings:ps,
+  dateLine:[p.date, p.medium, p.where].filter(Boolean).join(" · ")};
+}
+const BANKM = BANK ? bankMuses(BANK) : null;
+const SCRIPTURE = (BANKM && isoToday()>=ART_FROM) ? (BANKM.find(m=>m.kind==="Scripture")||null) : null;
+const MUSES = BANKM ? (SCRIPTURE ? BANKM.map(m=>m===SCRIPTURE?artMuse(isoToday(), SCRIPTURE):m) : BANKM) : BUILTIN_MUSES;
+const DAY = BANK ? {theme:BANK.theme, line:BANK.line,
+                    verse:SCRIPTURE?SCRIPTURE.quote:BANK.verse, verseRef:SCRIPTURE?`${SCRIPTURE.title} · ${SCRIPTURE.maker}`:BANK.verseRef,
                     questions:BANK.questions||[], howTheySpeak:BANK.howTheySpeak||"",
                     reading:BANK.reading, readingNote:BANK.readingNote,
                     maxim:BANK.maxim||BUILTIN_DAY.maxim, maximCite:BANK.maxim?BANK.maximCite:BUILTIN_DAY.maximCite} : BUILTIN_DAY;
@@ -355,7 +375,14 @@ const THEMES=[
  {"id":"couple","key":"color.couple.name","name":"a couple minutes","sw":["#002f4d","#faebc9","#3d1700","#b3006b","#ffb3ba","#b88a5c"],"tex":true},
  {"id":"leaves","key":"color.leaves.name","name":"leaves from the vine","sw":["#cebc8d","#524523","#f5f6c1","#383215","#eae4c7","#b88a5c"],"tex":true},
  {"id":"shirt","key":"color.shirt.name","name":"niko's shirt","sw":["#c4e7f3","#cdefc8","#392b0e","#392b0e","#d5cee9","#392b0e"],"edge":true},
- {"id":"irene","key":"color.irene.name","name":"irene","sw":["#b94b18","#f4c3e2","#392b0e","#c7e0ef","#c7e0ef","#faeaf4"]}];
+ {"id":"irene","key":"color.irene.name","name":"irene","sw":["#b94b18","#f4c3e2","#392b0e","#c7e0ef","#c7e0ef","#faeaf4"]},
+ {"id":"monastery1","key":"color.monastery1.name","name":"Monastery 1","sw":["#3a1018","#f3e6c4","#2a1a10","#1f3f7a","#d9b45c","#8a5a2b"],"tex":true,"by":"Poiesis"},
+ {"id":"monastery2","key":"color.monastery2.name","name":"Monastery 2","sw":["#22201e","#efe3c8","#2b2018","#a8321e","#f0b860","#6e5a44"],"tex":true,"by":"Poiesis"},
+ {"id":"monastery3","key":"color.monastery3.name","name":"Monastery 3","sw":["#e8dcc6","#fbf6ea","#2e2418","#a33a22","#ecd59a","#c49a56"],"edge":true,"by":"Poiesis"},
+ {"id":"office","key":"color.office.name","name":"Modern office","sw":["#e4e5e7","#ffffff","#1c1d1f","#383b40","#d3d5d9","#9a9da3"],"edge":true,"by":"Poiesis"},
+ {"id":"scroller","key":"color.scroller.name","name":"Refined Scroller","sw":["#121213","#1f1f21","#e9e7e3","#ff6719","#ff8a3d","#2c2c2f"],"edge":true,"by":"Poiesis"},
+ {"id":"forum","key":"color.forum.name","name":"Forum","sw":["#313338","#2b2d31","#dbdee1","#4752c4","#c9cdfb","#1e1f22"],"edge":true,"by":"Poiesis"},
+ {"id":"lamplight","key":"color.lamplight.name","name":"Lamplight","sw":["#0f1626","#f4ead2","#241c14","#2c4a7a","#f0b65a","#7a5a3a"],"by":"Poiesis"}];
 const THEME_DEFAULT="dark";
 /* MARY THEMES END */
 const themeName=t=>T(t.key,t.name);
@@ -618,7 +645,10 @@ function applyPrefs(){
  const u=U(), C=curColor(); R.removeAttribute("data-look"); R.removeAttribute("data-font");
  R.setAttribute("data-mlook",curLook()); R.setAttribute("data-color",C); const th=THEMES.find(t=>t.id===C); R.setAttribute("data-edge",th?.edge?"on":"off"); R.setAttribute("data-tex",th?.tex?"on":"off");
  R.setAttribute("data-dev",DEV()); R.setAttribute("data-density",u.density); R.setAttribute("data-gloss",u.gloss); R.setAttribute("data-psize",u.psize);
- $("#colorList").innerHTML=THEMES.map(t=>`<button type="button" class="thpick" data-color="${t.id}" aria-pressed="${t.id===C}"><span class="thname">${esc(themeName(t))}</span><span class="thstrip" aria-hidden="true">${t.sw.map(c=>`<span style="background:${c}"></span>`).join("")}</span></button>`).join("");
+ const pick=t=>`<button type="button" class="thpick" data-color="${t.id}" aria-pressed="${t.id===C}"><span class="thname">${esc(themeName(t))}</span><span class="thstrip" aria-hidden="true">${t.sw.map(c=>`<span style="background:${c}"></span>`).join("")}</span></button>`;
+ /* Mary's first, then the ones Poiesis made (29 Oct), under their own small heading */
+ const own=THEMES.filter(t=>t.by), hd=T("color.house","Made for Poiesis");
+ $("#colorList").innerHTML=THEMES.filter(t=>!t.by).map(pick).join("")+(own.length?`${hd?`<p class="thgroup">${esc(hd)}</p>`:""}${own.map(pick).join("")}`:"");
  $("#profBtn").innerHTML=avatarHTML(me());
 }
 function setColor(id){ if(!THEMES.some(t=>t.id===id)) return; setPref("color",id); save(); applyPrefs(); render(); }
@@ -685,9 +715,10 @@ const SYN_CHOICES=()=>[...LINKS.map(l=>l.id),"whole"];
 const HOUSE_QS=["Where do they agree without meaning to?","What would one say to the other?","What does one see that the other misses?","Which line would you hand from one to the other?","What do both ask of you?","Where do they part ways, and who is right today?","What one word could stand for both?","If they met on the road, what would they talk about?"];
 function houseQs(){ return HOUSE_QS.map((q,i)=>T("synth.q."+(i+1),q)).filter(Boolean); }
 function synInOrder(id){ return synSubjects(id).slice().sort((x,y)=>MUSES.findIndex(m=>m.id===x)-MUSES.findIndex(m=>m.id===y)); }
-function synPickLabel(id){ return id==="whole"?T("syn.pick.whole","All three"):T("syn.pick."+id, synInOrder(id).map(x=>MUSE[x].kind).join(" + ")); }
+function synPickLabel(id){ const k=synInOrder(id).map(x=>MUSE[x].kind).join(" + "); return id==="whole"?T("syn.pick.whole","All three"):(SCRIPTURE?k:T("syn.pick."+id, k)); }
 function synPairsHTML(id){
- return `<div class="sy-pairs" role="group" aria-label="${esc(T("syn.pick.aria","What you are joining"))}">${SYN_CHOICES().map(c=>{ const done=!!S.syn[WK(c)];
+ const cur=curMuse().id;
+ return `<div class="sy-pairs" role="group" aria-label="${esc(T("syn.pick.aria","What you are joining"))}">${SYN_CHOICES().filter(c=>c==="whole"||synSubjects(c).includes(cur)).map(c=>{ const done=!!S.syn[WK(c)];
   return `<button type="button" class="sy-pair" data-synpick="${c}" aria-pressed="${c===id}">${esc(synPickLabel(c))}${done?`<span class="sy-tick" role="img" aria-label="${esc(T("syn.pick.done","written"))}">✓</span>`:""}</button>`; }).join("")}</div>`;
 }
 function synQList(){ return [...(DAY.questions||[]).map(q=>({q, day:true})), ...houseQs().map(q=>({q, day:false}))]; }
@@ -1075,6 +1106,7 @@ function workHTML(m, inBook){
  if(u.storyMode==="info"&&u.infoStyle==="flip"&&S.info) return `<div class="m-work back">${labelHTML(m,false)}<div class="m-foot" style="justify-content:flex-end"><button class="btn small" data-info>Turn it back</button></div></div>`;
  if(m.plate) return `<div class="plate ${m.plate}" role="img" aria-label="Color study after ${esc(m.title)}"><span class="note">Color study · museum image in the app</span></div>${m.quote?`<blockquote class="pull museText">${esc(m.quote)}<cite>${esc(m.cite)}</cite></blockquote>`:""}`;
  if(m.kind==="Scripture") return `<div class="m-work scripture">${scriptureHTML(m)}</div>`;
+ if(m.kind==="Art") return artWorkHTML(m);
  let inner;
  if(m.poem) inner=poemHTML(m);
  else { const paras=(m.quote||"").split(/(?<=…)\s+/); inner=`<div class="m-prose museText">${paras.map((p,i)=>`<p>${i===0&&rubric()?incHTML(p):esc(p)}</p>`).join("")}${m.cite?`<div class="cite">${esc(m.cite)}</div>`:""}</div>${m.notebook?`<div class="notebook-plate museText" style="margin:14px 0 0;position:relative;z-index:1">${m.notebook.map(esc).join("<br>")}<small>${esc(m.notebookNote)}</small></div>`:""}`; }
@@ -1118,7 +1150,7 @@ function writerInnerM(m, nb){
  const q=qChosen(m.id), ask=q||PROMPT;
  const lab=T("muse.first.label","First impression");
  return `${lab?`<p class="fi-l">${esc(lab)}</p>`:""}<p class="m-nbhead fi-s ${dim?"dim":""} ${q?"asked":""}">${esc(ask)}</p><textarea id="draft" class="${nb?"m-grow":"m-wbox"}" aria-label="${esc(lab||ask)}" placeholder="${T("muse.prompt.placeholder","One sentence is enough.")}">${esc(d)}</textarea>
-  <div class="m-foot"><span>${u.shade==="writer"?shadeHTML(m.id,34):""}</span><button class="btn primary" data-act="seal" ${d.trim()?"":"disabled"}>${T("muse.first.button","Leave my first impression")}</button></div>${qGuideHTML(m.id)}`;
+  <div class="m-foot"><span>${u.shade==="writer"?shadeHTML(m.id,34):""}</span><button class="btn primary" data-act="seal" ${d.trim()?"":"disabled"}>${T("muse.first.button","Leave my first impression")}</button></div>${qChosen(m.id)?qGuideHTML(m.id):qFold(qGuideHTML(m.id), T("muse.q.toggle","Today’s questions"))}`;
 }
 function curlHTML(m){
  if(U().turner!=="curl"||m.closed) return "";
@@ -1174,7 +1206,7 @@ function keepAskHTML(){
 /* Round 17 D: tapping a drawn sticker (desktop) opens its card, on its own work */
 function openStickerCard(mid){ S.keepAsk=mid; const k=MUSES.findIndex(x=>x.id===mid); if(k>=0&&!S.past&&S.mi!==k){ S.mi=k; S.info=false; S.openSyn=null; } save(); render(); }
 function keepSticker(id){ setCheck(id); S.keepAsk=null; render(); toast(`${STICKERS[id].name}${T("toast.sticker.check"," carries today’s check. It settles at midnight.")}`); }
-function synOverlay(){ if(!S.openSyn) return ""; return `<div class="m-overlay sy-ov" data-synbg><div>${synBoxHTML(S.openSyn)}</div></div>`; }
+function synOverlay(){ return ""; }   /* Round 23: synthesis opens on the page itself, not over it */
 
 /* ---------- Phone home (from the Phone Studio): theme first, the works as a list, tap to open ---------- */
 const PICON={
@@ -1183,7 +1215,7 @@ const PICON={
  cross:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M13.2 5.5h5.6v7.7h7.7v5.6h-7.7v7.7h-5.6v-7.7H5.5v-5.6h7.7z"/></svg>',
  frame:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="7" width="21" height="18" rx="1"/><rect x="9" y="10.5" width="14" height="11"/><path d="M10 20l4-5 3 3 2.5-2.5 3.5 4.5"/></svg>'
 };
-const iconFor=m=>({Poem:"pencil",Passage:"book",Scripture:"cross",Painting:"frame"})[m.kind]||"book";
+const iconFor=m=>({Poem:"pencil",Passage:"book",Scripture:"cross",Painting:"frame",Art:"frame"})[m.kind]||"book";
 const ESSAYS=[["Inspired Orientation", ["Before every important essay or poem that I write, I draw a little cross at the top of my page. I keep a quote that I resonate with next to my desk, a book rich with insight within reach, even a song that matches the vibe on repeat. From my own experience, I have found that the greatest works to come from my own pen in hand all share one trait: they are inspired.", "I am not concerned with the autonomous genius, and frankly I am not convinced that such a person exists, for the greatest works come from someone who is moved. A wise sage is moved by the gods, an aspiring general doesn’t act without a philosopher, a genius runs only after being struck by Inspiration, a businessman doesn’t deal without a mentor’s consultation.", "Great things come from someone who can actively receive, taking inspiration into action. Humans wish to create, imitating the Creator, and wise men draw from the Creator’s foundation.", "So what is meant by an orientation of inspiration, and how can one facilitate active reception? Undeniably, chance plays an outsized role; most success is simply the right person at the right time. Yet it is possible, through one’s own agency, to be favored by that chance force outside of oneself. An attentive awareness of the great things of life is the action that most enhances the possibility of human happiness and flourishing. Being open and aware of inspiration is the first step to being great."]], ["Starting the Day with Something Good", ["I think that one ought, with utmost care, to guard what the mind first consumes at the start of the day. There must be an intentionality around what words will echo until sunset, what will pervade where the mind will look and search. What tune will be stuck in your head, what thought will pervade your mind: what else is more important than the foundation of the Day?", "I’ve observed best practices: morning office, Scripture devotionals, a quote on a sticky note, a reminder from the day before, a gratitude journal, a good book, all pointing toward ordered inspiration. Intentional, because the ramifications set the tone for the entire day. The worse alternative is far too common: a random text, scrolling, a song with no substance, or any other piece of garbage we fill our minds with on a daily basis.", "Once the *what* is taken care of, there is still the question of ‘making it stick’."]], ["Making It Stick: Wrestling with Truth", ["How do I internalize and highlight that which I intentionally choose to let guide my day? My answer is that you find a way to chew on it. The Greek word for when Christ offers his body and blood is often translated as ‘take and eat’, yet it could also be understood as ‘trogo’, which is used in John’s Gospel and means to chew or to gnaw. To sit with, break down, internalize, digest: all more intimate than simply taking. And so, with that posture, one must attend to the bread of life, the Word that sustains them, slowly contemplating and actively receiving.", "Additionally, there must be a reason why God chose Israel, he who wrestles with God. Who better understands God than he who has struggled with every muscle, who has held intimately and with incessant fervor the divine? Job questions, Jacob wrestles; we must clash and question with openness if we are to know God.", "If God manifests himself through Scripture, why not connect it to the greatest works of man that express our humanity? Why not start each morning wrestling with human questions, connecting works to divine revelation? Know well, question well, internalize the word of the Lord; internalize and make truth real to you through poiesis."]], ["Habitualizing Inspiration", ["Your habits shape who you are as a person. They strengthen the virtues that you prioritize through a discipline that molds your will. Your habitual actions shape what you crave, what a good day looks like, what it means to have lived a day well. To habitualize is to adopt an action into one’s identity and add onto how we express our personhood.", "Aristotle calls us to habituate virtue; Christ calls us to live his Beatitudes and imitate his person: the perfection of man is found through these continued practices. The ancients saw philosophy as a lifestyle with a daily, consistent pursuit.", "So how would you change as a person if you aimed to habitualize inspiration? How would you see the world if your vision was always coupled with a poem, a passage, a work in mind? How would you approach another if you exercised the attempt to see and understand the depths of the human person?", "Only time can tell.", "Here is my understanding of what practicing receptive inspiration means:", "→ Contemplating and manifesting in the flesh the essences of Truth, Goodness, and Beauty. The practice of the Beatific Vision, the daily practice of creativity. Fulfilling the human desire to create, and articulating what is in our heart."]]];
 /* Niko's essays, after the Discourse on the Why page. Each opens from its
    title. The words live in copy.js (why.essay.N.title / .pN); blank hides. */
@@ -1223,7 +1255,7 @@ function phoneHomeHTML(){
  const reading=S.reading?maximHTML():"";
  const cols=TODAY.slice(0,4).map(p=>`<span style="background:${PEOPLE[p.n].c}">${esc(initials(p.n))}</span>`).join("");
  return `<div class="ph-home"><p class="ph-date">${esc(dateStr)}</p>
-  <div class="ph-theme"><h1 class="ph-tw">${esc(DAY.theme)}</h1>${wisdomBtn()}</div>
+  <div class="ph-theme">${themeWithCross("ph-tw","h1")}</div>
   ${reading}
   ${threadCueHTML()}
   ${nudgeHTML()}${hintHTML(false)}
@@ -1262,7 +1294,7 @@ function renderMuse(v){
  const head=`<div class="m-head"><div class="m-htop"><div class="m-hl"><span class="type kind">${esc(m.kind)}</span><div class="m-tl"><h2 class="mtitle">${esc(m.title)}</h2>${info}</div><div class="byline">${esc(m.maker)} · ${esc(m.date)}</div></div>${cueside}</div></div>`;
  const story=u.storyMode==="under"?`<div class="m-story">${storyBody(m,false)}</div>`:"";
  /* Round 19: the look composes the page; the pieces are the same in all five */
- let body=`${lookHTML(m,{past, dateStr, reading, info, day})}${bottomTurnerM(m)}${story}`;
+ let body=`${lookHTML(m,{past, dateStr, reading, info, day})}${past?bottomTurnerM(m):""}${story}`;
  if(dev==="phone"&&!past){ const i=MUSES.indexOf(m), nx=MUSES[(i+1)%MUSES.length];
   body=`<div class="ph-bar"><button type="button" class="ph-back" data-act="phome">${T("phone.back","‹ Today")}</button><span class="ph-mini">${esc(DAY.theme)}</span></div>${body}<p class="ph-nextw"><button type="button" class="ph-back" data-mgo="${nx.id}">${T("phone.next","Next work ›")}</button></p>`; }
  v.innerHTML=`${body}${responsesHTML(m)}${infoLayer(m)}${synOverlay()}${keepAskHTML()}`;
@@ -1288,6 +1320,8 @@ function renderMuse(v){
    if(a==="keepmaxim"){ keepVerse(); }
   if(a==="nokeep"){ const had=checkedToday(); S.keepAsk=null; save(); render(); if(!had) toast("You can keep one from any muse you’ve answered, until midnight."); }
   if(a==="closesyn"){ S.openSyn=null; save(); render(); }
+  if(a==="syntab"){ if(S.openSyn){ S.openSyn=null; save(); render(); } else { const i=MUSES.indexOf(m); openSyn(linkFor(m.id, MUSES[(i+1)%MUSES.length].id)); } return; }
+  if(a==="qtoggle"){ S.qOpen=!S.qOpen; save(); render(); return; }
   if(a==="pubsyn") publishSyn(S.openSyn);
   if(a==="keepwork"){ keepWork(m, e.target.closest("[data-act]")); return; }
   if(a==="keepopen"){ openKeptPage(m); return; }
@@ -1301,21 +1335,110 @@ function renderMuse(v){
    them, the work with its ⓘ and bookmark, and the writing box, which on a
    wide screen always sits beside the work. On a phone the day lives on the
    Today page, so a work page starts at the buttons. */
+/* ---------- Round 23 (1 Nov): the Muse page from the Muse Art Studio ----------
+   Niko's picks: tabs on the top edge of the paper box (Poem · Passage · Art,
+   then the Synthesise symbol, two circles); in the box the kind, then the
+   big title; "How it came to be" under the work, then "Synthesise with" the
+   other two (one tap opens that pair) and a bold "All three". A quiet page:
+   no hint line, no "who is here" in the running head, questions behind a
+   button. The writing box sits beside the work and stays in view as you
+   scroll (the writing desk). Synthesis opens on the page: the pair buttons,
+   the title cards and the notepad in that column, both works one after the
+   other in the box; tapping a single work closes it. On a phone the panel and
+   the notepad come first, then both works. */
+const CIRCLES=`<svg class="sym-c" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/><path d="M12 7.2a6 6 0 0 1 0 9.6a6 6 0 0 1 0-9.6z" fill="currentColor" fill-opacity=".35" stroke="none"/></svg>`;
+const QICON=`<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .8-1 1.5v.6"/><circle cx="12" cy="16.9" r=".6" fill="currentColor"/></svg>`;
+function linkFor(a,b){ const l=LINKS.find(l=>(l.a===a&&l.b===b)||(l.a===b&&l.b===a)); return l?l.id:"whole"; }
+/* the ✝ sits on the line with the day's word's last word, so a long theme
+   doesn't leave it stranded on the right */
+function themeWithCross(cls, tag){
+ const w=String(DAY.theme||"").trim().split(/\s+/), last=w.pop()||"";
+ return `<${tag} class="${cls}">${w.length?esc(w.join(" "))+" ":""}<span class="th-last">${esc(last)}${wisdomBtn()}</span></${tag}>`;
+}
+/* the day's art: a fine frame round a colour study, the label under it */
+const STUDY_SVG={
+ oldage:()=>`<svg viewBox="0 0 400 270" role="img" aria-label="Colour study after Thomas Cole, The Voyage of Life: Old Age"><defs><linearGradient id="oa-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b3138"/><stop offset=".55" stop-color="#4b5155"/><stop offset="1" stop-color="#232729"/></linearGradient><radialGradient id="oa-light" cx=".72" cy=".08" r=".55"><stop offset="0" stop-color="#f6e2a8" stop-opacity=".95"/><stop offset=".4" stop-color="#d9b56a" stop-opacity=".45"/><stop offset="1" stop-color="#d9b56a" stop-opacity="0"/></radialGradient><linearGradient id="oa-beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3dc9b" stop-opacity=".55"/><stop offset="1" stop-color="#f3dc9b" stop-opacity="0"/></linearGradient><linearGradient id="oa-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4446"/><stop offset="1" stop-color="#121617"/></linearGradient><filter id="oa-blur"><feGaussianBlur stdDeviation="7"/></filter></defs><rect width="400" height="270" fill="url(#oa-sky)"/><g filter="url(#oa-blur)" opacity=".9"><ellipse cx="80" cy="60" rx="120" ry="48" fill="#1b1f22"/><ellipse cx="190" cy="120" rx="150" ry="36" fill="#262b2e"/><ellipse cx="370" cy="150" rx="90" ry="40" fill="#1e2224"/></g><rect width="400" height="270" fill="url(#oa-light)"/><path d="M262 0 L318 0 L250 196 L196 196 Z" fill="url(#oa-beam)"/><rect y="190" width="400" height="80" fill="url(#oa-sea)"/><g stroke="#6d7470" stroke-width="1" opacity=".5"><path d="M30 214h60M140 226h80M250 210h50M300 240h70M60 250h90"/></g><path d="M14 200 Q40 176 70 192 L80 202 Z" fill="#141819"/><g transform="translate(150 196)"><path d="M0 8 Q30 22 70 8 L64 2 L6 2 Z" fill="#2e2418"/><path d="M28 2 q4 -18 10 -18 q5 0 6 18 z" fill="#8b8a84"/><circle cx="37" cy="-19" r="3.4" fill="#b9b3a2"/><path d="M44 -12 q14 -30 30 -40 q-4 16 -8 22 q10 -6 18 -4 q-10 8 -26 22 z" fill="#efe7d2" opacity=".9"/><circle cx="62" cy="-40" r="3" fill="#f3ead6"/><path d="M64 -44 L90 -96" stroke="#f3ead6" stroke-width="1.6" stroke-linecap="round"/></g></svg>`,
+ prodigal:()=>`<svg viewBox="0 0 300 380" role="img" aria-label="Colour study after Rembrandt, The Return of the Prodigal Son"><defs><radialGradient id="pr-glow" cx=".38" cy=".46" r=".55"><stop offset="0" stop-color="#d79a46" stop-opacity=".85"/><stop offset=".45" stop-color="#7a4a1f" stop-opacity=".55"/><stop offset="1" stop-color="#1c120b" stop-opacity="0"/></radialGradient><filter id="pr-blur"><feGaussianBlur stdDeviation="3"/></filter></defs><rect width="300" height="380" fill="#1a110b"/><rect width="300" height="380" fill="url(#pr-glow)"/><g filter="url(#pr-blur)"><path d="M70 90 q22 -16 44 0 q16 30 18 80 q4 70 -6 170 l-74 0 q-8 -90 -2 -170 q2 -50 20 -80z" fill="#9c2f1c"/><ellipse cx="92" cy="96" rx="15" ry="18" fill="#e3b77a"/><path d="M86 210 q30 -20 64 4 q22 40 22 92 l-104 0 q0 -60 18 -96z" fill="#9a7a43"/><circle cx="104" cy="206" r="15" fill="#c79a5c"/><path d="M82 186 q10 10 22 12" stroke="#e8c48a" stroke-width="6" stroke-linecap="round" fill="none"/><path d="M232 70 q20 -6 26 14 q10 60 6 260 l-44 0 q-4 -190 12 -274z" fill="#5a2a18"/><ellipse cx="244" cy="70" rx="12" ry="15" fill="#b98a55"/><path d="M178 120 q10 -8 22 0 q6 60 2 200 l-22 0 q-8 -120 -2 -200z" fill="#3a2414" opacity=".8"/></g></svg>`
+};
+function paletteStudy(p){
+ const pal=p.palette||["#cfcabc","#9a9384","#6b6355"], [c1,c2,c3]=[pal[0], pal[1]||pal[0], pal[2]||pal[1]||pal[0]];
+ const bg=`radial-gradient(ellipse 70% 55% at 22% 24%, ${c1} 0 40%, transparent 78%),radial-gradient(ellipse 80% 60% at 78% 72%, ${c3} 0 38%, transparent 76%),radial-gradient(ellipse 90% 70% at 50% 50%, ${c2} 0 45%, transparent 85%), ${c2}`;
+ return `<div class="lk-pstudy" role="img" aria-label="Colour study after ${esc(p.title)}${p.artist?` by ${esc(p.artist)}`:""}" style="background:${bg}"></div>`;
+}
+function artFigure(p){
+ const study=STUDY_SVG[p.study]?STUDY_SVG[p.study]():paletteStudy(p);
+ const cs=p.placeholder?T("art.placeholder","Placeholder from the Art Wall · colour study"):T("art.study","Colour study · the painting itself comes next");
+ return `<figure class="lk-art"><div class="lk-frame">${study}</div><figcaption class="lk-artlab"><b>${esc(p.title)}</b>${p.artist||p.date?`<span>${esc([p.artist,p.date].filter(Boolean).join(" · "))}</span>`:""}${p.medium||p.where?`<span>${esc([p.medium,p.where].filter(Boolean).join(" · "))}</span>`:""}${p.note?`<span class="lk-artnote">${esc(p.note)}</span>`:""}${cs?`<span class="lk-cs">${esc(cs)}</span>`:""}${p.link&&T("art.see","See the painting ↗")?`<a href="${esc(p.link)}" target="_blank" rel="noopener">${esc(T("art.see","See the painting ↗"))}</a>`:""}</figcaption></figure>`;
+}
+function artWorkHTML(m){ const ps=m.paintings||[];
+ return `<div class="m-work lk-artwork">${ps.length>1?`<div class="lk-arts">${ps.map(artFigure).join("")}</div>`:ps.map(artFigure).join("")}</div>`; }
+/* "How it came to be": the bank's story, without its list of sources (those stay in ⓘ) */
+function cameHTML(m){
+ const ps=(m.story||[]).filter(p=>!/^\s*sources?\s*:/i.test(String(p))); if(!ps.length) return "";
+ const lab=T("muse.came.label","How it came to be");
+ return `<div class="lk-came">${lab?`<p class="lk-camel">${esc(lab)}</p>`:""}${ps.map(p=>`<p>${p}</p>`).join("")}</div>`;
+}
+/* under the story: synthesise with either of the other two, or all three */
+function synGoHTML(m){
+ if(readOnlyDay()||m.closed||S.past) return "";
+ const others=MUSES.filter(x=>x.id!==m.id), lab=T("syn.with","Synthesise with");
+ return `<div class="lk-go">${lab?`<p class="lk-golab">${CIRCLES}${esc(lab)}</p>`:""}<div class="lk-with">${others.map(o=>{ const lid=linkFor(m.id,o.id);
+   return `<button type="button" class="lk-withb" data-mside="${lid}"><span class="k">${esc(o.kind)}${S.syn[WK(lid)]?` <span class="lk-tick" role="img" aria-label="${esc(T("syn.pick.done","written"))}">✓</span>`:""}</span><b>${esc(o.title)}</b></button>`; }).join("")}
+  <button type="button" class="lk-synbig" data-mside="whole">${CIRCLES}<span>${esc(T("syn.all","All three"))}</span>${S.syn[WK("whole")]?` <span class="lk-tick" role="img" aria-label="${esc(T("syn.pick.done","written"))}">✓</span>`:""}</button></div></div>`;
+}
+/* the tabs on the box's top edge */
+function tabsV2(m){
+ const own=!S.past&&!m.closed;
+ return `<nav class="lk-tabs" aria-label="${esc(T("tabs.aria","Today’s works"))}">${MUSES.map(x=>`<button type="button" class="lk-tab" data-mgo="${x.id}" aria-pressed="${!S.openSyn&&x.id===m.id}">${PICON[iconFor(x)]}<span>${esc(x.kind)}</span>${S.drawn[WK(x.id)]?shadeHTML(x.id,22):S.sealed[WK(x.id)]?`<span class="lk-tick" role="img" aria-label="${esc(T("phone.written","written"))}">✓</span>`:""}</button>`).join("")}${own?`<button type="button" class="lk-tab lk-tsyn" data-act="syntab" aria-pressed="${!!S.openSyn}" aria-label="${esc(T("syn.tab","Synthesise"))}" data-tip="${esc(T("syn.tab","Synthesise"))}">${CIRCLES}</button>`:""}</nav>`;
+}
+/* questions behind a button, so the page stays quiet */
+function qFold(inner, label){
+ if(!inner) return "";
+ return `<div class="lk-qfold"><button type="button" class="lk-qbtn" data-act="qtoggle" aria-expanded="${!!S.qOpen}">${QICON}<span>${esc(label)}</span><span class="lk-qch" aria-hidden="true">${S.qOpen?"▴":"▾"}</span></button>${S.qOpen?`<div class="lk-qbody">${inner}</div>`:""}</div>`;
+}
+/* synthesis: the panel (pair buttons and the title cards) and the notepad */
+function synPanelHTML(id){
+ const ids=synInOrder(id);
+ return `<div class="lk-card lk-synpick" id="synbox"><div class="lk-synh"><b>${CIRCLES}${esc(T("syn.title","Synthesis"))}</b><button type="button" class="lk-x" data-act="closesyn" aria-label="${esc(T("syn.close","Close synthesis"))}">×</button></div>
+  ${synPairsHTML(id)}
+  <div class="lk-syncards">${ids.map(x=>`<div class="lk-syncard"><span class="k">${esc(MUSE[x].kind)}</span><b>${esc(MUSE[x].title)}</b><small>${esc(MUSE[x].maker)}</small></div>`).join("")}</div></div>`;
+}
+function synNoteHTML(id){
+ const ids=synInOrder(id), mine=S.syn[WK(id)], d=S.synDrafts[WK(id)]||"";
+ if(mine) return `<div class="lk-card writer seal lk-synnote"><span class="wax" aria-hidden="true">P</span><small>${id==="whole"?T("link.yours.whole","Your thought on all three"):`${T("link.yours.pair","Your synthesis of the ")}${esc(synName(id))}`} · ${when(mine.at)}</small><div class="first">${esc(mine.text)}</div>
+   <p class="type" style="color:var(--paper-mute);margin:10px 0 0;font-size:.62rem">${T("link.published.under","Published under ")}${ids.map(x=>esc(MUSE[x].kind.toLowerCase())).join(", ")}${T("link.published.journal"," · also in your journal")}</p></div>`;
+ return `<div class="lk-card writer lk-synnote"><h4>${id==="whole"?T("link.whole.heading","One thought that holds all three"):T("link.pair.heading","What do these two say to each other?")}</h4>
+   <div class="sub">${id==="whole"?T("link.whole.line","Where do they meet, where do they argue — and what does the day leave you with?"):T("link.pair.line","Agreement is not required. Disagreement is often better.")}</div>
+   ${(()=>{ const pick=(S.synQ||{})[WK(id)]; return pick?`<p class="sy-asked">${esc(pick)}</p>`:""; })()}
+   <textarea class="grow" id="synDraft" rows="3" aria-label="Your synthesis" placeholder="${T("link.placeholder","Two or three sentences is plenty.")}">${esc(d)}</textarea>
+   <div class="wrow"><span class="type" style="color:var(--paper-mute)">${T("link.appears","Appears under the ")}${esc(andList(ids.map(x=>MUSE[x].kind.toLowerCase())))}</span>
+    <button class="btn primary" data-act="pubsyn" ${d.trim()?"":"disabled"}>${T("link.publish","Publish this synthesis")}</button></div>
+   ${qFold(synQsHTML(id,d).replace(/<p class="sy-asked">[\s\S]*?<\/p>/,""), T("synth.q.toggle","Questions to start from"))}</div>`;
+}
+/* both works, one after the other, the one you were on first */
+function synWorksHTML(id){
+ const cur=curMuse().id, ids=[cur, ...synInOrder(id).filter(x=>x!==cur)].filter(x=>synSubjects(id).includes(x));
+ return ids.map((x,i)=>{ const w=MUSE[x];
+  return `<section class="lk-synw${i?" next":""}"><p class="lk-kind">${esc(w.kind)}</p><h2 class="mtitle lk-title">${esc(w.title)}</h2><p class="lk-by">${esc(w.maker)}${w.date?` · ${esc(w.date)}`:""}</p><div class="m-wwrap">${workHTML(w,false)}</div></section>`; }).join("")
+  + `${id==="whole"?curatorNoteHTML():""}${synThreadHTML(id)}`;
+}
 function lookHTML(m,o){
  const ph=DEV()==="phone", past=o.past, dayOn=!ph&&!past;
- /* on a phone the links live on the Today list, so a work page has the three
-    buttons only; on a wide screen the threads and ◇ sit between them */
- const row=vert=>past?"":ph?`<div class="lk-row"><nav class="lk-wkrow" aria-label="Today’s three">${MUSES.map(x=>itemHTML(x,threeSize(),false,false)).join("")}</nav></div>`
-  :`<div class="lk-row">${threeHTML(threeSize(), !!vert, true)}</div>`;
- const title=`<header class="lk-head"><div class="m-tl"><h2 class="mtitle lk-title">${esc(m.title)}</h2>${o.info}</div><p class="lk-by">${esc(m.maker)}${m.date?` · ${esc(m.date)}`:""}</p></header>`;
- const work=`<div class="m-wwrap">${workHTML(m,false)}</div>${noteHTML(m)}`;
- const write=`<div class="m-nb lk-write${(S.drafts[WK(m.id)]||"").trim()||S.sealed[WK(m.id)]?" has":""}" id="writerBox">${writerInnerM(m,false)}${curlHTML(m)}</div>`;
+ const syn=!past&&S.openSyn?S.openSyn:null;
+ const title=`<header class="lk-head"><p class="lk-kind">${esc(m.kind)}</p><div class="m-tl"><h2 class="mtitle lk-title">${esc(m.title)}</h2>${o.info}</div><p class="lk-by">${esc(m.maker)}${m.date?` · ${esc(m.date)}`:""}</p></header>`;
+ const work=`<div class="m-wwrap">${workHTML(m,false)}</div>${m.kind==="Art"?"":noteHTML(m)}${cameHTML(m)}${synGoHTML(m)}`;
+ const write=`<div class="m-nb lk-write lk-card${(S.drafts[WK(m.id)]||"").trim()||S.sealed[WK(m.id)]?" has":""}" id="writerBox">${writerInnerM(m,false)}${curlHTML(m)}</div>`;
  const date=dayOn?`<div class="lk-date">${esc(o.dateStr)}</div>`:"";
- const theme=dayOn?`<div class="lk-themewrap"><h1 class="lk-theme">${esc(DAY.theme)}</h1>${wisdomBtn()}</div>`:"";
- const cue=dayOn&&U().cue!=="off"?`<div class="lk-cue">${cueHTML()}</div>`:"";
+ const theme=dayOn?`<div class="lk-themewrap">${themeWithCross("lk-theme","h1")}</div>`:"";
  const reading=dayOn?o.reading:"", pastbar=past?o.day:"";
- /* Manuscript: a running head, then the text block and its margin at 1.618 : 1 */
- return `<div class="lk lk-b">${pastbar}${dayOn?`<div class="lk-rh"><span class="lk-rl lk-marks">${POIESIS_MARK}</span>${theme}<div class="lk-rhr">${date}${cue}</div></div>${reading}`:""}<div class="lk-page"><article class="lk-text">${past||ph?row():`<div class="lk-rowwrap">${nudgeHTML()}${hintHTML(true)}${row()}</div>`}${title}${work}</article><aside class="lk-margin">${write}</aside></div></div>`;
+ const side=syn?`${synPanelHTML(syn)}${synNoteHTML(syn)}`:write;
+ const page=`<article class="lk-page lk-text${syn?" lk-synview":""}">${syn?synWorksHTML(syn):`${title}${work}`}</article>`;
+ const top=`${past?"":nudgeHTML()}${past?"":tabsV2(m)}`;
+ /* desk: the box and, beside it, the column that stays in view; phone: in a
+    synthesis the panel and notepad come straight after the tabs */
+ const desk=ph&&syn?`<div class="lk-col">${top}<div class="lk-side">${side}</div>${page}</div>`
+  :`<div class="lk-col">${top}${page}</div><aside class="lk-side">${side}</aside>`;
+ return `<div class="lk lk-b lk-v2${syn?" lk-syn":""}">${pastbar}${dayOn?`<div class="lk-rh"><span class="lk-rl lk-marks">${POIESIS_MARK}</span>${theme}<div class="lk-rhr">${date}</div></div>${reading}`:""}<div class="lk-desk">${desk}</div></div>`;
 }
 /* Round 22: the Poiesis mark (circle, cross, quill) stands where "the day's
    word" stood. Niko picked it over the day's-art candidate, which is gone. */
@@ -1370,8 +1493,13 @@ function renderSettings(v){
 function goMuse(id){ const k=MUSES.findIndex(x=>x.id===id); if(k<0){ S.past=id; } else { S.past=null; S.mi=k; } S.openSyn=null; S.info=false; S.card=0; save(); render(); const top=$("#view").getBoundingClientRect().top; if(top<0) scrollTo({top:scrollY+top-70, behavior:reduce?"auto":"smooth"}); }
 function openSyn(id){
  S.info=false;
- S.openSyn=S.openSyn===id?null:id; if(S.openSyn) S.nudgeDone=today(); save(); render();
- if(S.openSyn&&DEV()!=="phone"){ setTimeout(()=>{ $("#synDraft")?.focus({preventScroll:true}); },80); }
+ S.openSyn=S.openSyn===id?null:id;
+ if(S.openSyn){ S.nudgeDone=today(); const ids=synSubjects(S.openSyn);
+  if(!ids.includes(curMuse().id)){ const k=MUSES.findIndex(x=>x.id===ids[0]); if(k>=0){ S.mi=k; S.past=null; } }
+  if(DEV()==="phone") S.phome=false; }
+ save(); render();
+ if(S.openSyn){ const top=$("#view")?.getBoundingClientRect().top; if(top!=null&&top<0) scrollTo({top:scrollY+top-70, behavior:reduce?"auto":"smooth"});
+  if(DEV()!=="phone") setTimeout(()=>{ $("#synDraft")?.focus({preventScroll:true}); },80); }
 }
 /* Round 22 (C): once a day, after a first impression, a handwritten note by
    the hint line. It goes when synthesis opens or it is dismissed, and does

@@ -23,7 +23,7 @@ site.tab.muse: Muse
 site.tab.notebook: Notebook
 site.why.link: Why Poiesis ›
 site.footer: A working sketch, 2026.
-# One look (Manuscript); colour is one of Mary's themes (four in Round 20, eight since 28 Oct).
+# One look (Manuscript); colour is one of the themes (Mary's four in Round 20, her eight on 28 Oct, fifteen since 29 Oct).
 # Her names exactly as she typed them.
 site.colors.title: Colour
 color.dark.name: dark mode
@@ -34,13 +34,39 @@ color.couple.name: a couple minutes
 color.leaves.name: leaves from the vine
 color.shirt.name: niko's shirt
 color.irene.name: irene
+# Poiesis's own (29 Oct, from Niko's list)
+color.monastery1.name: Monastery 1
+color.monastery2.name: Monastery 2
+color.monastery3.name: Monastery 3
+color.office.name: Modern office
+color.scroller.name: Refined Scroller
+color.forum.name: Forum
+color.lamplight.name: Lamplight
 color.credit: Colours by Mary
+color.house: Made for Poiesis
 # the hint above Poem · Passage · Scripture, with arrows to the buttons and the ◇
 muse.hint: Synthesise, or comment on one
 link.yours.pair: Your synthesis of the 
 link.tag: A synthesis
 link.page.title: Synthesis: 
 link.aria: Synthesis: 
+# Round 23 (1 Nov): the Muse page from the Muse Art Studio.
+# The tabs on the box, then in the box: the kind, the title, the work,
+# "How it came to be", then "Synthesise with" the other two and "All three".
+tabs.aria: Today’s works
+muse.came.label: How it came to be
+syn.with: Synthesise with
+syn.all: All three
+syn.tab: Synthesise
+syn.title: Synthesis
+syn.close: Close synthesis
+# questions behind a button (first impression, and in a synthesis)
+muse.q.toggle: Today’s questions
+synth.q.toggle: Questions to start from
+# the day's art (from 1 Nov the third work; Scripture is in the ✝)
+art.study: Colour study · the painting itself comes next
+art.placeholder: Placeholder from the Art Wall · colour study
+art.see: See the painting ↗
 # Round 22: the switcher at the top of the synthesis page.
 # A tick shows on a choice you've already published.
 syn.pick.pp: Poem + Passage
