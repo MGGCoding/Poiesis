@@ -1348,6 +1348,24 @@ function maximHTML(){
  const kept=S.verseKept===today();
  return `<div class="m-reading m-maxim m-verseday"><span class="mx-q">${esc(DAY.verse).replace(/\n/g,"<br>")}</span><span class="mx-c">${esc(DAY.verseRef||"")}</span><button type="button" class="mx-keep" data-act="keepmaxim" ${kept?"disabled":""}>${kept?T("verse.kept","kept"):T("verse.keep","keep it")}</button></div>`;
 }
+/* Round 29: the home page. The day's theme in the middle, a small cross for
+   Scripture, the other works in a stack you move through with dots, "Start
+   with…" or "Synthesise", and What others thought faded at the bottom: the
+   same number of faded lines every day (never a count), nothing readable. */
+function homeHTML(){
+ const works=MUSES.filter(m=>m.kind!=="Scripture"), scr=MUSES.find(m=>m.kind==="Scripture"), n=works.length;
+ let i=+S.hi||0; if(i<0||i>=n) i=0; const w=works[i];
+ const eb=T("home.eyebrow","Today’s theme"), low={Poem:"poem",Passage:"passage",Art:"painting"}[w.kind]||w.kind.toLowerCase();
+ const start=T("home.start."+w.kind,"Start with the "+low), or=T("home.or","or"), syn=T("home.synth","Synthesise");
+ const oh=T("others.heading","What others thought"), ol=T("home.others.line","First, your own impression. Theirs open once you’ve written.");
+ const cross=scr?`<button type="button" class="hm-cross" data-popen="${scr.id}" aria-label="${esc(scr.kind+": "+scr.title)}">${CROSS}<span>${esc(scr.title)}</span>${S.sealed[WK(scr.id)]?`<span class="hm-done" role="img" aria-label="${esc(T("phone.written","written"))}">✓</span>`:""}</button>`:"";
+ const card=`<div class="hm-stack">${n>1?`<span class="hm-b1" aria-hidden="true"></span><span class="hm-b2" aria-hidden="true"></span>`:""}<button type="button" class="hm-card ph-row lk-parch" data-popen="${w.id}"><span class="hm-row"><span class="hm-k">${esc(w.kind)}</span>${n>1?`<span class="hm-n">${i+1} / ${n}</span>`:""}</span><b class="hm-t">${esc(w.title)}</b><span class="hm-by">${esc(w.maker)}${w.date?` · ${esc(w.date)}`:""}</span>${S.sealed[WK(w.id)]?`<span class="hm-done">✓ ${esc(T("phone.written","written"))}</span>`:""}</button></div>`;
+ const dots=n>1?`<div class="hm-dots"><button type="button" class="hm-ar" data-hi="${(i-1+n)%n}" aria-label="${esc(T("home.prev","Previous work"))}"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button>${works.map((x,k)=>`<button type="button" data-hi="${k}" aria-label="${esc(x.kind)}, ${k+1} / ${n}" aria-current="${k===i}"><span class="hm-d"></span></button>`).join("")}<button type="button" class="hm-ar" data-hi="${(i+1)%n}" aria-label="${esc(T("home.next","Next work"))}"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button></div>`:"";
+ const acts=`<div class="hm-acts">${start?`<button type="button" class="hm-start" data-popen="${w.id}">${esc(start)}</button>`:""}${start&&syn&&or?`<span class="hm-or">${esc(or)}</span>`:""}${syn&&n+(scr?1:0)>1?`<button type="button" class="hm-synth ph-knot" data-side="whole">${CIRCLES}<span>${esc(syn)}</span></button>`:""}</div>`;
+ const fw=[[92,80,64],[86,70],[95,88,72,40],[78,60]], fc=["#3d5d86","#6b4a7d","#2f5d50","#8a5a3b"];
+ const others=`<section class="hm-others" aria-label="${esc(oh)}">${oh?`<h2>${esc(oh)}</h2>`:""}${ol?`<p>${esc(ol)}</p>`:""}<div class="hm-fade" aria-hidden="true">${fw.map((r,k)=>`<div class="hm-fl"><span style="background:${fc[k]}"></span><div>${r.map(x=>`<i style="width:${x}%"></i>`).join("")}</div></div>`).join("")}</div></section>`;
+ return `<div class="hm-home">${nudgeHTML()}<div class="hm-head">${eb?`<p class="hm-eb">${esc(eb)}</p>`:""}<h1 class="hm-theme">${esc(DAY.theme)}</h1></div>${cross}${card}${dots}${acts}${others}</div>`;
+}
 function phoneHomeHTML(){
  const dateStr=new Date().toLocaleDateString(undefined,{weekday:"long", month:"long", day:"numeric"});
  const done=id=>!!S.sealed[WK(id)], all=MUSES.every(x=>done(x.id)), first=MUSES.find(x=>!done(x.id)), none=!MUSES.some(x=>done(x.id));
@@ -1373,11 +1391,13 @@ function phGateHTML(){ const h=T("others.gate.heading","First, your own impressi
  return `<div class="ph-others ph-gate">${h?`<b>${esc(h)}</b>`:""}${l?`<span>${esc(l)}</span>`:""}</div>`;
 }
 function renderMuse(v){
- if(DEV()==="phone"&&!S.past&&S.phome!==false){
-  v.innerHTML=`${phoneHomeHTML()}${synOverlay()}${keepAskHTML()}`;
+ /* Round 29: phones and desks open on the home page; Start (or a work, or the cross) opens the work page as before */
+ if(!S.past&&S.phome!==false){
+  v.innerHTML=`${homeHTML()}${synOverlay()}${keepAskHTML()}`;
   wireBoard(v);
   v.onclick=e=>{
    if(synClick(e)) return;
+   const hi=e.target.closest("[data-hi]"); if(hi){ S.hi=+hi.dataset.hi; save(); render(); return; }
    const o=e.target.closest("[data-popen]"); if(o){ S.phome=false; goMuse(o.dataset.popen); return; }
    const sd=e.target.closest("[data-side]"); if(sd){ openSyn(sd.dataset.side); return; }
    if(e.target.matches("[data-synbg]")){ S.openSyn=null; save(); render(); return; }
@@ -1611,7 +1631,7 @@ function openSyn(id){
  S.openSyn=S.openSyn===id?null:id;
  if(S.openSyn){ S.nudgeDone=today(); const ids=synSubjects(S.openSyn);
   if(!ids.includes(curMuse().id)){ const k=MUSES.findIndex(x=>x.id===ids[0]); if(k>=0){ S.mi=k; S.past=null; } }
-  if(DEV()==="phone") S.phome=false; }
+  S.phome=false; }
  save(); render();
  if(S.openSyn){ const top=$("#view")?.getBoundingClientRect().top; if(top!=null&&top<0) scrollTo({top:scrollY+top-70, behavior:reduce?"auto":"smooth"});
   if(DEV()!=="phone") setTimeout(()=>{ $("#synDraft")?.focus({preventScroll:true}); },80); }

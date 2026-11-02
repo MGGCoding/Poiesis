@@ -53,6 +53,16 @@ patterns.ground.quatrefoil: Quatrefoil
 patterns.ground.stars: Stars
 # Round 26: tap the date ribbon and it drops to show the Poiesis mark; the mark opens Why Poiesis.
 ribbon.mark: Why Poiesis
+# Round 29: the home page (phone and desktop): the theme, a small cross for Scripture, the other works in a stack with dots, "Start with…" or "Synthesise", and What others thought faded at the bottom.
+home.eyebrow: Today’s theme
+home.start.Poem: Start with the poem
+home.start.Passage: Start with the passage
+home.start.Art: Start with the painting
+home.or: or
+home.synth: Synthesise
+home.others.line: First, your own impression. Theirs open once you’ve written.
+home.prev: Previous work
+home.next: Next work
 color.dark.name: dark mode
 color.forest.name: forest
 color.rose.name: rose
