@@ -455,7 +455,7 @@
   // While signed out, the avatar opens the sign-in card instead of a profile.
   function guardProfileButton() {
     document.addEventListener("click", (e) => {
-      if (user || !e.target.closest("#profBtn")) return;
+      if (user || !e.target.closest("#profGo")) return;
       e.preventDefault(); e.stopImmediatePropagation();
       openSheet();
     }, true);

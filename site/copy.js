@@ -26,6 +26,19 @@ site.footer: A working sketch, 2026.
 # One look (Manuscript); colour is one of the themes (Mary's four in Round 20, her eight on 28 Oct, fifteen since 29 Oct).
 # Her names exactly as she typed them.
 site.colors.title: Colour
+# Round 24 (2 Nov): the top bar is your picture (it opens this menu) and the date on a ribbon.
+menu.colour: Colour
+menu.profile: Your profile
+menu.why: Why Poiesis
+site.margins.title: Margins
+margins.margin: Margin
+margins.margin.vine: Climbing vine
+margins.margin.ms: Manuscript
+margins.margin.plain: Plain
+margins.spine: Spine
+margins.spine.stitch: Stitched
+margins.spine.diamond: Diamonds
+margins.spine.bands: Raised bands
 color.dark.name: dark mode
 color.forest.name: forest
 color.rose.name: rose
@@ -73,6 +86,15 @@ syn.pick.pp: Poem + Passage
 syn.pick.pv: Passage + Scripture
 syn.pick.vp: Poem + Scripture
 syn.pick.whole: All three
+# Round 24: from 1 Nov Scripture is a fourth tab, so "all four"
+syn.all.four: All four
+syn.pick.whole.four: All four
+link.whole.heading.four: One thought that holds all four
+link.whole.line.four: Where do they meet? What one thing are all four looking toward?
+link.yours.whole.four: Your thought on all four
+phone.all.write.four: Tie all four together
+phone.all.done.four: All four are together
+toast.all.four: All four, written.
 syn.pick.aria: What you are joining
 syn.pick.done: written
 # the optional questions above the box (they hide once you start typing).
@@ -106,7 +128,9 @@ lexicon.one: The act of bringing into being what was not there before, in imitat
 lexicon.two: Making as active reception: the maker labors, and inspiration is given.
 
 # THE MUSE PAGE ========================================================
+# Round 24: "First impression" is written on the notepad's lines; "Theme" over the day's word at its head.
 muse.first.label: First impression
+muse.theme.label: Theme
 muse.prompt: An idea, a feeling, a poem, a connection, a reference, a question.
 muse.prompt.placeholder: One sentence is enough.
 muse.q.heading:

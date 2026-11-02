@@ -15,7 +15,8 @@ function applyStaticCopy(){
  const set=(sel,k,d)=>{ const el=document.querySelector(sel); if(el) el.textContent=T(k,d); };
  const tab=(k,key,d,ic)=>{ const el=document.querySelector(`#switch [data-tab="${k}"]`); if(el) el.innerHTML=`${ic}<span>${esc(T(key,d))}</span>`; };
  tab("muse","site.tab.muse","Muse",IC_MUSE); tab("notebook","site.tab.notebook","Notebook",IC_NOTEBOOK);
- set("#colorPop h3","site.colors.title","Colour"); set("#colorPop .pop-credit","color.credit","Colours by Mary");
+ set('#colorPop [data-cpt="colour"]',"site.colors.title","Colour"); set('#colorPop [data-cpt="margins"]',"site.margins.title","Margins"); set("#colorPop .pop-credit","color.credit","Colours by Mary");
+ set("#colorBtn","menu.colour","Colour"); set("#profGo","menu.profile","Your profile"); set("#whyMenu","menu.why","Why Poiesis");
  set("#whyLink","site.why.link","Why Poiesis \u203a");
  set("footer span","site.footer","A working sketch, 2026. Other members are examples; what you write stays in this browser. Paintings appear as color studies.");
 }
@@ -120,7 +121,13 @@ function artMuse(iso, scr){
 }
 const BANKM = BANK ? bankMuses(BANK) : null;
 const SCRIPTURE = (BANKM && isoToday()>=ART_FROM) ? (BANKM.find(m=>m.kind==="Scripture")||null) : null;
-const MUSES = BANKM ? (SCRIPTURE ? BANKM.map(m=>m===SCRIPTURE?artMuse(isoToday(), SCRIPTURE):m) : BANKM) : BUILTIN_MUSES;
+/* Round 24 (2 Nov): the day's Scripture is a fourth tab, after the art, and
+   can be synthesised with like the others (Niko: "scripture is a 4th tab that
+   you can synthesis with"). Its painting is the Art tab's business now. */
+const KORD=k=>({Poem:0,Passage:1,Art:2,Scripture:3})[k]??1;
+const MUSES = BANKM ? (SCRIPTURE ? [...BANKM.filter(m=>m!==SCRIPTURE), artMuse(isoToday(), SCRIPTURE), Object.assign({}, SCRIPTURE, {painting:null})].sort((a,b)=>KORD(a.kind)-KORD(b.kind)) : BANKM) : BUILTIN_MUSES;
+/* three or four works: the wording that counts them */
+function TN(k,d3,d4){ return MUSES.length>3?T(k+".four",d4):T(k,d3); }
 const DAY = BANK ? {theme:BANK.theme, line:BANK.line,
                     verse:SCRIPTURE?SCRIPTURE.quote:BANK.verse, verseRef:SCRIPTURE?`${SCRIPTURE.title} · ${SCRIPTURE.maker}`:BANK.verseRef,
                     questions:BANK.questions||[], howTheySpeak:BANK.howTheySpeak||"",
@@ -131,7 +138,8 @@ const SAMPLES = !BANK;
 const LINKS=[
  {id:"pp", a:MUSES[0].id, b:MUSES[1].id},
  {id:"pv", a:MUSES[1].id, b:MUSES[2].id},
- {id:"vp", a:MUSES[2].id, b:MUSES[0].id}
+ {id:"vp", a:MUSES[2].id, b:MUSES[0].id},
+ ...(MUSES[3]?[0,1,2].map(i=>({id:"s"+i, a:MUSES[i].id, b:MUSES[3].id})):[])
 ];
 const LINK=Object.fromEntries(LINKS.map(l=>[l.id,l]));
 const LINKS3={pp:[MUSES[0].id,MUSES[1].id], pv:[MUSES[1].id,MUSES[2].id], vp:[MUSES[0].id,MUSES[2].id]};
@@ -566,8 +574,8 @@ const initials=n=>n.split(" ").map(w=>w[0]).join("").slice(0,2);
 
 /* ---------- Settings: one set for wide screens, one for phones ---------- */
 const HOUSE={
- desk:{color:THEME_DEFAULT,room:"monastery",font:"modern",density:"airy",theme:"start",three:"tabs",tplace:"top",backing:"none",tsize:"m",labels:"off",sides:"faint",arch:"under",guide:"pulse",cue:"note",cueplace:"hang",shade:"writer",shadeStyle:"pencil",reveal:"ink",turner:"strip",nb:"spread",nbpaper:"lined",prompt:"focus",fill:"drawing",paper:"fascicle",nums:"hand",numSide:"left",stanza:"space",gloss:"dots",psize:"m",storyMode:"info",infoStyle:"pop",story:"tag",gate:"folded",pplace:"row",wtab:"off",wlook:"notecard"},
- phone:{color:THEME_DEFAULT,room:"monastery",font:"modern",density:"snug",theme:"start",three:"stickers",tplace:"top",pplace:"row",backing:"none",tsize:"s",labels:"off",sides:"faint",arch:"arch",guide:"none",cue:"note",cueplace:"hang",shade:"writer",shadeStyle:"pencil",reveal:"ink",turner:"strip",wtab:"off",wlook:"notecard",prompt:"focus",fill:"drawing",paper:"card",nums:"off",numSide:"left",stanza:"space",gloss:"sup",psize:"m",storyMode:"info",infoStyle:"pop",story:"label",gate:"blur",nb:"card",nbpaper:"lined"}
+ desk:{color:THEME_DEFAULT,margin:"vine",spine:"stitch",room:"monastery",font:"modern",density:"airy",theme:"start",three:"tabs",tplace:"top",backing:"none",tsize:"m",labels:"off",sides:"faint",arch:"under",guide:"pulse",cue:"note",cueplace:"hang",shade:"writer",shadeStyle:"pencil",reveal:"ink",turner:"strip",nb:"spread",nbpaper:"lined",prompt:"focus",fill:"drawing",paper:"fascicle",nums:"hand",numSide:"left",stanza:"space",gloss:"dots",psize:"m",storyMode:"info",infoStyle:"pop",story:"tag",gate:"folded",pplace:"row",wtab:"off",wlook:"notecard"},
+ phone:{color:THEME_DEFAULT,margin:"vine",spine:"stitch",room:"monastery",font:"modern",density:"snug",theme:"start",three:"stickers",tplace:"top",pplace:"row",backing:"none",tsize:"s",labels:"off",sides:"faint",arch:"arch",guide:"none",cue:"note",cueplace:"hang",shade:"writer",shadeStyle:"pencil",reveal:"ink",turner:"strip",wtab:"off",wlook:"notecard",prompt:"focus",fill:"drawing",paper:"card",nums:"off",numSide:"left",stanza:"space",gloss:"sup",psize:"m",storyMode:"info",infoStyle:"pop",story:"label",gate:"blur",nb:"card",nbpaper:"lined"}
 };
 const SETTINGS=[
  {name:"Page", ctrls:[
@@ -620,7 +628,7 @@ const SETTINGS=[
 ];
 if(!S.ui) S.ui={};
 ["desk","phone"].forEach(d=>{ S.ui[d]=Object.assign(clone(HOUSE[d]), S.ui[d]||{}); });
-const SHARED=["color"];
+const SHARED=["color","margin","spine"];
 function setPref(k,v,d){ if(SHARED.includes(k)) ["desk","phone"].forEach(x=>S.ui[x][k]=v); else S.ui[d||DEV()][k]=v; }
 if(!S.sharedLook){ SHARED.forEach(k=>S.ui.phone[k]=S.ui.desk[k]); S.sharedLook=1; }
 const phoneMQ=matchMedia("(max-width: 700px)");
@@ -650,24 +658,43 @@ function applyPrefs(){
  const own=THEMES.filter(t=>t.by), hd=T("color.house","Made for Poiesis");
  $("#colorList").innerHTML=THEMES.filter(t=>!t.by).map(pick).join("")+(own.length?`${hd?`<p class="thgroup">${esc(hd)}</p>`:""}${own.map(pick).join("")}`:"");
  $("#profBtn").innerHTML=avatarHTML(me());
+ R.setAttribute("data-margin",U().margin||"vine"); R.setAttribute("data-spine",U().spine||"stitch");
+ $("#cpMargins").innerHTML=marginsPaneHTML();
+ const d=new Date(), rb=$("#dateRibbon"); if(rb) rb.textContent=`${d.getDate()} ${d.toLocaleDateString(undefined,{month:"short"}).replace(/\.$/,"")}`;
+}
+/* Round 24: the Margins tab beside Colour. What climbs the right margin of
+   the work, and how the spine between the work and the notepad is dressed. */
+const MARGINS=[["vine","Climbing vine"],["ms","Manuscript"],["plain","Plain"]];
+const SPINES=[["stitch","Stitched"],["diamond","Diamonds"],["bands","Raised bands"]];
+function marginsPaneHTML(){ const u=U();
+ const seg=(k,lab,opts)=>`<p class="cp-lab">${esc(T("margins."+k,lab))}</p><div class="cp-seg" role="group" aria-label="${esc(T("margins."+k,lab))}">${opts.map(([v,l])=>`<button type="button" data-mpref="${k}" data-val="${v}" aria-pressed="${(u[k]||opts[0][0])===v}"><span class="cp-pv cp-${k}-${v}" aria-hidden="true"></span><span>${esc(T(`margins.${k}.${v}`,l))}</span></button>`).join("")}</div>`;
+ return seg("margin","Margin",MARGINS)+seg("spine","Spine",SPINES);
 }
 function setColor(id){ if(!THEMES.some(t=>t.id===id)) return; setPref("color",id); save(); applyPrefs(); render(); }
 function pop(btn,p){ p.hidden=!p.hidden; btn.setAttribute("aria-expanded",String(!p.hidden)); }
-$("#colorBtn").onclick=e=>{e.stopPropagation(); pop(e.currentTarget,$("#colorPop"));};
+$("#colorBtn").onclick=e=>{e.stopPropagation(); $("#pMenu").hidden=true; $("#profBtn").setAttribute("aria-expanded","false"); pop(e.currentTarget,$("#colorPop"));};
 $("#colorList").onclick=e=>{const b=e.target.closest("[data-color]"); if(b) setColor(b.dataset.color);};
-document.addEventListener("click",e=>{ for(const p of [$("#colorPop")]) if(!p.hidden&&!p.contains(e.target)) p.hidden=true;
+$("#colorPop").addEventListener("click",e=>{
+ const t=e.target.closest("[data-cpt]"); if(t){ const m=t.dataset.cpt==="margins"; $("#cpColour").hidden=m; $("#cpMargins").hidden=!m; $("#colorPop").querySelectorAll("[data-cpt]").forEach(b=>b.setAttribute("aria-pressed",String(b===t))); return; }
+ const b=e.target.closest("[data-mpref]"); if(b){ setPref(b.dataset.mpref,b.dataset.val); save(); applyPrefs(); render(); }
+});
+/* the menu under your picture: Muse, Notebook, your profile, Colour, Why Poiesis */
+function menuShut(){ $("#pMenu").hidden=true; $("#profBtn").setAttribute("aria-expanded","false"); }
+$("#profBtn").onclick=e=>{ e.stopPropagation(); $("#colorPop").hidden=true; pop(e.currentTarget,$("#pMenu")); };
+$("#profGo").onclick=()=>{ menuShut(); go("profile"); };
+$("#whyMenu").onclick=e=>{ e.preventDefault(); menuShut(); go("why"); };
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ menuShut(); $("#colorPop").hidden=true; } });
+document.addEventListener("click",e=>{ const path=e.composedPath(); for(const p of [$("#colorPop"),$("#pMenu")]) if(!p.hidden&&!path.includes(p)) p.hidden=true;
  if(!e.target.closest(".bm")) document.querySelectorAll(".bmenu:not([hidden])").forEach(m=>m.hidden=true); });
 
 /* ---------- Navigation ---------- */
-$("#switch").onclick=e=>{const b=e.target.closest("[data-tab]"); if(b){ if(b.dataset.tab==="muse"){ S.past=null; S.phome=true; } go(b.dataset.tab);} };
-$("#home").onclick=e=>{e.preventDefault(); S.past=null; go("muse");};
-$("#profBtn").onclick=()=>go("profile");
+$("#switch").onclick=e=>{const b=e.target.closest("[data-tab]"); if(b){ menuShut(); if(b.dataset.tab==="muse"){ S.past=null; S.phome=true; } go(b.dataset.tab);} };
 $("#whyLink").onclick=e=>{e.preventDefault(); go("why");};
 function go(tab){ S.tab=tab; save(); render(); scrollTo({top:0, behavior:reduce?"auto":"smooth"}); }
 function render(){
  hideSel(); hideTip();
  document.querySelectorAll("#switch [data-tab]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===S.tab)));
- $("#profBtn").setAttribute("aria-current",String(S.tab==="profile"));
+ $("#profGo").setAttribute("aria-current",String(S.tab==="profile"));
  ({muse:renderMuse, notebook:renderNotebook, why:renderWhy, profile:renderProfile})[S.tab]($("#view"));
  pruneBlankControls($("#view"));
 }
@@ -700,7 +727,7 @@ function untilMidnight(){ const n=new Date(), m=new Date(n); m.setHours(24,0,0,0
 function synOpen(id){ return true; }
 function synSubjects(id){ return id==="whole"?MUSES.map(m=>m.id):[LINK[id].a, LINK[id].b]; }
 function andList(a){ return a.length<3?a.join(" and "):a.slice(0,-1).join(", ")+" and "+a[a.length-1]; }
-function synName(id){ return id==="whole"?"all three":`${MUSE[LINK[id].a].kind.toLowerCase()} & ${MUSE[LINK[id].b].kind.toLowerCase()}`; }
+function synName(id){ return id==="whole"?(MUSES.length>3?"all four":"all three"):`${MUSE[LINK[id].a].kind.toLowerCase()} & ${MUSE[LINK[id].b].kind.toLowerCase()}`; }
 function synTextHTML(m){
  if(m.plate) return `<div class="plate ${m.plate}" role="img" aria-label="Color study after ${esc(m.title)}"><span class="note">Color study</span></div>${m.quote?`<p class="sy-q museText">${esc(m.quote)}</p>`:""}`;
  if(m.poem) return `<div class="sy-poem museText">${m.poem.split("\n\n").map(st=>`<p>${st.split("\n").map(esc).join("<br>")}</p>`).join("")}</div>`;
@@ -715,7 +742,7 @@ const SYN_CHOICES=()=>[...LINKS.map(l=>l.id),"whole"];
 const HOUSE_QS=["Where do they agree without meaning to?","What would one say to the other?","What does one see that the other misses?","Which line would you hand from one to the other?","What do both ask of you?","Where do they part ways, and who is right today?","What one word could stand for both?","If they met on the road, what would they talk about?"];
 function houseQs(){ return HOUSE_QS.map((q,i)=>T("synth.q."+(i+1),q)).filter(Boolean); }
 function synInOrder(id){ return synSubjects(id).slice().sort((x,y)=>MUSES.findIndex(m=>m.id===x)-MUSES.findIndex(m=>m.id===y)); }
-function synPickLabel(id){ const k=synInOrder(id).map(x=>MUSE[x].kind).join(" + "); return id==="whole"?T("syn.pick.whole","All three"):(SCRIPTURE?k:T("syn.pick."+id, k)); }
+function synPickLabel(id){ const k=synInOrder(id).map(x=>MUSE[x].kind).join(" + "); return id==="whole"?TN("syn.pick.whole","All three","All four"):(SCRIPTURE?k:T("syn.pick."+id, k)); }
 function synPairsHTML(id){
  const cur=curMuse().id;
  return `<div class="sy-pairs" role="group" aria-label="${esc(T("syn.pick.aria","What you are joining"))}">${SYN_CHOICES().filter(c=>c==="whole"||synSubjects(c).includes(cur)).map(c=>{ const done=!!S.syn[WK(c)];
@@ -741,10 +768,10 @@ function synBoxHTML(id){
   ${synPairsHTML(id)}
   <div class="sy-body"><div class="synworks sy-cols" style="--n:${ids.length}">${ids.map(x=>synCard(x)).join("")}</div>
   ${id==="whole"?curatorNoteHTML():""}
-  ${mine?`<div class="writer seal sy-writer"><span class="wax" aria-hidden="true">P</span><small>${id==="whole"?T("link.yours.whole","Your thought on all three"):`${T("link.yours.pair","Your synthesis of the ")}${esc(synName(id))}`} · ${when(mine.at)}</small><div class="first">${esc(mine.text)}</div>
+  ${mine?`<div class="writer seal sy-writer"><span class="wax" aria-hidden="true">P</span><small>${id==="whole"?TN("link.yours.whole","Your thought on all three","Your thought on all four"):`${T("link.yours.pair","Your synthesis of the ")}${esc(synName(id))}`} · ${when(mine.at)}</small><div class="first">${esc(mine.text)}</div>
      <p class="type" style="color:var(--paper-mute);margin:10px 0 0;font-size:.62rem">${T("link.published.under","Published under ")}${ids.map(x=>esc(MUSE[x].kind.toLowerCase())).join(", ")}${T("link.published.journal"," · also in your journal")}</p></div>`:
-   `<div class="writer sy-writer"><h4>${id==="whole"?T("link.whole.heading","One thought that holds all three"):T("link.pair.heading","What do these two say to each other?")}</h4>
-    <div class="sub">${id==="whole"?T("link.whole.line","Where do they meet, where do they argue — and what does the day leave you with?"):T("link.pair.line","Agreement is not required. Disagreement is often better.")}</div>
+   `<div class="writer sy-writer"><h4>${id==="whole"?TN("link.whole.heading","One thought that holds all three","One thought that holds all four"):T("link.pair.heading","What do these two say to each other?")}</h4>
+    <div class="sub">${id==="whole"?TN("link.whole.line","Where do they meet, where do they argue — and what does the day leave you with?","Where do they meet? What one thing are all four looking toward?"):T("link.pair.line","Agreement is not required. Disagreement is often better.")}</div>
     ${synQsHTML(id,d)}
     <textarea class="grow" id="synDraft" rows="3" aria-label="Your synthesis" placeholder="${T("link.placeholder","Two or three sentences is plenty.")}">${esc(d)}</textarea>
     <div class="wrow"><span class="type" style="color:var(--paper-mute)">${T("link.appears","Appears under the ")}${esc(andList(ids.map(x=>MUSE[x].kind.toLowerCase())))}</span>
@@ -946,7 +973,7 @@ function gateWithTeasesHTML(m, posts, peek){
   <div class="teases ${U().gate==="folded"?"folded":""}">${posts.map(teaseHTML).join("")}</div>
   ${gateCardHTML(m)}</section>`;
 }
-function linkTag(id){ return id==="whole"?"all three":synSubjects(id).map(x=>MUSE[x].kind.toLowerCase()).join(" & "); }
+function linkTag(id){ return id==="whole"?(MUSES.length>3?"all four":"all three"):synSubjects(id).map(x=>MUSE[x].kind.toLowerCase()).join(" & "); }
 function responsesHTML(m){
  const posts=postsFor(m.id), s=S.sealed[WK(m.id)];
  const linksHere=[...LINKS.map(l=>l.id),"whole"].filter(id=>synSubjects(id).includes(m.id));
@@ -1141,17 +1168,43 @@ function writerInnerM(m, nb){
  const s=S.sealed[WK(m.id)], u=U();
  if(!s&&readOnlyDay()) return `<p class="m-nbhead">${T("muse.history.heading","A day already past")}</p><p style="margin:0;font-size:.92rem;color:var(--paper-mute)">${T("muse.history.line","You are reading an earlier day. Its conversation is closed; what you write today belongs to today.")}</p>`;
  if(!s&&m.closed) return `<p class="m-nbhead">${T("muse.past.heading","This muse has passed")}</p><p style="margin:0;font-size:.92rem;color:var(--paper-mute)">${T("muse.past.line","Its conversation closed before you left an impression. You can still write about it in your notebook.")}</p>`;
- if(s) return `<div class="m-mine"><small>${s.via?`${T("muse.first.via","Your first impression, written as a synthesis with the ")}${esc(synSubjects(s.via).filter(x=>x!==m.id).map(x=>MUSE[x].kind.toLowerCase()).join(" and "))}`:T("muse.first.mine","Your first impression")} · ${when(s.at)}</small>${esc(s.text)}</div>
+ if(s) return `${npHeadHTML(m,false)}<div class="m-mine"><small>${s.via?`${T("muse.first.via","Your first impression, written as a synthesis with the ")}${esc(synSubjects(s.via).filter(x=>x!==m.id).map(x=>MUSE[x].kind.toLowerCase()).join(" and "))}`:T("muse.first.mine","Your first impression")} · ${when(s.at)}</small>${esc(s.text)}</div>
   ${curatorNoteHTML()}
   ${m.deeper?`<div class="m-deeper"><span>${T("muse.deeper.label","Go deeper")}</span>${esc(m.deeper)}</div>`:""}
   ${myLayers(m.id).map(l=>`<div class="m-layer"><small>${esc(l.w||"later")}</small>${esc(l.t)}</div>`).join("")}
   ${(m.closed||readOnlyDay())?"":`<form class="m-later" id="laterF"><textarea id="layerIn" class="${nb?"":"m-wbox"}" aria-label="${T("post.reply.mine.placeholder","Add another thought")}" placeholder="${T("muse.later.placeholder","Add another thought, or reply to yourself.")}"></textarea><div class="m-foot"><span class="m-note">${T("muse.first.stays","Your first impression stays as written")}</span><button class="btn small">${T("muse.later.button","Add")}</button></div></form>`}`;
- const d=S.drafts[WK(m.id)]||"", dim=u.prompt==="focus"&&d.length>0;
- const q=qChosen(m.id), ask=q||PROMPT;
+ const d=S.drafts[WK(m.id)]||"";
+ const q=qChosen(m.id);
  const lab=T("muse.first.label","First impression");
- return `${lab?`<p class="fi-l">${esc(lab)}</p>`:""}<p class="m-nbhead fi-s ${dim?"dim":""} ${q?"asked":""}">${esc(ask)}</p><textarea id="draft" class="${nb?"m-grow":"m-wbox"}" aria-label="${esc(lab||ask)}" placeholder="${T("muse.prompt.placeholder","One sentence is enough.")}">${esc(d)}</textarea>
-  <div class="m-foot"><span>${u.shade==="writer"?shadeHTML(m.id,34):""}</span><button class="btn primary" data-act="seal" ${d.trim()?"":"disabled"}>${T("muse.first.button","Leave my first impression")}</button></div>${qChosen(m.id)?qGuideHTML(m.id):qFold(qGuideHTML(m.id), T("muse.q.toggle","Today’s questions"))}`;
+ return `${npHeadHTML(m,true)}${q?`<p class="m-nbhead fi-s asked">${esc(q)}</p>`:""}<textarea id="draft" class="${nb?"m-grow":"m-wbox"}" aria-label="${esc(lab||"First impression")}" placeholder="${esc(lab)}">${esc(d)}</textarea>
+  <div class="m-foot"><span>${u.shade==="writer"?shadeHTML(m.id,34):""}</span><button class="btn primary" data-act="seal" ${d.trim()?"":"disabled"}>${T("muse.first.button","Leave my first impression")}</button></div>${q?qGuideHTML(m.id):""}`;
 }
+/* Round 24: the head of the notepad. "Theme" in small capitals, like "Poem"
+   in the box, then the day's word between corner brackets with a fleuron
+   under it; ? drops the day's questions under it. */
+function npHeadHTML(m, ask){
+ if(!DAY.theme) return "";
+ const k=T("muse.theme.label","Theme"), qs=ask&&!qChosen(m.id)&&(DAY.questions||[]).length;
+ const ql=T("muse.q.toggle","Today’s questions");
+ return `<div class="np-head">${k?`<p class="lk-kind np-k">${esc(k)}</p>`:""}<p class="np-word"><span class="np-brk"><span class="np-c" aria-hidden="true"></span>${esc(DAY.theme)}</span></p><span class="np-fl" aria-hidden="true">❦</span>${qs?`<button type="button" class="np-q" data-act="qtoggle" aria-expanded="${!!S.qOpen}" aria-label="${esc(ql)}" data-tip="${esc(ql)}">?</button>`:""}</div>${qs&&S.qOpen?`<div class="np-qs">${qGuideHTML(m.id)}</div>`:""}`;
+}
+/* Round 24: what climbs the right margin of the work. Small doodles for the
+   day: an ear of wheat, a hazelnut, a feather, a lamp (the same four every
+   day until each theme has its own). */
+const DOODLE={
+ ear:`<svg viewBox="0 0 30 60" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"><path d="M15 60V18"/>${[0,1,2,3,4].map(i=>`<path d="M15 ${44-i*7}c-6-3-8-8-6-12 5 2 7 7 6 12zM15 ${44-i*7}c6-3 8-8 6-12-5 2-7 7-6 12z"/>`).join("")}<path d="M15 14l-2-12M15 14l3-11"/></svg>`,
+ nut:`<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"><path d="M20 12c-8 0-13 6-13 14s6 12 13 12 13-4 13-12-5-14-13-14z"/><path d="M12 16c2-5 14-5 16 0"/><path d="M20 12c0-5 3-9 8-10-1 5-4 8-8 10z"/></svg>`,
+ feather:`<svg viewBox="0 0 30 60" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"><path d="M8 58C12 40 18 20 26 2"/><path d="M26 2C14 8 8 22 9 40M26 2c2 12-2 28-12 40"/><path d="M12 30l6-4M11 38l7-5M14 22l6-3"/></svg>`,
+ lamp:`<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"><path d="M6 26c6 6 22 6 28-2-8-2-14-6-18-6-6 0-10 4-10 8z"/><path d="M34 24c3 0 4-2 4-4"/><path d="M12 22c1-6 4-10 4-14 3 4 3 9 0 12"/><path d="M14 32h12"/></svg>`};
+function marginOf(){ const v=U().margin; return ["vine","ms","plain"].includes(v)?v:"vine"; }
+function marginArtHTML(m){
+ const mg=marginOf(); if(mg==="plain"||m.kind==="Art") return "";
+ const dd=(k,top,sm)=>`<i class="dd${sm?" sm":""}" style="top:${top}%">${DOODLE[k]}</i>`;
+ if(mg==="vine") return `<span class="lk-mg lk-vine" aria-hidden="true"><span class="vstem"></span>${dd("ear",14)}${dd("nut",44,1)}${dd("feather",72)}</span>`;
+ const short=m.kind!=="Poem";   /* the poem has the whole margin; a passage or Scripture a shorter one */
+ return `<span class="lk-mg lk-msb${short?" short":""}" aria-hidden="true"><span class="vstem"></span>${short?dd("ear",7)+dd("nut",30,1):dd("ear",10)+dd("nut",36,1)+dd("lamp",62)+dd("feather",84)}</span>`;
+}
+function spineHTML(){ const v=U().spine; return `<div class="lk-spine sp-${["stitch","diamond","bands"].includes(v)?v:"stitch"}" aria-hidden="true"><i></i></div>`; }
 function curlHTML(m){
  if(U().turner!=="curl"||m.closed) return "";
  const i=MUSES.indexOf(m), nx=MUSES[(i+1)%MUSES.length];
@@ -1238,7 +1291,7 @@ function constitutionHTML(){
 function keepVerse(){ if(S.verseKept===today()) return; const ref=(DAY.verseRef||"").split(" · ");
  addLine({text:DAY.verse, who:ref[0]||"", where:ref.slice(1).join(" · "), from:"muse"}); S.verseKept=today(); save(); render(); toast(T("toast.verse.kept","Kept in your notebook.")); }
 const CROSS=`<svg class="mx-cross" viewBox="0 0 24 30" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M9.5 2h5v7.5H21v5h-6.5V28h-5V14.5H3v-5h6.5z"/></svg>`;
-function wisdomBtn(){ return `<button class="m-colbtn m-crossbtn" type="button" data-act="reading" aria-expanded="${!!S.reading}" aria-label="${T("verse.button","The day’s verse")}" data-tip="${T("verse.button","The day’s verse")}">${CROSS}</button>`; }
+function wisdomBtn(){ if(MUSES.length>3) return ""; return `<button class="m-colbtn m-crossbtn" type="button" data-act="reading" aria-expanded="${!!S.reading}" aria-label="${T("verse.button","The day’s verse")}" data-tip="${T("verse.button","The day’s verse")}">${CROSS}</button>`; }
 function maximHTML(){
  if(!DAY.verse) return "";
  const kept=S.verseKept===today();
@@ -1251,7 +1304,7 @@ function phoneHomeHTML(){
  const rows=MUSES.map((w,i)=>{ const st=done(w.id)?`<span class="ph-st">✓ ${T("phone.written","written")}</span>`:`<span class="ph-st"><span class="ph-dash">${w.kind==="Scripture"?"✝":esc(w.maker.split(" ").slice(-1)[0][0])}</span></span>`;
    const nextSeg=i<MUSES.length-1?seg(w.id,MUSES[i+1].id,LINKS.find(l=>(l.a===w.id&&l.b===MUSES[i+1].id)||(l.b===w.id&&l.a===MUSES[i+1].id))?.id):"";
    return `<button type="button" class="ph-row" data-popen="${w.id}"><span class="ph-ic" aria-hidden="true">${PICON[iconFor(w)]}</span><span class="ph-rt"><span class="k">${esc(w.kind.toLowerCase())}</span><b>${esc(w.title)}</b><span class="mk">${esc(w.maker)}</span></span>${st}${none&&first===w?`<span class="ph-begin">${T("phone.begin","begin here")}</span>`:""}</button>${nextSeg||""}`; }).join("");
- const knot=true?`<button type="button" class="ph-knot" data-side="whole"><span>◇</span>${S.syn[WK("whole")]?T("phone.all.done","You tied all three together"):T("phone.all.write","Tie all three together")}</button>`:"";
+ const knot=true?`<button type="button" class="ph-knot" data-side="whole"><span>◇</span>${S.syn[WK("whole")]?TN("phone.all.done","You tied all three together","All four are together"):TN("phone.all.write","Tie all three together","Tie all four together")}</button>`:"";
  const reading=S.reading?maximHTML():"";
  const cols=TODAY.slice(0,4).map(p=>`<span style="background:${PEOPLE[p.n].c}">${esc(initials(p.n))}</span>`).join("");
  return `<div class="ph-home"><p class="ph-date">${esc(dateStr)}</p>
@@ -1384,12 +1437,12 @@ function synGoHTML(m){
  const others=MUSES.filter(x=>x.id!==m.id), lab=T("syn.with","Synthesise with");
  return `<div class="lk-go">${lab?`<p class="lk-golab">${CIRCLES}${esc(lab)}</p>`:""}<div class="lk-with">${others.map(o=>{ const lid=linkFor(m.id,o.id);
    return `<button type="button" class="lk-withb" data-mside="${lid}"><span class="k">${esc(o.kind)}${S.syn[WK(lid)]?` <span class="lk-tick" role="img" aria-label="${esc(T("syn.pick.done","written"))}">✓</span>`:""}</span><b>${esc(o.title)}</b></button>`; }).join("")}
-  <button type="button" class="lk-synbig" data-mside="whole">${CIRCLES}<span>${esc(T("syn.all","All three"))}</span>${S.syn[WK("whole")]?` <span class="lk-tick" role="img" aria-label="${esc(T("syn.pick.done","written"))}">✓</span>`:""}</button></div></div>`;
+  <button type="button" class="lk-synbig" data-mside="whole">${CIRCLES}<span>${esc(TN("syn.all","All three","All four"))}</span>${S.syn[WK("whole")]?` <span class="lk-tick" role="img" aria-label="${esc(T("syn.pick.done","written"))}">✓</span>`:""}</button></div></div>`;
 }
 /* the tabs on the box's top edge */
 function tabsV2(m){
  const own=!S.past&&!m.closed;
- return `<nav class="lk-tabs" aria-label="${esc(T("tabs.aria","Today’s works"))}">${MUSES.map(x=>`<button type="button" class="lk-tab" data-mgo="${x.id}" aria-pressed="${!S.openSyn&&x.id===m.id}">${PICON[iconFor(x)]}<span>${esc(x.kind)}</span>${S.drawn[WK(x.id)]?shadeHTML(x.id,22):S.sealed[WK(x.id)]?`<span class="lk-tick" role="img" aria-label="${esc(T("phone.written","written"))}">✓</span>`:""}</button>`).join("")}${own?`<button type="button" class="lk-tab lk-tsyn" data-act="syntab" aria-pressed="${!!S.openSyn}" aria-label="${esc(T("syn.tab","Synthesise"))}" data-tip="${esc(T("syn.tab","Synthesise"))}">${CIRCLES}</button>`:""}</nav>`;
+ return `<nav class="lk-tabs${MUSES.length>3?" n4":""}" aria-label="${esc(T("tabs.aria","Today’s works"))}">${MUSES.map(x=>`<button type="button" class="lk-tab" data-mgo="${x.id}" aria-pressed="${!S.openSyn&&x.id===m.id}">${PICON[iconFor(x)]}<span>${esc(x.kind)}</span>${S.drawn[WK(x.id)]?shadeHTML(x.id,22):S.sealed[WK(x.id)]?`<span class="lk-tick" role="img" aria-label="${esc(T("phone.written","written"))}">✓</span>`:""}</button>`).join("")}${own?`<button type="button" class="lk-tab lk-tsyn" data-act="syntab" aria-pressed="${!!S.openSyn}" aria-label="${esc(T("syn.tab","Synthesise"))}" data-tip="${esc(T("syn.tab","Synthesise"))}">${CIRCLES}</button>`:""}</nav>`;
 }
 /* questions behind a button, so the page stays quiet */
 function qFold(inner, label){
@@ -1399,16 +1452,16 @@ function qFold(inner, label){
 /* synthesis: the panel (pair buttons and the title cards) and the notepad */
 function synPanelHTML(id){
  const ids=synInOrder(id);
- return `<div class="lk-card lk-synpick" id="synbox"><div class="lk-synh"><b>${CIRCLES}${esc(T("syn.title","Synthesis"))}</b><button type="button" class="lk-x" data-act="closesyn" aria-label="${esc(T("syn.close","Close synthesis"))}">×</button></div>
+ return `<div class="lk-card lk-parch lk-synpick" id="synbox"><div class="lk-synh"><b>${CIRCLES}${esc(T("syn.title","Synthesis"))}</b><button type="button" class="lk-x" data-act="closesyn" aria-label="${esc(T("syn.close","Close synthesis"))}">×</button></div>
   ${synPairsHTML(id)}
   <div class="lk-syncards">${ids.map(x=>`<div class="lk-syncard"><span class="k">${esc(MUSE[x].kind)}</span><b>${esc(MUSE[x].title)}</b><small>${esc(MUSE[x].maker)}</small></div>`).join("")}</div></div>`;
 }
 function synNoteHTML(id){
  const ids=synInOrder(id), mine=S.syn[WK(id)], d=S.synDrafts[WK(id)]||"";
- if(mine) return `<div class="lk-card writer seal lk-synnote"><span class="wax" aria-hidden="true">P</span><small>${id==="whole"?T("link.yours.whole","Your thought on all three"):`${T("link.yours.pair","Your synthesis of the ")}${esc(synName(id))}`} · ${when(mine.at)}</small><div class="first">${esc(mine.text)}</div>
+ if(mine) return `<div class="lk-card lk-parch writer seal lk-synnote"><span class="wax" aria-hidden="true">P</span><small>${id==="whole"?TN("link.yours.whole","Your thought on all three","Your thought on all four"):`${T("link.yours.pair","Your synthesis of the ")}${esc(synName(id))}`} · ${when(mine.at)}</small><div class="first">${esc(mine.text)}</div>
    <p class="type" style="color:var(--paper-mute);margin:10px 0 0;font-size:.62rem">${T("link.published.under","Published under ")}${ids.map(x=>esc(MUSE[x].kind.toLowerCase())).join(", ")}${T("link.published.journal"," · also in your journal")}</p></div>`;
- return `<div class="lk-card writer lk-synnote"><h4>${id==="whole"?T("link.whole.heading","One thought that holds all three"):T("link.pair.heading","What do these two say to each other?")}</h4>
-   <div class="sub">${id==="whole"?T("link.whole.line","Where do they meet, where do they argue — and what does the day leave you with?"):T("link.pair.line","Agreement is not required. Disagreement is often better.")}</div>
+ return `<div class="lk-card lk-parch writer lk-synnote"><h4>${id==="whole"?TN("link.whole.heading","One thought that holds all three","One thought that holds all four"):T("link.pair.heading","What do these two say to each other?")}</h4>
+   <div class="sub">${id==="whole"?TN("link.whole.line","Where do they meet, where do they argue — and what does the day leave you with?","Where do they meet? What one thing are all four looking toward?"):T("link.pair.line","Agreement is not required. Disagreement is often better.")}</div>
    ${(()=>{ const pick=(S.synQ||{})[WK(id)]; return pick?`<p class="sy-asked">${esc(pick)}</p>`:""; })()}
    <textarea class="grow" id="synDraft" rows="3" aria-label="Your synthesis" placeholder="${T("link.placeholder","Two or three sentences is plenty.")}">${esc(d)}</textarea>
    <div class="wrow"><span class="type" style="color:var(--paper-mute)">${T("link.appears","Appears under the ")}${esc(andList(ids.map(x=>MUSE[x].kind.toLowerCase())))}</span>
@@ -1427,18 +1480,22 @@ function lookHTML(m,o){
  const syn=!past&&S.openSyn?S.openSyn:null;
  const title=`<header class="lk-head"><p class="lk-kind">${esc(m.kind)}</p><div class="m-tl"><h2 class="mtitle lk-title">${esc(m.title)}</h2>${o.info}</div><p class="lk-by">${esc(m.maker)}${m.date?` · ${esc(m.date)}`:""}</p></header>`;
  const work=`<div class="m-wwrap">${workHTML(m,false)}</div>${m.kind==="Art"?"":noteHTML(m)}${cameHTML(m)}${synGoHTML(m)}`;
- const write=`<div class="m-nb lk-write lk-card${(S.drafts[WK(m.id)]||"").trim()||S.sealed[WK(m.id)]?" has":""}" id="writerBox">${writerInnerM(m,false)}${curlHTML(m)}</div>`;
+ const write=`<div class="m-nb lk-write lk-card lk-parch${(S.drafts[WK(m.id)]||"").trim()||S.sealed[WK(m.id)]?" has":""}" id="writerBox">${writerInnerM(m,false)}${curlHTML(m)}</div>`;
  const date=dayOn?`<div class="lk-date">${esc(o.dateStr)}</div>`:"";
  const theme=dayOn?`<div class="lk-themewrap">${themeWithCross("lk-theme","h1")}</div>`:"";
  const reading=dayOn?o.reading:"", pastbar=past?o.day:"";
  const side=syn?`${synPanelHTML(syn)}${synNoteHTML(syn)}`:write;
- const page=`<article class="lk-page lk-text${syn?" lk-synview":""}">${syn?synWorksHTML(syn):`${title}${work}`}</article>`;
+ void date; void theme;
+ const mg=syn?"":marginArtHTML(m), msArt=!syn&&m.kind==="Art"&&marginOf()==="ms";
+ const page=`<article class="lk-page lk-text lk-parch${syn?" lk-synview":""}${mg?" has-mg":""}${msArt?" lk-ms-art":""}">${mg}${syn?synWorksHTML(syn):`${title}${work}`}</article>`;
  const top=`${past?"":nudgeHTML()}${past?"":tabsV2(m)}`;
  /* desk: the box and, beside it, the column that stays in view; phone: in a
     synthesis the panel and notepad come straight after the tabs */
  const desk=ph&&syn?`<div class="lk-col">${top}<div class="lk-side">${side}</div>${page}</div>`
-  :`<div class="lk-col">${top}${page}</div><aside class="lk-side">${side}</aside>`;
- return `<div class="lk lk-b lk-v2${syn?" lk-syn":""}">${pastbar}${dayOn?`<div class="lk-rh"><span class="lk-rl lk-marks">${POIESIS_MARK}</span>${theme}<div class="lk-rhr">${date}</div></div>${reading}`:""}<div class="lk-desk">${desk}</div></div>`;
+  :`<div class="lk-col">${top}${page}</div>${spineHTML()}<aside class="lk-side">${side}</aside>`;
+ /* Round 24: no running head. The date is the ribbon in the top bar, the
+    day's word heads the notepad, and Scripture is a tab. */
+ return `<div class="lk lk-b lk-v2 lk-book${syn?" lk-syn":""}">${pastbar}${dayOn&&MUSES.length<4?reading:""}<div class="lk-desk">${desk}</div></div>`;
 }
 /* Round 22: the Poiesis mark (circle, cross, quill) stands where "the day's
    word" stood. Niko picked it over the day's-art candidate, which is gone. */
@@ -1535,7 +1592,7 @@ function seal(m){
  Table.put({id:"t_"+WHO+"_"+WK(m.id), on:WK(m.id), by:WHO, name:S.profile.name||WHONAME, at:Date.now(), day:DAYK(), text:t});
  const kp=keptPage(m.id); if(kp){ const pg=S.journal.find(j=>j.id===kp); if(pg) pg.body=workPageBody(m, S.sealed[WK(m.id)]); }
  const drew=drawSticker(m.id); if(drew) setCheck(drew); S.keepAsk=drew?m.id:null; save(); render();
- toast(all?"All three. The knot after the painting is open, and the day’s word is uncovered.":drew?`You drew ${STICKERS[drew].name}.`:"Kept. Here’s how it sang in others.");
+ toast(all?(MUSES.length>3?T("toast.all.four","All four, written."):"All three. The knot after the painting is open, and the day’s word is uncovered."):drew?`You drew ${STICKERS[drew].name}.`:"Kept. Here’s how it sang in others.");
  setTimeout(()=>$("#responses")?.scrollIntoView({behavior:reduce?"auto":"smooth", block:"start"}),60);
 }
 function findPost(pid, mid){

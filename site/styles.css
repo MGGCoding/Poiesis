@@ -1873,3 +1873,123 @@ html[data-dev="phone"] .lk-arts{grid-template-columns:1fr}
 .lk-synview .locked .veil .muted{color:var(--lk-mute)}
 /* the sticker you drew sits small on its work's tab (Round 17 D: tap it to keep it today) */
 .lk-tab .m-stk{flex:none; margin-left:2px}
+
+/* ===== Round 24 (2 Nov): the Muse Header Sample, built in =================
+   The top bar holds only your picture (it opens the menu) and the date on a
+   ribbon. The work and the notepad are an open book: parchment pages, a
+   spine between them, a climbing vine or a manuscript border up the work's
+   right margin (Colour › Margins). The notepad is headed by the day's word. */
+.top{border-bottom-color:transparent}
+.top .bar{grid-template-columns:1fr auto}
+.top .icons{justify-self:end; display:flex; align-items:flex-start; gap:10px; align-self:stretch}
+.dribbon{display:block; margin-top:-8px; background:var(--accent); color:var(--on-accent); padding:12px 12px 17px; font:400 .76rem var(--f-type); letter-spacing:.14em; text-transform:uppercase; white-space:nowrap;
+ clip-path:polygon(0 0,100% 0,100% 100%,50% 80%,0 100%); box-shadow:0 6px 12px -6px rgba(0,0,0,.6)}
+.top .icons .edbtn{align-self:center}
+.pmenu{position:fixed; z-index:41; top:calc(env(safe-area-inset-top,0px) + 54px); left:max(16px, env(safe-area-inset-left,0px)); min-width:230px; display:grid; gap:4px; padding:10px;
+ background:var(--surface); color:var(--on-surface); border:1px solid var(--line); border-radius:6px; box-shadow:var(--shadow)}
+.pmenu .switch{justify-self:start; margin-bottom:6px}
+.pm-row{display:block; width:100%; text-align:left; border:0; border-radius:4px; background:transparent; color:var(--on-surface); padding:9px 10px; font:400 1.02rem var(--f-body); text-decoration:none; cursor:pointer}
+.pm-row:hover, .pm-row[aria-current="true"]{background:color-mix(in srgb,var(--on-surface) 9%,transparent)}
+.profbtn[aria-expanded="true"] .av{outline:2px solid var(--accent); outline-offset:3px}
+.pop{right:auto; left:max(16px, env(safe-area-inset-left,0px))}
+.cp-tabs{display:inline-flex; background:color-mix(in srgb,var(--on-surface) 6%,transparent); border:1px solid var(--line); border-radius:22px; padding:3px; margin:0 0 12px}
+.cp-tabs button{border:0; background:transparent; color:var(--on-surface); padding:6px 16px; border-radius:18px; font:400 .98rem var(--f-body); cursor:pointer}
+.cp-tabs button[aria-pressed="true"]{background:var(--accent); color:var(--on-accent)}
+.cp-lab{margin:6px 0 6px!important; font:400 .7rem var(--f-type)!important; letter-spacing:.14em; text-transform:uppercase; color:var(--on-surface)!important}
+.cp-seg{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px}
+.cp-seg button{display:grid; justify-items:center; gap:6px; min-width:96px; border:1px solid var(--line); border-radius:6px; background:color-mix(in srgb,var(--on-surface) 4%,transparent); color:var(--on-surface); padding:8px 10px; font:400 .95rem var(--f-body); cursor:pointer}
+.cp-seg button[aria-pressed="true"]{border-color:var(--on-surface); box-shadow:inset 0 0 0 1px var(--on-surface)}
+.cp-pv{display:block; width:44px; height:52px; border-radius:2px; background:#f1e4c3; position:relative; overflow:hidden; color:#7c6a3e}
+@media (max-width:700px){
+ html[data-mlook] .top .bar{grid-template-columns:1fr auto}
+ html[data-mlook] .top.extra .bar{grid-template-columns:1fr auto; grid-template-areas:"l i"}
+ .dribbon{margin-top:-10px; padding:11px 10px 15px}
+}
+
+/* parchment: the paper's own colour, with fibres and a darker edge */
+.lk-v2 .lk-parch{background-image:radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(140,100,45,.16) 100%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .32 0 0 0 0 .15 0 0 0 .2 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* the notepad: the day's word at its head, "First impression" on the lines */
+.np-head{position:relative; text-align:center; margin:-2px 0 16px}
+.lk .np-head .np-k{margin:0 0 6px}
+.np-word{margin:0; line-height:1}
+.np-brk{position:relative; display:inline-block; padding:8px 22px 9px; font:italic 400 1.9rem/1.15 var(--f-display); color:var(--lk-ink)}
+.np-c{position:absolute; inset:0; pointer-events:none;
+ --b:var(--lk-red); background:
+  linear-gradient(var(--b),var(--b)) left top/14px 1.5px no-repeat, linear-gradient(var(--b),var(--b)) left top/1.5px 14px no-repeat,
+  linear-gradient(var(--b),var(--b)) right top/14px 1.5px no-repeat, linear-gradient(var(--b),var(--b)) right top/1.5px 14px no-repeat,
+  linear-gradient(var(--b),var(--b)) left bottom/14px 1.5px no-repeat, linear-gradient(var(--b),var(--b)) left bottom/1.5px 14px no-repeat,
+  linear-gradient(var(--b),var(--b)) right bottom/14px 1.5px no-repeat, linear-gradient(var(--b),var(--b)) right bottom/1.5px 14px no-repeat}
+.np-fl{display:block; margin-top:6px; color:var(--lk-red); font-size:1.05rem; line-height:1}
+.np-q{position:absolute; top:-4px; right:-6px; width:30px; height:30px; border-radius:50%; border:1px solid var(--lk-rule); background:transparent; color:var(--lk-red); font:600 1rem var(--f-display); cursor:pointer; display:grid; place-items:center}
+.np-q:hover, .np-q[aria-expanded="true"]{border-color:var(--lk-red)}
+.np-qs{margin:0 0 14px}
+.lk .np-qs .m-qguide{margin:0; border-top:1px dashed var(--lk-rule)}
+.lk .lk-write #draft{--np-rule:color-mix(in srgb,var(--lk-ink) 32%,transparent); background-image:linear-gradient(transparent 30px, var(--np-rule) 30px); background-size:100% 32px; min-height:288px}
+.lk .lk-write #draft::placeholder{color:var(--lk-mute); opacity:1}
+html[data-dev="phone"] .lk .lk-write #draft{min-height:160px}
+
+/* the open book: the box, the spine, the notepad */
+@media (min-width:901px){
+ html:not([data-dev="phone"]) .lk-book .lk-desk{grid-template-columns:minmax(0,1.618fr) 34px minmax(0,1fr); gap:0}
+ html:not([data-dev="phone"]) .lk-book .lk-page{box-shadow:inset -18px 0 22px -18px rgba(60,40,20,.42), var(--shadow)}
+ html:not([data-dev="phone"]) .lk-book .lk-side > .lk-card{box-shadow:inset 18px 0 22px -18px rgba(60,40,20,.42), var(--shadow)}
+}
+.lk-spine{display:none}
+@media (min-width:901px){ html:not([data-dev="phone"]) .lk-spine{display:block; position:relative; align-self:stretch; margin-top:46px; min-height:200px;
+ --sp:color-mix(in srgb,var(--lk-paper) 80%,var(--lk-ink)); --sp2:color-mix(in srgb,var(--lk-paper) 94%,var(--lk-ink));
+ background:linear-gradient(90deg,var(--sp),var(--sp2) 30%,var(--lk-paper) 50%,var(--sp2) 70%,var(--sp)); box-shadow:inset 0 0 10px rgba(60,40,20,.35)} }
+.lk-spine i{position:absolute; inset:16px 0; display:block; color:var(--lk-red)}
+.sp-stitch i{left:50%; width:2px; margin-left:-1px; background:repeating-linear-gradient(180deg,currentColor 0 12px,transparent 12px 22px)}
+.sp-stitch i::before, .sp-stitch i::after{content:""; position:absolute; left:-5px; width:12px; height:12px; border-radius:50%; border:1.5px solid currentColor}
+.sp-stitch i::before{top:-12px} .sp-stitch i::after{bottom:-12px}
+.sp-diamond i{background:currentColor; opacity:.75;
+ -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='40'%3E%3Cpath d='M17 8l6 12-6 12-6-12z'/%3E%3Ccircle cx='17' cy='2' r='1.5'/%3E%3Ccircle cx='17' cy='38' r='1.5'/%3E%3C/svg%3E") center top/34px 40px repeat-y;
+ mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='40'%3E%3Cpath d='M17 8l6 12-6 12-6-12z'/%3E%3Ccircle cx='17' cy='2' r='1.5'/%3E%3Ccircle cx='17' cy='38' r='1.5'/%3E%3C/svg%3E") center top/34px 40px repeat-y}
+.sp-bands i{--d:color-mix(in srgb,var(--lk-ink) 45%,transparent); --l:color-mix(in srgb,var(--lk-paper) 70%,#fff);
+ background:repeating-linear-gradient(180deg,transparent 0 120px,var(--d) 120px 122px,var(--l) 122px 124px,transparent 124px 132px,var(--d) 132px 134px,var(--l) 134px 136px,transparent 136px 240px)}
+.sp-bands i::before{content:"✦"; position:absolute; left:50%; top:44%; transform:translateX(-50%); color:var(--lk-red); font-size:.9rem}
+@media (min-width:901px){ html:not([data-dev="phone"]) .lk-spine.sp-bands{--sp:color-mix(in srgb,var(--lk-paper) 66%,var(--lk-ink))} }
+
+/* the right margin of the work: a climbing vine, or a manuscript border */
+.lk-mg{position:absolute; top:28px; bottom:28px; right:16px; width:56px; pointer-events:none; color:color-mix(in srgb,var(--lk-mute) 80%,transparent)}
+.lk-mg .vstem{position:absolute; inset:0; background:currentColor;
+ -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='140' viewBox='0 0 56 140'%3E%3Cg fill='none' stroke='black' stroke-width='1.2' stroke-linecap='round'%3E%3Cpath d='M30 140c-14-20 14-50 0-70s14-50 0-70'/%3E%3Cpath d='M26 112c-10-1-15-7-14-14 8 1 13 7 14 14zM34 84c10-2 15-8 13-15-8 1-12 7-13 15zM26 42c-10-1-15-7-14-14 8 1 13 7 14 14zM34 14c10-2 15-8 13-15-8 1-12 7-13 15z' fill='black' fill-opacity='.2'/%3E%3Cpath d='M22 96c-4 4-4 8-1 10M38 60c4 4 4 8 1 10'/%3E%3C/g%3E%3C/svg%3E") center bottom/56px 140px repeat-y;
+ mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='140' viewBox='0 0 56 140'%3E%3Cg fill='none' stroke='black' stroke-width='1.2' stroke-linecap='round'%3E%3Cpath d='M30 140c-14-20 14-50 0-70s14-50 0-70'/%3E%3Cpath d='M26 112c-10-1-15-7-14-14 8 1 13 7 14 14zM34 84c10-2 15-8 13-15-8 1-12 7-13 15zM26 42c-10-1-15-7-14-14 8 1 13 7 14 14zM34 14c10-2 15-8 13-15-8 1-12 7-13 15z' fill='black' fill-opacity='.2'/%3E%3Cpath d='M22 96c-4 4-4 8-1 10M38 60c4 4 4 8 1 10'/%3E%3C/g%3E%3C/svg%3E") center bottom/56px 140px repeat-y}
+.lk-mg .dd{position:absolute; left:50%; transform:translateX(-50%); width:30px; display:block; background:var(--lk-paper); border-radius:50%; padding:3px}
+.lk-mg .dd.sm{width:34px}
+.lk-mg .dd svg{display:block; width:100%; height:auto}
+.lk-msb{right:12px; width:48px; color:var(--lk-mute)}
+.lk-msb::before, .lk-msb::after{content:""; position:absolute; top:0; bottom:0; border-left:1.5px solid var(--gold)}
+.lk-msb::before{left:4px} .lk-msb::after{right:4px; border-left-width:1px}
+.lk-msb .vstem{inset:0 6px; opacity:.75}
+.lk-msb .dd{color:var(--lk-red); box-shadow:0 0 0 1.5px var(--gold),0 0 0 4px var(--lk-paper),0 0 0 5px var(--lk-red)}
+.lk-msb.short{bottom:auto; height:46%; -webkit-mask:linear-gradient(180deg,#000 82%,transparent); mask:linear-gradient(180deg,#000 82%,transparent)}
+.lk-b.lk-v2 .lk-text.has-mg{padding-right:104px}
+html[data-color="monastery3"] .lk-mg{top:150px}
+.lk-ms-art .lk-frame{border:0; padding:18px; background:var(--lk-paper); box-shadow:inset 0 0 0 2px var(--gold),inset 0 0 0 7px var(--lk-paper),inset 0 0 0 8px var(--lk-red),0 12px 22px -14px rgba(0,0,0,.6)}
+.lk-ms-art .lk-frame::before{content:"❦"; position:absolute; top:-1px; left:50%; transform:translateX(-50%); color:var(--lk-red); font-size:1rem; line-height:1}
+.lk-ms-art .lk-frame::after{content:"✦ ❦ ✦"; inset:auto 0 0 0; border:0; text-align:center; color:var(--lk-red); font-size:.75rem; line-height:18px}
+@media (max-width:900px){ .lk-mg{display:none} .lk-b.lk-v2 .lk-text.has-mg{padding-right:20px} }
+html[data-dev="phone"] .lk-mg{display:none}
+html[data-dev="phone"] .lk-b.lk-v2 .lk-text.has-mg{padding-right:18px}
+
+/* the previews in Colour › Margins */
+.cp-margin-vine::after, .cp-margin-ms::after{content:""; position:absolute; top:4px; bottom:4px; right:2px; width:16px; background:currentColor;
+ -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='40' viewBox='0 0 56 140'%3E%3Cg fill='none' stroke='black' stroke-width='4' stroke-linecap='round'%3E%3Cpath d='M30 140c-14-20 14-50 0-70s14-50 0-70'/%3E%3Cpath d='M26 112c-10-1-15-7-14-14 8 1 13 7 14 14zM34 84c10-2 15-8 13-15-8 1-12 7-13 15zM26 42c-10-1-15-7-14-14 8 1 13 7 14 14z' fill='black'/%3E%3C/g%3E%3C/svg%3E") center/16px 40px repeat-y;
+ mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='40' viewBox='0 0 56 140'%3E%3Cg fill='none' stroke='black' stroke-width='4' stroke-linecap='round'%3E%3Cpath d='M30 140c-14-20 14-50 0-70s14-50 0-70'/%3E%3Cpath d='M26 112c-10-1-15-7-14-14 8 1 13 7 14 14zM34 84c10-2 15-8 13-15-8 1-12 7-13 15zM26 42c-10-1-15-7-14-14 8 1 13 7 14 14z' fill='black'/%3E%3C/g%3E%3C/svg%3E") center/16px 40px repeat-y}
+.cp-margin-ms::before{content:""; position:absolute; top:3px; bottom:3px; right:1px; width:18px; border-left:1px solid #b08a3a; border-right:1px solid #b08a3a}
+.cp-pv[class*="cp-spine"]{background:linear-gradient(90deg,#f1e4c3 0 40%,#c9b083 40%,#efe0bd 50%,#c9b083 60%,#f1e4c3 60%)}
+.cp-spine-stitch::after{content:""; position:absolute; top:6px; bottom:6px; left:50%; width:2px; margin-left:-1px; background:repeating-linear-gradient(180deg,#8c3600 0 5px,transparent 5px 9px)}
+.cp-spine-diamond::after{content:"◆\A◆\A◆"; white-space:pre; position:absolute; inset:4px 0; text-align:center; color:#8c3600; font-size:.55rem; line-height:15px}
+.cp-spine-bands::after{content:""; position:absolute; inset:0; background:repeating-linear-gradient(180deg,transparent 0 12px,#7a4a24 12px 13px,transparent 13px 16px,#7a4a24 16px 17px,transparent 17px 26px)}
+/* four tabs on a phone: the words only, and they may scroll */
+.lk-tabs{overflow-x:auto; scrollbar-width:none}
+.lk-tabs::-webkit-scrollbar{display:none}
+html[data-dev="phone"] .lk-tabs.n4 .lk-tab:not(.lk-tsyn) > svg{display:none}
+html[data-dev="phone"] .lk-tabs.n4 .lk-tab{padding-inline:12px}
+/* the red first words of a verse stay on its first line */
+.m-verse span.inc{display:inline}
+/* the column of cards never grows wider than the screen (the pair switcher scrolls inside it) */
+.lk-v2 .lk-side{grid-template-columns:minmax(0,1fr)}
+.lk-v2 .lk-side > *{min-width:0}

@@ -6,16 +6,19 @@
 <link rel="stylesheet" href="fonts.css">
 <header class="top">
   <div class="wrap bar">
-    <div class="lefthd"><button class="profbtn" id="profBtn" aria-label="Your profile" title="Your profile"></button><a class="mark" href="#" id="home">Poiesis</a></div>
-    <div class="switch" role="tablist" id="switch" aria-label="Go to">
-      <button role="tab" data-tab="muse">Muse</button><button role="tab" data-tab="notebook">Notebook</button>
-    </div>
-    <div class="icons">
-      <button class="ibtn" id="colorBtn" aria-label="Change the colour" title="Change the colour" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.8 1.8-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 0 0 5-5C21 6.4 17 3 12 3z"/><circle cx="7.5" cy="11" r="1.1" fill="currentColor"/><circle cx="10.5" cy="7" r="1.1" fill="currentColor"/><circle cx="15" cy="7.5" r="1.1" fill="currentColor"/></svg></button>
-    </div>
+    <div class="lefthd"><button class="profbtn" id="profBtn" aria-label="Menu" title="Menu" aria-haspopup="true" aria-expanded="false"></button></div>
+    <div class="icons"><span class="dribbon" id="dateRibbon"></span></div>
   </div>
 </header>
-<div class="pop" id="colorPop" hidden><h3>Colour</h3><div class="thlist" id="colorList"></div><p class="pop-credit">Colours by Mary</p></div>
+<nav class="pmenu" id="pMenu" aria-label="Menu" hidden>
+  <div class="switch" role="tablist" id="switch" aria-label="Go to">
+    <button role="tab" data-tab="muse">Muse</button><button role="tab" data-tab="notebook">Notebook</button>
+  </div>
+  <button type="button" class="pm-row" id="profGo">Your profile</button>
+  <button type="button" class="pm-row" id="colorBtn" aria-expanded="false">Colour</button>
+  <a href="#" class="pm-row" id="whyMenu">Why Poiesis</a>
+</nav>
+<div class="pop" id="colorPop" hidden><div class="cp-tabs" role="group" aria-label="Colour and margins"><button type="button" data-cpt="colour" aria-pressed="true">Colour</button><button type="button" data-cpt="margins" aria-pressed="false">Margins</button></div><div id="cpColour"><div class="thlist" id="colorList"></div><p class="pop-credit">Colours by Mary</p></div><div id="cpMargins" hidden></div></div>
 <main class="wrap">
   <div class="view" id="view"></div>
   <footer><a href="#" id="whyLink" class="whylink">Why Poiesis ›</a><span>A working sketch, 2026. Other members are examples; what you write stays in this browser. Paintings appear as color studies.</span></footer>
