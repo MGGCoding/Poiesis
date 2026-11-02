@@ -16,7 +16,9 @@ function applyStaticCopy(){
  const tab=(k,key,d,ic)=>{ const el=document.querySelector(`#switch [data-tab="${k}"]`); if(el) el.innerHTML=`${ic}<span>${esc(T(key,d))}</span>`; };
  tab("muse","site.tab.muse","Muse",IC_MUSE); tab("notebook","site.tab.notebook","Notebook",IC_NOTEBOOK);
  set('#colorPop [data-cpt="colour"]',"site.colors.title","Colour"); set('#colorPop [data-cpt="margins"]',"site.margins.title","Margins"); set('#colorPop [data-cpt="patterns"]',"site.patterns.title","Patterns"); set("#colorPop .pop-credit","color.credit","Colours by Mary");
- set("#colorBtn","menu.colour","Colour"); set("#profGo","menu.profile","Your profile"); set("#whyMenu","menu.why","Why Poiesis");
+ { const cb=document.querySelector("#colorBtn"), cl=T("menu.colour","Colour"); if(cb){ cb.innerHTML=`${IC_PALETTE}<span>${esc(cl)}</span>`; cb.setAttribute("aria-label",cl||"Colour"); } }
+ { const pb=document.querySelector("#profBtn"), pl=T("menu.profile","Your profile"); if(pb){ pb.setAttribute("aria-label",pl||"Your profile"); pb.title=pl; } }
+ { const mw=document.querySelector("#dateRibbon .dr-markw"), ml=T("ribbon.mark","Why Poiesis"); if(mw){ mw.insertAdjacentHTML("beforeend",ml?`<span>${esc(ml)}</span>`:""); mw.setAttribute("aria-label",ml||"Why Poiesis"); } }
  set("#whyLink","site.why.link","Why Poiesis \u203a");
  set("footer span","site.footer","A working sketch, 2026. Other members are examples; what you write stays in this browser. Paintings appear as color studies.");
 }
@@ -24,6 +26,7 @@ const $=(s,r=document)=>r.querySelector(s);
 /* Round 19 icons: a column for Muse, a notebook and pen for Notebook, and a
    pencil, an open book and a cross for the day's three works */
 const IC_MUSE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4.5h16M5 4.5c0 1.3 1 2 2 2h10c1 0 2-.7 2-2"/><path d="M7 8.5v10M17 8.5v10M10.3 9.5v8.5M13.7 9.5v8.5M6 19h12M4.5 21.5h15"/></svg>';
+const IC_PALETTE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.3 0 2-.8 2-1.8 0-1.3-1.2-1.6-1.2-2.8 0-1 .8-1.6 1.9-1.6H17a4 4 0 0 0 4-4C21 6.4 17 3 12 3z"/><circle cx="7.5" cy="11" r="1.2"/><circle cx="10" cy="7" r="1.2"/><circle cx="14.5" cy="7" r="1.2"/><circle cx="17" cy="10.5" r="1.2"/></svg>';
 const IC_NOTEBOOK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3.5h10.5a2 2 0 0 1 2 2V20a.5.5 0 0 1-.5.5H5z"/><path d="M8 3.5v17M10.5 8h4M10.5 11h4"/><path d="M19.5 7.5l1.5 1.5-5 5-2 .5.5-2z"/></svg>';
 const IC_KIND={
  Poem:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 3.5l4 4L9 19l-5 1.2L5.2 15z"/><path d="M14.5 5.5l4 4"/></svg>',
@@ -712,27 +715,27 @@ function patternsPaneHTML(){ const u=U(), cur=GROUNDS.some(x=>x[0]===u.ground)?u
 }
 function setColor(id){ if(!THEMES.some(t=>t.id===id)) return; setPref("color",id); save(); applyPrefs(); render(); }
 function pop(btn,p){ p.hidden=!p.hidden; btn.setAttribute("aria-expanded",String(!p.hidden)); }
-$("#colorBtn").onclick=e=>{e.stopPropagation(); $("#pMenu").hidden=true; $("#profBtn").setAttribute("aria-expanded","false"); pop(e.currentTarget,$("#colorPop"));};
+$("#colorBtn").onclick=e=>{e.stopPropagation(); ribbonUp(); pop(e.currentTarget,$("#colorPop"));};
 $("#colorList").onclick=e=>{const b=e.target.closest("[data-color]"); if(b) setColor(b.dataset.color);};
 $("#colorPop").addEventListener("click",e=>{
  const t=e.target.closest("[data-cpt]"); if(t){ const k=t.dataset.cpt; $("#cpColour").hidden=k!=="colour"; $("#cpMargins").hidden=k!=="margins"; $("#cpPatterns").hidden=k!=="patterns"; $("#colorPop").querySelectorAll("[data-cpt]").forEach(b=>b.setAttribute("aria-pressed",String(b===t))); return; }
  const b=e.target.closest("[data-mpref]"); if(b){ setPref(b.dataset.mpref,b.dataset.val); save(); applyPrefs(); render(); }
 });
 /* the menu under your picture: Muse, Notebook, your profile, Colour, Why Poiesis */
-function menuShut(){ $("#pMenu").hidden=true; $("#profBtn").setAttribute("aria-expanded","false"); }
-$("#profBtn").onclick=e=>{ e.stopPropagation(); $("#colorPop").hidden=true; pop(e.currentTarget,$("#pMenu")); };
-$("#profGo").onclick=()=>{ menuShut(); go("profile"); };
-$("#whyMenu").onclick=e=>{ e.preventDefault(); menuShut(); go("why"); };
+/* Round 28: your picture goes straight to your profile; the date ribbon is the menu */
+function menuShut(){ ribbonUp(); }
+$("#profBtn").onclick=e=>{ e.stopPropagation(); ribbonUp(); $("#colorPop").hidden=true; go("profile"); };
 /* Round 26: tap the date ribbon and it drops to show the Poiesis mark; the mark opens Why Poiesis */
-const RB=$("#dateRibbon"), RBd=RB.querySelector(".dr-date"), RBm=RB.querySelector(".dr-mark");
-{ const ml=T("ribbon.mark","Why Poiesis"); RBm.setAttribute("aria-label",ml||"Why Poiesis"); if(ml) RBm.title=ml; }
-function ribbonUp(){ RB.classList.remove("down"); RBd.setAttribute("aria-expanded","false"); RBm.tabIndex=-1; }
-RBd.onclick=()=>{ const d=!RB.classList.contains("down"); menuShut(); $("#colorPop").hidden=true; RB.classList.toggle("down",d); RBd.setAttribute("aria-expanded",String(d)); RBm.tabIndex=d?0:-1; };
+/* Round 28: it is also the menu: the mark (Why Poiesis), Muse, Notebook, and the palette (Colour) */
+const RB=$("#dateRibbon"), RBd=RB.querySelector(".dr-date"), RBm=RB.querySelector(".dr-markw"), RBmenu=$("#drMenu");
+RBmenu.inert=true;
+function ribbonUp(){ RB.classList.remove("down"); RB.closest(".top")?.classList.remove("rb-down"); RBd.setAttribute("aria-expanded","false"); RBmenu.inert=true; }
+RBd.onclick=()=>{ const d=!RB.classList.contains("down"); $("#colorPop").hidden=true; RB.classList.toggle("down",d); RB.closest(".top")?.classList.toggle("rb-down",d); RBd.setAttribute("aria-expanded",String(d)); RBmenu.inert=!d; };
 RBm.onclick=e=>{ e.preventDefault(); ribbonUp(); go("why"); };
 document.addEventListener("click",e=>{ if(!e.composedPath().includes(RB)) ribbonUp(); },true);
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") ribbonUp(); });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ menuShut(); $("#colorPop").hidden=true; } });
-document.addEventListener("click",e=>{ const path=e.composedPath(); for(const p of [$("#colorPop"),$("#pMenu")]) if(!p.hidden&&!path.includes(p)) p.hidden=true;
+document.addEventListener("click",e=>{ const path=e.composedPath(); for(const p of [$("#colorPop")]) if(!p.hidden&&!path.includes(p)) p.hidden=true;
  if(!e.target.closest(".bm")) document.querySelectorAll(".bmenu:not([hidden])").forEach(m=>m.hidden=true); });
 
 /* ---------- Navigation ---------- */
@@ -742,7 +745,7 @@ function go(tab){ S.tab=tab; save(); render(); scrollTo({top:0, behavior:reduce?
 function render(){
  hideSel(); hideTip();
  document.querySelectorAll("#switch [data-tab]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===S.tab)));
- $("#profGo").setAttribute("aria-current",String(S.tab==="profile"));
+ $("#profBtn").setAttribute("aria-current",String(S.tab==="profile"));
  ({muse:renderMuse, notebook:renderNotebook, why:renderWhy, profile:renderProfile})[S.tab]($("#view"));
  pruneBlankControls($("#view"));
 }
@@ -1355,14 +1358,19 @@ function phoneHomeHTML(){
  const knot=true?`<button type="button" class="ph-knot" data-side="whole"><span>${CIRCLES}</span>${S.syn[WK("whole")]?TN("phone.all.done","You tied all three together","All four are together"):TN("phone.all.write","Tie all three together","Tie all four together")}</button>`:"";
  const reading=S.reading?maximHTML():"";
  const cols=TODAY.slice(0,4).map(p=>`<span style="background:${PEOPLE[p.n].c}">${esc(initials(p.n))}</span>`).join("");
- return `<div class="ph-home"><p class="ph-date">${esc(dateStr)}</p>
+ void dateStr; /* Round 28: the date is only on the ribbon */
+ return `<div class="ph-home">
   <div class="ph-theme">${themeWithCross("ph-tw","h1")}</div>
   ${reading}
   ${threadCueHTML()}
   ${nudgeHTML()}${hintHTML(false)}
   <div class="ph-three ph-card ph-parch">${rows}${knot}</div>
   ${(TODAY.length+MUSES.reduce((k,m)=>k+Table.others(WK(m.id)).length,0))?`<div class="ph-others"><span class="ph-avs">${cols}</span>${TODAY.length+MUSES.reduce((k,m)=>k+Table.others(WK(m.id)).length,0)}${T("phone.others.suffix"," others wrote today")}</div>`
-   :`<div class="ph-others">${mineParts().length?T("cue.onlyyou.some","Only you here so far today"):T("cue.onlyyou","Nobody here yet today")}</div>`}</div>`;
+   :mineParts().length?`<div class="ph-others">${T("cue.onlyyou.some","Only you here so far today")}</div>`:phGateHTML()}</div>`;
+}
+/* Round 28: before you have written, the home note says what desktop says under What others thought */
+function phGateHTML(){ const h=T("others.gate.heading","First, your own impression."), l=T("others.gate.line","A fruitful dialogue with others starts between the muse and oneself"); if(!h&&!l) return "";
+ return `<div class="ph-others ph-gate">${h?`<b>${esc(h)}</b>`:""}${l?`<span>${esc(l)}</span>`:""}</div>`;
 }
 function renderMuse(v){
  if(DEV()==="phone"&&!S.past&&S.phome!==false){
@@ -1555,7 +1563,7 @@ const POIESIS_MARK=`<span class="lk-logo" role="img" aria-label="Poiesis" data-t
 const ARROW_L=`<svg class="hint-ar" viewBox="0 0 34 26" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M30 4C18 3 8 8 6 22"/><path d="M2 17l4 6 5-5"/></svg>`;
 const ARROW_R=`<svg class="hint-ar" viewBox="0 0 34 26" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4c12-1 22 4 24 18"/><path d="M23 18l5 5 4-6"/></svg>`;
 function hintHTML(right){ const t=T("muse.hint","Synthesise, or comment on one"); if(!t) return "";
- return `<p class="lk-hint">${CIRCLES}<span>${esc(t)}</span>${right?`<span class="hint-gap"></span>${ARROW_R}`:""}</p>`; }
+ return `<button type="button" class="lk-hint" data-side="whole">${CIRCLES}<span>${esc(t)}</span>${right?`<span class="hint-gap"></span>${ARROW_R}`:""}</button>`; }
 /* B and D rubricate: the first two words of the work in red small capitals */
 function rubric(){ return true; }
 function incHTML(t){ const mm=String(t).match(/^(\s*\S+\s+\S+)([\s\S]*)$/); return mm?`<span class="inc">${esc(mm[1])}</span>${esc(mm[2])}`:esc(t); }

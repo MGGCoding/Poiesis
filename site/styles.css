@@ -1933,3 +1933,40 @@ html[data-mlook] .ph-card :is(.ph-knot, .ph-knot span, .ph-st, .ph-dash, .ph-beg
 .ph-home .lk-hint .sym-c{width:26px; height:26px; flex:none; margin:0 4px 8px 0; color:var(--ground-accent)}
 .lk-gocard{margin-top:16px}
 .lk-gocard .lk-go{margin-top:0}
+
+/* Round 28 (2 Nov): your picture goes straight to your profile, bigger and in
+   line with the ribbon; the date ribbon is the menu (the mark for Why
+   Poiesis, Muse, Notebook, the palette for Colour) and drops over the page
+   without moving it. Phones: no second date on the home page; tap
+   "Synthesise, or comment on one" for all four; the home note says what
+   desktop says before you've written. The ? by the theme is bolder. */
+.profgo{display:contents}
+html[data-mlook] .top .profbtn, .top .profbtn{width:48px; height:48px; margin-top:0}
+.top .profbtn .av{width:42px; height:42px; font-size:1.12rem}
+.top .icons{align-items:flex-start}
+.dribbon{min-width:76px; position:relative; z-index:31; clip-path:polygon(0 0,100% 0,100% 100%,50% calc(100% - 9px),0 100%)}
+#dateRibbon .dr-menu{display:grid; justify-items:stretch; width:100%; max-height:0; overflow:hidden; transition:max-height .28s ease, padding .28s ease}
+#dateRibbon.down .dr-menu{max-height:340px; padding:0 0 18px}
+#dateRibbon .switch{display:contents; background:none; border:0; padding:0; box-shadow:none}
+#dateRibbon .dr-i{all:unset; box-sizing:border-box; display:grid; justify-items:center; gap:4px; width:100%; padding:8px 4px; cursor:pointer; color:var(--on-accent); font:400 .56rem var(--f-type); letter-spacing:.1em; text-transform:uppercase; text-align:center}
+#dateRibbon .dr-i svg{width:22px; height:22px; display:block; color:inherit}
+#dateRibbon .dr-i::after{display:none}
+#dateRibbon .dr-i:hover{background:color-mix(in srgb,var(--on-accent) 12%,transparent)}
+#dateRibbon .dr-i:focus-visible{outline:2px solid var(--on-accent); outline-offset:-3px}
+#dateRibbon .dr-i[aria-selected="true"] span{border-bottom:1px solid currentColor}
+#dateRibbon .dr-mark{display:block; width:34px; height:34px; margin:0; background:var(--on-accent); transition:none}
+@media (prefers-reduced-motion:reduce){ #dateRibbon .dr-menu{transition:none} }
+@media (max-width:700px){
+ .top .icons{height:54px}
+ html[data-mlook] .top .profbtn, .top .profbtn{width:44px; height:44px; margin-top:4px}
+ .top .profbtn .av{width:38px; height:38px}
+}
+.np-q{border:2px solid var(--lk-red); font-weight:700; font-size:1.1rem; width:32px; height:32px}
+.np-q:hover, .np-q[aria-expanded="true"]{background:var(--lk-red); color:var(--lk-paper); border-color:var(--lk-red)}
+.ph-home button.lk-hint{border:0; background:none; padding:0; cursor:pointer; text-align:left}
+.ph-home button.lk-hint:focus-visible{outline:2px solid var(--ground-accent); outline-offset:4px}
+.ph-gate{display:grid; gap:4px}
+.ph-gate b{font:400 1.12rem var(--f-display)}
+.ph-gate span{font-size:.95rem; line-height:1.35}
+/* the dropped ribbon sits over an open drawer, as the old menu did */
+.top.rb-down, html[data-mlook] .top.rb-down{z-index:41}

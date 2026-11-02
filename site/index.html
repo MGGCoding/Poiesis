@@ -6,17 +6,9 @@
 <link rel="stylesheet" href="fonts.css">
 <header class="top">
   <div class="wrap bar">
-    <div class="icons"><button class="profbtn" id="profBtn" aria-label="Menu" title="Menu" aria-haspopup="true" aria-expanded="false"></button><div class="dribbon" id="dateRibbon"><button type="button" class="dr-date" aria-expanded="false"></button><a href="#" class="dr-mark" tabindex="-1"></a></div></div>
+    <div class="icons"><span class="profgo" id="profGo"><button class="profbtn" id="profBtn" aria-label="Your profile" title="Your profile"></button></span><div class="dribbon" id="dateRibbon"><button type="button" class="dr-date" aria-expanded="false" aria-controls="drMenu"></button><div class="dr-menu" id="drMenu"><a href="#" class="dr-i dr-markw"><span class="dr-mark" aria-hidden="true"></span></a><div class="switch" role="tablist" id="switch" aria-label="Go to"><button role="tab" data-tab="muse" class="dr-i">Muse</button><button role="tab" data-tab="notebook" class="dr-i">Notebook</button></div><button type="button" class="dr-i" id="colorBtn" aria-expanded="false">Colour</button></div></div></div>
   </div>
 </header>
-<nav class="pmenu" id="pMenu" aria-label="Menu" hidden>
-  <div class="switch" role="tablist" id="switch" aria-label="Go to">
-    <button role="tab" data-tab="muse">Muse</button><button role="tab" data-tab="notebook">Notebook</button>
-  </div>
-  <button type="button" class="pm-row" id="profGo">Your profile</button>
-  <button type="button" class="pm-row" id="colorBtn" aria-expanded="false">Colour</button>
-  <a href="#" class="pm-row" id="whyMenu">Why Poiesis</a>
-</nav>
 <div class="pop" id="colorPop" hidden><div class="cp-tabs" role="group" aria-label="Colour and margins"><button type="button" data-cpt="colour" aria-pressed="true">Colour</button><button type="button" data-cpt="margins" aria-pressed="false">Margins</button><button type="button" data-cpt="patterns" aria-pressed="false">Patterns</button></div><div id="cpColour"><div class="thlist" id="colorList"></div><p class="pop-credit">Colours by Mary</p></div><div id="cpMargins" hidden></div><div id="cpPatterns" hidden></div></div>
 <main class="wrap">
   <div class="view" id="view"></div>
