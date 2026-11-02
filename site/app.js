@@ -1351,8 +1351,8 @@ function phoneHomeHTML(){
  const seg=(a,b,id)=>{ if(!id) return ""; const lbl=`${MUSE[a].kind.toLowerCase()} and ${MUSE[b].kind.toLowerCase()}`; return `<button type="button" class="ph-seg" data-side="${id}">${S.syn[WK(id)]?"✓ "+T("phone.link.done","linked: ")+lbl:"↳ "+T("phone.link.write","write a link: ")+lbl}</button>`; };
  const rows=MUSES.map((w,i)=>{ const st=done(w.id)?`<span class="ph-st">✓ ${T("phone.written","written")}</span>`:`<span class="ph-st"><span class="ph-dash">${w.kind==="Scripture"?"✝":esc(w.maker.split(" ").slice(-1)[0][0])}</span></span>`;
    const nextSeg=i<MUSES.length-1?seg(w.id,MUSES[i+1].id,LINKS.find(l=>(l.a===w.id&&l.b===MUSES[i+1].id)||(l.b===w.id&&l.a===MUSES[i+1].id))?.id):"";
-   return `<button type="button" class="ph-row" data-popen="${w.id}"><span class="ph-ic" aria-hidden="true">${PICON[iconFor(w)]}</span><span class="ph-rt"><span class="k">${esc(w.kind.toLowerCase())}</span><b>${esc(w.title)}</b><span class="mk">${esc(w.maker)}</span></span>${st}${none&&first===w?`<span class="ph-begin">${T("phone.begin","begin here")}</span>`:""}</button>${nextSeg||""}`; }).join("");
- const knot=true?`<button type="button" class="ph-knot" data-side="whole"><span>◇</span>${S.syn[WK("whole")]?TN("phone.all.done","You tied all three together","All four are together"):TN("phone.all.write","Tie all three together","Tie all four together")}</button>`:"";
+   return `<button type="button" class="ph-row" data-popen="${w.id}"><span class="ph-ic" aria-hidden="true">${PICON[iconFor(w)]}</span><span class="ph-rt"><span class="k">${esc(w.kind.toLowerCase())}</span><b>${esc(w.title)}</b><span class="mk">${esc(w.maker)}</span></span>${st}${none&&first===w?`<span class="ph-begin">${T("phone.begin","begin here")}</span>`:""}</button>`; void nextSeg; }).join("");
+ const knot=true?`<button type="button" class="ph-knot" data-side="whole"><span>${CIRCLES}</span>${S.syn[WK("whole")]?TN("phone.all.done","You tied all three together","All four are together"):TN("phone.all.write","Tie all three together","Tie all four together")}</button>`:"";
  const reading=S.reading?maximHTML():"";
  const cols=TODAY.slice(0,4).map(p=>`<span style="background:${PEOPLE[p.n].c}">${esc(initials(p.n))}</span>`).join("");
  return `<div class="ph-home"><p class="ph-date">${esc(dateStr)}</p>
@@ -1360,7 +1360,7 @@ function phoneHomeHTML(){
   ${reading}
   ${threadCueHTML()}
   ${nudgeHTML()}${hintHTML(false)}
-  <div class="ph-three">${rows}${seg(MUSES[0].id,MUSES[2].id,"vp")}${knot}</div>
+  <div class="ph-three ph-card ph-parch">${rows}${knot}</div>
   ${(TODAY.length+MUSES.reduce((k,m)=>k+Table.others(WK(m.id)).length,0))?`<div class="ph-others"><span class="ph-avs">${cols}</span>${TODAY.length+MUSES.reduce((k,m)=>k+Table.others(WK(m.id)).length,0)}${T("phone.others.suffix"," others wrote today")}</div>`
    :`<div class="ph-others">${mineParts().length?T("cue.onlyyou.some","Only you here so far today"):T("cue.onlyyou","Nobody here yet today")}</div>`}</div>`;
 }
@@ -1527,7 +1527,9 @@ function lookHTML(m,o){
  const ph=DEV()==="phone", past=o.past, dayOn=!ph&&!past;
  const syn=!past&&S.openSyn?S.openSyn:null;
  const title=`<header class="lk-head"><p class="lk-kind">${esc(m.kind)}</p><div class="m-tl"><h2 class="mtitle lk-title">${esc(m.title)}</h2>${o.info}</div><p class="lk-by">${esc(m.maker)}${m.date?` · ${esc(m.date)}`:""}</p></header>`;
- const work=`<div class="m-wwrap">${workHTML(m,false)}</div>${m.kind==="Art"?"":noteHTML(m)}${cameHTML(m)}${synGoHTML(m)}`;
+ const work=`<div class="m-wwrap">${workHTML(m,false)}</div>${m.kind==="Art"?"":noteHTML(m)}${cameHTML(m)}${ph?"":synGoHTML(m)}`;
+ /* Round 27: on a phone, "Synthesise with" is its own card after your first impression */
+ const goCard=ph&&!syn&&synGoHTML(m)?`<section class="lk-card lk-parch lk-gocard">${synGoHTML(m)}</section>`:"";
  const write=`<div class="m-nb lk-write lk-card lk-parch${(S.drafts[WK(m.id)]||"").trim()||S.sealed[WK(m.id)]?" has":""}" id="writerBox">${writerInnerM(m,false)}${curlHTML(m)}</div>`;
  const date=dayOn?`<div class="lk-date">${esc(o.dateStr)}</div>`:"";
  const theme=dayOn?`<div class="lk-themewrap">${themeWithCross("lk-theme","h1")}</div>`:"";
@@ -1540,7 +1542,7 @@ function lookHTML(m,o){
  /* desk: the box and, beside it, the column that stays in view; phone: in a
     synthesis the panel and notepad come straight after the tabs */
  const desk=ph&&syn?`<div class="lk-col">${top}<div class="lk-side">${side}</div>${page}</div>`
-  :`<div class="lk-col">${top}${page}</div>${spineHTML()}<aside class="lk-side">${side}</aside>`;
+  :`<div class="lk-col">${top}${page}</div>${spineHTML()}<aside class="lk-side">${side}</aside>${goCard}`;
  /* Round 24: no running head. The date is the ribbon in the top bar, the
     day's word heads the notepad, and Scripture is a tab. */
  return `<div class="lk lk-b lk-v2 lk-book${syn?" lk-syn":""}">${pastbar}${dayOn&&MUSES.length<4?reading:""}<div class="lk-desk">${desk}</div></div>`;
@@ -1553,7 +1555,7 @@ const POIESIS_MARK=`<span class="lk-logo" role="img" aria-label="Poiesis" data-t
 const ARROW_L=`<svg class="hint-ar" viewBox="0 0 34 26" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M30 4C18 3 8 8 6 22"/><path d="M2 17l4 6 5-5"/></svg>`;
 const ARROW_R=`<svg class="hint-ar" viewBox="0 0 34 26" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4c12-1 22 4 24 18"/><path d="M23 18l5 5 4-6"/></svg>`;
 function hintHTML(right){ const t=T("muse.hint","Synthesise, or comment on one"); if(!t) return "";
- return `<p class="lk-hint">${ARROW_L}<span>${esc(t)}</span>${right?`<span class="hint-gap"></span>${ARROW_R}`:""}</p>`; }
+ return `<p class="lk-hint">${CIRCLES}<span>${esc(t)}</span>${right?`<span class="hint-gap"></span>${ARROW_R}`:""}</p>`; }
 /* B and D rubricate: the first two words of the work in red small capitals */
 function rubric(){ return true; }
 function incHTML(t){ const mm=String(t).match(/^(\s*\S+\s+\S+)([\s\S]*)$/); return mm?`<span class="inc">${esc(mm[1])}</span>${esc(mm[2])}`:esc(t); }

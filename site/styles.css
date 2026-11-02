@@ -1794,7 +1794,7 @@ html[data-dev="phone"] .lk-arts{grid-template-columns:1fr}
 }
 
 /* parchment: the paper's own colour, with fibres and a darker edge */
-.lk-v2 .lk-parch{background-image:radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(140,100,45,.16) 100%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .32 0 0 0 0 .15 0 0 0 .2 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E")}
+.lk-v2 .lk-parch, .ph-home .ph-parch{background-image:radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(140,100,45,.16) 100%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .32 0 0 0 0 .15 0 0 0 .2 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E")}
 
 /* the notepad: the day's word at its head, "First impression" on the lines */
 .np-head{position:relative; text-align:center; margin:-2px 0 16px}
@@ -1916,3 +1916,20 @@ html[data-dev="desk"] .pen, html[data-dev="desk"] .penbox{display:none!important
 html[data-ground]:not([data-ground="theme"]) body, html[data-ground]:not([data-ground="theme"])[data-dev="phone"] body{background:var(--gpat,none) 0 0/var(--gsize,auto) repeat, var(--ground)}
 .cp-gpv{background:var(--ground); box-shadow:inset 0 0 0 1px var(--line)}
 html[data-tex="on"] .cp-gpv-theme{background:var(--texture) 0 0/var(--tex-size) repeat, var(--ground)}
+
+/* Round 27 (2 Nov), phones: the day's works on one parchment card, clear of
+   the ground's pattern; no "write a synthesis" line under each work; the two
+   circles beside "Synthesise, or comment on one" and on "Tie all four
+   together"; on a work's page "Synthesise with" is its own card after your
+   first impression. */
+.ph-home .ph-card{background-color:var(--lk-paper); color:var(--lk-ink); box-shadow:var(--shadow); padding:12px 16px 4px; margin-top:14px; border-radius:2px}
+.ph-home .ph-card::before{display:none}
+.ph-card .ph-row + .ph-row, .ph-card .ph-knot{border-top-color:var(--lk-rule)}
+.ph-card .ph-ic{background:transparent; color:var(--lk-ink)}
+.ph-card .ph-rt .k, .ph-card .ph-rt .mk{color:var(--lk-mute)}
+html[data-mlook] .ph-card :is(.ph-knot, .ph-knot span, .ph-st, .ph-dash, .ph-begin){color:var(--lk-red)}
+.ph-card .ph-dash{border-color:var(--lk-rule)}
+.ph-knot .sym-c{width:26px; height:26px; vertical-align:middle}
+.ph-home .lk-hint .sym-c{width:26px; height:26px; flex:none; margin:0 4px 8px 0; color:var(--ground-accent)}
+.lk-gocard{margin-top:16px}
+.lk-gocard .lk-go{margin-top:0}
