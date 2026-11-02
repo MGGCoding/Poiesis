@@ -47,75 +47,6 @@ html[data-color="rose"]{
   --texture:url("data:image/svg+xml,%3Csvg%20opacity%3D%270.08%27%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27120%27%20height%3D%27120%27%20viewBox%3D%270%200%20120%20120%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23e2b983%27%20stroke-width%3D%271.1%27%3E%3Cg%20transform%3D%27translate(30%2030)%27%3E%3Ccircle%20r%3D%273%27%2F%3E%3Cpath%20d%3D%27M0-4c4-9%2010-6%206%202M4%200c9%204%206%2010-2%206M0%204c-4%209-10%206-6-2M-4%200c-9-4-6-10%202-6%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate(90%2090)%20rotate(30)%27%3E%3Ccircle%20r%3D%273%27%2F%3E%3Cpath%20d%3D%27M0-4c4-9%2010-6%206%202M4%200c9%204%206%2010-2%206M0%204c-4%209-10%206-6-2M-4%200c-9-4-6-10%202-6%27%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%27M44%2044c8%206%2016%2010%2030%2014M76%2030c-4%206-4%2012%200%2016M60%2098c-6-6-14-8-22-6%27%2F%3E%3Cpath%20d%3D%27M70%2056c3-4%208-4%2010-1-3%203-7%203-10%201zM40%2090c2-4%207-5%2010-3-2%204-7%204-10%203z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"); --tex-size:120px 120px;
   --mcol:#632600;
 }
-/* marys favroite xcx — by Mary
-   ink: her cyan ink can't be read on her pink paper (1.4 : 1); dark ink, as the earlier xcx (Niko, 28 Oct)
-   made readable: red letters on paper #b3fff5 → #364d4a; the day's word and pencilled notes #b3fff5 → #45625e; quiet words on paper 74% ink, not 68%; paper and ground too alike (1.4 : 1): a 2px edge in #80b7b0 */
-html[data-color="xcx"]{
-  --ground:#a5ff9e; --on-ground:#1b1640; --muted-ground:#4f6f64;
-  --surface:#9aec96; --on-surface:#1b1640; --muted:#4f6f64; --line:#8fda8f;
-  --card:#ffb3e3; --card-ink:#1b1640; --card-rule:#e4a0cf; --card-margin:#d5dded;
-  --board:#b3fff5; --board-dot:#8fccc4; --frame:#68948e;
-  --accent:#b3fff5; --on-accent:#1b1640; --note:#b3fff5;
-  --card-accent:#364d4a; --ground-accent:#45625e; --card-edge:#80b7b0;
-  --tape:#f2bed980;
-  --paper-mute:color-mix(in srgb,var(--card-ink) 74%,var(--card));
-  --shadow:0 1px 2px rgba(20,20,40,.18), 0 8px 18px -8px rgba(20,20,40,.3);
-}
-/* a couple minutes — by Mary · texture: dots · margin: vine
-   made readable: quiet words on paper 70% ink, not 68% */
-html[data-color="couple"]{
-  --ground:#002f4d; --on-ground:#e6dcbf; --muted-ground:#8f9a94;
-  --surface:#123d56; --on-surface:#e6dcbf; --muted:#8f9a94; --line:#254b5f;
-  --card:#faebc9; --card-ink:#3d1700; --card-rule:#e3d2b1; --card-margin:#d36a95;
-  --board:#b88a5c; --board-dot:#936e4a; --frame:#6b5035;
-  --accent:#b3006b; --on-accent:#faebc9; --note:#ffb3ba;
-  --card-accent:#b3006b; --ground-accent:#ffb3ba; --card-edge:transparent;
-  --tape:#d5cfb680;
-  --paper-mute:color-mix(in srgb,var(--card-ink) 70%,var(--card));
-  --texture:url("data:image/svg+xml,%3Csvg%20opacity%3D%270.08%27%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2728%27%20height%3D%2728%27%20viewBox%3D%270%200%2028%2028%27%3E%3Cg%20fill%3D%27%23ffb3ba%27%3E%3Ccircle%20cx%3D%277%27%20cy%3D%277%27%20r%3D%271.6%27%2F%3E%3Ccircle%20cx%3D%2721%27%20cy%3D%2721%27%20r%3D%271.6%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"); --tex-size:28px 28px;
-  --mcol:#b3006b;
-}
-/* leaves from the vine — by Mary · texture: vine · margin: vine
-   made readable: red letters on paper #383215 → #b9b7ad */
-html[data-color="leaves"]{
-  --ground:#cebc8d; --on-ground:#1b1640; --muted-ground:#5f555d;
-  --surface:#c0af87; --on-surface:#1b1640; --muted:#5f555d; --line:#b1a181;
-  --card:#524523; --card-ink:#f5f6c1; --card-rule:#665a36; --card-margin:#443b1b;
-  --board:#b88a5c; --board-dot:#936e4a; --frame:#6b5035;
-  --accent:#383215; --on-accent:#f5f6c1; --note:#eae4c7;
-  --card-accent:#b9b7ad; --ground-accent:#383215; --card-edge:transparent;
-  --tape:#65573380;
-  --shadow:0 1px 2px rgba(20,20,40,.18), 0 8px 18px -8px rgba(20,20,40,.3);
-  --texture:url("data:image/svg+xml,%3Csvg%20opacity%3D%270.08%27%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2790%27%20height%3D%27160%27%20viewBox%3D%270%200%2090%20160%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23eae4c7%27%20stroke-width%3D%271.1%27%3E%3Cpath%20d%3D%27M45%200c-20%2020%2020%2060%200%2080s20%2060%200%2080%27%2F%3E%3Cpath%20d%3D%27M42%2030c-10-2-16%202-18%208%208%202%2014-2%2018-8zM48%2070c10-2%2016%202%2018%208-8%202-14-2-18-8zM42%20110c-10-2-16%202-18%208%208%202%2014-2%2018-8zM48%20150c10-2%2016%202%2018%208-8%202-14-2-18-8z%27%2F%3E%3Ccircle%20cx%3D%2720%27%20cy%3D%2758%27%20r%3D%272%27%2F%3E%3Ccircle%20cx%3D%2770%27%20cy%3D%2798%27%20r%3D%272%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"); --tex-size:90px 160px;
-  --mcol:#383215;
-}
-/* niko's shirt — by Mary
-   made readable: quiet words on paper 76% ink, not 68%; paper and ground too alike (1.0 : 1): a 2px edge in #392b0e */
-html[data-color="shirt"]{
-  --ground:#c4e7f3; --on-ground:#1b1640; --muted-ground:#5b6584;
-  --surface:#b6d6e5; --on-surface:#1b1640; --muted:#5b6584; --line:#a9c6d6;
-  --card:#cdefc8; --card-ink:#392b0e; --card-rule:#bbd7b2; --card-margin:#7c8362;
-  --board:#392b0e; --board-dot:#2e220b; --frame:#211908;
-  --accent:#392b0e; --on-accent:#cdefc8; --note:#d5cee9;
-  --card-accent:#392b0e; --ground-accent:#392b0e; --card-edge:#392b0e;
-  --tape:#cceece80;
-  --paper-mute:color-mix(in srgb,var(--card-ink) 76%,var(--card));
-  --mute-ink:76%;
-  --shadow:0 1px 2px rgba(20,20,40,.18), 0 8px 18px -8px rgba(20,20,40,.3);
-}
-/* irene — by Mary
-   made readable: panels a shade darker than the ground, so words on them read; words on the ground #f3ead8 → #ffffff; quiet notes nearer the words (24% ground, not 38%); red letters on paper #c7e0ef → #464e54; the day's word and pencilled notes #c7e0ef → #f8fbfd; quiet words on paper 80% ink, not 68% */
-html[data-color="irene"]{
-  --ground:#b94b18; --on-ground:#ffffff; --muted-ground:#eed4c8;
-  --surface:#aa4516; --on-surface:#ffffff; --muted:#eed4c8; --line:#c8734b;
-  --card:#f4c3e2; --card-ink:#392b0e; --card-rule:#deb1c9; --card-margin:#dbd3e9;
-  --board:#faeaf4; --board-dot:#c8bbc3; --frame:#91888e;
-  --accent:#c7e0ef; --on-accent:#392b0e; --note:#c7e0ef;
-  --card-accent:#464e54; --ground-accent:#f8fbfd; --card-edge:transparent;
-  --tape:#ebb1c480;
-  --paper-mute:color-mix(in srgb,var(--card-ink) 80%,var(--card));
-  --mute-ink:80%;
-}
 /* Monastery 1 — by Poiesis · texture: quatrefoil · margin: gilt
    made readable: quiet words on paper 70% ink, not 68% */
 html[data-color="monastery1"]{
@@ -143,19 +74,16 @@ html[data-color="monastery2"]{
   --paper-mute:color-mix(in srgb,var(--card-ink) 72%,var(--card));
   --texture:url("data:image/svg+xml,%3Csvg%20opacity%3D%270.07%27%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2780%27%20height%3D%2780%27%20viewBox%3D%270%200%2080%2080%27%3E%3Cg%20fill%3D%27%23f0b860%27%3E%3Cpath%20d%3D%27M20%208c3%204%203%209%200%2014-3-5-3-10%200-14zM20%2024c-4-6-11-6-12-1%204%200%207%202%209%205zM20%2024c4-6%2011-6%2012-1-4%200-7%202-9%205zM16%2027h8v2h-8zM19%2029h2v6h-2z%27%2F%3E%3Cpath%20d%3D%27M60%2048c3%204%203%209%200%2014-3-5-3-10%200-14zM60%2064c-4-6-11-6-12-1%204%200%207%202%209%205zM60%2064c4-6%2011-6%2012-1-4%200-7%202-9%205zM56%2067h8v2h-8zM59%2069h2v6h-2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"); --tex-size:80px 80px;
 }
-/* Monastery 3 — by Poiesis · margin: ribbon
-   made readable: the day's word and pencilled notes #a33a22 → #983620; quiet words on paper 70% ink, not 68%; paper and ground too alike (1.3 : 1): a 2px edge in #c49a56 */
-html[data-color="monastery3"]{
-  --ground:#e8dcc6; --on-ground:#1b1640; --muted-ground:#696173;
-  --surface:#d8ccbb; --on-surface:#1b1640; --muted:#696173; --line:#c7bcb1;
-  --card:#fbf6ea; --card-ink:#2e2418; --card-rule:#e2ddd1; --card-margin:#cb8f7c;
-  --board:#c49a56; --board-dot:#9d7b45; --frame:#725932;
-  --accent:#a33a22; --on-accent:#fbf6ea; --note:#ecd59a;
-  --card-accent:#a33a22; --ground-accent:#983620; --card-edge:#c49a56;
-  --tape:#f8f2e580;
-  --paper-mute:color-mix(in srgb,var(--card-ink) 70%,var(--card));
-  --shadow:0 1px 2px rgba(20,20,40,.18), 0 8px 18px -8px rgba(20,20,40,.3);
-  --mcol:#a33a22;
+/* Refined Scroller — by Poiesis
+   made readable: paper and ground too alike (1.1 : 1): a 2px edge in #414144 */
+html[data-color="scroller"]{
+  --ground:#121213; --on-ground:#f3ead8; --muted-ground:#9e988d;
+  --surface:#242323; --on-surface:#f3ead8; --muted:#9e988d; --line:#363533;
+  --card:#1f1f21; --card-ink:#e9e7e3; --card-rule:#373738; --card-margin:#9a471d;
+  --board:#2c2c2f; --board-dot:#232326; --frame:#1a1a1b;
+  --accent:#ff6719; --on-accent:#1f1f21; --note:#ff8a3d;
+  --card-accent:#ff6719; --ground-accent:#ff6719; --card-edge:#414144;
+  --tape:#1d1d1f80;
 }
 /* Modern office — by Poiesis
    made readable: paper and ground too alike (1.3 : 1): a 2px edge in #9a9da3 */
@@ -169,55 +97,14 @@ html[data-color="office"]{
   --tape:#fbfbfb80;
   --shadow:0 1px 2px rgba(20,20,40,.18), 0 8px 18px -8px rgba(20,20,40,.3);
 }
-/* Refined Scroller — by Poiesis
-   made readable: paper and ground too alike (1.1 : 1): a 2px edge in #414144 */
-html[data-color="scroller"]{
-  --ground:#121213; --on-ground:#f3ead8; --muted-ground:#9e988d;
-  --surface:#242323; --on-surface:#f3ead8; --muted:#9e988d; --line:#363533;
-  --card:#1f1f21; --card-ink:#e9e7e3; --card-rule:#373738; --card-margin:#9a471d;
-  --board:#2c2c2f; --board-dot:#232326; --frame:#1a1a1b;
-  --accent:#ff6719; --on-accent:#1f1f21; --note:#ff8a3d;
-  --card-accent:#ff6719; --ground-accent:#ff6719; --card-edge:#414144;
-  --tape:#1d1d1f80;
-}
-/* Forum — by Poiesis
-   made readable: red letters on paper #4752c4 → #8a91da; paper and ground too alike (1.1 : 1): a 2px edge in #5a5b5d */
-html[data-color="forum"]{
-  --ground:#313338; --on-ground:#f3ead8; --muted-ground:#a9a49b;
-  --surface:#414245; --on-surface:#f3ead8; --muted:#a9a49b; --line:#505052;
-  --card:#2b2d31; --card-ink:#dbdee1; --card-rule:#404246; --card-margin:#3a4182;
-  --board:#1e1f22; --board-dot:#18191b; --frame:#111214;
-  --accent:#4752c4; --on-accent:#dbdee1; --note:#c9cdfb;
-  --card-accent:#8a91da; --ground-accent:#c9cdfb; --card-edge:#5a5b5d;
-  --tape:#2c2e3280;
-}
-/* Lamplight — by Poiesis
-   made readable: quiet words on paper 70% ink, not 68% */
-html[data-color="lamplight"]{
-  --ground:#0f1626; --on-ground:#e2d9c4; --muted-ground:#928f88;
-  --surface:#202633; --on-surface:#e2d9c4; --muted:#928f88; --line:#31353f;
-  --card:#f4ead2; --card-ink:#241c14; --card-rule:#dbd1bb; --card-margin:#8692a2;
-  --board:#7a5a3a; --board-dot:#62482e; --frame:#473422;
-  --accent:#2c4a7a; --on-accent:#f4ead2; --note:#f0b65a;
-  --card-accent:#2c4a7a; --ground-accent:#f0b65a; --card-edge:transparent;
-  --tape:#d2cab880;
-  --paper-mute:color-mix(in srgb,var(--card-ink) 70%,var(--card));
-}
 /* margin: spine (rose) */
 html[data-color="rose"] .lk-b .lk-text{position:relative}
 html[data-color="rose"] .lk-b .lk-text::before{content:""; position:absolute; left:0; top:0; bottom:0; width:30px; background:linear-gradient(90deg,rgba(0,0,0,.35),rgba(0,0,0,.08) 55%,rgba(255,255,255,.12) 80%,rgba(0,0,0,.18)),var(--mcol); pointer-events:none}
 html[data-color="rose"] .lk-b .lk-text::after{content:""; position:absolute; left:38px; top:10px; bottom:10px; border-left:1.5px dashed var(--mcol); opacity:.6; pointer-events:none}
 @media (max-width:700px){ html[data-color="rose"] .lk-b .lk-text::before{width:20px} html[data-color="rose"] .lk-b .lk-text::after{left:26px} }
-/* margin: vine (couple, leaves) */
-html[data-color="couple"] .lk-b .lk-text, html[data-color="leaves"] .lk-b .lk-text{position:relative}
-html[data-color="couple"] .lk-b .lk-text::before, html[data-color="leaves"] .lk-b .lk-text::before{content:""; position:absolute; left:14px; top:24px; bottom:24px; width:24px; background:var(--mcol); -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='90' viewBox='0 0 24 90'%3E%3Cg fill='none' stroke='black' stroke-width='1.4'%3E%3Cpath d='M12 0c-8 15 8 30 0 45s8 30 0 45'/%3E%3Cpath d='M10 20c-6-1-9 2-10 6 5 1 8-2 10-6zM14 65c6-1 9 2 10 6-5 1-8-2-10-6z' fill='black'/%3E%3Ccircle cx='19' cy='38' r='1.6' fill='black'/%3E%3C/g%3E%3C/svg%3E") repeat-y center/24px 90px; mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='90' viewBox='0 0 24 90'%3E%3Cg fill='none' stroke='black' stroke-width='1.4'%3E%3Cpath d='M12 0c-8 15 8 30 0 45s8 30 0 45'/%3E%3Cpath d='M10 20c-6-1-9 2-10 6 5 1 8-2 10-6zM14 65c6-1 9 2 10 6-5 1-8-2-10-6z' fill='black'/%3E%3Ccircle cx='19' cy='38' r='1.6' fill='black'/%3E%3C/g%3E%3C/svg%3E") repeat-y center/24px 90px; opacity:.8; pointer-events:none}
-@media (max-width:700px){ html[data-color="couple"] .lk-b .lk-text::before, html[data-color="leaves"] .lk-b .lk-text::before{left:8px; width:20px} }
 /* margin: gilt (monastery1) */
 html[data-color="monastery1"] .lk-b .lk-text{position:relative}
 html[data-color="monastery1"] .lk-b .lk-text::before{content:""; position:absolute; inset:14px; border:1px solid var(--mcol); outline:1px solid var(--mcol); outline-offset:4px; opacity:.75; pointer-events:none}
-/* margin: ribbon (monastery3) */
-html[data-color="monastery3"] .lk-b .lk-text{position:relative}
-html[data-color="monastery3"] .lk-b .lk-text::before{content:""; position:absolute; top:-10px; right:24px; width:22px; height:130px; background:linear-gradient(90deg,rgba(0,0,0,.18),transparent 40%,rgba(255,255,255,.15) 60%,rgba(0,0,0,.15)),var(--mcol); clip-path:polygon(0 0,100% 0,100% 100%,50% 88%,0 100%); pointer-events:none}
 /* MARY THEMES END */
 *{box-sizing:border-box}
 @media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
@@ -1966,7 +1853,6 @@ html[data-dev="phone"] .lk .lk-write #draft{min-height:160px}
 .lk-msb .dd{color:var(--lk-red); box-shadow:0 0 0 1.5px var(--gold),0 0 0 4px var(--lk-paper),0 0 0 5px var(--lk-red)}
 .lk-msb.short{bottom:auto; height:46%; -webkit-mask:linear-gradient(180deg,#000 82%,transparent); mask:linear-gradient(180deg,#000 82%,transparent)}
 .lk-b.lk-v2 .lk-text.has-mg{padding-right:104px}
-html[data-color="monastery3"] .lk-mg{top:150px}
 .lk-ms-art .lk-frame{border:0; padding:18px; background:var(--lk-paper); box-shadow:inset 0 0 0 2px var(--gold),inset 0 0 0 7px var(--lk-paper),inset 0 0 0 8px var(--lk-red),0 12px 22px -14px rgba(0,0,0,.6)}
 .lk-ms-art .lk-frame::before{content:"❦"; position:absolute; top:-1px; left:50%; transform:translateX(-50%); color:var(--lk-red); font-size:1rem; line-height:1}
 .lk-ms-art .lk-frame::after{content:"✦ ❦ ✦"; inset:auto 0 0 0; border:0; text-align:center; color:var(--lk-red); font-size:.75rem; line-height:18px}
@@ -1993,3 +1879,21 @@ html[data-dev="phone"] .lk-tabs.n4 .lk-tab{padding-inline:12px}
 /* the column of cards never grows wider than the screen (the pair switcher scrolls inside it) */
 .lk-v2 .lk-side{grid-template-columns:minmax(0,1fr)}
 .lk-v2 .lk-side > *{min-width:0}
+
+
+/* Round 25 (2 Nov): the header isn't sticky; the date and your picture sit on
+   the right, level with the work's tabs on the left, and the page moves up. */
+.top, html[data-mlook] .top{position:absolute; top:0; left:0; right:0; z-index:30; margin:0; padding:0 16px; background:transparent; border:0; pointer-events:none}
+.top .bar{display:flex; justify-content:flex-end}
+.top .icons{pointer-events:auto; align-items:flex-start; gap:14px}
+.top .profbtn{margin-top:36px}
+.pmenu, .pop{position:absolute; top:calc(env(safe-area-inset-top,0px) + 86px)}
+.pmenu{left:auto; right:max(16px, env(safe-area-inset-right,0px))}
+.pop{left:auto; right:max(16px, env(safe-area-inset-right,0px))}
+.lk-b .lk-write{top:20px}
+.lk-v2 .lk-side{top:20px; max-height:calc(100dvh - 36px)}
+@media (max-width:700px){
+ .top, html[data-mlook] .top{position:relative; margin-inline:-16px}
+ .top .profbtn{margin-top:6px}
+ .pmenu, .pop{top:calc(env(safe-area-inset-top,0px) + 58px)}
+}

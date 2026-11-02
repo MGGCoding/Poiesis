@@ -377,20 +377,12 @@ const SPACES={journal:"Journal", scrap:"Scrapbook", board:"Idea board"};
 /* MARY THEMES START: written by tools/mary-themes.mjs */
 const THEMES=[
  {"id":"dark","key":"color.dark.name","name":"dark mode","sw":["#1f160f","#faebc9","#2a2420","#8c3600","#e9dba7","#b88a5c"]},
- {"id":"forest","key":"color.forest.name","name":"forest","sw":["#202f19","#faebc9","#59221d","#59221d","#f4ceb8","#66463e"]},
  {"id":"rose","key":"color.rose.name","name":"rose","sw":["#952d3d","#faebc9","#3d1700","#632600","#e2b983","#b88a5c"],"tex":true},
- {"id":"xcx","key":"color.xcx.name","name":"marys favroite xcx","sw":["#a5ff9e","#ffb3e3","#1b1640","#b3fff5","#b3fff5","#b3fff5"],"edge":true},
- {"id":"couple","key":"color.couple.name","name":"a couple minutes","sw":["#002f4d","#faebc9","#3d1700","#b3006b","#ffb3ba","#b88a5c"],"tex":true},
- {"id":"leaves","key":"color.leaves.name","name":"leaves from the vine","sw":["#cebc8d","#524523","#f5f6c1","#383215","#eae4c7","#b88a5c"],"tex":true},
- {"id":"shirt","key":"color.shirt.name","name":"niko's shirt","sw":["#c4e7f3","#cdefc8","#392b0e","#392b0e","#d5cee9","#392b0e"],"edge":true},
- {"id":"irene","key":"color.irene.name","name":"irene","sw":["#b94b18","#f4c3e2","#392b0e","#c7e0ef","#c7e0ef","#faeaf4"]},
+ {"id":"forest","key":"color.forest.name","name":"forest","sw":["#202f19","#faebc9","#59221d","#59221d","#f4ceb8","#66463e"]},
  {"id":"monastery1","key":"color.monastery1.name","name":"Monastery 1","sw":["#3a1018","#f3e6c4","#2a1a10","#1f3f7a","#d9b45c","#8a5a2b"],"tex":true,"by":"Poiesis"},
  {"id":"monastery2","key":"color.monastery2.name","name":"Monastery 2","sw":["#22201e","#efe3c8","#2b2018","#a8321e","#f0b860","#6e5a44"],"tex":true,"by":"Poiesis"},
- {"id":"monastery3","key":"color.monastery3.name","name":"Monastery 3","sw":["#e8dcc6","#fbf6ea","#2e2418","#a33a22","#ecd59a","#c49a56"],"edge":true,"by":"Poiesis"},
- {"id":"office","key":"color.office.name","name":"Modern office","sw":["#e4e5e7","#ffffff","#1c1d1f","#383b40","#d3d5d9","#9a9da3"],"edge":true,"by":"Poiesis"},
  {"id":"scroller","key":"color.scroller.name","name":"Refined Scroller","sw":["#121213","#1f1f21","#e9e7e3","#ff6719","#ff8a3d","#2c2c2f"],"edge":true,"by":"Poiesis"},
- {"id":"forum","key":"color.forum.name","name":"Forum","sw":["#313338","#2b2d31","#dbdee1","#4752c4","#c9cdfb","#1e1f22"],"edge":true,"by":"Poiesis"},
- {"id":"lamplight","key":"color.lamplight.name","name":"Lamplight","sw":["#0f1626","#f4ead2","#241c14","#2c4a7a","#f0b65a","#7a5a3a"],"by":"Poiesis"}];
+ {"id":"office","key":"color.office.name","name":"Modern office","sw":["#e4e5e7","#ffffff","#1c1d1f","#383b40","#d3d5d9","#9a9da3"],"edge":true,"by":"Poiesis"}];
 const THEME_DEFAULT="dark";
 /* MARY THEMES END */
 const themeName=t=>T(t.key,t.name);
@@ -517,10 +509,31 @@ function emptyShell(){ const f=fresh();
  Object.assign(f, {replies:{}, sealed:{}, owned:{}, drawn:{}, journal:[], lines:[], questions:[]});
  f.nb.sel=null; Object.assign(f.profile, {name:"", badge:"", top:null, formed:[]});
  return f; }
-let S; try{ const saved=JSON.parse(localStorage.getItem(KEY)||"null"); S=Object.assign((TESTER&&!saved)?emptyShell():fresh(), saved||{}); }catch(e){ S=TESTER?emptyShell():fresh(); }
+/* ---------- Round 25: the live site never starts from the prototype's sample notebook ----------
+   With config.js filled in (accounts on), a new browser starts empty with one welcome page.
+   Sample pages left from an earlier visit are cleared only when they are exactly as shipped,
+   so nothing a person wrote or changed is ever removed. */
+const LIVE=(()=>{ const c=window.POIESIS_CONFIG||{}; return !!(c.supabaseUrl&&c.supabaseAnonKey); })();
+function welcomePage(){ const title=T("welcome.title","Welcome"), body=T("welcome.body","");
+ if(!title&&!body) return null;
+ return {id:"j_welcome", date:today(), title, muse:null, q:null, lines:[], body, welcome:true}; }
+function scrubSamples(){
+ const f=fresh(), same=(x,y)=>JSON.stringify(x)===JSON.stringify(y);
+ ["journal","lines","questions"].forEach(k=>{ if(Array.isArray(S[k])) S[k]=S[k].filter(x=>!(f[k]||[]).some(d=>same(d,x))); });
+ ["sealed","owned","drawn","replies"].forEach(k=>{ const o=S[k]; if(!o||typeof o!=="object") return;
+  Object.keys(f[k]||{}).forEach(id=>{ if(o[id]!==undefined&&same(o[id],f[k][id])) delete o[id]; }); });
+ const p=S.profile, d=f.profile;
+ if(p&&p.name===d.name&&p.badge===d.badge&&same(p.formed,d.formed)) Object.assign(p,{name:"",badge:"",top:null,formed:[]});
+ if(S.nb&&S.nb.sel&&!S.journal.some(x=>x.id===S.nb.sel)) S.nb.sel=null;
+}
+function ensureWelcome(){ if(!LIVE||S.welcomed) return;
+ if(!S.journal.length){ const w=welcomePage(); if(w) S.journal.push(w); }
+ S.welcomed=true; }
+let S; try{ const saved=JSON.parse(localStorage.getItem(KEY)||"null"); S=Object.assign(((TESTER||LIVE)&&!saved)?emptyShell():fresh(), saved||{}); }catch(e){ S=(TESTER||LIVE)?emptyShell():fresh(); }
 function save(quiet){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ toast(T("toast.storage","This browser is out of room for pictures. Your words are still here.")); }
  if(!quiet && window.PoiesisData) window.PoiesisData.changed(); /* data.js: sync to the account */ }
 if(S.pick.date && S.pick.date<today()) S.pick={date:null,id:null};
+if(LIVE){ scrubSamples(); ensureWelcome(); }
 S.visits[today()]=1; save();
 let tt; function toast(m){ const t=$("#toast"); t.textContent=m; t.hidden=false; clearTimeout(tt); tt=setTimeout(()=>t.hidden=true,2800); }
 const uid=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
@@ -1538,7 +1551,7 @@ function settingsHTML(){
   <div class="rowbtns" style="margin-top:16px"><button class="btn" data-sethouse>Put back the house style for ${d==="desk"?"wide screens":"phones"}</button></div></div>`;
 }
 function renderSettings(v){
- v.innerHTML=`<div class="viewt m-ptabs" role="tablist"><button data-ptab="you" aria-pressed="false">${T("profile.tab.you","Your profile")}</button><button data-ptab="settings" aria-pressed="true">${T("profile.tab.settings","Settings")}</button></div>${settingsHTML()}`;
+ v.innerHTML=`${ptabs("settings")}${settingsHTML()}`;
  v.onclick=e=>{
   const pt=e.target.closest("[data-ptab]"); if(pt){ S.ptab=pt.dataset.ptab; save(); render(); return; }
   const sd=e.target.closest("[data-setdev]"); if(sd){ S.setDev=sd.dataset.setdev; save(); renderSettings(v); return; }
@@ -1863,6 +1876,55 @@ function wireCork(){
 function addPin(o){ const id=addLine({text:o.text, who:o.cite||"", where:o.where||"", from:"muse", muse:o.muse||null});
  toast(T("toast.line.kept","Kept. It is on your board.")); return id; }
 
+/* ---------- Round 25: the circle, as members see it ---------- */
+const liveUser=()=>!!(window.PoiesisData&&window.PoiesisData.enabled&&window.PoiesisData.user);
+function ptabs(on){
+ const tabs=[["you",T("profile.tab.you","Your profile")],...(liveUser()?[["members",T("profile.tab.members","Members")]]:[]),["settings",T("profile.tab.settings","Settings")]];
+ return `<div class="viewt m-ptabs" role="tablist">${tabs.filter(t=>t[1]).map(([k,l])=>`<button data-ptab="${k}" aria-pressed="${on===k}">${l}</button>`).join("")}</div>`; }
+const myHandle=()=>{ const m=window.PoiesisData&&window.PoiesisData.profile&&window.PoiesisData.profile.me(); return (m&&m.handle)||""; };
+const memberName=m=>m.display_name||(m.handle?"@"+m.handle:T("members.unnamed","A member"));
+function memberAv(m){ return avatarHTML({c:"var(--accent)", ink:"var(--on-accent)", initials:initials(m.display_name||m.handle||"?")||"?", photo:null, ring:RINGS[m.ring]?m.ring:"none"}); }
+function memberShelfHTML(shelf){
+ if(!shelf) return `<p class="mk-closed">${esc(T("members.shelf.hidden","Keeps their shelf to themselves."))}</p>`;
+ const owned=new Set((Array.isArray(shelf.owned)?shelf.owned:[]).filter(id=>STICKERS[id])), gilt=new Set(Array.isArray(shelf.gilt)?shelf.gilt:[]);
+ const makers=Object.keys(SETS).filter(mk=>SETS[mk].some(id=>owned.has(id)));
+ if(!makers.length) return `<p class="mk-closed">${esc(T("members.shelf.empty","Nothing on their shelf yet."))}</p>`;
+ return makers.map(mk=>`<div class="mk-shelf"><div class="mk-head"><b>${esc(MAKERNAME[mk]||mk)}</b></div><div class="mk-row">${SETS[mk].map(id=>owned.has(id)
+  ?`<span class="mk-slot has">${stickerHTML(id,52,`${STICKERS[id].series} · ${STICKERS[id].name}`,gilt.has(id))}<small>${esc(STICKERS[id].name)}</small></span>`
+  :`<span class="mk-slot" aria-hidden="true"><span class="mk-empty"></span><small>—</small></span>`).join("")}</div></div>`).join(""); }
+function renderMembers(v){
+ if(!liveUser()){ S.ptab="you"; return renderProfile(v); }
+ v.innerHTML=`${ptabs("members")}<div class="panel"><h3>${T("members.heading","The circle")}</h3><p class="muted" style="margin:2px 0 8px;font-size:.9rem">${T("members.line","Everyone who has joined. Open a name to read their profile.")}</p><div class="memlist" id="memList"><p class="muted">${T("members.loading","Loading…")}</p></div></div>`;
+ v.onclick=e=>{ const pt=e.target.closest("[data-ptab]"); if(pt){ S.ptab=pt.dataset.ptab; save(); render(); return; }
+  const m=e.target.closest("[data-member]"); if(m) openMember(m.dataset.member); };
+ window.PoiesisData.profile.members().then(list=>{ const box=$("#memList"); if(!box||S.ptab!=="members") return;
+  const meId=window.PoiesisData.user&&window.PoiesisData.user.id;
+  list.sort((x,y)=>memberName(x).localeCompare(memberName(y)));
+  box.innerHTML=list.map(m=>`<button class="memrow" data-member="${esc(m.id)}">${memberAv(m)}<span><b>${esc(memberName(m))}</b>${m.id===meId?esc(T("members.you"," (you)")):""} ${stickerHTML(m.top_sticker,18)} ${m.badge?`<span class="badge">${esc(m.badge)}</span>`:""}<small>${esc([m.line,m.makes].filter(Boolean).join(" · "))}</small></span></button>`).join("")||`<p class="muted">${esc(T("members.empty","No one else is here yet."))}</p>`;
+ }).catch(()=>{ const box=$("#memList"); if(box) box.innerHTML=`<p class="muted">${esc(T("members.error","Couldn’t load that. Try again in a moment."))}</p>`; });
+}
+let memVeil=null;
+function closeMember(){ if(memVeil){ memVeil.remove(); memVeil=null; } }
+async function openMember(id){
+ closeMember();
+ const veil=memVeil=document.createElement("div"); veil.className="authveil memveil";
+ veil.innerHTML=`<div class="authcard memcard" role="dialog" aria-modal="true"><button class="authx" data-x aria-label="${esc(T("members.close","Close"))}">×</button><p class="muted">${esc(T("members.loading","Loading…"))}</p></div>`;
+ document.body.appendChild(veil);
+ const onKey=e=>{ if(e.key==="Escape"){ closeMember(); document.removeEventListener("keydown",onKey); } };
+ document.addEventListener("keydown",onKey);
+ veil.addEventListener("click",e=>{ if(e.target===veil||e.target.closest("[data-x]")) closeMember(); });
+ let m=null; try{ m=await window.PoiesisData.profile.member(id); }catch(e){}
+ const card=veil.querySelector(".authcard"); if(!card||memVeil!==veil) return;
+ const x=card.querySelector("[data-x]").outerHTML;
+ if(!m){ card.innerHTML=`${x}<p>${esc(T("members.error","Couldn’t load that. Try again in a moment."))}</p>`; return; }
+ const formed=(Array.isArray(m.formed)?m.formed:[]).filter(Boolean);
+ card.innerHTML=`${x}<div class="mem-head">${memberAv(m).replace('class="av"','class="av big"')}<div><h3>${esc(memberName(m))}</h3>${m.handle&&m.display_name?`<small class="muted">@${esc(m.handle)}</small>`:""}<div>${stickerHTML(m.top_sticker,22)} ${m.badge?`<span class="badge">${esc(m.badge)}</span>`:""}</div></div></div>
+  ${[m.line,m.makes].filter(Boolean).length?`<p style="margin:4px 0 0">${esc([m.line,m.makes].filter(Boolean).join(" · "))}</p>`:""}
+  ${m.bio?`<p class="mem-bio">${esc(m.bio)}</p>`:""}
+  ${formed.length?`<p class="muted" style="font-size:.86rem;margin:4px 0 0">${esc(T("members.formed","Formed by "))}${esc(formed.join(", "))}</p>`:""}
+  <h4 class="mem-sh">${esc(T("members.shelf.heading","Their shelf"))}</h4>${memberShelfHTML(m.shelf)}`;
+}
+
 /* ---------- Profile ---------- */
 function collection(){ return Object.entries(S.owned).map(([id,o])=>({id, date:o.date, gilt:o.gilt})); }
 function shelfHTML(){
@@ -1881,29 +1943,38 @@ function stickerCardHTML(id){ const s=STICKERS[id], o=S.owned[id]||{};
   <div class="rowbtns"><button class="btn small" data-gild="${id}">${o.gilt?T("profile.ungild","Take the gilding off"):T("profile.gild","Gild it")}</button><button class="btn small ${S.profile.top===id?"primary":""}" data-top="${id}">${S.profile.top===id?T("profile.worn","★ Worn beside your name"):T("profile.wear","Wear it")}</button></div></div></div>`; }
 function renderProfile(v){
  if(S.ptab==="settings") return renderSettings(v);
+ if(S.ptab==="members") return renderMembers(v);
  const p=S.profile, col=collection();
  const draws=todaysDraws(), checked=checkedToday();
  const todayPanel=draws.length?`<div class="panel" style="margin-bottom:16px"><h3>${T("profile.today.heading","Today’s sticker")}</h3><p class="muted" style="margin:2px 0 12px;font-size:.9rem">${checked?`<b>${esc(STICKERS[checked].name)}</b> carries today’s check. Tap another to move it; it settles at midnight.`:T("profile.today.none","Tap one of today’s to give it the check.")}</p>
    <div class="rowbtns">${draws.map(id=>`<button class="btn ${checked===id?"primary":""}" data-keep="${id}" ${checked===id?'aria-pressed="true"':""}>${stickerHTML(id,26)} ${esc(STICKERS[id].name)}${checked===id?" · today’s":""}</button>`).join("")}</div></div>`:"";
- v.innerHTML=`<div class="viewt m-ptabs" role="tablist"><button data-ptab="you" aria-pressed="true">${T("profile.tab.you","Your profile")}</button><button data-ptab="settings" aria-pressed="false">${T("profile.tab.settings","Settings")}</button></div><div class="profile"><div class="panel pcard">
+ v.innerHTML=`${ptabs("you")}<div class="profile"><div class="panel pcard">
    <div class="pa">${avatarHTML(me()).replace('class="av"','class="av big"')}<div><button class="btn small" id="pPic">${p.photo?"Change photo":"Add a photo"}</button><input type="file" id="pFile" accept="image/*" hidden></div></div>
    <label class="lbl" for="pName">${T("profile.name","Name")}</label><input class="field" id="pName" value="${esc(p.name)}">
    <label class="lbl" for="pLine">${T("profile.line","A line about you")}</label><input class="field" id="pLine" value="${esc(p.line)}" placeholder="${T("profile.line.placeholder","Reads Homer on trams")}">
    <label class="lbl" for="pMake">${T("profile.makes","What you make")}</label><input class="field" id="pMake" value="${esc(p.makes)}" placeholder="${T("profile.makes.placeholder","Essays, a few poems, bread")}">
+   ${liveUser()?`<label class="lbl" for="pHandle">${T("profile.handle","Handle")}</label><input class="field" id="pHandle" value="${esc(myHandle())}" placeholder="${T("profile.handle.placeholder","letters, numbers, _")}" autocapitalize="none" autocomplete="off" spellcheck="false" maxlength="25"><p class="muted hmsg" id="pHandleMsg" role="status" aria-live="polite"></p>`:""}
+   <label class="lbl" for="pBio">${T("profile.bio","A longer bio")}</label><textarea class="field" id="pBio" rows="4" maxlength="500" placeholder="${esc(T("profile.bio.placeholder",""))}">${esc(p.bio||"")}</textarea><small class="muted bio-count" id="pBioN"></small>
    <p class="lbl">${T("profile.ring","Ring")}</p><div class="rings">${Object.entries(RINGS).map(([k,r])=>`<button class="ringbtn" data-ring="${k}" aria-pressed="${p.ring===k}"><span class="av" style="background:var(--accent);box-shadow:${r.css}"></span><small>${r.name}</small></button>`).join("")}</div>
    <p class="lbl">${T("profile.badge","Badge")}</p><div class="badges">${BADGES.map(b=>{const ok=b.ok(); return `<button class="badge pick" data-badge="${b.id}" aria-pressed="${p.badge===b.id}" ${ok?"":"disabled"} data-tip="${esc(ok?b.how:"Locked · "+b.how)}">${esc(b.id)}</button>`;}).join("")}</div></div>
   <div>${todayPanel}<div class="panel"><h3>${T("profile.makers.heading","Your makers")}</h3><p class="muted" style="margin:2px 0 4px;font-size:.9rem">${T("profile.makers.line","Each maker has a set of six, each one tied to something they really made or did. A first impression draws one you don’t have yet — never a repeat. Only makers you have met are shown.")}</p>
     <p class="muted" style="margin:0 0 6px;font-size:.84rem">${T("profile.gilding.line","Gilding is a finish, not a prize: gild anything you own, and take it off again.")}</p>
+    ${liveUser()?`<label class="shelfsw"><input type="checkbox" id="pShelf" ${p.showShelf===false?"":"checked"}> ${esc(T("profile.shelf.show","Show my sticker shelf to other members"))}</label>`:""}
     ${shelfHTML()}</div>
    <div class="panel" style="margin-top:16px"><h3>${T("profile.formed.heading","Who formed you")}</h3>${T("profile.formed.line","The writers, artists and teachers you apprentice to. Your circle sees these.")?`<p class="muted" style="margin:2px 0 10px;font-size:.9rem">${T("profile.formed.line","")}</p>`:""}
     <div class="formed">${p.formed.map((f,i)=>`<span class="fchip">${esc(f)}<button data-unform="${i}" aria-label="Remove ${esc(f)}">×</button></span>`).join("")}</div>
     <form class="cform" id="formF"><input class="field" id="formIn" placeholder="${T("profile.formed.placeholder","Add a name")}" aria-label="Add someone who formed you"><button class="btn">${T("profile.formed.add","Add")}</button></form></div>
    <div class="panel" style="margin-top:16px"><h3>${T("profile.circle.heading","How your circle sees you")}</h3>
     <div class="who" style="margin-top:10px">${avatarHTML(me())}<div><b>${esc(p.name||"You")}</b> ${myTop()?stickerHTML(myTop(),20):""} ${p.badge?`<span class="badge">${esc(p.badge)}</span>`:""}<small>${esc([p.line,p.makes].filter(Boolean).join(" · ")||T("profile.circle.empty","Add a line about yourself"))}</small></div></div>
+    ${p.bio?`<p class="mem-bio" style="font-size:.9rem">${esc(p.bio)}</p>`:""}
     ${p.formed.length?`<p class="muted" style="font-size:.86rem;margin:6px 0 0">${T("profile.formed.by","Formed by ")}${esc(p.formed.join(", "))}</p>`:""}</div></div></div>`;
  const put=k=>e=>{ S.profile[k]=e.target.value; save(); };
  $("#pName").oninput=put("name"); $("#pLine").oninput=put("line"); $("#pMake").oninput=put("makes");
  ["pName","pLine","pMake"].forEach(id=>$("#"+id).onchange=()=>{ applyPrefs(); renderProfile(v); });
+ const bioEl=$("#pBio"), bioN=$("#pBioN"), bioCount=()=>{ if(bioN) bioN.textContent=bioEl.value.length>=400?`${bioEl.value.length} / 500`:""; };
+ if(bioEl){ bioCount(); bioEl.oninput=e=>{ S.profile.bio=e.target.value.slice(0,500); bioCount(); save(); }; }
+ const hEl=$("#pHandle"); if(hEl) hEl.onchange=async()=>{ const r=await window.PoiesisData.profile.setHandle(hEl.value), m=$("#pHandleMsg"); if(m) m.textContent=r.ok?T("profile.handle.saved","Saved."):r.message; if(r.ok) hEl.value=r.handle; };
+ const shEl=$("#pShelf"); if(shEl) shEl.onchange=()=>{ S.profile.showShelf=shEl.checked; save(); };
  $("#pPic").onclick=()=>$("#pFile").click();
  $("#pFile").onchange=e=>{ const f=e.target.files[0]; if(f) shrink(f,img=>{ S.profile.photo=img; save(); applyPrefs(); renderProfile(v); }); };
  $("#formF").onsubmit=e=>{ e.preventDefault(); const t=$("#formIn").value.trim(); if(!t) return; S.profile.formed.push(t); save(); renderProfile(v); };
@@ -2028,7 +2099,11 @@ window.PoiesisApp={ T, toast, today, state:()=>S,
  // New data arrived from the account: keep it, and redraw unless someone is mid-sentence.
  commit(){ save(true); applyPrefs(); if(typing()){ renderLater=true; return; } render(); },
  // Start this device's copy afresh (signing out, or another person signing in). Display settings stay.
- reset(){ const ui=S.ui, sl=S.sharedLook; S=fresh(); S.ui=ui; S.sharedLook=sl; S.visits[today()]=1; save(true); applyPrefs(); render(); },
+ reset(){ const ui=S.ui, sl=S.sharedLook; S=LIVE?emptyShell():fresh(); S.ui=ui; S.sharedLook=sl; S.visits[today()]=1; ensureWelcome(); save(true); applyPrefs(); render(); },
+ // A returning person on a new device gets their own notebook; the untouched welcome page is dropped.
+ dropWelcome(){ const i=S.journal.findIndex(x=>x.id==="j_welcome"&&x.welcome&&x.body===T("welcome.body","")&&x.title===T("welcome.title","Welcome"));
+  if(i<0) return false; S.journal.splice(i,1); if(S.nb&&S.nb.sel==="j_welcome") S.nb.sel=null; S.welcomed=true; save(true); return true; },
+ openMember, live:LIVE,
   who:WHO, table:Table };
 
 applyStaticCopy(); applyPrefs(); penInit(); render();
