@@ -1897,3 +1897,22 @@ html[data-dev="phone"] .lk-tabs.n4 .lk-tab{padding-inline:12px}
  .top .profbtn{margin-top:6px}
  .pmenu, .pop{top:calc(env(safe-area-inset-top,0px) + 58px)}
 }
+
+/* Round 26 (2 Nov): the date ribbon sits to the right of your picture; tap it
+   and it drops to show the Poiesis mark (the mark opens Why Poiesis). The
+   write-anywhere pen is phone-only. Patterns: faint grounds (Colour › Patterns). */
+.dribbon{padding:0; display:flex; flex-direction:column; align-items:center}
+.dribbon .dr-date{all:unset; box-sizing:border-box; display:block; cursor:pointer; padding:12px 12px 17px; color:inherit; font:inherit; letter-spacing:inherit; text-transform:inherit; white-space:nowrap}
+.dribbon .dr-date:focus-visible, .dribbon .dr-mark:focus-visible{outline:2px solid var(--on-accent); outline-offset:-4px}
+.dribbon .dr-mark{display:block; width:46px; height:0; margin:0; overflow:hidden; background:var(--on-accent); -webkit-mask:url("mark.png") center/contain no-repeat; mask:url("mark.png") center/contain no-repeat; transition:height .25s ease, margin .25s ease}
+.dribbon.down .dr-mark{height:46px; margin:-8px 0 20px}
+@media (prefers-reduced-motion:reduce){ .dribbon .dr-mark{transition:none} }
+@media (max-width:700px){
+ .dribbon{padding:0}
+ .dribbon .dr-date{padding:11px 10px 15px}
+ .dribbon.down .dr-mark{width:40px; height:40px; margin:-6px 0 16px}
+}
+html[data-dev="desk"] .pen, html[data-dev="desk"] .penbox{display:none!important}
+html[data-ground]:not([data-ground="theme"]) body, html[data-ground]:not([data-ground="theme"])[data-dev="phone"] body{background:var(--gpat,none) 0 0/var(--gsize,auto) repeat, var(--ground)}
+.cp-gpv{background:var(--ground); box-shadow:inset 0 0 0 1px var(--line)}
+html[data-tex="on"] .cp-gpv-theme{background:var(--texture) 0 0/var(--tex-size) repeat, var(--ground)}

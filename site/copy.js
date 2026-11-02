@@ -39,6 +39,20 @@ margins.spine: Spine
 margins.spine.stitch: Stitched
 margins.spine.diamond: Diamonds
 margins.spine.bands: Raised bands
+# Round 26: Patterns, the third tab in Colour: faint textures and patterns on the ground around the pages.
+site.patterns.title: Patterns
+patterns.ground: Background
+patterns.ground.theme: Theme's own
+patterns.ground.plain: Plain
+patterns.ground.grain: Paper grain
+patterns.ground.linen: Linen
+patterns.ground.wood: Woodgrain
+patterns.ground.dots: Dots
+patterns.ground.pinstripe: Pinstripe
+patterns.ground.quatrefoil: Quatrefoil
+patterns.ground.stars: Stars
+# Round 26: tap the date ribbon and it drops to show the Poiesis mark; the mark opens Why Poiesis.
+ribbon.mark: Why Poiesis
 color.dark.name: dark mode
 color.forest.name: forest
 color.rose.name: rose
@@ -129,7 +143,7 @@ lexicon.two: Making as active reception: the maker labors, and inspiration is gi
 
 # THE MUSE PAGE ========================================================
 # Round 24: "First impression" is written on the notepad's lines; "Theme" over the day's word at its head.
-muse.first.label: First impression
+muse.first.label: one sentence is enough..
 muse.theme.label: Theme
 muse.prompt: An idea, a feeling, a poem, a connection, a reference, a question.
 muse.prompt.placeholder: One sentence is enough.

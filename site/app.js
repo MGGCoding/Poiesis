@@ -15,7 +15,7 @@ function applyStaticCopy(){
  const set=(sel,k,d)=>{ const el=document.querySelector(sel); if(el) el.textContent=T(k,d); };
  const tab=(k,key,d,ic)=>{ const el=document.querySelector(`#switch [data-tab="${k}"]`); if(el) el.innerHTML=`${ic}<span>${esc(T(key,d))}</span>`; };
  tab("muse","site.tab.muse","Muse",IC_MUSE); tab("notebook","site.tab.notebook","Notebook",IC_NOTEBOOK);
- set('#colorPop [data-cpt="colour"]',"site.colors.title","Colour"); set('#colorPop [data-cpt="margins"]',"site.margins.title","Margins"); set("#colorPop .pop-credit","color.credit","Colours by Mary");
+ set('#colorPop [data-cpt="colour"]',"site.colors.title","Colour"); set('#colorPop [data-cpt="margins"]',"site.margins.title","Margins"); set('#colorPop [data-cpt="patterns"]',"site.patterns.title","Patterns"); set("#colorPop .pop-credit","color.credit","Colours by Mary");
  set("#colorBtn","menu.colour","Colour"); set("#profGo","menu.profile","Your profile"); set("#whyMenu","menu.why","Why Poiesis");
  set("#whyLink","site.why.link","Why Poiesis \u203a");
  set("footer span","site.footer","A working sketch, 2026. Other members are examples; what you write stays in this browser. Paintings appear as color studies.");
@@ -641,7 +641,7 @@ const SETTINGS=[
 ];
 if(!S.ui) S.ui={};
 ["desk","phone"].forEach(d=>{ S.ui[d]=Object.assign(clone(HOUSE[d]), S.ui[d]||{}); });
-const SHARED=["color","margin","spine"];
+const SHARED=["color","margin","spine","ground"];
 function setPref(k,v,d){ if(SHARED.includes(k)) ["desk","phone"].forEach(x=>S.ui[x][k]=v); else S.ui[d||DEV()][k]=v; }
 if(!S.sharedLook){ SHARED.forEach(k=>S.ui.phone[k]=S.ui.desk[k]); S.sharedLook=1; }
 const phoneMQ=matchMedia("(max-width: 700px)");
@@ -673,7 +673,10 @@ function applyPrefs(){
  $("#profBtn").innerHTML=avatarHTML(me());
  R.setAttribute("data-margin",U().margin||"vine"); R.setAttribute("data-spine",U().spine||"stitch");
  $("#cpMargins").innerHTML=marginsPaneHTML();
- const d=new Date(), rb=$("#dateRibbon"); if(rb) rb.textContent=`${d.getDate()} ${d.toLocaleDateString(undefined,{month:"short"}).replace(/\.$/,"")}`;
+ const g=GROUNDS.some(x=>x[0]===U().ground)?U().ground:"theme", gp=groundPat(g, groundInk()); R.setAttribute("data-ground",g);
+ if(gp){ R.style.setProperty("--gpat",gp[0]); R.style.setProperty("--gsize",gp[1]); }
+ $("#cpPatterns").innerHTML=patternsPaneHTML();
+ const d=new Date(), rb=$("#dateRibbon .dr-date"); if(rb) rb.textContent=`${d.getDate()} ${d.toLocaleDateString(undefined,{month:"short"}).replace(/\.$/,"")}`;
 }
 /* Round 24: the Margins tab beside Colour. What climbs the right margin of
    the work, and how the spine between the work and the notepad is dressed. */
@@ -683,12 +686,36 @@ function marginsPaneHTML(){ const u=U();
  const seg=(k,lab,opts)=>`<p class="cp-lab">${esc(T("margins."+k,lab))}</p><div class="cp-seg" role="group" aria-label="${esc(T("margins."+k,lab))}">${opts.map(([v,l])=>`<button type="button" data-mpref="${k}" data-val="${v}" aria-pressed="${(u[k]||opts[0][0])===v}"><span class="cp-pv cp-${k}-${v}" aria-hidden="true"></span><span>${esc(T(`margins.${k}.${v}`,l))}</span></button>`).join("")}</div>`;
  return seg("margin","Margin",MARGINS)+seg("spine","Spine",SPINES);
 }
+/* Round 26: Patterns, the third tab beside Colour and Margins: faint
+   textures and patterns on the ground around the pages, drawn in the theme's
+   own ink so they suit every colour. "Theme's own" keeps the theme's texture. */
+const GROUNDS=[["theme","Theme's own"],["plain","Plain"],["grain","Paper grain"],["linen","Linen"],["wood","Woodgrain"],["dots","Dots"],["pinstripe","Pinstripe"],["quatrefoil","Quatrefoil"],["stars","Stars"]];
+function groundInk(){ const i=document.createElement("i"); i.style.color="var(--on-ground)"; document.body.appendChild(i); const c=getComputedStyle(i).color; i.remove(); return c; }
+function groundPat(k,c){
+ const m=(c.match(/[\d.]+/g)||[0,0,0]).slice(0,3).map(v=>(+v/255).toFixed(3));
+ const noise=(f,o,a,b)=>`<filter id="n" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="${f}" numOctaves="${o}" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 ${m[0]} 0 0 0 0 ${m[1]} 0 0 0 0 ${m[2]} ${a} 0 0 0 ${b}"/></filter>`;
+ const P={
+  grain:[180,180,.5,noise(".85",2,1.4,-.62)+`<rect width="180" height="180" filter="url(#n)"/>`],
+  wood:[420,420,.45,noise(".004 .09",3,1.6,-.7)+`<rect width="420" height="420" filter="url(#n)"/>`],
+  linen:[7,7,.14,`<path d="M0 .5H7M0 4H7" stroke="${c}" stroke-width=".5"/><path d="M.5 0V7M4 0V7" stroke="${c}" stroke-width=".35"/>`],
+  dots:[22,22,.17,`<circle cx="11" cy="11" r="1.3" fill="${c}"/>`],
+  pinstripe:[16,16,.12,`<path d="M8 0V16" stroke="${c}" stroke-width=".8"/>`],
+  quatrefoil:[44,44,.12,`<g fill="none" stroke="${c}" stroke-width="1"><circle cx="16" cy="22" r="6"/><circle cx="28" cy="22" r="6"/><circle cx="22" cy="16" r="6"/><circle cx="22" cy="28" r="6"/></g><g fill="${c}"><circle cx="0" cy="0" r="1.4"/><circle cx="44" cy="0" r="1.4"/><circle cx="0" cy="44" r="1.4"/><circle cx="44" cy="44" r="1.4"/></g>`],
+  stars:[60,60,.15,`<g fill="${c}"><path d="M15 9l1.6 4.4L21 15l-4.4 1.6L15 21l-1.6-4.4L9 15l4.4-1.6z"/><path d="M45 39l1 2.8 2.8 1-2.8 1-1 2.8-1-2.8-2.8-1 2.8-1z"/></g>`]};
+ if(k==="theme") return null; if(k==="plain"||!P[k]) return ["none","auto"];
+ const [w,h,o,body]=P[k], svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" opacity="${o}">${body}</svg>`;
+ return [`url("data:image/svg+xml,${encodeURIComponent(svg)}")`, `${w}px ${h}px`];
+}
+function patternsPaneHTML(){ const u=U(), cur=GROUNDS.some(x=>x[0]===u.ground)?u.ground:"theme", ink=groundInk(), lab=T("patterns.ground","Background");
+ return `${lab?`<p class="cp-lab">${esc(lab)}</p>`:""}<div class="cp-seg" role="group" aria-label="${esc(lab)}">${GROUNDS.map(([v,l])=>{ const gp=groundPat(v,ink);
+  return `<button type="button" data-mpref="ground" data-val="${v}" aria-pressed="${cur===v}"><span class="cp-pv cp-gpv${v==="theme"?" cp-gpv-theme":""}" aria-hidden="true"${gp&&gp[0]!=="none"?` style="background:${esc(gp[0])} 0 0/${gp[1]} repeat, var(--ground)"`:""}></span><span>${esc(T("patterns.ground."+v,l))}</span></button>`; }).join("")}</div>`;
+}
 function setColor(id){ if(!THEMES.some(t=>t.id===id)) return; setPref("color",id); save(); applyPrefs(); render(); }
 function pop(btn,p){ p.hidden=!p.hidden; btn.setAttribute("aria-expanded",String(!p.hidden)); }
 $("#colorBtn").onclick=e=>{e.stopPropagation(); $("#pMenu").hidden=true; $("#profBtn").setAttribute("aria-expanded","false"); pop(e.currentTarget,$("#colorPop"));};
 $("#colorList").onclick=e=>{const b=e.target.closest("[data-color]"); if(b) setColor(b.dataset.color);};
 $("#colorPop").addEventListener("click",e=>{
- const t=e.target.closest("[data-cpt]"); if(t){ const m=t.dataset.cpt==="margins"; $("#cpColour").hidden=m; $("#cpMargins").hidden=!m; $("#colorPop").querySelectorAll("[data-cpt]").forEach(b=>b.setAttribute("aria-pressed",String(b===t))); return; }
+ const t=e.target.closest("[data-cpt]"); if(t){ const k=t.dataset.cpt; $("#cpColour").hidden=k!=="colour"; $("#cpMargins").hidden=k!=="margins"; $("#cpPatterns").hidden=k!=="patterns"; $("#colorPop").querySelectorAll("[data-cpt]").forEach(b=>b.setAttribute("aria-pressed",String(b===t))); return; }
  const b=e.target.closest("[data-mpref]"); if(b){ setPref(b.dataset.mpref,b.dataset.val); save(); applyPrefs(); render(); }
 });
 /* the menu under your picture: Muse, Notebook, your profile, Colour, Why Poiesis */
@@ -696,6 +723,14 @@ function menuShut(){ $("#pMenu").hidden=true; $("#profBtn").setAttribute("aria-e
 $("#profBtn").onclick=e=>{ e.stopPropagation(); $("#colorPop").hidden=true; pop(e.currentTarget,$("#pMenu")); };
 $("#profGo").onclick=()=>{ menuShut(); go("profile"); };
 $("#whyMenu").onclick=e=>{ e.preventDefault(); menuShut(); go("why"); };
+/* Round 26: tap the date ribbon and it drops to show the Poiesis mark; the mark opens Why Poiesis */
+const RB=$("#dateRibbon"), RBd=RB.querySelector(".dr-date"), RBm=RB.querySelector(".dr-mark");
+{ const ml=T("ribbon.mark","Why Poiesis"); RBm.setAttribute("aria-label",ml||"Why Poiesis"); if(ml) RBm.title=ml; }
+function ribbonUp(){ RB.classList.remove("down"); RBd.setAttribute("aria-expanded","false"); RBm.tabIndex=-1; }
+RBd.onclick=()=>{ const d=!RB.classList.contains("down"); menuShut(); $("#colorPop").hidden=true; RB.classList.toggle("down",d); RBd.setAttribute("aria-expanded",String(d)); RBm.tabIndex=d?0:-1; };
+RBm.onclick=e=>{ e.preventDefault(); ribbonUp(); go("why"); };
+document.addEventListener("click",e=>{ if(!e.composedPath().includes(RB)) ribbonUp(); },true);
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") ribbonUp(); });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ menuShut(); $("#colorPop").hidden=true; } });
 document.addEventListener("click",e=>{ const path=e.composedPath(); for(const p of [$("#colorPop"),$("#pMenu")]) if(!p.hidden&&!path.includes(p)) p.hidden=true;
  if(!e.target.closest(".bm")) document.querySelectorAll(".bmenu:not([hidden])").forEach(m=>m.hidden=true); });
