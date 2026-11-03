@@ -381,11 +381,11 @@ const SPACES={journal:"Journal", scrap:"Scrapbook", board:"Idea board"};
 const THEMES=[
  {"id":"dark","key":"color.dark.name","name":"dark mode","sw":["#1f160f","#faebc9","#2a2420","#8c3600","#e9dba7","#b88a5c"]},
  {"id":"rose","key":"color.rose.name","name":"rose","sw":["#952d3d","#faebc9","#3d1700","#632600","#e2b983","#b88a5c"],"tex":true},
- {"id":"forest","key":"color.forest.name","name":"forest","sw":["#202f19","#faebc9","#59221d","#59221d","#f4ceb8","#66463e"]},
  {"id":"monastery1","key":"color.monastery1.name","name":"Monastery 1","sw":["#3a1018","#f3e6c4","#2a1a10","#1f3f7a","#d9b45c","#8a5a2b"],"tex":true,"by":"Poiesis"},
  {"id":"monastery2","key":"color.monastery2.name","name":"Monastery 2","sw":["#22201e","#efe3c8","#2b2018","#a8321e","#f0b860","#6e5a44"],"tex":true,"by":"Poiesis"},
  {"id":"scroller","key":"color.scroller.name","name":"Refined Scroller","sw":["#121213","#1f1f21","#e9e7e3","#ff6719","#ff8a3d","#2c2c2f"],"edge":true,"by":"Poiesis"},
- {"id":"office","key":"color.office.name","name":"Modern office","sw":["#e4e5e7","#ffffff","#1c1d1f","#383b40","#d3d5d9","#9a9da3"],"edge":true,"by":"Poiesis"}];
+ {"id":"office","key":"color.office.name","name":"Modern office","sw":["#e4e5e7","#ffffff","#1c1d1f","#383b40","#d3d5d9","#9a9da3"],"edge":true,"by":"Poiesis"},
+ {"id":"forest","key":"color.forest.name","name":"forest","sw":["#202f19","#faebc9","#59221d","#59221d","#f4ceb8","#66463e"]}];
 const THEME_DEFAULT="dark";
 /* MARY THEMES END */
 const themeName=t=>T(t.key,t.name);
@@ -671,8 +671,8 @@ function applyPrefs(){
  R.setAttribute("data-dev",DEV()); R.setAttribute("data-density",u.density); R.setAttribute("data-gloss",u.gloss); R.setAttribute("data-psize",u.psize);
  const pick=t=>`<button type="button" class="thpick" data-color="${t.id}" aria-pressed="${t.id===C}"><span class="thname">${esc(themeName(t))}</span><span class="thstrip" aria-hidden="true">${t.sw.map(c=>`<span style="background:${c}"></span>`).join("")}</span></button>`;
  /* Mary's first, then the ones Poiesis made (29 Oct), under their own small heading */
- const own=THEMES.filter(t=>t.by), hd=T("color.house","Made for Poiesis");
- $("#colorList").innerHTML=THEMES.filter(t=>!t.by).map(pick).join("")+(own.length?`${hd?`<p class="thgroup">${esc(hd)}</p>`:""}${own.map(pick).join("")}`:"");
+ /* Round 30: one list, no groups */
+ $("#colorList").innerHTML=THEMES.map(pick).join("");
  $("#profBtn").innerHTML=avatarHTML(me());
  R.setAttribute("data-margin",U().margin||"vine"); R.setAttribute("data-spine",U().spine||"stitch");
  $("#cpMargins").innerHTML=marginsPaneHTML();
@@ -687,7 +687,8 @@ const MARGINS=[["vine","Climbing vine"],["ms","Manuscript"],["plain","Plain"]];
 const SPINES=[["stitch","Stitched"],["diamond","Diamonds"],["bands","Raised bands"]];
 function marginsPaneHTML(){ const u=U();
  const seg=(k,lab,opts)=>`<p class="cp-lab">${esc(T("margins."+k,lab))}</p><div class="cp-seg" role="group" aria-label="${esc(T("margins."+k,lab))}">${opts.map(([v,l])=>`<button type="button" data-mpref="${k}" data-val="${v}" aria-pressed="${(u[k]||opts[0][0])===v}"><span class="cp-pv cp-${k}-${v}" aria-hidden="true"></span><span>${esc(T(`margins.${k}.${v}`,l))}</span></button>`).join("")}</div>`;
- return seg("margin","Margin",MARGINS)+seg("spine","Spine",SPINES);
+ const wh=T("margins.where","On a desk, the margin runs up the right edge of the work and the spine sits between the work and your notepad. Phones show one page, without them.");
+ return `${wh?`<p class="cp-where">${esc(wh)}</p>`:""}`+seg("margin","Margin",MARGINS)+seg("spine","Spine",SPINES);
 }
 /* Round 26: Patterns, the third tab beside Colour and Margins: faint
    textures and patterns on the ground around the pages, drawn in the theme's
@@ -710,7 +711,8 @@ function groundPat(k,c){
  return [`url("data:image/svg+xml,${encodeURIComponent(svg)}")`, `${w}px ${h}px`];
 }
 function patternsPaneHTML(){ const u=U(), cur=GROUNDS.some(x=>x[0]===u.ground)?u.ground:"theme", ink=groundInk(), lab=T("patterns.ground","Background");
- return `${lab?`<p class="cp-lab">${esc(lab)}</p>`:""}<div class="cp-seg" role="group" aria-label="${esc(lab)}">${GROUNDS.map(([v,l])=>{ const gp=groundPat(v,ink);
+ const wh=T("patterns.where","Patterns sit on the background around the pages and cards, on every screen.");
+ return `${wh?`<p class="cp-where">${esc(wh)}</p>`:""}${lab?`<p class="cp-lab">${esc(lab)}</p>`:""}<div class="cp-seg" role="group" aria-label="${esc(lab)}">${GROUNDS.map(([v,l])=>{ const gp=groundPat(v,ink);
   return `<button type="button" data-mpref="ground" data-val="${v}" aria-pressed="${cur===v}"><span class="cp-pv cp-gpv${v==="theme"?" cp-gpv-theme":""}" aria-hidden="true"${gp&&gp[0]!=="none"?` style="background:${esc(gp[0])} 0 0/${gp[1]} repeat, var(--ground)"`:""}></span><span>${esc(T("patterns.ground."+v,l))}</span></button>`; }).join("")}</div>`;
 }
 function setColor(id){ if(!THEMES.some(t=>t.id===id)) return; setPref("color",id); save(); applyPrefs(); render(); }
@@ -724,7 +726,9 @@ $("#colorPop").addEventListener("click",e=>{
 /* the menu under your picture: Muse, Notebook, your profile, Colour, Why Poiesis */
 /* Round 28: your picture goes straight to your profile; the date ribbon is the menu */
 function menuShut(){ ribbonUp(); }
-$("#profBtn").onclick=e=>{ e.stopPropagation(); ribbonUp(); $("#colorPop").hidden=true; go("profile"); };
+$("#profBtn").onclick=e=>{ e.stopPropagation(); ribbonUp(); $("#colorPop").hidden=true; if(S.tab!=="profile") S.backTo=S.tab; go("profile"); };
+/* Round 30: back from the profile to where you were */
+document.addEventListener("click",e=>{ if(!e.target.closest("#pfBack")) return; const t=S.backTo&&S.backTo!=="profile"?S.backTo:"muse"; go(t); });
 /* Round 26: tap the date ribbon and it drops to show the Poiesis mark; the mark opens Why Poiesis */
 /* Round 28: it is also the menu: the mark (Why Poiesis), Muse, Notebook, and the palette (Colour) */
 const RB=$("#dateRibbon"), RBd=RB.querySelector(".dr-date"), RBm=RB.querySelector(".dr-markw"), RBmenu=$("#drMenu");
@@ -1352,6 +1356,7 @@ function maximHTML(){
    Scripture, the other works in a stack you move through with dots, "Start
    with…" or "Synthesise", and What others thought faded at the bottom: the
    same number of faded lines every day (never a count), nothing readable. */
+let HM_TURN=0;   /* Round 30: which way the top card turns after a dot, the corner or a swipe */
 function homeHTML(){
  const works=MUSES.filter(m=>m.kind!=="Scripture"), scr=MUSES.find(m=>m.kind==="Scripture"), n=works.length;
  let i=+S.hi||0; if(i<0||i>=n) i=0; const w=works[i];
@@ -1359,11 +1364,12 @@ function homeHTML(){
  const start=T("home.start."+w.kind,"Start with the "+low), or=T("home.or","or"), syn=T("home.synth","Synthesise");
  const oh=T("others.heading","What others thought"), ol=T("home.others.line","First, your own impression. Theirs open once you’ve written.");
  const cross=scr?`<button type="button" class="hm-cross" data-popen="${scr.id}" aria-label="${esc(scr.kind+": "+scr.title)}">${CROSS}<span>${esc(scr.title)}</span>${S.sealed[WK(scr.id)]?`<span class="hm-done" role="img" aria-label="${esc(T("phone.written","written"))}">✓</span>`:""}</button>`:"";
- const card=`<div class="hm-stack">${n>1?`<span class="hm-b1" aria-hidden="true"></span><span class="hm-b2" aria-hidden="true"></span>`:""}<button type="button" class="hm-card ph-row lk-parch" data-popen="${w.id}"><span class="hm-row"><span class="hm-k">${esc(w.kind)}</span>${n>1?`<span class="hm-n">${i+1} / ${n}</span>`:""}</span><b class="hm-t">${esc(w.title)}</b><span class="hm-by">${esc(w.maker)}${w.date?` · ${esc(w.date)}`:""}</span>${S.sealed[WK(w.id)]?`<span class="hm-done">✓ ${esc(T("phone.written","written"))}</span>`:""}</button></div>`;
+ const card=`<div class="hm-stack" data-n="${n}" data-i="${i}">${n>1?`<span class="hm-b1" aria-hidden="true"></span><span class="hm-b2" aria-hidden="true"></span>`:""}<button type="button" class="hm-card ph-row lk-parch${HM_TURN?` hm-turn${HM_TURN<0?" back":""}`:""}" data-popen="${w.id}"><span class="hm-row"><span class="hm-k">${esc(w.kind)}</span>${n>1?`<span class="hm-n">${i+1} / ${n}</span>`:""}</span><b class="hm-t">${esc(w.title)}</b><span class="hm-by">${esc(w.maker)}${w.date?` · ${esc(w.date)}`:""}</span>${S.sealed[WK(w.id)]?`<span class="hm-done">✓ ${esc(T("phone.written","written"))}</span>`:""}</button>${n>1?`<button type="button" class="hm-ear" data-hi="${(i+1)%n}" aria-label="${esc(T("home.next","Next work"))}" title="${esc(T("home.next","Next work"))}"></button>`:""}</div>`;
  const dots=n>1?`<div class="hm-dots"><button type="button" class="hm-ar" data-hi="${(i-1+n)%n}" aria-label="${esc(T("home.prev","Previous work"))}"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button>${works.map((x,k)=>`<button type="button" data-hi="${k}" aria-label="${esc(x.kind)}, ${k+1} / ${n}" aria-current="${k===i}"><span class="hm-d"></span></button>`).join("")}<button type="button" class="hm-ar" data-hi="${(i+1)%n}" aria-label="${esc(T("home.next","Next work"))}"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button></div>`:"";
  const acts=`<div class="hm-acts">${start?`<button type="button" class="hm-start" data-popen="${w.id}">${esc(start)}</button>`:""}${start&&syn&&or?`<span class="hm-or">${esc(or)}</span>`:""}${syn&&n+(scr?1:0)>1?`<button type="button" class="hm-synth ph-knot" data-side="whole">${CIRCLES}<span>${esc(syn)}</span></button>`:""}</div>`;
  const fw=[[92,80,64],[86,70],[95,88,72,40],[78,60]], fc=["#3d5d86","#6b4a7d","#2f5d50","#8a5a3b"];
  const others=`<section class="hm-others" aria-label="${esc(oh)}">${oh?`<h2>${esc(oh)}</h2>`:""}${ol?`<p>${esc(ol)}</p>`:""}<div class="hm-fade" aria-hidden="true">${fw.map((r,k)=>`<div class="hm-fl"><span style="background:${fc[k]}"></span><div>${r.map(x=>`<i style="width:${x}%"></i>`).join("")}</div></div>`).join("")}</div></section>`;
+ HM_TURN=0;
  return `<div class="hm-home">${nudgeHTML()}<div class="hm-head">${eb?`<p class="hm-eb">${esc(eb)}</p>`:""}<h1 class="hm-theme">${esc(DAY.theme)}</h1></div>${cross}${card}${dots}${acts}${others}</div>`;
 }
 function phoneHomeHTML(){
@@ -1394,10 +1400,16 @@ function renderMuse(v){
  /* Round 29: phones and desks open on the home page; Start (or a work, or the cross) opens the work page as before */
  if(!S.past&&S.phome!==false){
   v.innerHTML=`${homeHTML()}${synOverlay()}${keepAskHTML()}`;
+  /* Round 30: swipe the stack on a phone */
+  const st=v.querySelector(".hm-stack");
+  if(st&&+st.dataset.n>1){ let x0=null, y0=0;
+   st.addEventListener("touchstart",e=>{ x0=e.touches[0].clientX; y0=e.touches[0].clientY; },{passive:true});
+   st.addEventListener("touchend",e=>{ if(x0==null) return; const dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0; x0=null;
+    if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.3){ e.preventDefault(); const n=+st.dataset.n; S.hi=(+st.dataset.i+(dx<0?1:-1)+n)%n; HM_TURN=dx<0?1:-1; save(); render(); } },{passive:false}); }
   wireBoard(v);
   v.onclick=e=>{
    if(synClick(e)) return;
-   const hi=e.target.closest("[data-hi]"); if(hi){ S.hi=+hi.dataset.hi; save(); render(); return; }
+   const hi=e.target.closest("[data-hi]"); if(hi){ const was=+S.hi||0; S.hi=+hi.dataset.hi; HM_TURN=S.hi===was?0:(hi.classList.contains("hm-ar")&&hi===hi.parentElement.firstElementChild?-1:1); save(); render(); return; }
    const o=e.target.closest("[data-popen]"); if(o){ S.phome=false; goMuse(o.dataset.popen); return; }
    const sd=e.target.closest("[data-side]"); if(sd){ openSyn(sd.dataset.side); return; }
    if(e.target.matches("[data-synbg]")){ S.openSyn=null; save(); render(); return; }
@@ -1426,6 +1438,7 @@ function renderMuse(v){
  let body=`${lookHTML(m,{past, dateStr, reading, info, day})}${past?bottomTurnerM(m):""}${story}`;
  if(dev==="phone"&&!past){ const i=MUSES.indexOf(m), nx=MUSES[(i+1)%MUSES.length];
   body=`<div class="ph-bar"><button type="button" class="ph-back" data-act="phome">${T("phone.back","‹ Today")}</button><span class="ph-mini">${esc(DAY.theme)}</span></div>${body}<p class="ph-nextw"><button type="button" class="ph-back" data-mgo="${nx.id}">${T("phone.next","Next work ›")}</button></p>`; }
+
  v.innerHTML=`${body}${responsesHTML(m)}${infoLayer(m)}${synOverlay()}${keepAskHTML()}`;
  wireBoard(v); wireWriterM(m); if(u.gloss!=="none") applyGloss(v);
  v.onclick=e=>{
@@ -1496,8 +1509,10 @@ function paletteStudy(p){
 }
 function artFigure(p){
  const study=STUDY_SVG[p.study]?STUDY_SVG[p.study]():paletteStudy(p);
- const cs=p.placeholder?T("art.placeholder","Placeholder from the Art Wall · colour study"):T("art.study","Colour study · the painting itself comes next");
- return `<figure class="lk-art"><div class="lk-frame">${study}</div><figcaption class="lk-artlab"><b>${esc(p.title)}</b>${p.artist||p.date?`<span>${esc([p.artist,p.date].filter(Boolean).join(" · "))}</span>`:""}${p.medium||p.where?`<span>${esc([p.medium,p.where].filter(Boolean).join(" · "))}</span>`:""}${p.note?`<span class="lk-artnote">${esc(p.note)}</span>`:""}${cs?`<span class="lk-cs">${esc(cs)}</span>`:""}${p.link&&T("art.see","See the painting ↗")?`<a href="${esc(p.link)}" target="_blank" rel="noopener">${esc(T("art.see","See the painting ↗"))}</a>`:""}</figcaption></figure>`;
+ /* Round 30: the painting itself when there is one; the colour study if it can't load */
+ const cs=p.img?"":p.placeholder?T("art.placeholder","Placeholder from the Art Wall · colour study"):T("art.study","Colour study · the painting itself comes next");
+ const pic=p.img?`<img class="lk-img" src="${esc(p.img)}" alt="${esc(p.title)}${p.artist?`, ${esc(p.artist)}`:""}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.closest('.lk-art').classList.add('noimg')"><div class="lk-fallback">${study}</div>`:study;
+ return `<figure class="lk-art${p.img?" hasimg":""}"><div class="lk-frame">${pic}</div><figcaption class="lk-artlab"><b>${esc(p.title)}</b>${p.artist||p.date?`<span>${esc([p.artist,p.date].filter(Boolean).join(" · "))}</span>`:""}${p.medium||p.where?`<span>${esc([p.medium,p.where].filter(Boolean).join(" · "))}</span>`:""}${p.note?`<span class="lk-artnote">${esc(p.note)}</span>`:""}${cs?`<span class="lk-cs">${esc(cs)}</span>`:""}${p.link&&T("art.see","See the painting ↗")?`<a href="${esc(p.link)}" target="_blank" rel="noopener">${esc(T("art.see","See the painting ↗"))}</a>`:""}</figcaption></figure>`;
 }
 function artWorkHTML(m){ const ps=m.paintings||[];
  return `<div class="m-work lk-artwork">${ps.length>1?`<div class="lk-arts">${ps.map(artFigure).join("")}</div>`:ps.map(artFigure).join("")}</div>`; }
@@ -1557,7 +1572,8 @@ function lookHTML(m,o){
  const title=`<header class="lk-head"><p class="lk-kind">${esc(m.kind)}</p><div class="m-tl"><h2 class="mtitle lk-title">${esc(m.title)}</h2>${o.info}</div><p class="lk-by">${esc(m.maker)}${m.date?` · ${esc(m.date)}`:""}</p></header>`;
  const work=`<div class="m-wwrap">${workHTML(m,false)}</div>${m.kind==="Art"?"":noteHTML(m)}${cameHTML(m)}${ph?"":synGoHTML(m)}`;
  /* Round 27: on a phone, "Synthesise with" is its own card after your first impression */
- const goCard=ph&&!syn&&synGoHTML(m)?`<section class="lk-card lk-parch lk-gocard">${synGoHTML(m)}</section>`:"";
+ /* Round 30: on a phone, one Synthesise button instead of the list of works */
+ const goCard=ph&&!syn&&synGoHTML(m)?`<div class="lk-gobtn"><button type="button" class="hm-synth" data-mside="whole">${CIRCLES}<span>${esc(T("home.synth","Synthesise"))}</span></button></div>`:"";
  const write=`<div class="m-nb lk-write lk-card lk-parch${(S.drafts[WK(m.id)]||"").trim()||S.sealed[WK(m.id)]?" has":""}" id="writerBox">${writerInnerM(m,false)}${curlHTML(m)}</div>`;
  const date=dayOn?`<div class="lk-date">${esc(o.dateStr)}</div>`:"";
  const theme=dayOn?`<div class="lk-themewrap">${themeWithCross("lk-theme","h1")}</div>`:"";
@@ -1566,7 +1582,9 @@ function lookHTML(m,o){
  void date; void theme;
  const mg=syn?"":marginArtHTML(m), msArt=!syn&&m.kind==="Art"&&marginOf()==="ms";
  const page=`<article class="lk-page lk-text lk-parch${syn?" lk-synview":""}${mg?" has-mg":""}${msArt?" lk-ms-art":""}">${mg}${syn?synWorksHTML(syn):`${title}${work}`}</article>`;
- const top=`${past?"":nudgeHTML()}${past?"":tabsV2(m)}`;
+ /* Round 30: on a desk, "‹ Today" at the end of the tabs' row goes back to the home page */
+ const bk=!ph&&!past&&!S.past?T("phone.back","‹ Today"):"", back=bk?`<button type="button" class="ph-back lk-back" data-act="phome">${esc(bk)}</button>`:"";
+ const top=`${past?"":nudgeHTML()}${past?"":tabsV2(m).replace(/<\/nav>\s*$/, back+"</nav>")}`;
  /* desk: the box and, beside it, the column that stays in view; phone: in a
     synthesis the panel and notepad come straight after the tabs */
  const desk=ph&&syn?`<div class="lk-col">${top}<div class="lk-side">${side}</div>${page}</div>`
@@ -1945,7 +1963,8 @@ function addPin(o){ const id=addLine({text:o.text, who:o.cite||"", where:o.where
 const liveUser=()=>!!(window.PoiesisData&&window.PoiesisData.enabled&&window.PoiesisData.user);
 function ptabs(on){
  const tabs=[["you",T("profile.tab.you","Your profile")],...(liveUser()?[["members",T("profile.tab.members","Members")]]:[]),["settings",T("profile.tab.settings","Settings")]];
- return `<div class="viewt m-ptabs" role="tablist">${tabs.filter(t=>t[1]).map(([k,l])=>`<button data-ptab="${k}" aria-pressed="${on===k}">${l}</button>`).join("")}</div>`; }
+ const bk=T("profile.back","‹ Back");
+ return `${bk?`<p class="pf-backrow"><button type="button" class="ph-back pf-back" id="pfBack">${esc(bk)}</button></p>`:""}<div class="viewt m-ptabs" role="tablist">${tabs.filter(t=>t[1]).map(([k,l])=>`<button data-ptab="${k}" aria-pressed="${on===k}">${l}</button>`).join("")}</div>`; }
 const myHandle=()=>{ const m=window.PoiesisData&&window.PoiesisData.profile&&window.PoiesisData.profile.me(); return (m&&m.handle)||""; };
 const memberName=m=>m.display_name||(m.handle?"@"+m.handle:T("members.unnamed","A member"));
 function memberAv(m){ return avatarHTML({c:"var(--accent)", ink:"var(--on-accent)", initials:initials(m.display_name||m.handle||"?")||"?", photo:null, ring:RINGS[m.ring]?m.ring:"none"}); }

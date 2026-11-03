@@ -27,7 +27,7 @@ site.footer: A working sketch, 2026.
 # Her names exactly as she typed them.
 site.colors.title: Colour
 # Round 24 (2 Nov): the top bar is your picture (it opens this menu) and the date on a ribbon.
-menu.colour: Colour
+menu.colour: Style
 menu.profile: Your profile
 menu.why: Why Poiesis
 site.margins.title: Margins
@@ -63,6 +63,10 @@ home.synth: Synthesise
 home.others.line: First, your own impression. Theirs open once you’ve written.
 home.prev: Previous work
 home.next: Next work
+# Round 30: where margins and patterns appear (Colour › Margins, Patterns), and the profile's way back
+margins.where: On a desk, the margin runs up the right edge of the work and the spine sits between the work and your notepad. Phones show one page, without them.
+patterns.where: Patterns sit on the background around the pages and cards, on every screen.
+profile.back: ‹ Back
 color.dark.name: dark mode
 color.forest.name: forest
 color.rose.name: rose
@@ -79,7 +83,7 @@ color.office.name: Modern office
 color.scroller.name: Refined Scroller
 color.forum.name: Forum
 color.lamplight.name: Lamplight
-color.credit: Colours by Mary
+color.credit: 
 color.house: Made for Poiesis
 # the hint above Poem · Passage · Scripture, with arrows to the buttons and the ◇
 muse.hint: Synthesise, or comment on one
@@ -433,7 +437,7 @@ toast.pocket.caught: Caught. It will be on the desk.
 toast.storage: This browser is out of room for pictures. Your words are still here.
 
 # ACCOUNTS AND SAVING (only shown once config.js is filled in) ==========
-site.footer.live: A working sketch, 2026. Paintings appear as color studies.
+site.footer.live: A working sketch, 2026.
 sync.local: Your notebook is on this device only.
 sync.saved: Saved to your account.
 sync.saving: Saving…

@@ -2023,3 +2023,30 @@ html[data-mlook] .hm-synth, html[data-mlook] .hm-synth span{color:var(--on-groun
  .hm-acts{flex-direction:column; gap:6px}
 }
 .hm-synth span{width:auto; text-align:left; font-size:inherit}
+
+/* Round 30 (3 Nov): the painting itself (the colour study only if the image
+   can't load); Style's one list; where margins and patterns appear; a way
+   back on desks and from the profile; a dog-eared corner that turns the home
+   card; on a phone's work page one Synthesise button. */
+.lk-art .lk-img{display:block; width:100%; height:auto; max-height:72vh; object-fit:contain; background:#1a140f}
+.lk-art.hasimg .lk-fallback{display:none}
+.lk-art.noimg .lk-img{display:none}
+.lk-art.noimg .lk-fallback{display:block}
+.thgroup{display:none}
+.cp-where{margin:0 0 10px!important; font:400 .86rem/1.4 var(--f-body)!important; color:var(--on-surface)!important; opacity:.85; max-width:34ch}
+.lk-tabs .lk-back{margin-left:auto; align-self:center; white-space:nowrap}
+.lk-back, .pf-back{font-size:1.02rem; color:var(--muted-ground); cursor:pointer; padding:6px 0; min-height:36px}
+.lk-back:hover, .pf-back:hover{color:var(--on-ground)}
+.pf-backrow{margin:0 0 8px}
+.hm-ear{position:absolute; right:0; bottom:0; width:46px; height:46px; border:0; padding:0; cursor:pointer; z-index:2;
+ background:linear-gradient(135deg, color-mix(in srgb, var(--lk-paper) 70%, #6d4f28) 0 47%, color-mix(in srgb, var(--lk-paper) 55%, #3a2a16) 50%, var(--ground) 50.5%);
+ transition:width .18s ease, height .18s ease}
+.hm-ear:hover, .hm-ear:focus-visible{width:56px; height:56px}
+.hm-ear:focus-visible{outline:2px solid var(--ground-accent); outline-offset:2px}
+@keyframes hm-turn{from{transform:perspective(900px) rotateY(-16deg) translateX(18px); opacity:.35} to{transform:none; opacity:1}}
+@keyframes hm-turnb{from{transform:perspective(900px) rotateY(16deg) translateX(-18px); opacity:.35} to{transform:none; opacity:1}}
+.hm-card.hm-turn{animation:hm-turn .32s ease-out; transform-origin:left center}
+.hm-card.hm-turn.back{animation-name:hm-turnb; transform-origin:right center}
+@media (prefers-reduced-motion:reduce){ .hm-card.hm-turn{animation:none} .hm-ear{transition:none} }
+.hm-stack{touch-action:pan-y}
+.lk-gobtn{display:flex; justify-content:center; margin:18px 0 4px}
