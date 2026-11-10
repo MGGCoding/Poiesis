@@ -15,9 +15,10 @@
 
   const CFG = window.POIESIS_CONFIG || {};
   const APP = window.PoiesisApp;
-  const ON = !!(CFG.supabaseUrl && CFG.supabaseAnonKey && APP);
+  const ON = !!(CFG.supabaseUrl && CFG.supabaseAnonKey && APP) && !CFG.forum;  // forum: true hands sign-in to forum.js; no notebook is stored
   const SDK = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js";
   const SYNC_KEY = "poiesis.sync.v1";
+  const INVITE_KEY = "poiesis.invite";
   const PROVIDERS = Array.isArray(CFG.providers) ? CFG.providers : [];
   const T = (k, d) => (APP ? APP.T(k, d) : d);
 
@@ -137,6 +138,8 @@
    * ------------------------------------------------------------------ */
   let sb = null;         // the Supabase client
   let user = null;       // the signed-in person, or null
+  let member = null;     // true once they have joined (invite code); false until then; null = not known yet
+  let mine = null;       // their own profiles row (handle…)
   let shadow = null;     // what we last agreed with the server
   let timer = null, retryTimer = null, retryWait = 5000;
   let pushing = false, again = false, lastHidden = 0;
@@ -196,44 +199,133 @@
     }
     saveShadow();
     setStatus("saving");
-    if (S.profile && !S.profile.name && user.user_metadata && user.user_metadata.full_name) {
-      S.profile.name = user.user_metadata.full_name; APP.commit();
+    // Round 25: only members (people with an invite code) keep a notebook or write.
+    let ok = await checkMember();
+    if (ok === null) { setStatus("error"); return; }
+    if (!ok) {
+      const code = savedCode();
+      if (code) {
+        const r = await redeem(code);
+        if (r.ok) ok = true;
+        else { openSheet("invite"); sheet.querySelector(".authmsg").textContent = r.message; }
+      } else openSheet("invite");
     }
-    await pull();
+    if (!ok) { setStatus(); return; }
+    await enter();
+  }
+
+  // Signed in AND joined: bring the notebook in, send what's new, fetch their profile.
+  async function enter() {
+    const S = APP.state();
+    if (S.profile && !S.profile.name && user.user_metadata && (user.user_metadata.full_name || user.user_metadata.name)) {
+      S.profile.name = user.user_metadata.full_name || user.user_metadata.name; APP.commit();
+    }
+    const firstPull = !shadow.cursor;
+    const seen = (await pull()) || 0;
+    // A returning person on a new device: their own notebook came down, so the welcome page isn't needed.
+    if (firstPull && seen > 0 && APP.dropWelcome && APP.dropWelcome()) APP.commit();
+    await loadMine();
     await push();
     setStatus();
+    if (APP.state().tab === "profile") APP.commit();
   }
 
   function onSignedOut() {
+    member = null; mine = null;
     setStatus();
   }
+
+  async function checkMember() {
+    const { data, error } = await sb.rpc("is_member");
+    if (error) return null;
+    member = !!data;
+    return member;
+  }
+
+  const savedCode = () => { try { return localStorage.getItem(INVITE_KEY) || ""; } catch (e) { return ""; } };
+  const stashCode = (c) => { try { c = String(c || "").trim(); if (c) localStorage.setItem(INVITE_KEY, c); } catch (e) {} };
+
+  // Enter an invite code. { ok } or { ok:false, message }.
+  async function redeem(code) {
+    const { data, error } = await sb.rpc("redeem_invite", { p_code: String(code || "") });
+    if (error) return { ok: false, message: error.code === "54000" ? T("auth.invite.slow", "Too many tries. Wait a few minutes and try again.") : friendly(error) };
+    if (!data) return { ok: false, message: T("auth.invite.no", "That code didn’t work. Check it with whoever invited you.") };
+    member = true;
+    try { localStorage.removeItem(INVITE_KEY); } catch (e) {}
+    return { ok: true };
+  }
+
+  async function loadMine() {
+    const { data } = await sb.from("profiles").select("id,handle,display_name").eq("id", user.id).maybeSingle();
+    mine = data || mine;
+  }
+
+  /* What other members see of a profile. The page's own copy (name, line, bio, ring, badge,
+   * worn sticker, shelf…) is kept in step in the background, like the notebook. */
+  function mirrorPayload(S) {
+    const p = S.profile || {};
+    const owned = Object.keys(S.owned || {}).slice(0, 120);
+    const gilt = owned.filter((id) => S.owned[id] && S.owned[id].gilt);
+    const cut = (v, n) => String(v == null ? "" : v).slice(0, n);
+    return {
+      display_name: cut(p.name, 60), line: cut(p.line, 200), makes: cut(p.makes, 200),
+      bio: cut(p.bio, 500), ring: cut(p.ring, 24), badge: cut(p.badge, 40), top_sticker: cut(p.top, 80),
+      formed: (Array.isArray(p.formed) ? p.formed : []).slice(0, 12).map((x) => cut(x, 55)),
+      shelf: p.showShelf === false ? null : { owned, gilt },
+    };
+  }
+
+  const profile = {
+    me: () => mine,
+    async setHandle(raw) {
+      const h = String(raw || "").trim().replace(/^@/, "").toLowerCase();
+      if (h && !/^[a-z0-9_]{3,24}$/.test(h)) return { ok: false, message: T("profile.handle.bad", "Use 3 to 24 letters, numbers or _.") };
+      const { error } = await sb.from("profiles").update({ handle: h || null }).eq("id", user.id);
+      if (error) return { ok: false, message: error.code === "23505" ? T("profile.handle.taken", "That handle is taken.") : friendly(error) };
+      mine = Object.assign(mine || {}, { handle: h || null });
+      return { ok: true, handle: h };
+    },
+    // Everyone who has joined (the database only returns members to members).
+    async members() {
+      const { data, error } = await sb.from("profiles").select("id,display_name,handle,line,makes,badge,top_sticker,ring");
+      if (error) throw new Error(friendly(error));
+      return data || [];
+    },
+    async member(id) {
+      const { data, error } = await sb.from("profiles")
+        .select("id,display_name,handle,line,makes,bio,badge,top_sticker,ring,formed,shelf").eq("id", id).maybeSingle();
+      if (error) throw new Error(friendly(error));
+      return data;
+    },
+  };
 
   /* ------------------------------------------------------------------
    * Sync: bring in what changed elsewhere, send what changed here.
    * ------------------------------------------------------------------ */
 
   // Called by app.js after every save().
-  function changed() { if (user) flushSoon(1500); }
+  function changed() { if (user && member) flushSoon(1500); }
   function flushSoon(ms) {
     clearTimeout(timer);
     timer = setTimeout(push, ms);
   }
 
   async function pull() {
-    if (!user || !navigator.onLine) return;
+    if (!user || !member || !navigator.onLine) return 0;
     const first = !shadow.cursor;
     // Look back a few seconds past the cursor so nothing that committed
     // late is missed; applying a row twice is harmless.
     const since = shadow.cursor ? new Date(new Date(shadow.cursor).getTime() - 5000).toISOString() : null;
     const S = APP.state();
     const before = snapshot(S);
-    let applied = 0, cursor = shadow.cursor, from = 0;
+    let applied = 0, cursor = shadow.cursor, from = 0, seen = 0;
     for (;;) {
       let q = sb.from("notebook_items").select("kind,id,data,deleted,updated_at")
         .order("updated_at", { ascending: true }).range(from, from + 999);
       if (since) q = q.gt("updated_at", since);
       const { data, error } = await q;
-      if (error) { setStatus("error"); return; }
+      if (error) { setStatus("error"); return seen; }
+      seen += data.length;
       for (const row of data) {
         const key = row.kind + SEP + row.id;
         const local = before.get(key);
@@ -254,10 +346,11 @@
     shadow.cursor = cursor || new Date(0).toISOString();
     saveShadow();
     if (applied) APP.commit();
+    return seen;
   }
 
   async function push() {
-    if (!user) return;
+    if (!user || !member) return;
     if (!navigator.onLine) { setStatus("offline"); return; }
     if (pushing) { again = true; return; }
     pushing = true; again = false;
@@ -277,8 +370,14 @@
           done.push([key, null]);
         }
       });
-      if (!rows.length) { setStatus(); return; }
+      const mp = mirrorPayload(APP.state()), mh = hash(JSON.stringify(mp));
+      if (!rows.length && shadow.ph === mh) { setStatus(); return; }
       setStatus("saving");
+      if (shadow.ph !== mh) {
+        const { error } = await sb.from("profiles").update(mp).eq("id", user.id);
+        if (error) throw error;
+        shadow.ph = mh; saveShadow();
+      }
       for (let i = 0; i < rows.length; i += 100) {
         const { error } = await sb.from("notebook_items")
           .upsert(rows.slice(i, i + 100), { onConflict: "user_id,kind,id" });
@@ -436,6 +535,8 @@
     const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
     if (!user) {
       footerEl.innerHTML = `${esc(T("sync.local", "Your notebook is on this device only."))} <button class="linkbtn" data-auth="open">${esc(T("auth.cta", "Sign in to keep it"))}</button>`;
+    } else if (member === false) {
+      footerEl.innerHTML = `${esc(T("auth.invite.footer", "Waiting for your invite code."))} <button class="linkbtn" data-auth="invite">${esc(T("auth.invite.open", "Enter it"))}</button> · <button class="linkbtn" data-auth="out">${esc(T("auth.signout", "Sign out"))}</button>`;
     } else {
       const who = user.email || T("auth.you", "you");
       const line = state === "saving" ? T("sync.saving", "Saving…")
@@ -448,6 +549,7 @@
       const b = e.target.closest("[data-auth]");
       if (!b) return;
       if (b.dataset.auth === "open") openSheet();
+      if (b.dataset.auth === "invite") openSheet("invite");
       if (b.dataset.auth === "out") signOut();
     };
   }
@@ -466,15 +568,23 @@
     const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
     sheet = document.createElement("div");
     sheet.className = "authveil";
-    const newpass = mode === "newpass";
+    const newpass = mode === "newpass", invite = mode === "invite";
+    const title = newpass ? T("auth.newpass.title", "Choose a new password")
+      : invite ? T("auth.invite.title", "One more thing")
+      : T("auth.title", "Keep your notebook with you");
+    const line = newpass ? "" : invite ? T("auth.invite.line", "Poiesis is in a small beta. Enter the invite code you were given.")
+      : T("auth.line", "Sign in to write at the table and to find your notebook on any device.");
     sheet.innerHTML = `
       <div class="authcard" role="dialog" aria-modal="true" aria-labelledby="authTitle">
         <button class="authx" data-a="close" aria-label="${esc(T("auth.close", "Close"))}">×</button>
-        <h3 id="authTitle">${esc(newpass ? T("auth.newpass.title", "Choose a new password") : T("auth.title", "Keep your notebook with you"))}</h3>
-        <p class="authline">${esc(newpass ? "" : T("auth.line", "Sign in to write at the table and to find your notebook on any device."))}</p>
+        <h3 id="authTitle">${esc(title)}</h3>
+        <p class="authline">${esc(line)}</p>
         ${newpass ? `
         <label class="authlab">${esc(T("auth.password", "Password"))}<input type="password" id="authNew" autocomplete="new-password" minlength="8"></label>
-        <button class="btn primary authwide" data-a="setpass">${esc(T("auth.newpass.save", "Save password"))}</button>` : `
+        <button class="btn primary authwide" data-a="setpass">${esc(T("auth.newpass.save", "Save password"))}</button>` : invite ? `
+        <label class="authlab">${esc(T("auth.invite.label", "Invite code"))}<input id="authCode" autocomplete="off" autocapitalize="none" spellcheck="false" value="${esc(savedCode())}"></label>
+        <button class="btn primary authwide" data-a="redeem">${esc(T("auth.invite.go", "Come in"))}</button>
+        <button class="linkbtn" data-a="out">${esc(T("auth.invite.notyou", "Not you? Sign out"))}</button>` : `
         ${PROVIDERS.includes("google") ? `<button class="btn authwide" data-a="google">${esc(T("auth.google", "Continue with Google"))}</button>` : ""}
         ${PROVIDERS.includes("apple") ? `<button class="btn authwide" data-a="apple">${esc(T("auth.apple", "Continue with Apple"))}</button>` : ""}
         ${PROVIDERS.length ? `<div class="author"><span>${esc(T("auth.or", "or with your email"))}</span></div>` : ""}
@@ -490,13 +600,15 @@
           </div>
           <button class="linkbtn" data-a="forgot">${esc(T("auth.forgot", "Forgot your password?"))}</button>
         </div>
-        <button class="linkbtn" data-a="pwtoggle">${esc(T("auth.pw.toggle", "Use a password instead"))}</button>`}
+        <button class="linkbtn" data-a="pwtoggle">${esc(T("auth.pw.toggle", "Use a password instead"))}</button>
+        <label class="authlab authcode">${esc(T("auth.code.label", "New here? Your invite code"))}<input id="authCode" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="${esc(T("auth.code.placeholder", "Only the first time"))}" value="${esc(savedCode())}"></label>`}
         <p class="authmsg" role="status" aria-live="polite"></p>
       </div>`;
     document.body.appendChild(sheet);
     const $ = (s) => sheet.querySelector(s);
     const msg = (m) => ($(".authmsg").textContent = m || "");
     const email = () => ($("#authEmail") ? $("#authEmail").value.trim() : "");
+    const stash = () => stashCode($("#authCode") && $("#authCode").value);
     const busy = async (fn) => {
       sheet.querySelectorAll("button").forEach((b) => (b.disabled = true));
       try { await fn(); } catch (err) { msg(err.message || String(err)); }
@@ -508,6 +620,12 @@
       const b = e.target.closest("[data-a]"); if (!b) return;
       const a = b.dataset.a;
       if (a === "close") return closeSheet();
+      if (a === "out") { closeSheet(); return signOut(); }
+      if (a === "redeem") return busy(async () => {
+        const r = await redeem($("#authCode").value);
+        if (!r.ok) throw new Error(r.message);
+        closeSheet(); setStatus("saving"); await enter();
+      });
       if (a === "pwtoggle") {
         sheet.querySelectorAll(".authpw").forEach((x) => (x.hidden = !x.hidden));
         const pw = !sheet.querySelector(".authpw").hidden;
@@ -516,21 +634,25 @@
         return;
       }
       if (a === "google" || a === "apple") return busy(async () => {
+        stash();
         const { error } = await sb.auth.signInWithOAuth({ provider: a, options: { redirectTo: here() } });
         if (error) throw error;
       });
       if (a === "link") { if (!needEmail()) return; return busy(async () => {
+        stash();
         const { error } = await sb.auth.signInWithOtp({ email: email(), options: { emailRedirectTo: here() } });
         if (error) throw error;
         msg(T("auth.link.sent", "Check your email. The link signs you in on the device you open it on."));
       }); }
       if (a === "pwin") { if (!needEmail()) return; return busy(async () => {
+        stash();
         const { error } = await sb.auth.signInWithPassword({ email: email(), password: $("#authPw").value });
         if (error) throw new Error(T("auth.pw.wrong", "That email and password don’t match."));
       }); }
       if (a === "pwup") { if (!needEmail()) return; return busy(async () => {
         const pw = $("#authPw").value;
         if (pw.length < 8) throw new Error(T("auth.pw.short", "Use at least 8 characters."));
+        stash();
         const { data, error } = await sb.auth.signUp({ email: email(), password: pw, options: { emailRedirectTo: here() } });
         if (error) throw error;
         if (!data.session) msg(T("auth.confirm", "Check your email to confirm, then come back."));
@@ -550,9 +672,11 @@
     });
     sheet.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeSheet();
-      if (e.key === "Enter" && e.target.id === "authEmail" && !$('[data-a="link"]').hidden) $('[data-a="link"]').click();
+      if (e.key !== "Enter") return;
+      if (e.target.id === "authEmail" && $('[data-a="link"]') && !$('[data-a="link"]').hidden) $('[data-a="link"]').click();
+      if (e.target.id === "authCode" && invite) $('[data-a="redeem"]').click();
     });
-    const first = $("#authEmail") || $("#authNew");
+    const first = $("#authEmail") || $("#authNew") || $("#authCode");
     setTimeout(() => first && first.focus(), 30);
   }
 
@@ -565,6 +689,8 @@
     threads,
     signIn: () => openSheet(),
     signOut,
+    profile,
+    get member() { return member; },
     refresh: () => pull(),
     get user() { return user; },
   };

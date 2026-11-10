@@ -604,4 +604,42 @@ verse.button: The day’s verse
 verse.keep: keep it
 verse.kept: kept
 toast.verse.kept: Kept in your notebook.
+
+# ---------- The forum: the welcome page and sign-in (site/forum.js) ----------
+# The Notebook's cover while it waits
+notebook.soon: Will be added soon
+notebook.soon.line: Anything you already wrote here is kept on this device.
+# The welcome page
+forum.title: Poiesis
+forum.sub: A daily habit of inspiration.
+forum.walk.1.title: Each morning, four works arrive
+forum.walk.1.line: A reading from Scripture, a poem, a passage and a painting, gathered around one theme.
+forum.walk.2.title: Write your first impression
+forum.walk.2.line: One sentence is enough. You write before you read anyone else’s.
+forum.walk.3.title: Then the table opens
+forum.walk.3.line: See how the same work sang in others, and write back.
+forum.walk.4.title: Come back tomorrow
+forum.walk.4.line: A new theme every day. That is the whole habit.
+forum.look: Just look around first
+# The sign-in card
+forum.tab.create: Create account
+forum.tab.in: Sign in
+forum.email: Email
+forum.name: Username (what others see)
+forum.pw.new: Password (6 or more characters)
+forum.pw: Password
+forum.word: Beta word
+forum.letter.ask: Send me the daily letter when it begins
+forum.create.go: Come in
+forum.in.go: Sign in
+forum.link: Email me a sign-in link instead
+forum.name.title: Choose a username
+forum.name.line: This is the name others see beside what you write.
+forum.name.go: Come in
+# The line at the foot of the page, and the button over the conversation
+forum.foot.signin: Sign in to join the table
+forum.foot.letter.on: Daily letter: yes
+forum.foot.letter.off: Daily letter: no
+forum.foot.out: Sign out
+forum.refresh: ↻ Refresh
 `;

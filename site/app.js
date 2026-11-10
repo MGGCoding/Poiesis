@@ -752,6 +752,7 @@ function render(){
  $("#profBtn").setAttribute("aria-current",String(S.tab==="profile"));
  ({muse:renderMuse, notebook:renderNotebook, why:renderWhy, profile:renderProfile})[S.tab]($("#view"));
  pruneBlankControls($("#view"));
+ if(window.PoiesisForum) window.PoiesisForum.afterRender(); /* forum.js */
 }
 const HERO=`<section class="hero"><div><p class="eyebrow">${T("hero.eyebrow","Poiesis, a place to make things")}</p><h1>${T("hero.headline","Every made thing began as a thing ")}<em>${T("hero.headline.stressed","received")}</em>.</h1></div>
  <aside class="lexicon" aria-label="Definition of poiesis"><div><span class="hw">${T("lexicon.word","poiesis")}</span><span class="gr">${T("lexicon.greek","ποίησις")}</span></div><div class="pos">${T("lexicon.part","noun · from Greek ")}<i>${T("lexicon.root","poiein")}</i>, ${T("lexicon.rootgloss","“to make”")}</div>
@@ -884,6 +885,7 @@ function publishSyn(id){
  remember("journal",jid,`${T("link.page.title","Synthesis: ")}${synName(id)}`);
  ids.forEach(x=>Table.put({id:"t_"+WHO+"_"+id+"_"+WK(x), on:WK(x), by:WHO, name:S.profile.name||WHONAME, at:now, day:DAYK(), text:t, via:id}));
  S.synDrafts[WK(id)]=""; save(); render();
+ if(window.PoiesisForum) setTimeout(()=>window.PoiesisForum.wrote(),0); /* forum.js */
  toast(fresh.length?`${T("toast.link.counts","Your link is your first impression on the ")}${andList(fresh.map(x=>MUSE[x].kind.toLowerCase()))}.`:`${T("toast.link.published","Published under the ")}${andList(ids.map(x=>MUSE[x].kind.toLowerCase()))}.`);
  setTimeout(()=>$("#synbox")?.scrollIntoView({behavior:reduce?"auto":"smooth", block:"center"}),60);
 }
@@ -983,7 +985,7 @@ function postHTML(p, m, mine, closed){
  const topTip=top?(mine?`${STICKERS[top].series} · ${STICKERS[top].name}`:`${STICKERS[top].name} · ${p.name.split(" ")[0]} collected this ${GOT[p.name]||"earlier"}`):"";
  const badge=mine?S.profile.badge:(P?P.badge:"");
  const role=mine?[S.profile.line,S.profile.makes].filter(Boolean).join(" · "):(P?P.role:T("post.alsohere","Also writing in this browser"));
- const reps=[...(p.replies||[]), ...(S.replies[WK(p.id)]||[])];
+ const reps=[...(p.replies||[]), ...(window.PoiesisForum?window.PoiesisForum.repliesFor(p.id):[]), ...(S.replies[WK(p.id)]||[])];
  const shown=closed?reps.slice(0,3):reps;
  return `<article class="post" data-p="${p.id}" data-m="${m.id}"${p.linkOf?` data-syn="1" data-link="${p.linkOf}"`:""}>
   <div class="who">${mine?avatarHTML(me()):personAv(p.name)}<div><b>${mine?esc(S.profile.name||"You"):esc(p.name)}</b> ${top?stickerHTML(top,20,topTip):""} ${badge?`<span class="badge">${esc(badge)}</span>`:""} ${P?'<span class="sample">sample</span>':""}${role?`<small>${esc(role)}</small>`:""}</div></div>
@@ -1620,7 +1622,7 @@ function wireWriterM(m){
    const q=d.parentElement.querySelector(".m-nbhead"); if(q&&U().prompt==="focus") q.classList.toggle("dim", d.value.length>0);
    if(U().reveal==="ink"){ const a=revealAmt(m.id); document.querySelectorAll(`.m-stk[data-sid="${m.id}"] .full`).forEach(el=>el.style.opacity=a); } }; }
  const f=$("#laterF"); if(f) f.onsubmit=e=>{ e.preventDefault(); const t=$("#layerIn").value.trim(); if(!t) return; const s=S.sealed[WK(m.id)];
-  (S.replies[WK("me_"+m.id)]=S.replies[WK("me_"+m.id)]||[]).push({n:"You", t, w:when(Date.now())});
+  (S.replies[WK("me_"+m.id)]=S.replies[WK("me_"+m.id)]||[]).push({n:"You", t, w:when(Date.now())}); if(window.PoiesisForum) window.PoiesisForum.replied("me_"+m.id,t);
   const j=S.journal.find(x=>x.id===s.jid); if(j) j.body+=`\n\nLater: ${t}`; save(); render(); toast(T("toast.later.added","Added under your impression.")); };
 }
 
@@ -1675,7 +1677,7 @@ function wireWriter(m){
  const d=$("#draft");
  if(d){ autogrow(d); d.oninput=()=>{ S.drafts[WK(m.id)]=d.value; save(); autogrow(d); const b=document.querySelector('[data-act="seal"]'); if(b) b.disabled=!d.value.trim(); }; }
  const f=$("#laterF"); if(f) f.onsubmit=e=>{ e.preventDefault(); const t=$("#layerIn").value.trim(); if(!t) return; const s=S.sealed[WK(m.id)];
-  (S.replies[WK("me_"+m.id)]=S.replies[WK("me_"+m.id)]||[]).push({n:"You", t, w:when(Date.now())});
+  (S.replies[WK("me_"+m.id)]=S.replies[WK("me_"+m.id)]||[]).push({n:"You", t, w:when(Date.now())}); if(window.PoiesisForum) window.PoiesisForum.replied("me_"+m.id,t);
   const j=S.journal.find(x=>x.id===s.jid); if(j) j.body+=`\n\nLater: ${t}`; save(); render(); toast(T("toast.later.added","Added under your impression.")); };
 }
 function seal(m){
@@ -1686,6 +1688,7 @@ function seal(m){
  S.journal.unshift({id:jid, date:today(), title:`First impression: ${m.maker}`, lines:[], q:null, muse:m.id, body:t}); remember("journal",jid,`First impression: ${m.maker}`);
  S.drafts[WK(m.id)]=""; const all=MUSES.every(x=>S.sealed[WK(x.id)]);
  Table.put({id:"t_"+WHO+"_"+WK(m.id), on:WK(m.id), by:WHO, name:S.profile.name||WHONAME, at:Date.now(), day:DAYK(), text:t});
+ if(window.PoiesisForum) setTimeout(()=>window.PoiesisForum.wrote(),0); /* forum.js */
  const kp=keptPage(m.id); if(kp){ const pg=S.journal.find(j=>j.id===kp); if(pg) pg.body=workPageBody(m, S.sealed[WK(m.id)]); }
  const drew=drawSticker(m.id); if(drew) setCheck(drew); S.keepAsk=drew?m.id:null; save(); render();
  toast(all?(MUSES.length>3?T("toast.all.four","All four, written."):"All three. The knot after the painting is open, and the day’s word is uncovered."):drew?`You drew ${STICKERS[drew].name}.`:"Kept. Here’s how it sang in others.");
@@ -1701,7 +1704,7 @@ function postAction(b){
  if(k==="like"){ S.likes[pid]=!S.likes[pid]; save(); b.setAttribute("aria-pressed",String(!!S.likes[pid])); b.textContent=S.likes[pid]?T("post.moved.on","♥ Moved me"):T("post.moved.off","♡ Moved me"); if(S.likes[pid]) toast(`${p.name.split(" ")[0]}${T("toast.moved"," will see that it moved you. Nobody else will.")}`); }
  if(k==="bm"){ const menu=art.querySelector(".bmenu"), was=menu.hidden; document.querySelectorAll(".bmenu").forEach(x=>x.hidden=true); menu.hidden=!was; b.setAttribute("aria-expanded",String(was)); }
  if(k==="reply"){ const slot=art.querySelector(".slot2"); slot.innerHTML=`<form class="cform"><input class="field" id="cIn" aria-label="Write back" placeholder="${p.mine?T("post.reply.mine.placeholder","Add another thought"):T("post.reply.placeholder","Say what it stirred in you")}"><button class="btn primary">${T("post.reply.send","Send")}</button></form>`; $("#cIn").focus();
-  slot.querySelector("form").onsubmit=e=>{ e.preventDefault(); const t=$("#cIn").value.trim(); if(!t) return; (S.replies[WK(pid)]=S.replies[WK(pid)]||[]).push({n:"You", t, w:when(Date.now())}); save(); render(); }; }
+  slot.querySelector("form").onsubmit=e=>{ e.preventDefault(); const t=$("#cIn").value.trim(); if(!t) return; (S.replies[WK(pid)]=S.replies[WK(pid)]||[]).push({n:"You", t, w:when(Date.now())}); save(); render(); if(window.PoiesisForum) window.PoiesisForum.replied(pid,t); }; }
  if(k==="save"){ const to=b.dataset.to, txt=p.later?.poem||p.later?.text||p.first;
   const lid=addLine({text:txt, who:p.name, where:MUSE[mid]?`beside ${MUSE[mid].maker}`:"", from:"muse", muse:MUSE[mid]?mid:null});
   if(to==="page"){ newPage([lid]); toast(T("toast.page.under","A page is open under it in your notebook.")); }
@@ -1880,6 +1883,7 @@ function pocketHTML(){
   <details class="nb-resting" style="margin-top:18px"><summary>${T("pocket.desk.summary","The rest of the notebook lives on the desk")}</summary><p class="muted" style="font-size:.88rem;margin:8px 0 0">${T("pocket.desk.line","Pages, the board, your questions and the index are all there. This is on purpose: the phone catches, the desk works.")}</p></details></div>`;
 }
 function renderNotebook(v){
+ if((window.POIESIS_CONFIG||{}).notebookSoon){ v.innerHTML=`<section class="nb-soon"><div class="nb-soon-card"><h2>${esc(T("notebook.soon","Will be added soon"))}</h2><p>${esc(T("notebook.soon.line","Anything you already wrote here is kept on this device."))}</p></div></section>`; return; }
  if(DEV()==="phone"){ v.innerHTML=pocketHTML(); wireNotebook(v); return; }
  const way=S.nb.way||"page";
  v.innerHTML=`<div class="nb-bar"><div class="spaces" role="tablist">${WAYS.map(([k,l])=>`<button role="tab" data-nbway="${k}" aria-selected="${way===k}">${l}</button>`).join("")}</div></div>
@@ -2180,6 +2184,7 @@ function headerInit(){ editorInit(); testerInit(); }
 if(document.readyState==="complete") headerInit(); else window.addEventListener("load", headerInit);
 
 window.PoiesisApp={ T, toast, today, state:()=>S,
+ forum:{ Table, TABLE_KEY, DAYK, WK, when, synSubjects, cur:()=>curMuse().id }, /* forum.js */
  // New data arrived from the account: keep it, and redraw unless someone is mid-sentence.
  commit(){ save(true); applyPrefs(); if(typing()){ renderLater=true; return; } render(); },
  // Start this device's copy afresh (signing out, or another person signing in). Display settings stay.

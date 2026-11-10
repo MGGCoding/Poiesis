@@ -2050,3 +2050,38 @@ html[data-mlook] .hm-synth, html[data-mlook] .hm-synth span{color:var(--on-groun
 @media (prefers-reduced-motion:reduce){ .hm-card.hm-turn{animation:none} .hm-ear{transition:none} }
 .hm-stack{touch-action:pan-y}
 .lk-gobtn{display:flex; justify-content:center; margin:18px 0 4px}
+
+/* ---------- Forum v1 (10 Nov 2026): the welcome page, the Refresh button, the waiting Notebook ---------- */
+html.fgate-open{overflow:hidden}
+.fgate{position:fixed; inset:0; z-index:70; overflow:auto; background:var(--ground); color:var(--on-ground, var(--on-surface)); padding:env(safe-area-inset-top,0px) 16px 32px}
+.fpage{width:min(880px,100%); margin:0 auto; padding-top:28px; display:grid; grid-template-columns:1fr; gap:22px}
+.fhead{text-align:center}
+.fmark{width:64px; height:64px; object-fit:contain; display:block; margin:0 auto 8px; background:#faebc9; border-radius:50%; padding:9px; box-shadow:var(--shadow)}
+.fhead h1{font-family:var(--f-display); font-size:2.1rem; margin:0; font-weight:500}
+.fsub{margin:4px 0 0; font-style:italic; opacity:.8}
+.fwalk{list-style:none; margin:0; padding:0; display:grid; gap:10px; align-self:start; align-content:start}
+.fwalk li{background:var(--card); color:var(--card-ink); border:1px solid var(--line); border-radius:3px; box-shadow:var(--shadow); padding:12px 14px 13px 46px; position:relative; display:flex; flex-direction:column; gap:2px; font-size:.93rem; line-height:1.4}
+.fwalk li:nth-child(odd){transform:rotate(-.35deg)} .fwalk li:nth-child(even){transform:rotate(.3deg)}
+.fwalk b{font-family:var(--f-display); font-size:1.08rem; font-weight:500}
+.fnum{position:absolute; left:13px; top:12px; width:22px; height:22px; border:1px solid currentColor; border-radius:50%; display:grid; place-items:center; font-size:.8rem; opacity:.7}
+.fcard{background:var(--card); color:var(--card-ink); border:1px solid var(--line); border-radius:4px; box-shadow:var(--shadow); padding:18px 18px 12px; display:flex; flex-direction:column; gap:12px; align-self:start}
+.fcard form{display:flex; flex-direction:column; gap:11px}
+.fcard h3{font-family:var(--f-display); font-size:1.25rem; margin:0}
+.fcard .authlab input{background:rgba(255,255,255,.6); color:var(--card-ink); border-color:rgba(0,0,0,.28)}
+.fcard .authlab input:focus{outline:2px solid var(--accent); outline-offset:1px}
+.fline{margin:-6px 0 0; font-size:.9rem; opacity:.8}
+.ftabs{display:flex; gap:4px; border-bottom:1px solid var(--line)}
+.ftabs button{flex:1; background:none; border:0; border-bottom:2px solid transparent; padding:8px 4px; font:inherit; color:inherit; opacity:.6; cursor:pointer}
+.ftabs button[aria-selected="true"]{opacity:1; border-bottom-color:var(--accent)}
+.fcheck{display:flex; gap:8px; align-items:flex-start; font-size:.88rem; line-height:1.35}
+.fcheck input{margin-top:3px; width:16px; height:16px; flex:none}
+.flook{justify-self:center; font-size:.88rem; opacity:.75; padding:6px}
+.forum-refresh{margin-left:10px; vertical-align:middle; font-family:inherit; font-weight:400}
+@media (min-width:760px){
+  .fpage{grid-template-columns:1fr 360px; column-gap:34px; padding-top:48px}
+  .fhead,.flook{grid-column:1 / -1}
+}
+.nb-soon{min-height:52vh; display:grid; place-items:center; padding:24px 0}
+.nb-soon-card{background:var(--card); color:var(--card-ink); border:1px solid var(--line); border-radius:3px; box-shadow:var(--shadow); padding:30px 34px; text-align:center; transform:rotate(-.6deg); max-width:340px}
+.nb-soon-card h2{font-family:var(--f-display); font-weight:500; font-size:1.5rem; margin:0 0 6px}
+.nb-soon-card p{margin:0; font-size:.9rem; opacity:.75}
