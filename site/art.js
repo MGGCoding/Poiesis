@@ -16,6 +16,7 @@
  */
 /* Round 30 (3 Nov): "img" is the painting itself, taken from the Art Wall
    (Wikimedia Commons, public domain); the colour study shows if it fails to load. */
+/* 15–19 Nov (15 Nov): the art chat's picks, one a day, chosen for Niko; cards in muse-bank/art/. */
 window.POIESIS_ART = {
   "2026-11-01": { paintings: [
     { title: "The Voyage of Life: Old Age", img: "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4e/Thomas_Cole_-_The_Voyage_of_Life_Old_Age%2C_1842_%28National_Gallery_of_Art%29.jpg/960px-Thomas_Cole_-_The_Voyage_of_Life_Old_Age%2C_1842_%28National_Gallery_of_Art%29.jpg", artist: "Thomas Cole", date: "1842",
@@ -50,5 +51,40 @@ window.POIESIS_ART = {
       note: "A man finds the woman he loved, collapsed against a wall at dawn. Rossetti never finished it.",
       link: "https://en.wikipedia.org/wiki/Found_(Rossetti)", placeholder: true,
       palette: ["#c9c2b4", "#7a4a3a", "#3f4a52"] }
+  ]},
+  "2026-11-15": { paintings: [
+    { title: "The Good Samaritan (after Delacroix)", img: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b1/Vincent_van_Gogh_-_The_Good_Samaritan%2C_1890_-_Google_Art_Project.jpg/960px-Vincent_van_Gogh_-_The_Good_Samaritan%2C_1890_-_Google_Art_Project.jpg", artist: "Vincent van Gogh", date: "1890",
+      medium: "Oil on canvas", where: "Kröller-Müller Museum, Otterlo",
+      note: "Heaving a stranger onto his own horse; two figures walk away down the road.",
+      link: "https://commons.wikimedia.org/wiki/File:Vincent_van_Gogh_-_The_Good_Samaritan,_1890_-_Google_Art_Project.jpg",
+      palette: ["#d9c56a", "#3f6f8f", "#b5532e"] }
+  ]},
+  "2026-11-16": { paintings: [
+    { title: "The Calling of Saint Matthew", img: "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/59/Caravaggio_%E2%80%94_The_Calling_of_Saint_Matthew.jpg/960px-Caravaggio_%E2%80%94_The_Calling_of_Saint_Matthew.jpg", artist: "Caravaggio", date: "1599–1600",
+      medium: "Oil on canvas", where: "Contarelli Chapel, San Luigi dei Francesi, Rome",
+      note: "A hand points across a counting table. One man hasn't looked up.",
+      link: "https://en.wikipedia.org/wiki/The_Calling_of_Saint_Matthew",
+      palette: ["#2a211a", "#b9894a", "#7a2e22"] }
+  ]},
+  "2026-11-17": { paintings: [
+    { title: "Zacchaeus in the Sycamore Awaiting the Passage of Jesus", img: "https://upload.wikimedia.org/wikipedia/commons/e/e2/Brooklyn_Museum_-_Zacchaeus_in_the_Sycamore_Awaiting_the_Passage_of_Jesus_%28Zach%C3%A9e_sur_le_sycomore_attendant_le_passage_de_J%C3%A9sus%29_-_James_Tissot.jpg", artist: "James Tissot", date: "1886–96",
+      medium: "Opaque watercolour over graphite", where: "Brooklyn Museum, New York",
+      note: "A rich man up a tree like a boy, waiting to get a look.",
+      link: "https://commons.wikimedia.org/w/index.php?title=Special:MediaSearch&type=image&search=Tissot%20Zacchaeus%20in%20the%20sycamore",
+      palette: ["#cdbf9c", "#6f7f4f", "#8a5a3c"] }
+  ]},
+  "2026-11-18": { paintings: [
+    { title: "The Parable of the Talents (or Minas)", img: "https://commons.wikimedia.org/wiki/Special:FilePath/Willem_de_Poorter%27s_The_Parable_of_The_Talents_or_Minas.png?width=960", artist: "Willem de Poorter", date: "17th century (c. 1630s)",
+      medium: "Oil on panel, 45 × 55 cm", where: "National Gallery Prague",
+      note: "A servant gives his account of the coin he kept safe.",
+      link: "https://commons.wikimedia.org/wiki/File:Willem_de_Poorter%27s_The_Parable_of_The_Talents_or_Minas.png",
+      palette: ["#3a2e22", "#b08a4e", "#d8cdb4"] }
+  ]},
+  "2026-11-19": { paintings: [
+    { title: "The Parable of the Unjust Steward", img: "https://commons.wikimedia.org/wiki/Special:FilePath/Parable_of_the_Unjust_Steward_Marinus_van_Reymerswaele.jpg?width=960", artist: "Marinus van Reymerswaele", date: "c. 1540",
+      medium: "Oil on oak panel, 77 × 96.5 cm", where: "Kunsthistorisches Museum, Vienna (Gemäldegalerie, inv. 962)",
+      note: "A steward before his master, the books between them.",
+      link: "https://www.khm.at/en/artworks/gleichnis-vom-untreuen-verwalter-1536",
+      palette: ["#7a2b24", "#c8b48a", "#2f3a36"] }
   ]}
 };
