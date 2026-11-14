@@ -94,6 +94,7 @@
     closeGate(); setStatus();
     await sendMine();
     await refresh();
+    syncSaves();
   }
   function onSignedOut() { me = null; cache.mine = {}; cache.replies = {}; writeTable(DAYK(), []); setStatus(); render(); if (!looking()) openGate(); }
 
@@ -353,6 +354,65 @@
     } catch (x) { done(friendly(x)); }
   }
 
-  window.PoiesisForum = { wrote, replied, repliesFor, afterRender, refresh, get user() { return user; }, get username() { return me && me.username; } };
+  /* ------------------------------------------------ notebook saves (supabase/notebook-saves-v1.sql)
+     Kept lines (S.lines) and kept writing (S.saved) follow the account; pages, questions and drafts stay on
+     the device. Only adding and removing travel: where a card sits on the board is each device's own.
+     "Known" is the list of saves this device has seen on the account, so a removal can be told from a new save. */
+  const SAMPLE = /^l[1-6]$/;                  // the prototype's example lines never go to an account
+  const isDate = (d) => /^\d{4}-\d{2}-\d{2}$/.test(d || "");
+  const knownKey = () => "poiesis.saves.known." + user.id;
+  const getKnown = () => { try { return new Set(JSON.parse(localStorage.getItem(knownKey()) || "[]")); } catch (e) { return new Set(); } };
+  const setKnown = (set) => { try { localStorage.setItem(knownKey(), JSON.stringify([...set])); } catch (e) {} };
+  let savesBusy = false, savesAgain = false, savesTimer = null, savesOff = false;
+  function localSaves() {
+    const out = new Map(), cut = (s, n) => String(s || "").slice(0, n);
+    (S.lines || []).forEach((l) => { if (l && l.id && !SAMPLE.test(l.id) && String(l.text || "").trim())
+      out.set(String(l.id), { client_id: cut(l.id, 64), kind: "line", body: cut(l.text, 4000), who: cut(l.who, 200), source: cut(l.where, 300), day: isDate(l.date) ? l.date : null, meta: { from: l.from || "you", muse: l.muse || null } }); });
+    (S.saved || []).forEach((s) => { if (s && s.id && String(s.text || "").trim())
+      out.set(String(s.id), { client_id: cut(s.id, 64), kind: "post", body: cut(s.text, 4000), who: cut(s.who, 200), source: cut(s.where, 300), day: isDate(s.date) ? s.date : null, meta: { key: cut(s.key, 300), pkind: s.pkind || "impression", muse: s.muse || null, post: cut(s.post, 80) } }); });
+    return out;
+  }
+  function addLocal(r) {
+    const m = r.meta || {};
+    if (r.kind === "line") S.lines.unshift({ id: r.client_id, text: r.body, who: r.who || "", where: r.source || "", date: r.day || today(), from: m.from || "you", muse: m.muse || null, x: 8 + Math.random() * 60, y: 8 + Math.random() * 58, r: (Math.random() * 6 - 3).toFixed(1) });
+    else { if (!S.saved) S.saved = []; S.saved.unshift({ id: r.client_id, key: m.key || "s:" + r.client_id, text: r.body, who: r.who || "", where: r.source || "", date: r.day || today(), pkind: m.pkind || "impression", muse: m.muse || null, post: m.post || null }); }
+  }
+  async function syncSaves() {
+    if (!sb || !user || !me || !me.username || savesOff) return;
+    if (savesBusy) { savesAgain = true; return; }
+    savesBusy = true;
+    try {
+      const { data, error } = await sb.from("saves").select("client_id,kind,body,who,source,day,meta").order("created_at").limit(5000);
+      if (error) { if (/PGRST205|42P01|schema cache|does not exist/i.test((error.code || "") + " " + (error.message || ""))) savesOff = true; return; }   // the table is not there yet: stay on the device
+      const server = new Map((data || []).map((r) => [r.client_id, r]));
+      const local = localSaves(), known = getKnown();
+      const wiped = server.size === 0 && known.size > 0;      // the table was emptied: send everything again, remove nothing
+      const up = [], gone = [], drop = new Set(); let changed = false;
+      local.forEach((row, id) => { if (!server.has(id)) { if (known.has(id) && !wiped) drop.add(id); else up.push(row); } });
+      server.forEach((row, id) => { if (!local.has(id)) { if (known.has(id)) gone.push(id); else { addLocal(row); changed = true; } } });
+      if (drop.size) {                                          // taken out on another device
+        S.lines = (S.lines || []).filter((l) => !drop.has(String(l.id)));
+        S.saved = (S.saved || []).filter((s) => !drop.has(String(s.id)));
+        changed = true;
+      }
+      const now = new Set([...server.keys()].filter((id) => !gone.includes(id)));
+      for (let i = 0; i < up.length; i += 200) {
+        const part = up.slice(i, i + 200);
+        const r = await sb.from("saves").insert(part);
+        if (!r.error || r.error.code === "23505") part.forEach((x) => now.add(x.client_id));
+      }
+      for (let i = 0; i < gone.length; i += 200) {
+        const part = gone.slice(i, i + 200);
+        const r = await sb.from("saves").delete().in("client_id", part);
+        if (r.error) part.forEach((id) => now.add(id));       // try again next time
+      }
+      setKnown(now);
+      if (changed) APP.commit();
+    } catch (e) { /* offline: the device keeps everything; next change tries again */ }
+    finally { savesBusy = false; if (savesAgain) { savesAgain = false; changed(); } }
+  }
+  function changed() { if (!user || savesOff) return; clearTimeout(savesTimer); savesTimer = setTimeout(syncSaves, 1500); }
+
+  window.PoiesisForum = { wrote, replied, repliesFor, afterRender, refresh, changed, syncSaves, get user() { return user; }, get username() { return me && me.username; } };
   start();
 })();

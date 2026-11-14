@@ -2085,3 +2085,173 @@ html.fgate-open{overflow:hidden}
 .nb-soon-card{background:var(--card); color:var(--card-ink); border:1px solid var(--line); border-radius:3px; box-shadow:var(--shadow); padding:30px 34px; text-align:center; transform:rotate(-.6deg); max-width:340px}
 .nb-soon-card h2{font-family:var(--f-display); font-weight:500; font-size:1.5rem; margin:0 0 6px}
 .nb-soon-card p{margin:0; font-size:.9rem; opacity:.75}
+
+/* ---------- Notebook saves v1 (10 Nov 2026): Save on posts and replies, Kept writing ---------- */
+.btn.keepb[aria-pressed="true"]{border-color:var(--accent); color:var(--accent)}
+.cm-keep{background:none; border:0; padding:0 0 0 6px; font-family:var(--f-type); font-size:.6rem; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); cursor:pointer; min-height:24px}
+.cm-keep[aria-pressed="true"]{color:var(--accent)}
+.nb-kept-h{font-family:var(--f-display); font-weight:500; font-size:1.25rem; margin:0 0 12px}
+.nb-kept{position:relative; background:var(--card); color:var(--card-ink); border:1px solid var(--line); border-radius:3px; box-shadow:var(--shadow); padding:12px 14px 10px; margin:0 0 12px; max-width:640px}
+.nb-kept small{display:block; font-size:.6rem; letter-spacing:.05em; text-transform:uppercase; opacity:.7; margin-bottom:6px; padding-right:70px}
+.nb-kept-t{font-family:var(--f-display); font-size:1rem; line-height:1.45; white-space:pre-wrap; overflow-wrap:anywhere}
+.nb-kept-x{position:absolute; top:6px; right:8px; background:none; border:0; color:inherit; opacity:.6; font-family:var(--f-type); font-size:.6rem; letter-spacing:.05em; text-transform:uppercase; cursor:pointer; min-height:28px}
+.nb-kept-pocket{margin-top:18px}
+
+/* ================= Round 31 (14 Nov): the notebook look =================
+   Light ruled paper, one accent, a plain sans for the frame. Four styles:
+   Notebook (the default), Evening, Garden, Terracotta. Everything below
+   overrides the Manuscript layers above; nothing above was removed. */
+html[data-color="notebook"]{
+  --ground:#ECE7DB; --on-ground:#25221D; --muted-ground:#5F594D;
+  --surface:#F6F2E8; --on-surface:#25221D; --muted:#5F594D; --line:#D8D1C1;
+  --card:#FCFAF3; --card-ink:#25221D; --card-rule:#D5DDE4; --card-margin:#DE9C92;
+  --board:#DDD6C6; --board-dot:#C9C1AE; --frame:#B8AF9B;
+  --accent:#2E4A78; --on-accent:#FFFFFF; --note:#FFF1B5; --on-note:#25221D;
+  --card-accent:#2E4A78; --ground-accent:#2E4A78; --card-edge:transparent;
+  --tab:#DDD6C6; --tape:rgba(216,209,193,.6);
+}
+html[data-color="evening"]{
+  --ground:#22262E; --on-ground:#ECE7DB; --muted-ground:#A9ABA8;
+  --surface:#2A2F38; --on-surface:#ECE7DB; --muted:#A9ABA8; --line:#3A404B;
+  --card:#F3EEE2; --card-ink:#24221E; --card-rule:#D4D8DB; --card-margin:#D9A08F;
+  --board:#323843; --board-dot:#3F4652; --frame:#4A5160;
+  --accent:#E0A458; --on-accent:#231C10; --note:#F3DFA6; --on-note:#24221E;
+  --card-accent:#7D4F14; --ground-accent:#E0A458; --card-edge:transparent;
+  --tab:#323843; --tape:rgba(243,238,226,.4);
+}
+html[data-color="garden"]{
+  --ground:#DFE5D6; --on-ground:#232620; --muted-ground:#525948;
+  --surface:#EDF0E5; --on-surface:#232620; --muted:#525948; --line:#C9D1BE;
+  --card:#FCFBF4; --card-ink:#232620; --card-rule:#D3DDD0; --card-margin:#D9A08F;
+  --board:#CFD7C3; --board-dot:#BBC5AC; --frame:#A9B399;
+  --accent:#3F5E3A; --on-accent:#FFFFFF; --note:#FBEFB4; --on-note:#232620;
+  --card-accent:#3F5E3A; --ground-accent:#3F5E3A; --card-edge:transparent;
+  --tab:#CFD7C3; --tape:rgba(201,209,190,.6);
+}
+html[data-color="terracotta"]{
+  --ground:#F1E1D6; --on-ground:#2A211C; --muted-ground:#604E43;
+  --surface:#F8ECE3; --on-surface:#2A211C; --muted:#604E43; --line:#E0CDBF;
+  --card:#FFFBF5; --card-ink:#2A211C; --card-rule:#E6D8CF; --card-margin:#D98F7C;
+  --board:#E5D0C3; --board-dot:#D6BDAE; --frame:#C4A795;
+  --accent:#9A4A32; --on-accent:#FFFFFF; --note:#FCEBB6; --on-note:#2A211C;
+  --card-accent:#9A4A32; --ground-accent:#9A4A32; --card-edge:transparent;
+  --tab:#E5D0C3; --tape:rgba(224,205,191,.6);
+}
+html[data-mlook]{
+  --f-display:"EB Garamond", Garamond, Georgia, serif;
+  --f-type:"Work Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-ui:"Work Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --paper-mute:color-mix(in srgb,var(--card-ink) 70%,var(--card));
+  --shadow:0 1px 2px rgba(0,0,0,.14), 0 10px 24px -14px rgba(0,0,0,.35);
+}
+
+/* --- the frame: one bar. Poiesis and the date, the menu, your picture --- */
+html[data-mlook] body{font-family:var(--f-body)}
+html[data-mlook] .top, html[data-mlook] .top.rb-down{position:sticky; top:0; left:auto; right:auto; z-index:30; margin:0; padding:10px max(20px, env(safe-area-inset-left,0px)) 10px max(20px, env(safe-area-inset-right,0px)); padding-top:calc(10px + env(safe-area-inset-top,0px)); background:var(--surface); border:0; border-bottom:1px solid var(--line); pointer-events:auto}
+html[data-mlook] .top .bar, html[data-mlook] .top.extra .bar{display:grid; grid-template-columns:1fr auto 1fr; grid-template-areas:none; align-items:center; gap:16px; max-width:none; width:auto; margin:0; padding:0}
+html[data-mlook] .top .icons{display:contents; pointer-events:auto}
+.nbk-brand{justify-self:start; display:grid; gap:1px; min-height:44px; align-content:center; text-decoration:none; color:var(--on-surface)}
+.nbk-brand:focus-visible{outline:2px solid var(--ground-accent); outline-offset:4px; border-radius:6px}
+.nbk-word{font:400 24px/1 var(--f-display); color:var(--on-surface)}
+.nbk-date{font:500 12px/1.2 var(--f-ui); letter-spacing:.03em; color:var(--muted)}
+html[data-mlook] .top .profbtn{justify-self:end; width:44px; height:44px; margin:0; border-radius:50%; overflow:visible}
+html[data-mlook] .top .profbtn .av{width:40px; height:40px; font:400 19px/1 var(--f-display); box-shadow:0 0 0 2px var(--ground-accent)!important}
+html[data-mlook] .top .profbtn[aria-current="true"] .av{outline:2px solid var(--ground-accent); outline-offset:3px}
+html[data-mlook] #dateRibbon{display:block; position:static; z-index:auto; min-width:0; margin:0; padding:0; background:none; color:inherit; clip-path:none; font:inherit; letter-spacing:0; text-transform:none; white-space:normal}
+html[data-mlook] #dateRibbon .dr-date{display:none}
+html[data-mlook] #dateRibbon .dr-menu{display:flex; align-items:center; gap:4px; width:auto; max-height:none; overflow:visible; padding:0; transition:none}
+html[data-mlook] #switch{display:contents}
+html[data-mlook] #dateRibbon .dr-i{all:unset; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:8px; height:44px; padding:0 16px; border-radius:22px; cursor:pointer; color:var(--on-surface); font:500 15px/1 var(--f-ui); letter-spacing:0; text-transform:none; white-space:nowrap}
+html[data-mlook] #dateRibbon .dr-i svg{width:20px; height:20px; display:block; color:inherit}
+html[data-mlook] #dateRibbon .dr-i span{border:0}
+html[data-mlook] #dateRibbon .dr-mark{display:block; width:20px; height:20px; margin:0; background:currentColor; -webkit-mask:url("mark.png") center/contain no-repeat; mask:url("mark.png") center/contain no-repeat; transition:none}
+html[data-mlook] #dateRibbon .dr-i:hover{background:color-mix(in srgb,var(--on-surface) 8%,transparent)}
+html[data-mlook] #dateRibbon .dr-i:focus-visible{outline:2px solid var(--ground-accent); outline-offset:2px}
+html[data-mlook] #dateRibbon .dr-i[aria-selected="true"], html[data-mlook] #dateRibbon .dr-i[aria-current="true"], html[data-mlook] #dateRibbon #colorBtn[aria-expanded="true"]{background:var(--accent); color:var(--on-accent); font-weight:600}
+html[data-mlook] .pop{left:auto; right:max(20px, env(safe-area-inset-right,0px)); top:calc(72px + env(safe-area-inset-top,0px)); border-radius:12px; box-shadow:0 1px 2px rgba(0,0,0,.14), 0 18px 40px -16px rgba(0,0,0,.45)}
+
+/* --- phones: the menu is a bar along the bottom, under the thumb --- */
+@media (max-width:700px){
+ html[data-mlook] .top .bar, html[data-mlook] .top.extra .bar{grid-template-columns:1fr auto}
+ html[data-mlook] body{padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+ html[data-mlook] #dateRibbon{position:fixed; left:0; right:0; bottom:0; z-index:35; background:var(--surface); border-top:1px solid var(--line); padding-bottom:env(safe-area-inset-bottom,0px)}
+ html[data-mlook] #dateRibbon .dr-menu{display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:0}
+ html[data-mlook] #dateRibbon .dr-i{flex-direction:column; gap:5px; height:62px; padding:0 2px; border-radius:0; font:500 12px/1 var(--f-ui); color:var(--muted)}
+ html[data-mlook] #dateRibbon .dr-i svg, html[data-mlook] #dateRibbon .dr-mark{width:24px; height:24px}
+ html[data-mlook] #dateRibbon .dr-i[aria-selected="true"], html[data-mlook] #dateRibbon .dr-i[aria-current="true"], html[data-mlook] #dateRibbon #colorBtn[aria-expanded="true"]{background:none; color:var(--ground-accent); font-weight:600}
+ html[data-mlook] .pop{left:12px; right:12px; top:auto; bottom:calc(74px + env(safe-area-inset-bottom,0px)); width:auto; max-height:calc(100dvh - 160px)}
+ html[data-mlook] .nbk-word{font-size:22px}
+}
+
+/* --- Style: four papers, shown as they look --- */
+html[data-mlook] #colorPop .cp-tabs button{font:500 14px var(--f-ui); min-height:40px}
+html[data-mlook] #colorPop .thlist{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+html[data-mlook] #colorPop .thpick{display:grid; gap:8px; padding:10px; border:2px solid transparent; border-radius:12px; background:var(--card); color:var(--card-ink); text-align:left; cursor:pointer; min-height:44px}
+html[data-mlook] #colorPop .thpick[aria-pressed="true"]{border-color:var(--card-accent)}
+html[data-mlook] #colorPop .thpick .thname{order:2; font:600 15px var(--f-ui); color:var(--card-ink)}
+html[data-mlook] #colorPop .thpick .thstrip{order:1; display:flex; height:44px; border-radius:6px; overflow:hidden; border:1px solid color-mix(in srgb,var(--card-ink) 14%,transparent)}
+html[data-mlook] #colorPop .thpick .thstrip span{flex:1 1 0; height:auto; width:auto; border:0; border-radius:0}
+html[data-mlook] #colorPop .thpick .thstrip span:nth-child(n+5){display:none}
+
+/* --- the home page: theme, tabs, the work, one clear button --- */
+html[data-mlook] .hm-home{padding-top:28px}
+html[data-mlook] .hm-eb{font:600 12px var(--f-ui); letter-spacing:.14em}
+html[data-mlook] .hm-theme{font:italic 400 clamp(54px, 13vw, 84px)/1.05 var(--f-display); color:var(--on-ground)}
+.hm-tabs{display:flex; justify-content:center; gap:4px; width:100%; margin-top:24px}
+.hm-tabs button{flex:0 0 104px; min-height:44px; padding:0 6px; border:0; border-radius:10px 10px 0 0; background:var(--tab, var(--board)); color:var(--muted-ground); font:500 14px var(--f-ui); cursor:pointer}
+.hm-tabs button[aria-pressed="true"]{background:var(--card); color:var(--card-ink); font-weight:600}
+.hm-tabs button:focus-visible{outline:2px solid var(--ground-accent); outline-offset:2px}
+.hm-tabs .hm-tick{margin-left:5px; color:var(--card-accent)}
+.hm-tabs button:not([aria-pressed="true"]) .hm-tick{color:inherit}
+html[data-mlook] .hm-stack{margin-top:0; padding-bottom:12px}
+html[data-mlook] .hm-b1, html[data-mlook] .hm-b2{inset:auto 14px 0 14px; height:30px; transform:none; border-radius:0 0 12px 12px; background:var(--card); opacity:.45; box-shadow:0 1px 2px rgba(0,0,0,.12)}
+html[data-mlook] .hm-b2{inset:auto 7px 6px 7px; opacity:.7}
+html[data-mlook] .hm-home .hm-card, html[data-mlook] .hm-home .hm-card.lk-parch{min-height:200px; padding:36px 24px 30px; justify-items:center; align-content:center; text-align:center; gap:10px; border-radius:12px; background-image:none; background-color:var(--card); color:var(--card-ink); box-shadow:var(--shadow)}
+html[data-mlook] .hm-row{display:none}
+html[data-mlook] .hm-t{margin-top:0; font:400 clamp(26px, 6.6vw, 36px)/1.15 var(--f-body)}
+html[data-mlook] .hm-by{color:var(--paper-mute)}
+html[data-mlook] .hm-card .hm-done{margin-top:6px; font:600 13px var(--f-ui); color:var(--card-accent)}
+@keyframes nbk-in{from{opacity:.4; transform:translateX(10px)} to{opacity:1; transform:none}}
+@keyframes nbk-inb{from{opacity:.4; transform:translateX(-10px)} to{opacity:1; transform:none}}
+html[data-mlook] .hm-card.hm-turn{animation:nbk-in .2s ease-out}
+html[data-mlook] .hm-card.hm-turn.back{animation-name:nbk-inb}
+@media (prefers-reduced-motion:reduce){ html[data-mlook] .hm-card.hm-turn{animation:none} }
+html[data-mlook] .hm-acts{margin-top:22px; gap:12px}
+html[data-mlook] .hm-start{min-height:52px; padding:0 32px; border-radius:10px; font:600 16px var(--f-ui)}
+html[data-mlook] .hm-synth{min-height:52px; padding:0 26px; border-radius:10px; border:1.5px solid var(--muted-ground); font:500 15px var(--f-ui)}
+html[data-mlook] .hm-synth .sym-c{color:currentColor}
+html[data-mlook] .hm-others{margin-top:36px; padding-top:22px; border-top:1px solid var(--line)}
+html[data-mlook] .hm-others h2{font:400 24px var(--f-body)}
+html[data-mlook] .hm-others p{font:400 15px/1.5 var(--f-ui)}
+@media (max-width:700px){
+ html[data-mlook] .hm-home{padding-top:14px}
+ html[data-mlook] .hm-start, html[data-mlook] .hm-synth{width:100%; justify-content:center; box-sizing:border-box}
+ html[data-mlook] .hm-acts{gap:8px}
+}
+
+/* --- a work and the notepad: clean paper, ruled lines, a red margin --- */
+html[data-mlook] .lk-parch{background-image:none}
+html[data-mlook] .lk-page, html[data-mlook] .lk-card{border-radius:12px; box-shadow:var(--shadow)}
+html[data-mlook] .lk-tabs{justify-content:center}
+html[data-mlook] .lk-kind, html[data-mlook] .lk-camel, html[data-mlook] .lk-golab{font-family:var(--f-ui); font-weight:600; letter-spacing:.14em}
+html[data-mlook] .lk-write{position:relative}
+html[data-mlook] .m-wbox{font-family:var(--f-hand); font-size:20px; line-height:32px; padding-top:0; padding-bottom:0; background-color:transparent; background-image:repeating-linear-gradient(to bottom, transparent 0, transparent 31px, var(--card-rule) 31px, var(--card-rule) 32px); background-attachment:local; border:0; border-radius:0; color:var(--card-ink)}
+html[data-mlook] .m-wbox::placeholder{color:var(--paper-mute); opacity:1}
+html[data-mlook] .m-wbox:focus-visible{outline:2px solid var(--card-accent); outline-offset:4px}
+html[data-mlook] .btn{font-family:var(--f-ui); border-radius:10px}
+html[data-mlook] .btn.primary{min-height:48px; padding-inline:22px; font-weight:600; font-size:15px}
+html[data-mlook] .top, html[data-mlook] .top.rb-down{margin-inline:-16px}
+html[data-mlook] .lk-spine{visibility:hidden}
+html[data-mlook] .m-wbox{background-image:repeating-linear-gradient(to bottom, transparent 0, transparent 31px, var(--card-rule) 31px, var(--card-rule) 32px)!important}
+html[data-mlook] .np-c, html[data-mlook] .np-fl{display:none}
+html[data-mlook] .np-brk{padding:4px 0 8px}
+@media (min-width:701px){
+ html[data-mlook] .lk-tabs{position:relative; padding:0}
+ html[data-mlook] .lk-tabs .lk-back{position:absolute; left:0; top:0; margin:0}
+ html[data-mlook] .lk-side .lk-write{padding-left:46px}
+ html[data-mlook] .lk-side .lk-write::before{content:""; position:absolute; top:0; bottom:0; left:28px; width:1.5px; background:var(--card-margin); pointer-events:none}
+}
+@media (max-width:700px){
+ html[data-mlook] .pen{bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+}
+html[data-mlook] #dateRibbon, html[data-mlook] #dateRibbon .dr-menu{box-shadow:none; filter:none}

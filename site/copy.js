@@ -61,12 +61,22 @@ home.start.Art: Start with the painting
 home.or: or
 home.synth: Synthesise
 home.others.line: First, your own impression. Theirs open once you’ve written.
+# Round 31: the tabs above the card (the label is read aloud, not shown)
+home.tabs.label: Today’s works
+home.tab.Poem: Poem
+home.tab.Passage: Passage
+home.tab.Art: Painting
 home.prev: Previous work
 home.next: Next work
 # Round 30: where margins and patterns appear (Colour › Margins, Patterns), and the profile's way back
 margins.where: On a desk, the margin runs up the right edge of the work and the spine sits between the work and your notepad. Phones show one page, without them.
 patterns.where: Patterns sit on the background around the pages and cards, on every screen.
 profile.back: ‹ Back
+# Round 31 (14 Nov): the four styles of the notebook look
+color.notebook.name: Notebook
+color.evening.name: Evening
+color.garden.name: Garden
+color.terracotta.name: Terracotta
 color.dark.name: dark mode
 color.forest.name: forest
 color.rose.name: rose
@@ -642,4 +652,50 @@ forum.foot.letter.on: Daily letter: yes
 forum.foot.letter.off: Daily letter: no
 forum.foot.out: Sign out
 forum.refresh: ↻ Refresh
+
+# THE DAILY LETTER (the email; built by worker/letter.mjs) =================
+# Blank hides a line; a deleted line brings back its default. {theme}, {makers}
+# and {date} are filled in. The subject is the day's first question; the
+# fallback is used on a day with no question.
+letter.from.name: Poiesis
+letter.subject.fallback: Today’s theme: {theme}
+letter.preheader: {theme}: {makers}. One sentence is enough.
+letter.kicker: Today’s theme
+letter.lead: Three works around one theme. Here is how each begins.
+letter.ask: You write your first impression before you hear anyone else’s, so what you make begins as your own.
+letter.cta: Write your first impression
+letter.after: one sentence is enough..
+# One of these closes each letter, in turn (add letter.why.8, .9 … for more).
+# Each is a sentence of yours from the Why page.
+letter.why.1: Imitate the model, not the rival.
+letter.why.2: A narrow page makes a deep conversation.
+letter.why.3: The great authors of a muse are not our rivals in creating; they are models for our own aspiration.
+letter.why.4: Nobody keeps score: there are no follower counts, and when something moves you, only its maker is told.
+letter.why.5: Great things come from someone who can actively receive, taking inspiration into action.
+letter.why.6: What tune will be stuck in your head, what thought will pervade your mind: what else is more important than the foundation of the Day?
+letter.why.7: Your habits shape who you are as a person.
+letter.foot.because: You asked for the daily letter when you joined Poiesis.
+letter.foot.unsub: Take me off the letter list
+# A postal address, if you decide the letter needs one (blank = not shown).
+letter.foot.address:
+# The page behind the unsubscribe link
+letter.off.title: The daily letter
+letter.off.ask: Stop sending me the daily letter?
+letter.off.go: Take me off the list
+letter.off.done: You’re off the letter list. Nothing more will be sent.
+letter.off.back: Put me back on
+letter.off.backdone: You’re back on the list for the daily letter.
+letter.off.unknown: This link is no longer good. You can change the daily letter at the foot of poetdaily.org.
+letter.off.home: Go to today’s works ›
+keep.post.off: Save
+keep.post.on: Saved
+toast.keep.on: Saved to your notebook.
+toast.keep.off: Taken out of your notebook.
+nb.way.kept: Kept writing
+nb.kept.title: Kept writing
+nb.kept.empty: Nothing kept yet. Press Save under a first impression or a reply and it will be here.
+nb.kept.remove: Take out
+nb.kept.impression: First impression
+nb.kept.link: Synthesis
+nb.kept.reply: Reply
 `;

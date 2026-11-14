@@ -18,7 +18,8 @@ window.POIESIS_CONFIG = {
   // The forum (site/forum.js, supabase/forum-v1.sql). With the two lines above
   // filled in, forum: true shows the welcome page, lets people sign in with an
   // email, a username and a password, and carries the day's conversation.
-  // Nothing from the notebook is stored.
+  // From the notebook, only saves are stored (kept lines and kept writing;
+  // supabase/notebook-saves-v1.sql). Pages and questions stay on the device.
   //   emailLink: true  adds "Email me a sign-in link" (turn it on only once a
   //                    sending service is connected in Supabase).
   //   betaWord: true   asks for the beta word when a username is chosen (set
@@ -28,7 +29,7 @@ window.POIESIS_CONFIG = {
   forum: true,
   emailLink: false,
   betaWord: false,
-  notebookSoon: true,
+  notebookSoon: false,
 
   // The feedback page (feedback.html). Both may stay blank: friends then send
   // their answers to you themselves (share, copy, or email).

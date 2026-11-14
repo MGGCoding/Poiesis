@@ -388,13 +388,23 @@ const THEMES=[
  {"id":"forest","key":"color.forest.name","name":"forest","sw":["#202f19","#faebc9","#59221d","#59221d","#f4ceb8","#66463e"]}];
 const THEME_DEFAULT="dark";
 /* MARY THEMES END */
+/* Round 31 (14 Nov): the notebook look. Four styles replace the list above
+   (the generator's block is kept so tools/mary-themes.mjs still runs; its
+   themes are no longer offered). A saved colour that is gone falls back to
+   Notebook. Colours live in styles.css under "Round 31". */
+THEMES.splice(0,THEMES.length,
+ {id:"notebook",key:"color.notebook.name",name:"Notebook",sw:["#ECE7DB","#FCFAF3","#25221D","#2E4A78","#DE9C92","#DDD6C6"]},
+ {id:"evening",key:"color.evening.name",name:"Evening",sw:["#22262E","#F3EEE2","#24221E","#E0A458","#D9A08F","#323843"]},
+ {id:"garden",key:"color.garden.name",name:"Garden",sw:["#DFE5D6","#FCFBF4","#232620","#3F5E3A","#D9A08F","#CFD7C3"]},
+ {id:"terracotta",key:"color.terracotta.name",name:"Terracotta",sw:["#F1E1D6","#FFFBF5","#2A211C","#9A4A32","#D98F7C","#E5D0C3"]});
+const STYLE_DEFAULT="notebook";
 const themeName=t=>T(t.key,t.name);
 /* what Manuscript fixes, and the settings that no longer change the layout */
 const LOOKFIX={three:"icons", tplace:"top", pplace:"row", backing:"none", tsize:"m", labels:"off", cueplace:"small",
  nb:"look", nbpaper:"lined", paper:"look", fill:"none", wtab:"off", wlook:"look", numSide:"left", arch:"under", nums:"five"};
 const RETIRED=["room","font","density","turner","storyMode","infoStyle","story"];   /* fixed at the house value */
 const LOOK_DECIDES=[...Object.keys(LOOKFIX), ...RETIRED];
-function curColor(){ const v=S&&S.ui&&S.ui.desk&&S.ui.desk.color; return THEMES.some(t=>t.id===v)?v:THEME_DEFAULT; }
+function curColor(){ const v=S&&S.ui&&S.ui.desk&&S.ui.desk.color; return THEMES.some(t=>t.id===v)?v:STYLE_DEFAULT; }
 function curLook(){ return "b"; }
 
 const DEF_BOARDS=[{id:"light",name:"Light"},{id:"hosp",name:"Essay on hospitality"},{id:"morn",name:"Mornings"}];
@@ -534,7 +544,8 @@ function ensureWelcome(){ if(!LIVE||S.welcomed) return;
  S.welcomed=true; }
 let S; try{ const saved=JSON.parse(localStorage.getItem(KEY)||"null"); S=Object.assign(((TESTER||LIVE)&&!saved)?emptyShell():fresh(), saved||{}); }catch(e){ S=(TESTER||LIVE)?emptyShell():fresh(); }
 function save(quiet){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ toast(T("toast.storage","This browser is out of room for pictures. Your words are still here.")); }
- if(!quiet && window.PoiesisData) window.PoiesisData.changed(); /* data.js: sync to the account */ }
+ if(!quiet && window.PoiesisData) window.PoiesisData.changed(); /* data.js: sync to the account */
+ if(!quiet && window.PoiesisForum && window.PoiesisForum.changed) window.PoiesisForum.changed(); /* forum.js: notebook saves */ }
 if(S.pick.date && S.pick.date<today()) S.pick={date:null,id:null};
 if(LIVE){ scrubSamples(); ensureWelcome(); }
 S.visits[today()]=1; save();
@@ -646,6 +657,7 @@ if(!S.ui) S.ui={};
 ["desk","phone"].forEach(d=>{ S.ui[d]=Object.assign(clone(HOUSE[d]), S.ui[d]||{}); });
 const SHARED=["color","margin","spine","ground"];
 function setPref(k,v,d){ if(SHARED.includes(k)) ["desk","phone"].forEach(x=>S.ui[x][k]=v); else S.ui[d||DEV()][k]=v; }
+if(!S.nbk31){ ["desk","phone"].forEach(x=>{ S.ui[x].margin="plain"; S.ui[x].ground="plain"; }); S.nbk31=1; }
 if(!S.sharedLook){ SHARED.forEach(k=>S.ui.phone[k]=S.ui.desk[k]); S.sharedLook=1; }
 const phoneMQ=matchMedia("(max-width: 700px)");
 const DEV=()=>phoneMQ.matches?"phone":"desk";
@@ -679,7 +691,7 @@ function applyPrefs(){
  const g=GROUNDS.some(x=>x[0]===U().ground)?U().ground:"theme", gp=groundPat(g, groundInk()); R.setAttribute("data-ground",g);
  if(gp){ R.style.setProperty("--gpat",gp[0]); R.style.setProperty("--gsize",gp[1]); }
  $("#cpPatterns").innerHTML=patternsPaneHTML();
- const d=new Date(), rb=$("#dateRibbon .dr-date"); if(rb) rb.textContent=`${d.getDate()} ${d.toLocaleDateString(undefined,{month:"short"}).replace(/\.$/,"")}`;
+ const d=new Date(), rb=$("#dateRibbon .dr-date"); { const nd=$("#nbkDate"); if(nd) nd.textContent=d.toLocaleDateString(undefined,{weekday:"long", day:"numeric", month:"long"}); } if(rb) rb.textContent=`${d.getDate()} ${d.toLocaleDateString(undefined,{month:"short"}).replace(/\.$/,"")}`;
 }
 /* Round 24: the Margins tab beside Colour. What climbs the right margin of
    the work, and how the spine between the work and the notepad is dressed. */
@@ -726,15 +738,18 @@ $("#colorPop").addEventListener("click",e=>{
 /* the menu under your picture: Muse, Notebook, your profile, Colour, Why Poiesis */
 /* Round 28: your picture goes straight to your profile; the date ribbon is the menu */
 function menuShut(){ ribbonUp(); }
+/* Round 31: Style in the bar shows as open only while its card is open */
+new MutationObserver(()=>$("#colorBtn").setAttribute("aria-expanded",String(!$("#colorPop").hidden))).observe($("#colorPop"),{attributes:true,attributeFilter:["hidden"]});
 $("#profBtn").onclick=e=>{ e.stopPropagation(); ribbonUp(); $("#colorPop").hidden=true; if(S.tab!=="profile") S.backTo=S.tab; go("profile"); };
 /* Round 30: back from the profile to where you were */
 document.addEventListener("click",e=>{ if(!e.target.closest("#pfBack")) return; const t=S.backTo&&S.backTo!=="profile"?S.backTo:"muse"; go(t); });
 /* Round 26: tap the date ribbon and it drops to show the Poiesis mark; the mark opens Why Poiesis */
 /* Round 28: it is also the menu: the mark (Why Poiesis), Muse, Notebook, and the palette (Colour) */
 const RB=$("#dateRibbon"), RBd=RB.querySelector(".dr-date"), RBm=RB.querySelector(".dr-markw"), RBmenu=$("#drMenu");
-RBmenu.inert=true;
-function ribbonUp(){ RB.classList.remove("down"); RB.closest(".top")?.classList.remove("rb-down"); RBd.setAttribute("aria-expanded","false"); RBmenu.inert=true; }
-RBd.onclick=()=>{ const d=!RB.classList.contains("down"); $("#colorPop").hidden=true; RB.classList.toggle("down",d); RB.closest(".top")?.classList.toggle("rb-down",d); RBd.setAttribute("aria-expanded",String(d)); RBmenu.inert=!d; };
+/* Round 31: the menu is always showing (a bar: Muse, Notebook, Style, Why Poiesis), so it is never inert */
+RBmenu.inert=false;
+function ribbonUp(){ RB.classList.remove("down"); RB.closest(".top")?.classList.remove("rb-down"); RBd.setAttribute("aria-expanded","false"); }
+RBd.onclick=()=>{ const d=!RB.classList.contains("down"); $("#colorPop").hidden=true; RB.classList.toggle("down",d); RB.closest(".top")?.classList.toggle("rb-down",d); RBd.setAttribute("aria-expanded",String(d)); };
 RBm.onclick=e=>{ e.preventDefault(); ribbonUp(); go("why"); };
 document.addEventListener("click",e=>{ if(!e.composedPath().includes(RB)) ribbonUp(); },true);
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") ribbonUp(); });
@@ -745,11 +760,12 @@ document.addEventListener("click",e=>{ const path=e.composedPath(); for(const p 
 /* ---------- Navigation ---------- */
 $("#switch").onclick=e=>{const b=e.target.closest("[data-tab]"); if(b){ menuShut(); if(b.dataset.tab==="muse"){ S.past=null; S.phome=true; } go(b.dataset.tab);} };
 $("#whyLink").onclick=e=>{e.preventDefault(); go("why");};
+{ const bh=$("#brandHome"); if(bh) bh.onclick=e=>{ e.preventDefault(); menuShut(); S.past=null; S.phome=true; go("muse"); }; }
 function go(tab){ S.tab=tab; save(); render(); scrollTo({top:0, behavior:reduce?"auto":"smooth"}); }
 function render(){
  hideSel(); hideTip();
  document.querySelectorAll("#switch [data-tab]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===S.tab)));
- $("#profBtn").setAttribute("aria-current",String(S.tab==="profile"));
+ $("#profBtn").setAttribute("aria-current",String(S.tab==="profile")); RBm.setAttribute("aria-current",String(S.tab==="why"));
  ({muse:renderMuse, notebook:renderNotebook, why:renderWhy, profile:renderProfile})[S.tab]($("#view"));
  pruneBlankControls($("#view"));
  if(window.PoiesisForum) window.PoiesisForum.afterRender(); /* forum.js */
@@ -863,8 +879,8 @@ function synPostHTML(y,id){
  return `<article class="post" data-p="${y.id}" data-m="${id}" data-syn="1">
   <div class="who">${personAv(y.name)}<div><b>${esc(y.name)}</b> ${P?stickerHTML(P.top,20):""} ${P?`<span class="badge">${esc(P.badge)}</span>`:""} <span class="sample">sample</span><small>${esc(P?P.role:"")}</small></div></div>
   <div class="thought link"><small class="type" style="color:var(--paper-mute);font-size:.64rem">${T("link.tag","A synthesis")} · ${esc(y.at)}</small><div class="first">${esc(y.text)}</div></div>
-  <div class="pact"><button class="btn" data-pa="like" aria-pressed="${!!S.likes[y.id]}">${S.likes[y.id]?T("post.moved.on","♥ Moved me"):T("post.moved.off","♡ Moved me")}</button><button class="btn" data-pa="reply">${T("post.writeback","Write back")}${reps.length?` · ${reps.length}`:""}</button>${bmMenu()}</div>
-  ${reps.length?`<div class="comments">${reps.map(c=>`<div class="cm">${personAv(c.n)}<div><b>${esc(c.n==="You"?(S.profile.name||"You"):c.n)}</b> ${PEOPLE[c.n]?stickerHTML(PEOPLE[c.n].top,16):""} ${esc(c.t)}</div></div>`).join("")}</div>`:""}
+  <div class="pact"><button class="btn" data-pa="like" aria-pressed="${!!S.likes[y.id]}">${S.likes[y.id]?T("post.moved.on","♥ Moved me"):T("post.moved.off","♡ Moved me")}</button><button class="btn" data-pa="reply">${T("post.writeback","Write back")}${reps.length?` · ${reps.length}`:""}</button>${bmMenu()}${keepBtn(y.id)}</div>
+  ${reps.length?`<div class="comments">${reps.map(c=>`<div class="cm">${personAv(c.n)}<div><b>${esc(c.n==="You"?(S.profile.name||"You"):c.n)}</b> ${PEOPLE[c.n]?stickerHTML(PEOPLE[c.n].top,16):""} ${esc(c.t)} ${keepReplyBtn(c,y.id)}</div></div>`).join("")}</div>`:""}
   <div class="slot2"></div></article>`;
 }
 function synListHTML(){
@@ -979,6 +995,17 @@ function gateLine(m){
  const line=T("others.gate.line","What you write first stays yours, before anyone else’s voice gets in. It also draws you one sticker from ");
  return /\s$/.test(line)?line+esc(MAKERNAME[makerOf(m.id)]||m.maker)+".":line;
 }
+/* ---------- Notebook saves v1: Save on first impressions and replies ----------
+   A copy of the words goes to S.saved (the Notebook's "Kept writing"). Private: the writer is never told. */
+const keepKeyPost=pid=>"p:"+(String(pid).startsWith("me_")?WK(pid):pid);
+const keepKeyReply=(pid,n,t)=>"r:"+pid+":"+n+":"+String(t).slice(0,80);
+const isKept=key=>(S.saved||[]).some(x=>x.key===key);
+const keepLbl=on=>on?T("keep.post.on","Saved"):T("keep.post.off","Save");
+function keepBtn(pid){ const on=isKept(keepKeyPost(pid)); return `<button class="btn keepb" data-pa="keep" aria-pressed="${on}">${keepLbl(on)}</button>`; }
+function keepReplyBtn(c,pid){ const on=isKept(keepKeyReply(pid,c.n,c.t)); return `<button class="cm-keep" data-pa="keepr" data-n="${esc(c.n)}" data-t="${esc(c.t)}" aria-pressed="${on}">${keepLbl(on)}</button>`; }
+function keepWriting(o){ S.saved=S.saved||[]; const had=S.saved.find(x=>x.key===o.key);
+ if(had){ S.saved=S.saved.filter(x=>x!==had); save(); toast(T("toast.keep.off","Taken out of your notebook.")); return false; }
+ S.saved.unshift(Object.assign({id:uid("s"), date:today()}, o)); save(); toast(T("toast.keep.on","Saved to your notebook.")); return true; }
 function postHTML(p, m, mine, closed){
  const P=mine?null:(PEOPLE[p.name]||null);
  const top=mine?myTop():(P?P.top:null);
@@ -993,8 +1020,8 @@ function postHTML(p, m, mine, closed){
    <div class="first">${esc(p.first)}</div>
    ${p.later?`<div class="layer"><small>${esc(p.later.when)}</small>${p.later.poem?`<div class="poem">${esc(p.later.poem)}</div>`:""}${p.later.sketch?`<div class="sk s-garage" role="img" aria-label="Sketch"></div>`:""}${p.later.text?esc(p.later.text):""}</div>`:""}
   </div>
-  <div class="pact">${mine||closed?"":`<button class="btn" data-pa="like" aria-pressed="${!!S.likes[p.id]}">${S.likes[p.id]?T("post.moved.on","♥ Moved me"):T("post.moved.off","♡ Moved me")}</button>`}${closed?`<span class="muted" style="font-size:.84rem">Moved ${p.moved} people</span>`:`<button class="btn" data-pa="reply">${mine?T("post.addtothis","Add to this"):T("post.writeback","Write back")}${reps.length?` · ${reps.length}`:""}</button>`}${mine?"":bmMenu()}</div>
-  ${shown.length?`<div class="comments">${shown.map(c=>`<div class="cm">${personAv(c.n)}<div><b>${esc(c.n==="You"?(S.profile.name||"You"):c.n)}</b> ${PEOPLE[c.n]?stickerHTML(PEOPLE[c.n].top,16):""} ${esc(c.t)}</div></div>`).join("")}</div>`:""}
+  <div class="pact">${mine||closed?"":`<button class="btn" data-pa="like" aria-pressed="${!!S.likes[p.id]}">${S.likes[p.id]?T("post.moved.on","♥ Moved me"):T("post.moved.off","♡ Moved me")}</button>`}${closed?`<span class="muted" style="font-size:.84rem">Moved ${p.moved} people</span>`:`<button class="btn" data-pa="reply">${mine?T("post.addtothis","Add to this"):T("post.writeback","Write back")}${reps.length?` · ${reps.length}`:""}</button>`}${mine?"":bmMenu()}${keepBtn(p.id)}</div>
+  ${shown.length?`<div class="comments">${shown.map(c=>`<div class="cm">${personAv(c.n)}<div><b>${esc(c.n==="You"?(S.profile.name||"You"):c.n)}</b> ${PEOPLE[c.n]?stickerHTML(PEOPLE[c.n].top,16):""} ${esc(c.t)} ${keepReplyBtn(c,p.id)}</div></div>`).join("")}</div>`:""}
   <div class="slot2"></div></article>`;
 }
 /* ---------- Round 15 (E): partial visibility at the gate ------------------
@@ -1366,13 +1393,15 @@ function homeHTML(){
  const start=T("home.start."+w.kind,"Start with the "+low), or=T("home.or","or"), syn=T("home.synth","Synthesise");
  const oh=T("others.heading","What others thought"), ol=T("home.others.line","First, your own impression. Theirs open once you’ve written.");
  const cross=scr?`<button type="button" class="hm-cross" data-popen="${scr.id}" aria-label="${esc(scr.kind+": "+scr.title)}">${CROSS}<span>${esc(scr.title)}</span>${S.sealed[WK(scr.id)]?`<span class="hm-done" role="img" aria-label="${esc(T("phone.written","written"))}">✓</span>`:""}</button>`:"";
- const card=`<div class="hm-stack" data-n="${n}" data-i="${i}">${n>1?`<span class="hm-b1" aria-hidden="true"></span><span class="hm-b2" aria-hidden="true"></span>`:""}<button type="button" class="hm-card ph-row lk-parch${HM_TURN?` hm-turn${HM_TURN<0?" back":""}`:""}" data-popen="${w.id}"><span class="hm-row"><span class="hm-k">${esc(w.kind)}</span>${n>1?`<span class="hm-n">${i+1} / ${n}</span>`:""}</span><b class="hm-t">${esc(w.title)}</b><span class="hm-by">${esc(w.maker)}${w.date?` · ${esc(w.date)}`:""}</span>${S.sealed[WK(w.id)]?`<span class="hm-done">✓ ${esc(T("phone.written","written"))}</span>`:""}</button>${n>1?`<button type="button" class="hm-ear" data-hi="${(i+1)%n}" aria-label="${esc(T("home.next","Next work"))}" title="${esc(T("home.next","Next work"))}"></button>`:""}</div>`;
- const dots=n>1?`<div class="hm-dots"><button type="button" class="hm-ar" data-hi="${(i-1+n)%n}" aria-label="${esc(T("home.prev","Previous work"))}"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button>${works.map((x,k)=>`<button type="button" data-hi="${k}" aria-label="${esc(x.kind)}, ${k+1} / ${n}" aria-current="${k===i}"><span class="hm-d"></span></button>`).join("")}<button type="button" class="hm-ar" data-hi="${(i+1)%n}" aria-label="${esc(T("home.next","Next work"))}"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button></div>`:"";
+ const card=`<div class="hm-stack" data-n="${n}" data-i="${i}">${n>1?`<span class="hm-b1" aria-hidden="true"></span><span class="hm-b2" aria-hidden="true"></span>`:""}<button type="button" class="hm-card ph-row lk-parch${HM_TURN?` hm-turn${HM_TURN<0?" back":""}`:""}" data-popen="${w.id}"><span class="hm-row"><span class="hm-k">${esc(w.kind)}</span>${n>1?`<span class="hm-n">${i+1} / ${n}</span>`:""}</span><b class="hm-t">${esc(w.title)}</b><span class="hm-by">${esc(w.maker)}${w.date?` · ${esc(w.date)}`:""}</span>${S.sealed[WK(w.id)]?`<span class="hm-done">✓ ${esc(T("phone.written","written"))}</span>`:""}</button></div>`;
+ /* Round 31: the works are index tabs above the card (no dots, no dog-ear) */
+ const tabName=x=>T("home.tab."+x.kind,({Art:"Painting"})[x.kind]||x.kind);
+ const dots=n>1?`<div class="hm-tabs" role="group" aria-label="${esc(T("home.tabs.label","Today’s works"))}">${works.map((x,k)=>`<button type="button" data-hi="${k}" aria-pressed="${k===i}">${esc(tabName(x))}${S.sealed[WK(x.id)]?`<span class="hm-tick" role="img" aria-label="${esc(T("phone.written","written"))}">✓</span>`:""}</button>`).join("")}</div>`:"";
  const acts=`<div class="hm-acts">${start?`<button type="button" class="hm-start" data-popen="${w.id}">${esc(start)}</button>`:""}${start&&syn&&or?`<span class="hm-or">${esc(or)}</span>`:""}${syn&&n+(scr?1:0)>1?`<button type="button" class="hm-synth ph-knot" data-side="whole">${CIRCLES}<span>${esc(syn)}</span></button>`:""}</div>`;
  const fw=[[92,80,64],[86,70],[95,88,72,40],[78,60]], fc=["#3d5d86","#6b4a7d","#2f5d50","#8a5a3b"];
  const others=`<section class="hm-others" aria-label="${esc(oh)}">${oh?`<h2>${esc(oh)}</h2>`:""}${ol?`<p>${esc(ol)}</p>`:""}<div class="hm-fade" aria-hidden="true">${fw.map((r,k)=>`<div class="hm-fl"><span style="background:${fc[k]}"></span><div>${r.map(x=>`<i style="width:${x}%"></i>`).join("")}</div></div>`).join("")}</div></section>`;
  HM_TURN=0;
- return `<div class="hm-home">${nudgeHTML()}<div class="hm-head">${eb?`<p class="hm-eb">${esc(eb)}</p>`:""}<h1 class="hm-theme">${esc(DAY.theme)}</h1></div>${cross}${card}${dots}${acts}${others}</div>`;
+ return `<div class="hm-home">${nudgeHTML()}<div class="hm-head">${eb?`<p class="hm-eb">${esc(eb)}</p>`:""}<h1 class="hm-theme">${esc(DAY.theme)}</h1></div>${cross}${dots}${card}${acts}${others}</div>`;
 }
 function phoneHomeHTML(){
  const dateStr=new Date().toLocaleDateString(undefined,{weekday:"long", month:"long", day:"numeric"});
@@ -1411,7 +1440,7 @@ function renderMuse(v){
   wireBoard(v);
   v.onclick=e=>{
    if(synClick(e)) return;
-   const hi=e.target.closest("[data-hi]"); if(hi){ const was=+S.hi||0; S.hi=+hi.dataset.hi; HM_TURN=S.hi===was?0:(hi.classList.contains("hm-ar")&&hi===hi.parentElement.firstElementChild?-1:1); save(); render(); return; }
+   const hi=e.target.closest("[data-hi]"); if(hi){ const was=+S.hi||0; S.hi=+hi.dataset.hi; HM_TURN=S.hi===was?0:(S.hi<was?-1:1); save(); render(); return; }
    const o=e.target.closest("[data-popen]"); if(o){ S.phome=false; goMuse(o.dataset.popen); return; }
    const sd=e.target.closest("[data-side]"); if(sd){ openSyn(sd.dataset.side); return; }
    if(e.target.matches("[data-synbg]")){ S.openSyn=null; save(); render(); return; }
@@ -1699,8 +1728,15 @@ function findPost(pid, mid){
  return postsFor(mid).find(x=>x.id===pid) || SYNS.find(x=>x.id===pid);
 }
 function postAction(b){
- const art=b.closest("[data-p]"), pid=art.dataset.p, mid=art.dataset.m, p=findPost(pid, mid); if(!p) return;
+ const art=b.closest("[data-p]"), pid=art.dataset.p, mid=art.dataset.m, p=findPost(pid, mid);
  const k=b.dataset.pa;
+ if(k==="keep"||k==="keepr"){ const M=MUSE[mid], where=M?`${M.maker}, ${M.title}`:T("link.tag","A synthesis"), mine=String(pid).startsWith("me_");
+  const o=k==="keep"
+   ? {key:keepKeyPost(pid), text:(art.querySelector(".thought .first")?.textContent||"").trim(), who:mine?(S.profile.name||"You"):(art.querySelector(".who b")?.textContent||"").trim(), pkind:art.dataset.syn?"link":"impression"}
+   : {key:keepKeyReply(pid,b.dataset.n,b.dataset.t), text:(b.dataset.t||"").trim(), who:b.dataset.n==="You"?(S.profile.name||"You"):b.dataset.n, pkind:"reply"};
+  if(!o.text) return;
+  const on=keepWriting(Object.assign(o,{where, muse:M?mid:null, post:pid})); b.setAttribute("aria-pressed",String(on)); b.textContent=keepLbl(on); return; }
+ if(!p) return;
  if(k==="like"){ S.likes[pid]=!S.likes[pid]; save(); b.setAttribute("aria-pressed",String(!!S.likes[pid])); b.textContent=S.likes[pid]?T("post.moved.on","♥ Moved me"):T("post.moved.off","♡ Moved me"); if(S.likes[pid]) toast(`${p.name.split(" ")[0]}${T("toast.moved"," will see that it moved you. Nobody else will.")}`); }
  if(k==="bm"){ const menu=art.querySelector(".bmenu"), was=menu.hidden; document.querySelectorAll(".bmenu").forEach(x=>x.hidden=true); menu.hidden=!was; b.setAttribute("aria-expanded",String(was)); }
  if(k==="reply"){ const slot=art.querySelector(".slot2"); slot.innerHTML=`<form class="cform"><input class="field" id="cIn" aria-label="Write back" placeholder="${p.mine?T("post.reply.mine.placeholder","Add another thought"):T("post.reply.placeholder","Say what it stirred in you")}"><button class="btn primary">${T("post.reply.send","Send")}</button></form>`; $("#cIn").focus();
@@ -1766,7 +1802,11 @@ document.addEventListener("keydown", e=>{ if(S.tab!=="muse"||S.past||/INPUT|TEXT
  if(e.key==="ArrowRight"&&S.mi<MUSES.length-1){ S.mi++; save(); render(); } if(e.key==="ArrowLeft"&&S.mi>0){ S.mi--; save(); render(); } });
 
 /* ---------- Notebook (Round 8): one notebook, four ways in ---------- */
-const WAYS=[["page",T("nb.way.page","Page")],["board",T("nb.way.board","Board")],["questions",T("nb.way.questions","Questions")],["today",T("nb.way.today","Today")],["index",T("nb.way.index","Index")]];
+const WAYS=[["page",T("nb.way.page","Page")],["board",T("nb.way.board","Board")],["questions",T("nb.way.questions","Questions")],["today",T("nb.way.today","Today")],["kept",T("nb.way.kept","Kept writing")],["index",T("nb.way.index","Index")]];
+const KEPT_KIND={impression:["nb.kept.impression","First impression"], link:["nb.kept.link","Synthesis"], reply:["nb.kept.reply","Reply"]};
+function keptHTML(){ const L=S.saved||[];
+ return `<h3 class="nb-kept-h">${T("nb.kept.title","Kept writing")}</h3>${L.length?L.map(s=>{ const kk=KEPT_KIND[s.pkind]||KEPT_KIND.impression;
+  return `<div class="nb-kept"><small class="type">${esc(T(kk[0],kk[1]))}${s.who?` · ${esc(s.who)}`:""}${s.where?` · ${esc(s.where)}`:""} · ${esc(s.date||"")}</small><div class="nb-kept-t">${esc(s.text)}</div><button class="nb-kept-x" data-nbunkeep="${esc(s.id)}">${T("nb.kept.remove","Take out")}</button></div>`; }).join(""):`<p class="muted">${T("nb.kept.empty","Nothing kept yet. Press Save under a first impression or a reply and it will be here.")}</p>`}`; }
 function lineById(id){ return S.lines.find(l=>l.id===id); }
 function addLine(o){ const id=uid("l"); S.lines.unshift(Object.assign({id, date:today(), from:"you", x:8+Math.random()*60, y:8+Math.random()*58, r:(Math.random()*6-3).toFixed(1)}, o)); save(); return id; }
 function newPage(lineIds, q){ const id=uid("j"); S.journal.unshift({id, date:today(), title:"", body:"", lines:lineIds||[], q:q||null, muse:null}); S.nb.sel=id; S.nb.way="page"; S.nb.pick=[]; save(); return id; }
@@ -1880,6 +1920,7 @@ function pocketHTML(){
   <textarea class="nb-body" id="pkText" placeholder="${T("pocket.placeholder","A line, a phrase, an overheard thing…")}">${esc(S.nb.pocket||"")}</textarea>
   <div class="nb-addrow"><input class="field" id="pkWho" placeholder="${T("pocket.who.placeholder","Who or where from (optional)")}" aria-label="Who or where from"><button class="btn primary" data-nbact="pocket">${T("pocket.keep","Keep it")}</button></div>
   ${S.lines.filter(l=>l.from==="phone").length?`<p class="type muted" style="margin:16px 0 6px">${T("pocket.caught","Caught lately")}</p>${S.lines.filter(l=>l.from==="phone").slice(0,8).map(l=>`<div class="nb-line still">${esc(l.text)}${l.who?`<i>— ${esc(l.who)}</i>`:""}</div>`).join("")}`:""}
+  ${(S.saved||[]).length?`<div class="nb-kept-pocket">${keptHTML()}</div>`:""}
   <details class="nb-resting" style="margin-top:18px"><summary>${T("pocket.desk.summary","The rest of the notebook lives on the desk")}</summary><p class="muted" style="font-size:.88rem;margin:8px 0 0">${T("pocket.desk.line","Pages, the board, your questions and the index are all there. This is on purpose: the phone catches, the desk works.")}</p></details></div>`;
 }
 function renderNotebook(v){
@@ -1893,6 +1934,7 @@ function renderNotebook(v){
  else if(way==="board") box.innerHTML=boardHTMLnb();
  else if(way==="questions") box.innerHTML=questionsHTML();
  else if(way==="today") box.innerHTML=todayHTML();
+ else if(way==="kept") box.innerHTML=keptHTML();
  else if(way==="index") box.innerHTML=indexHTML();
  wireNotebook(v);
  if(way==="board") wireCork();
@@ -1920,6 +1962,7 @@ function wireNotebook(v){
    S.nb.pick=S.nb.pick.includes(id)?S.nb.pick.filter(x=>x!==id):(S.nb.pick.length<3?[...S.nb.pick,id]:S.nb.pick);
    if(S.nb.pick.length===3&&!S.nb.pick.includes(id)) toast(T("toast.nb.three","Three lines is the most a page can carry."));
    save(); renderNotebook(v); return; }
+  const unk=e.target.closest("[data-nbunkeep]"); if(unk){ S.saved=(S.saved||[]).filter(x=>x.id!==unk.dataset.nbunkeep); save(); renderNotebook(v); return; }
   const rest=e.target.closest("[data-nbrest]"); if(rest){ const l=lineById(rest.dataset.nbrest); if(l){ l.rest=true; save(); renderNotebook(v); toast(T("toast.nb.resting","Resting. It is still in the index.")); } return; }
   const wake=e.target.closest("[data-nbwake]"); if(wake){ const l=lineById(wake.dataset.nbwake); if(l){ l.rest=false; save(); renderNotebook(v); } return; }
   const drop=e.target.closest("[data-nbdrop]"); if(drop){ const pg=S.journal.find(x=>x.id===S.nb.sel); if(pg){ pg.lines=(pg.lines||[]).filter(x=>x!==drop.dataset.nbdrop); save(); renderNotebook(v); } return; }
