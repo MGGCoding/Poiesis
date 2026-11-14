@@ -35,6 +35,18 @@ margins.margin: Margin
 margins.margin.vine: Climbing vine
 margins.margin.ms: Manuscript
 margins.margin.plain: Plain
+margins.margin.rule: Red line
+margins.margin.double: Double line
+margins.margin.holes: Punched holes
+# Round 32: Size, the fourth tab under Style
+site.size.title: Size
+size.label: Size
+size.s: Small
+size.m: Medium
+size.l: Large
+size.xl: Largest
+# Round 32: the word over the small live page in Settings
+profile.settings.peek: Preview
 margins.spine: Spine
 margins.spine.stitch: Stitched
 margins.spine.diamond: Diamonds
@@ -58,9 +70,11 @@ home.eyebrow: Today’s theme
 home.start.Poem: Start with the poem
 home.start.Passage: Start with the passage
 home.start.Art: Start with the painting
-home.or: or
+# Round 32, fewer words: blank hides it. It read: or
+home.or:
 home.synth: Synthesise
-home.others.line: First, your own impression. Theirs open once you’ve written.
+# Round 32, fewer words: blank hides it. It read: First, your own impression. Theirs open once you’ve written.
+home.others.line:
 # Round 31: the tabs above the card (the label is read aloud, not shown)
 home.tabs.label: Today’s works
 home.tab.Poem: Poem
@@ -69,14 +83,21 @@ home.tab.Art: Painting
 home.prev: Previous work
 home.next: Next work
 # Round 30: where margins and patterns appear (Colour › Margins, Patterns), and the profile's way back
-margins.where: On a desk, the margin runs up the right edge of the work and the spine sits between the work and your notepad. Phones show one page, without them.
-patterns.where: Patterns sit on the background around the pages and cards, on every screen.
+# Round 32, fewer words: blank hides it. It read: On a desk, the margin runs up the right edge of the work and the spine sits between the work and your notepad. Phones show one page, without them.
+margins.where:
+# Round 32, fewer words: blank hides it. It read: Patterns sit on the background around the pages and cards, on every screen.
+patterns.where:
 profile.back: ‹ Back
 # Round 31 (14 Nov): the four styles of the notebook look
 color.notebook.name: Notebook
 color.evening.name: Evening
 color.garden.name: Garden
 color.terracotta.name: Terracotta
+# Round 32 (15 Nov): four more
+color.sky.name: Sky
+color.lavender.name: Lavender
+color.kraft.name: Kraft
+color.midnight.name: Midnight
 color.dark.name: dark mode
 color.forest.name: forest
 color.rose.name: rose

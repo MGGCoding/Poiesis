@@ -15,7 +15,7 @@ function applyStaticCopy(){
  const set=(sel,k,d)=>{ const el=document.querySelector(sel); if(el) el.textContent=T(k,d); };
  const tab=(k,key,d,ic)=>{ const el=document.querySelector(`#switch [data-tab="${k}"]`); if(el) el.innerHTML=`${ic}<span>${esc(T(key,d))}</span>`; };
  tab("muse","site.tab.muse","Muse",IC_MUSE); tab("notebook","site.tab.notebook","Notebook",IC_NOTEBOOK);
- set('#colorPop [data-cpt="colour"]',"site.colors.title","Colour"); set('#colorPop [data-cpt="margins"]',"site.margins.title","Margins"); set('#colorPop [data-cpt="patterns"]',"site.patterns.title","Patterns"); set("#colorPop .pop-credit","color.credit","Colours by Mary");
+ set('#colorPop [data-cpt="colour"]',"site.colors.title","Colour"); set('#colorPop [data-cpt="margins"]',"site.margins.title","Margins"); set('#colorPop [data-cpt="patterns"]',"site.patterns.title","Patterns"); set('#colorPop [data-cpt="size"]',"site.size.title","Size"); set("#colorPop .pop-credit","color.credit","Colours by Mary");
  { const cb=document.querySelector("#colorBtn"), cl=T("menu.colour","Colour"); if(cb){ cb.innerHTML=`${IC_PALETTE}<span>${esc(cl)}</span>`; cb.setAttribute("aria-label",cl||"Colour"); } }
  { const pb=document.querySelector("#profBtn"), pl=T("menu.profile","Your profile"); if(pb){ pb.setAttribute("aria-label",pl||"Your profile"); pb.title=pl; } }
  { const mw=document.querySelector("#dateRibbon .dr-markw"), ml=T("ribbon.mark","Why Poiesis"); if(mw){ mw.insertAdjacentHTML("beforeend",ml?`<span>${esc(ml)}</span>`:""); mw.setAttribute("aria-label",ml||"Why Poiesis"); } }
@@ -392,11 +392,17 @@ const THEME_DEFAULT="dark";
    (the generator's block is kept so tools/mary-themes.mjs still runs; its
    themes are no longer offered). A saved colour that is gone falls back to
    Notebook. Colours live in styles.css under "Round 31". */
+{ const kept=["dark","forest","rose","office"].map(id=>THEMES.find(t=>t.id===id)).filter(Boolean);   /* Round 32: four of the earlier ones come back */
 THEMES.splice(0,THEMES.length,
  {id:"notebook",key:"color.notebook.name",name:"Notebook",sw:["#ECE7DB","#FCFAF3","#25221D","#2E4A78","#DE9C92","#DDD6C6"]},
  {id:"evening",key:"color.evening.name",name:"Evening",sw:["#22262E","#F3EEE2","#24221E","#E0A458","#D9A08F","#323843"]},
  {id:"garden",key:"color.garden.name",name:"Garden",sw:["#DFE5D6","#FCFBF4","#232620","#3F5E3A","#D9A08F","#CFD7C3"]},
- {id:"terracotta",key:"color.terracotta.name",name:"Terracotta",sw:["#F1E1D6","#FFFBF5","#2A211C","#9A4A32","#D98F7C","#E5D0C3"]});
+ {id:"terracotta",key:"color.terracotta.name",name:"Terracotta",sw:["#F1E1D6","#FFFBF5","#2A211C","#9A4A32","#D98F7C","#E5D0C3"]},
+ {id:"sky",key:"color.sky.name",name:"Sky",sw:["#DCE5EC","#FBFCFA","#1F262C","#2F5D7C","#DE9C92","#CBD7E0"]},
+ {id:"lavender",key:"color.lavender.name",name:"Lavender",sw:["#E6E1EE","#FDFBFA","#26222E","#5B4A86","#D9A08F","#D6CFE3"]},
+ {id:"kraft",key:"color.kraft.name",name:"Kraft",sw:["#D9C7A8","#FBF6EA","#2A2118","#7A4A1E","#D98F7C","#CBB894"]},
+ {id:"midnight",key:"color.midnight.name",name:"Midnight",sw:["#171C2B","#F2F0EA","#22232B","#8FB3E8","#D9A08F","#2A3148"]},
+ ...kept); }
 const STYLE_DEFAULT="notebook";
 const themeName=t=>T(t.key,t.name);
 /* what Manuscript fixes, and the settings that no longer change the layout */
@@ -543,7 +549,10 @@ function ensureWelcome(){ if(!LIVE||S.welcomed) return;
  if(!S.journal.length){ const w=welcomePage(); if(w) S.journal.push(w); }
  S.welcomed=true; }
 let S; try{ const saved=JSON.parse(localStorage.getItem(KEY)||"null"); S=Object.assign(((TESTER||LIVE)&&!saved)?emptyShell():fresh(), saved||{}); }catch(e){ S=(TESTER||LIVE)?emptyShell():fresh(); }
-function save(quiet){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ toast(T("toast.storage","This browser is out of room for pictures. Your words are still here.")); }
+/* Round 32: ?peek is the small live page inside Settings: it reads what is saved and never writes */
+const PEEK=new URLSearchParams(location.search).has("peek");
+if(PEEK){ document.documentElement.classList.add("peek"); S.tab="muse"; S.phome=false; S.past=null; S.info=false; }
+function save(quiet){ if(PEEK) return; try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ toast(T("toast.storage","This browser is out of room for pictures. Your words are still here.")); }
  if(!quiet && window.PoiesisData) window.PoiesisData.changed(); /* data.js: sync to the account */
  if(!quiet && window.PoiesisForum && window.PoiesisForum.changed) window.PoiesisForum.changed(); /* forum.js: notebook saves */ }
 if(S.pick.date && S.pick.date<today()) S.pick={date:null,id:null};
@@ -658,6 +667,8 @@ if(!S.ui) S.ui={};
 const SHARED=["color","margin","spine","ground"];
 function setPref(k,v,d){ if(SHARED.includes(k)) ["desk","phone"].forEach(x=>S.ui[x][k]=v); else S.ui[d||DEV()][k]=v; }
 if(!S.nbk31){ ["desk","phone"].forEach(x=>{ S.ui[x].margin="plain"; S.ui[x].ground="plain"; }); S.nbk31=1; }
+/* Round 32: dark mode is offered again, but nobody lands on it by accident: once, the old house colour becomes Notebook */
+if(!S.nbk32){ ["desk","phone"].forEach(x=>{ if(S.ui[x].color==="dark") S.ui[x].color=STYLE_DEFAULT; }); S.nbk32=1; }
 if(!S.sharedLook){ SHARED.forEach(k=>S.ui.phone[k]=S.ui.desk[k]); S.sharedLook=1; }
 const phoneMQ=matchMedia("(max-width: 700px)");
 const DEV=()=>phoneMQ.matches?"phone":"desk";
@@ -688,6 +699,7 @@ function applyPrefs(){
  $("#profBtn").innerHTML=avatarHTML(me());
  R.setAttribute("data-margin",U().margin||"vine"); R.setAttribute("data-spine",U().spine||"stitch");
  $("#cpMargins").innerHTML=marginsPaneHTML();
+ R.setAttribute("data-size",SIZES.some(x=>x[0]===U().size)?U().size:"m"); { const cs=$("#cpSize"); if(cs) cs.innerHTML=sizePaneHTML(); }
  const g=GROUNDS.some(x=>x[0]===U().ground)?U().ground:"theme", gp=groundPat(g, groundInk()); R.setAttribute("data-ground",g);
  if(gp){ R.style.setProperty("--gpat",gp[0]); R.style.setProperty("--gsize",gp[1]); }
  $("#cpPatterns").innerHTML=patternsPaneHTML();
@@ -695,8 +707,12 @@ function applyPrefs(){
 }
 /* Round 24: the Margins tab beside Colour. What climbs the right margin of
    the work, and how the spine between the work and the notepad is dressed. */
-const MARGINS=[["vine","Climbing vine"],["ms","Manuscript"],["plain","Plain"]];
+const MARGINS=[["plain","Plain"],["rule","Red line"],["double","Double line"],["holes","Punched holes"],["vine","Climbing vine"],["ms","Manuscript"]];   /* Round 32: three notebook margins */
 const SPINES=[["stitch","Stitched"],["diamond","Diamonds"],["bands","Raised bands"]];
+/* Round 32: Size, the fourth tab. Everything on the page grows or shrinks together; each screen keeps its own. */
+const SIZES=[["s","Small"],["m","Medium"],["l","Large"],["xl","Largest"]];
+function sizePaneHTML(){ const cur=SIZES.some(x=>x[0]===U().size)?U().size:"m", lab=T("size.label","Size");
+ return `<div class="cp-seg cp-sizes" role="group" aria-label="${esc(lab)}">${SIZES.map(([v,l])=>`<button type="button" data-mpref="size" data-val="${v}" aria-pressed="${cur===v}"><span class="cp-aa cp-aa-${v}" aria-hidden="true">Aa</span><span>${esc(T("size."+v,l))}</span></button>`).join("")}</div>`; }
 function marginsPaneHTML(){ const u=U();
  const seg=(k,lab,opts)=>`<p class="cp-lab">${esc(T("margins."+k,lab))}</p><div class="cp-seg" role="group" aria-label="${esc(T("margins."+k,lab))}">${opts.map(([v,l])=>`<button type="button" data-mpref="${k}" data-val="${v}" aria-pressed="${(u[k]||opts[0][0])===v}"><span class="cp-pv cp-${k}-${v}" aria-hidden="true"></span><span>${esc(T(`margins.${k}.${v}`,l))}</span></button>`).join("")}</div>`;
  const wh=T("margins.where","On a desk, the margin runs up the right edge of the work and the spine sits between the work and your notepad. Phones show one page, without them.");
@@ -732,7 +748,7 @@ function pop(btn,p){ p.hidden=!p.hidden; btn.setAttribute("aria-expanded",String
 $("#colorBtn").onclick=e=>{e.stopPropagation(); ribbonUp(); pop(e.currentTarget,$("#colorPop"));};
 $("#colorList").onclick=e=>{const b=e.target.closest("[data-color]"); if(b) setColor(b.dataset.color);};
 $("#colorPop").addEventListener("click",e=>{
- const t=e.target.closest("[data-cpt]"); if(t){ const k=t.dataset.cpt; $("#cpColour").hidden=k!=="colour"; $("#cpMargins").hidden=k!=="margins"; $("#cpPatterns").hidden=k!=="patterns"; $("#colorPop").querySelectorAll("[data-cpt]").forEach(b=>b.setAttribute("aria-pressed",String(b===t))); return; }
+ const t=e.target.closest("[data-cpt]"); if(t){ const k=t.dataset.cpt; $("#cpColour").hidden=k!=="colour"; $("#cpMargins").hidden=k!=="margins"; $("#cpPatterns").hidden=k!=="patterns"; { const cs=$("#cpSize"); if(cs) cs.hidden=k!=="size"; } $("#colorPop").querySelectorAll("[data-cpt]").forEach(b=>b.setAttribute("aria-pressed",String(b===t))); return; }
  const b=e.target.closest("[data-mpref]"); if(b){ setPref(b.dataset.mpref,b.dataset.val); save(); applyPrefs(); render(); }
 });
 /* the menu under your picture: Muse, Notebook, your profile, Colour, Why Poiesis */
@@ -746,10 +762,10 @@ document.addEventListener("click",e=>{ if(!e.target.closest("#pfBack")) return; 
 /* Round 26: tap the date ribbon and it drops to show the Poiesis mark; the mark opens Why Poiesis */
 /* Round 28: it is also the menu: the mark (Why Poiesis), Muse, Notebook, and the palette (Colour) */
 const RB=$("#dateRibbon"), RBd=RB.querySelector(".dr-date"), RBm=RB.querySelector(".dr-markw"), RBmenu=$("#drMenu");
-/* Round 31: the menu is always showing (a bar: Muse, Notebook, Style, Why Poiesis), so it is never inert */
-RBmenu.inert=false;
-function ribbonUp(){ RB.classList.remove("down"); RB.closest(".top")?.classList.remove("rb-down"); RBd.setAttribute("aria-expanded","false"); }
-RBd.onclick=()=>{ const d=!RB.classList.contains("down"); $("#colorPop").hidden=true; RB.classList.toggle("down",d); RB.closest(".top")?.classList.toggle("rb-down",d); RBd.setAttribute("aria-expanded",String(d)); };
+/* Round 32: back to the banner. It drops to show the menu; shut, the menu takes no focus */
+RBmenu.inert=true;
+function ribbonUp(){ RB.classList.remove("down"); RB.closest(".top")?.classList.remove("rb-down"); RBd.setAttribute("aria-expanded","false"); RBmenu.inert=true; }
+RBd.onclick=()=>{ const d=!RB.classList.contains("down"); $("#colorPop").hidden=true; RB.classList.toggle("down",d); RB.closest(".top")?.classList.toggle("rb-down",d); RBd.setAttribute("aria-expanded",String(d)); RBmenu.inert=!d; };
 RBm.onclick=e=>{ e.preventDefault(); ribbonUp(); go("why"); };
 document.addEventListener("click",e=>{ if(!e.composedPath().includes(RB)) ribbonUp(); },true);
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") ribbonUp(); });
@@ -760,12 +776,13 @@ document.addEventListener("click",e=>{ const path=e.composedPath(); for(const p 
 /* ---------- Navigation ---------- */
 $("#switch").onclick=e=>{const b=e.target.closest("[data-tab]"); if(b){ menuShut(); if(b.dataset.tab==="muse"){ S.past=null; S.phome=true; } go(b.dataset.tab);} };
 $("#whyLink").onclick=e=>{e.preventDefault(); go("why");};
-{ const bh=$("#brandHome"); if(bh) bh.onclick=e=>{ e.preventDefault(); menuShut(); S.past=null; S.phome=true; go("muse"); }; }
+/* Round 32: on phones Muse and Notebook sit in a bar along the bottom; Style and Why Poiesis stay in the banner */
+{ const bb=$("#botBar"); if(bb){ bb.innerHTML=["muse","notebook"].map(k=>`<button type="button" data-bt="${k}">${$(`#switch [data-tab="${k}"]`).innerHTML}</button>`).join(""); bb.onclick=e=>{ const b=e.target.closest("[data-bt]"); if(b) $(`#switch [data-tab="${b.dataset.bt}"]`).click(); }; } }
 function go(tab){ S.tab=tab; save(); render(); scrollTo({top:0, behavior:reduce?"auto":"smooth"}); }
 function render(){
  hideSel(); hideTip();
  document.querySelectorAll("#switch [data-tab]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===S.tab)));
- $("#profBtn").setAttribute("aria-current",String(S.tab==="profile")); RBm.setAttribute("aria-current",String(S.tab==="why"));
+ $("#profBtn").setAttribute("aria-current",String(S.tab==="profile")); RBm.setAttribute("aria-current",String(S.tab==="why")); document.querySelectorAll("#botBar [data-bt]").forEach(b=>{ const src=$(`#switch [data-tab="${b.dataset.bt}"]`); if(src&&b.innerHTML!==src.innerHTML) b.innerHTML=src.innerHTML; b.setAttribute("aria-current",String(S.tab===b.dataset.bt)); });
  ({muse:renderMuse, notebook:renderNotebook, why:renderWhy, profile:renderProfile})[S.tab]($("#view"));
  pruneBlankControls($("#view"));
  if(window.PoiesisForum) window.PoiesisForum.afterRender(); /* forum.js */
@@ -1280,9 +1297,9 @@ const DOODLE={
  nut:`<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"><path d="M20 12c-8 0-13 6-13 14s6 12 13 12 13-4 13-12-5-14-13-14z"/><path d="M12 16c2-5 14-5 16 0"/><path d="M20 12c0-5 3-9 8-10-1 5-4 8-8 10z"/></svg>`,
  feather:`<svg viewBox="0 0 30 60" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"><path d="M8 58C12 40 18 20 26 2"/><path d="M26 2C14 8 8 22 9 40M26 2c2 12-2 28-12 40"/><path d="M12 30l6-4M11 38l7-5M14 22l6-3"/></svg>`,
  lamp:`<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"><path d="M6 26c6 6 22 6 28-2-8-2-14-6-18-6-6 0-10 4-10 8z"/><path d="M34 24c3 0 4-2 4-4"/><path d="M12 22c1-6 4-10 4-14 3 4 3 9 0 12"/><path d="M14 32h12"/></svg>`};
-function marginOf(){ const v=U().margin; return ["vine","ms","plain"].includes(v)?v:"vine"; }
+function marginOf(){ const v=U().margin; return MARGINS.some(x=>x[0]===v)?v:"plain"; }
 function marginArtHTML(m){
- const mg=marginOf(); if(mg==="plain"||m.kind==="Art") return "";
+ const mg=marginOf(); if((mg!=="vine"&&mg!=="ms")||m.kind==="Art") return "";   /* the notebook margins are drawn by the stylesheet */
  const dd=(k,top,sm)=>`<i class="dd${sm?" sm":""}" style="top:${top}%">${DOODLE[k]}</i>`;
  if(mg==="vine") return `<span class="lk-mg lk-vine" aria-hidden="true"><span class="vstem"></span>${dd("ear",14)}${dd("nut",44,1)}${dd("feather",72)}</span>`;
  const short=m.kind!=="Poem";   /* the poem has the whole margin; a passage or Scripture a shorter one */
@@ -1656,20 +1673,33 @@ function wireWriterM(m){
 }
 
 /* settings view in the profile */
+/* Round 32: the preview. The page itself in a small frame (phone-wide for
+   Phones, desk-wide for Wide screens), opened where the last change shows. */
+const PEEK_AT={gate:"others", turner:"end", cue:"top", cueplace:"top"};
+function peekURL(){ const q=new URLSearchParams(location.search), u=q.get("user"), at=S.peekAt||""; return location.pathname+"?peek=1"+(u?"&user="+encodeURIComponent(u):"")+(at?"&at="+at:""); }
+function fitPeek(){ const f=$(".set-frame"), i=$("#setPeek"); if(!f||!i) return; const phone=f.classList.contains("set-phone"), w=phone?390:1180, h=phone?760:820, sc=Math.min(1,f.clientWidth/w), cap=DEV()==="phone"?250:9999;
+ i.style.width=w+"px"; i.style.height=h+"px"; i.style.transform=`scale(${sc})`; i.style.marginLeft=Math.max(0,(f.clientWidth-w*sc)/2)+"px"; f.style.height=Math.min(cap,Math.round(h*sc))+"px"; }
+addEventListener("resize",fitPeek);
+if(PEEK) addEventListener("load",()=>setTimeout(()=>{ const at=new URLSearchParams(location.search).get("at"); let el=null;
+ if(at==="others") el=[...document.querySelectorAll("#view h2, #view h3")].find(h=>/others/i.test(h.textContent));
+ if(at==="end") el=document.querySelector("#view .lk-page")?.lastElementChild;
+ if(el) el.scrollIntoView({block:at==="end"?"end":"start"}); },350));
 function settingsHTML(){
  const d=S.setDev||DEV(), u=S.ui[d];
  return `<div class="panel"><div class="m-sethead"><div><h3>${T("profile.settings.heading","Settings")}</h3><p class="muted">${T("profile.settings.line","How the Muse page looks for you. Wide screens and phones keep their own settings; you’re on ")}${DEV()==="desk"?"a wide screen":"a phone"} now.</p></div>
   <div class="viewt" role="group" aria-label="Which screen"><button data-setdev="desk" aria-pressed="${d==="desk"}">Wide screens</button><button data-setdev="phone" aria-pressed="${d==="phone"}">Phones</button></div></div>
+  <div class="set-grid"><aside class="set-peek"><p class="set-cap">${esc(T("profile.settings.peek","Preview"))}</p><div class="set-frame set-${d}"><iframe id="setPeek" src="${esc(peekURL())}" title="${esc(T("profile.settings.peek","Preview"))}" tabindex="-1" aria-hidden="true"></iframe></div></aside><div class="set-ctrls">
   ${SETTINGS.filter(g=>(!g.dev||g.dev===d)&&g.ctrls.some(c=>(!c.dev||c.dev===d)&&!LOOK_DECIDES.includes(c.k))).map(g=>`<fieldset class="m-grp"><legend>${esc(g.name)}</legend>${g.ctrls.filter(c=>(!c.dev||c.dev===d)&&!LOOK_DECIDES.includes(c.k)).map(c=>{ const on=!c.when||c.when(u,d);
    return `<div class="m-ctrl ${on?"":"off"}"><span class="m-cl">${esc(c.label)}</span><div class="m-seg" role="group" aria-label="${esc(c.label)}">${c.opts.map(([val,l])=>`<button type="button" data-set="${c.k}" data-val="${val}" aria-pressed="${u[c.k]===val}" ${on?"":"disabled"}>${esc(l)}</button>`).join("")}</div></div>`; }).join("")}</fieldset>`).join("")}
+  </div></div>
   <div class="rowbtns" style="margin-top:16px"><button class="btn" data-sethouse>Put back the house style for ${d==="desk"?"wide screens":"phones"}</button></div></div>`;
 }
 function renderSettings(v){
- v.innerHTML=`${ptabs("settings")}${settingsHTML()}`;
+ v.innerHTML=`${ptabs("settings")}${settingsHTML()}`; fitPeek();
  v.onclick=e=>{
   const pt=e.target.closest("[data-ptab]"); if(pt){ S.ptab=pt.dataset.ptab; save(); render(); return; }
   const sd=e.target.closest("[data-setdev]"); if(sd){ S.setDev=sd.dataset.setdev; save(); renderSettings(v); return; }
-  const b=e.target.closest("[data-set]"); if(b){ const d=S.setDev||DEV(); setPref(b.dataset.set,b.dataset.val,d); save(); applyPrefs(); renderSettings(v); return; }
+  const b=e.target.closest("[data-set]"); if(b){ const d=S.setDev||DEV(); setPref(b.dataset.set,b.dataset.val,d); S.peekAt=PEEK_AT[b.dataset.set]||""; save(); applyPrefs(); renderSettings(v); return; }
   if(e.target.closest("[data-sethouse]")){ const d=S.setDev||DEV(); const keep={color:S.ui[d].color}; S.ui[d]=Object.assign(clone(HOUSE[d]),keep); save(); applyPrefs(); renderSettings(v); toast(`Back to the house style for ${d==="desk"?"wide screens":"phones"}.`); }
  };
 }
@@ -1802,7 +1832,7 @@ document.addEventListener("keydown", e=>{ if(S.tab!=="muse"||S.past||/INPUT|TEXT
  if(e.key==="ArrowRight"&&S.mi<MUSES.length-1){ S.mi++; save(); render(); } if(e.key==="ArrowLeft"&&S.mi>0){ S.mi--; save(); render(); } });
 
 /* ---------- Notebook (Round 8): one notebook, four ways in ---------- */
-const WAYS=[["page",T("nb.way.page","Page")],["board",T("nb.way.board","Board")],["questions",T("nb.way.questions","Questions")],["today",T("nb.way.today","Today")],["kept",T("nb.way.kept","Kept writing")],["index",T("nb.way.index","Index")]];
+const WAYS=[["page",T("nb.way.page","Page")],["board",T("nb.way.board","Board")],["questions",T("nb.way.questions","Questions")],["kept",T("nb.way.kept","Kept writing")]];   /* Round 32: Today and Index are off the bar */
 const KEPT_KIND={impression:["nb.kept.impression","First impression"], link:["nb.kept.link","Synthesis"], reply:["nb.kept.reply","Reply"]};
 function keptHTML(){ const L=S.saved||[];
  return `<h3 class="nb-kept-h">${T("nb.kept.title","Kept writing")}</h3>${L.length?L.map(s=>{ const kk=KEPT_KIND[s.pkind]||KEPT_KIND.impression;
@@ -1926,7 +1956,7 @@ function pocketHTML(){
 function renderNotebook(v){
  if((window.POIESIS_CONFIG||{}).notebookSoon){ v.innerHTML=`<section class="nb-soon"><div class="nb-soon-card"><h2>${esc(T("notebook.soon","Will be added soon"))}</h2><p>${esc(T("notebook.soon.line","Anything you already wrote here is kept on this device."))}</p></div></section>`; return; }
  if(DEV()==="phone"){ v.innerHTML=pocketHTML(); wireNotebook(v); return; }
- const way=S.nb.way||"page";
+ const way=WAYS.some(x=>x[0]===S.nb.way)?S.nb.way:"page";
  v.innerHTML=`<div class="nb-bar"><div class="spaces" role="tablist">${WAYS.map(([k,l])=>`<button role="tab" data-nbway="${k}" aria-selected="${way===k}">${l}</button>`).join("")}</div></div>
   <div class="panel nb-panel" id="nbspace"></div>`;
  const box=$("#nbspace");

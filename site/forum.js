@@ -48,7 +48,8 @@
   const here = () => location.origin + location.pathname;
   const pending = () => { try { return JSON.parse(localStorage.getItem(PENDING) || "{}") || {}; } catch (e) { return {}; } };
   const setPending = (o) => { try { o ? localStorage.setItem(PENDING, JSON.stringify(o)) : localStorage.removeItem(PENDING); } catch (e) {} };
-  const looking = () => { try { return sessionStorage.getItem(LOOK) === "1"; } catch (e) { return false; } };
+  const looking = () => { if (/[?&]peek=/.test(location.search)) return true;   /* the small preview inside Settings never shows the welcome page */
+    try { return sessionStorage.getItem(LOOK) === "1"; } catch (e) { return false; } };
 
   function friendly(error) {
     if (!navigator.onLine) return T("forum.err.offline", "You’re offline. Try again when you’re back.");
