@@ -7,6 +7,13 @@
 !/index.html
 !/.gitignore
 !/wrangler.jsonc
+# The sticker lane (Niko, 16 Nov 2026): its method, weeks, sheets and scripts.
+!/muse-bank/
+/muse-bank/*
+!/muse-bank/stickers/
+!/muse-bank/scripts/
+/muse-bank/scripts/*
+!/muse-bank/scripts/sticker-*.mjs
 .DS_Store
 node_modules/
 *.log
