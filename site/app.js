@@ -677,8 +677,15 @@ const U=()=>{ const d=DEV(), fixed={}; RETIRED.forEach(k=>fixed[k]=HOUSE[d][k]);
 
 /* ---------- Avatars, stickers ---------- */
 function stickerHTML(id, size, tip, gilt){ const s=STICKERS[id]; if(!s) return ""; return `<span class="stk${gilt?" gilt":""}" style="width:${size}px;height:${size}px" tabindex="0" data-tip="${esc(tip||`${s.series} · ${s.name}`)}">${s.svg}</span>`; }
-function avatarHTML(o){ const ring=RINGS[o.ring]||RINGS.none; return `<span class="av" style="background:${o.photo?`url('${o.photo}') center/cover`:o.c};${o.ink?`color:${o.ink};`:""}box-shadow:${ring.css}">${o.photo?"":esc(o.initials)}</span>`; }
-function me(){ const p=S.profile; return {c:"var(--accent)", ink:"var(--on-accent)", initials:initials(p.name||"You"), photo:p.photo, ring:p.ring}; }
+/* 16 Nov: a picture is a sticker you own, or your initial; photos are no longer shown (a stored one is left untouched) */
+function avatarHTML(o){ const ring=RINGS[o.ring]||RINGS.none, s=o.stk&&STICKERS[o.stk];
+ if(s) return `<span class="av haspic" style="box-shadow:${ring.css}">${s.svg}</span>`;
+ return `<span class="av" style="background:${o.c};${o.ink?`color:${o.ink};`:""}box-shadow:${ring.css}">${esc(o.initials)}</span>`; }
+const myUsername=()=>(window.PoiesisForum&&window.PoiesisForum.username)||"";
+/* your name is your username once you have one */
+function syncName(){ const u=myUsername(); if(u&&S.profile&&S.profile.name!==u){ S.profile.name=u; return true; } return false; }
+function myPic(){ return S.profile.pic && S.owned[S.profile.pic] && STICKERS[S.profile.pic] ? S.profile.pic : null; }
+function me(){ const p=S.profile; syncName(); return {c:"var(--accent)", ink:"var(--on-accent)", initials:initials(p.name||"You"), stk:myPic(), ring:p.ring}; }
 const COLOURS=["#3d5d86","#6b4a7d","#8a5a3b","#2f5d50","#8a2f22","#5f7f45","#2c4a58"];
 function personAv(n){ const P=PEOPLE[n]; if(P) return avatarHTML({c:P.c, initials:initials(n), ring:P.ring});
  if(!n||n==="You") return avatarHTML(me());
@@ -1957,7 +1964,14 @@ function renderNotebook(v){
  if((window.POIESIS_CONFIG||{}).notebookSoon){ v.innerHTML=`<section class="nb-soon"><div class="nb-soon-card"><h2>${esc(T("notebook.soon","Will be added soon"))}</h2><p>${esc(T("notebook.soon.line","Anything you already wrote here is kept on this device."))}</p></div></section>`; return; }
  if(DEV()==="phone"){ v.innerHTML=pocketHTML(); wireNotebook(v); return; }
  const way=WAYS.some(x=>x[0]===S.nb.way)?S.nb.way:"page";
- v.innerHTML=`<div class="nb-bar"><div class="spaces" role="tablist">${WAYS.map(([k,l])=>`<button role="tab" data-nbway="${k}" aria-selected="${way===k}">${l}</button>`).join("")}</div></div>
+ const NB_HELP={page:["nb.help.page","Choose a line that struck you from the left, then write under it. One page, one thought. It saves as you go."],
+  board:["nb.help.board","Every line you have kept, pinned in one place. Pick up to three that seem to belong together and write a page under them."],
+  questions:["nb.help.questions","The questions you keep coming back to. Put one on the shelf, then hang pages on it as your answer grows."],
+  kept:["nb.help.kept","First impressions and replies you saved from the Muse page. Only you can see them."]};
+ const help=NB_HELP[way];
+ v.innerHTML=`<div class="nb-head"><button type="button" class="btn small ghost nb-back" data-nbact="backmuse">${T("nb.back","← Back to Muse")}</button><h2 class="nb-h">${T("nb.title","Notebook")}</h2></div>
+  <div class="nb-bar"><div class="spaces" role="tablist">${WAYS.map(([k,l])=>`<button role="tab" data-nbway="${k}" aria-selected="${way===k}">${l}</button>`).join("")}</div></div>
+  ${help?`<p class="nb-help">${esc(T(help[0],help[1]))}</p>`:""}
   <div class="panel nb-panel" id="nbspace"></div>`;
  const box=$("#nbspace");
  if(way==="page") box.innerHTML=pageHTML();
@@ -1987,6 +2001,7 @@ function wireNotebook(v){
  const aq=$("#addQF"); if(aq) aq.onsubmit=e=>{ e.preventDefault(); const tx=$("#qIn").value.trim(); if(!tx) return;
   S.questions.unshift({id:uid("q"), text:tx, date:today()}); save(); renderNotebook($("#view")); };
  v.onclick=e=>{
+  if(e.target.closest('[data-nbact="backmuse"]')){ go("muse"); return; }
   const w=e.target.closest("[data-nbway]"); if(w){ S.nb.way=w.dataset.nbway; save(); renderNotebook(v); return; }
   const ln=e.target.closest("[data-nbline]"); if(ln&&!e.target.closest("[data-nbrest]")){ const id=ln.dataset.nbline;
    S.nb.pick=S.nb.pick.includes(id)?S.nb.pick.filter(x=>x!==id):(S.nb.pick.length<3?[...S.nb.pick,id]:S.nb.pick);
@@ -2105,24 +2120,27 @@ function stickerCardHTML(id){ const s=STICKERS[id], o=S.owned[id]||{};
 function renderProfile(v){
  if(S.ptab==="settings") return renderSettings(v);
  if(S.ptab==="members") return renderMembers(v);
- const p=S.profile, col=collection();
+ const uname=myUsername(); if(syncName()) save();
+ const p=S.profile, col=collection(), owned=Object.keys(S.owned).filter(id=>STICKERS[id]);
  const draws=todaysDraws(), checked=checkedToday();
  const todayPanel=draws.length?`<div class="panel" style="margin-bottom:16px"><h3>${T("profile.today.heading","Today’s sticker")}</h3><p class="muted" style="margin:2px 0 12px;font-size:.9rem">${checked?`<b>${esc(STICKERS[checked].name)}</b> carries today’s check. Tap another to move it; it settles at midnight.`:T("profile.today.none","Tap one of today’s to give it the check.")}</p>
    <div class="rowbtns">${draws.map(id=>`<button class="btn ${checked===id?"primary":""}" data-keep="${id}" ${checked===id?'aria-pressed="true"':""}>${stickerHTML(id,26)} ${esc(STICKERS[id].name)}${checked===id?" · today’s":""}</button>`).join("")}</div></div>`:"";
  v.innerHTML=`${ptabs("you")}<div class="profile"><div class="panel pcard">
-   <div class="pa">${avatarHTML(me()).replace('class="av"','class="av big"')}<div><button class="btn small" id="pPic">${p.photo?"Change photo":"Add a photo"}</button><input type="file" id="pFile" accept="image/*" hidden></div></div>
-   <label class="lbl" for="pName">${T("profile.name","Name")}</label><input class="field" id="pName" value="${esc(p.name)}">
-   <label class="lbl" for="pLine">${T("profile.line","A line about you")}</label><input class="field" id="pLine" value="${esc(p.line)}" placeholder="${T("profile.line.placeholder","Reads Homer on trams")}">
+   <div class="pa">${avatarHTML(me()).replace('class="av','class="av big')}<div class="picpick"><p class="lbl">${T("profile.pic.heading","Your picture is a sticker")}</p>${owned.length
+     ?`<div class="picrow">${owned.map(id=>`<button type="button" class="picbtn" data-pic="${id}" aria-pressed="${myPic()===id}" aria-label="${esc(STICKERS[id].name)}">${stickerHTML(id,40,STICKERS[id].name,S.owned[id].gilt)}</button>`).join("")}</div>`
+     :`<p class="muted picnone">${T("profile.pic.empty","A first impression draws your first sticker.")}</p>`}</div></div>
+   <label class="lbl" for="pName">${T("profile.name","Name")}</label><input class="field" id="pName" value="${esc(p.name)}"${uname?" readonly":""}>
+   <label class="lbl" for="pLine">${T("profile.line","A line about you")}</label><input class="field" id="pLine" value="${esc(p.line)}" placeholder="${T("profile.line.placeholder","A habit or aesthetic that describes you")}">
    <label class="lbl" for="pMake">${T("profile.makes","What you make")}</label><input class="field" id="pMake" value="${esc(p.makes)}" placeholder="${T("profile.makes.placeholder","Essays, a few poems, bread")}">
    ${liveUser()?`<label class="lbl" for="pHandle">${T("profile.handle","Handle")}</label><input class="field" id="pHandle" value="${esc(myHandle())}" placeholder="${T("profile.handle.placeholder","letters, numbers, _")}" autocapitalize="none" autocomplete="off" spellcheck="false" maxlength="25"><p class="muted hmsg" id="pHandleMsg" role="status" aria-live="polite"></p>`:""}
    <label class="lbl" for="pBio">${T("profile.bio","A longer bio")}</label><textarea class="field" id="pBio" rows="4" maxlength="500" placeholder="${esc(T("profile.bio.placeholder",""))}">${esc(p.bio||"")}</textarea><small class="muted bio-count" id="pBioN"></small>
    <p class="lbl">${T("profile.ring","Ring")}</p><div class="rings">${Object.entries(RINGS).map(([k,r])=>`<button class="ringbtn" data-ring="${k}" aria-pressed="${p.ring===k}"><span class="av" style="background:var(--accent);box-shadow:${r.css}"></span><small>${r.name}</small></button>`).join("")}</div>
    <p class="lbl">${T("profile.badge","Badge")}</p><div class="badges">${BADGES.map(b=>{const ok=b.ok(); return `<button class="badge pick" data-badge="${b.id}" aria-pressed="${p.badge===b.id}" ${ok?"":"disabled"} data-tip="${esc(ok?b.how:"Locked · "+b.how)}">${esc(b.id)}</button>`;}).join("")}</div></div>
-  <div>${todayPanel}<div class="panel"><h3>${T("profile.makers.heading","Your makers")}</h3><p class="muted" style="margin:2px 0 4px;font-size:.9rem">${T("profile.makers.line","Each maker has a set of six, each one tied to something they really made or did. A first impression draws one you don’t have yet — never a repeat. Only makers you have met are shown.")}</p>
+  <div>${todayPanel}<div class="panel"><h3>${T("profile.makers.heading","Stickers")}</h3><p class="muted" style="margin:2px 0 4px;font-size:.9rem">${T("profile.makers.line","Earn stickers from responding to works, collect them in your library or display them")}</p>
     <p class="muted" style="margin:0 0 6px;font-size:.84rem">${T("profile.gilding.line","Gilding is a finish, not a prize: gild anything you own, and take it off again.")}</p>
     ${liveUser()?`<label class="shelfsw"><input type="checkbox" id="pShelf" ${p.showShelf===false?"":"checked"}> ${esc(T("profile.shelf.show","Show my sticker shelf to other members"))}</label>`:""}
     ${shelfHTML()}</div>
-   <div class="panel" style="margin-top:16px"><h3>${T("profile.formed.heading","Who formed you")}</h3>${T("profile.formed.line","The writers, artists and teachers you apprentice to. Your circle sees these.")?`<p class="muted" style="margin:2px 0 10px;font-size:.9rem">${T("profile.formed.line","")}</p>`:""}
+   <div class="panel" style="margin-top:16px"><h3>${T("profile.formed.heading","Who are your models")}</h3>${T("profile.formed.line","The writers, artists and teachers you apprentice to. Your circle sees these.")?`<p class="muted" style="margin:2px 0 10px;font-size:.9rem">${T("profile.formed.line","")}</p>`:""}
     <div class="formed">${p.formed.map((f,i)=>`<span class="fchip">${esc(f)}<button data-unform="${i}" aria-label="Remove ${esc(f)}">×</button></span>`).join("")}</div>
     <form class="cform" id="formF"><input class="field" id="formIn" placeholder="${T("profile.formed.placeholder","Add a name")}" aria-label="Add someone who formed you"><button class="btn">${T("profile.formed.add","Add")}</button></form></div>
    <div class="panel" style="margin-top:16px"><h3>${T("profile.circle.heading","How your circle sees you")}</h3>
@@ -2130,19 +2148,18 @@ function renderProfile(v){
     ${p.bio?`<p class="mem-bio" style="font-size:.9rem">${esc(p.bio)}</p>`:""}
     ${p.formed.length?`<p class="muted" style="font-size:.86rem;margin:6px 0 0">${T("profile.formed.by","Formed by ")}${esc(p.formed.join(", "))}</p>`:""}</div></div></div>`;
  const put=k=>e=>{ S.profile[k]=e.target.value; save(); };
- $("#pName").oninput=put("name"); $("#pLine").oninput=put("line"); $("#pMake").oninput=put("makes");
+ if(!uname) $("#pName").oninput=put("name"); $("#pLine").oninput=put("line"); $("#pMake").oninput=put("makes");
  ["pName","pLine","pMake"].forEach(id=>$("#"+id).onchange=()=>{ applyPrefs(); renderProfile(v); });
  const bioEl=$("#pBio"), bioN=$("#pBioN"), bioCount=()=>{ if(bioN) bioN.textContent=bioEl.value.length>=400?`${bioEl.value.length} / 500`:""; };
  if(bioEl){ bioCount(); bioEl.oninput=e=>{ S.profile.bio=e.target.value.slice(0,500); bioCount(); save(); }; }
  const hEl=$("#pHandle"); if(hEl) hEl.onchange=async()=>{ const r=await window.PoiesisData.profile.setHandle(hEl.value), m=$("#pHandleMsg"); if(m) m.textContent=r.ok?T("profile.handle.saved","Saved."):r.message; if(r.ok) hEl.value=r.handle; };
  const shEl=$("#pShelf"); if(shEl) shEl.onchange=()=>{ S.profile.showShelf=shEl.checked; save(); };
- $("#pPic").onclick=()=>$("#pFile").click();
- $("#pFile").onchange=e=>{ const f=e.target.files[0]; if(f) shrink(f,img=>{ S.profile.photo=img; save(); applyPrefs(); renderProfile(v); }); };
  $("#formF").onsubmit=e=>{ e.preventDefault(); const t=$("#formIn").value.trim(); if(!t) return; S.profile.formed.push(t); save(); renderProfile(v); };
  v.onclick=e=>{ const pt=e.target.closest("[data-ptab]"); if(pt){ S.ptab=pt.dataset.ptab; save(); render(); return; }
   const kp=e.target.closest("[data-keep]"); if(kp){ if(checkedToday()!==kp.dataset.keep) keepSticker(kp.dataset.keep); return; }
   const st=e.target.closest("[data-stk]"); if(st){ S.stkSel=S.stkSel===st.dataset.stk?null:st.dataset.stk; save(); renderProfile(v); return; }
   const gd=e.target.closest("[data-gild]"); if(gd){ const o=S.owned[gd.dataset.gild]; if(o){ o.gilt=!o.gilt; save(); renderProfile(v); toast(o.gilt?T("toast.gilded","Gilded."):T("toast.ungilded","Gilding taken off.")); } return; }
+  const pc=e.target.closest("[data-pic]"); if(pc){ S.profile.pic=S.profile.pic===pc.dataset.pic?null:pc.dataset.pic; save(); applyPrefs(); renderProfile(v); return; }
   const b=e.target.closest("[data-ring],[data-badge],[data-top],[data-goto],[data-unform]"); if(!b) return;
   if(b.dataset.ring) S.profile.ring=b.dataset.ring;
   if(b.dataset.badge) S.profile.badge=b.dataset.badge;

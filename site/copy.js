@@ -278,6 +278,13 @@ sticker.card.close: Close
 sticker.locked.tip: A first impression draws one sticker from 
 
 # THE NOTEBOOK =========================================================
+nb.title: Notebook
+nb.back: ← Back to Muse
+# One line under the tabs saying what each space is for
+nb.help.page: Choose a line that struck you from the left, then write under it. One page, one thought. It saves as you go.
+nb.help.board: Every line you have kept, pinned in one place. Pick up to three that seem to belong together and write a page under them.
+nb.help.questions: The questions you keep coming back to. Put one on the shelf, then hang pages on it as your answer grows.
+nb.help.kept: First impressions and replies you saved from the Muse page. Only you can see them.
 nb.way.page: Page
 nb.way.board: Board
 nb.way.questions: Questions
@@ -307,13 +314,13 @@ nb.art.smaller: Smaller again
 
 # THE PAGE ITSELF — the prompt changes with how many lines are on it
 page.prompt.question: Hanging on: 
-page.prompt.none: 
+page.prompt.none: An empty page. Put a line at the top, or just start writing.
 page.prompt.one: One line at the top. What is it asking of you?
 page.prompt.two: Two lines to bring together:
 page.prompt.three: Three lines, what do they all say?
 page.empty: No line yet. Choose one or write straight onto the page.
 page.title.placeholder: Title (optional)
-page.body.placeholder: Write under it…
+page.body.placeholder: What does it stir in you? Start anywhere, a sentence is enough…
 page.hangs: Hangs on
 page.hangs.none: — nothing yet —
 page.hangs.new: + a new question…
@@ -379,15 +386,17 @@ profile.tab.you: Your profile
 profile.tab.settings: Settings
 profile.name: Name
 profile.line: A line about you
-profile.line.placeholder: Reads Homer on trams
+profile.line.placeholder: A habit or aesthetic that describes you
 profile.makes: What you make
 profile.makes.placeholder: Essays, a few poems, bread
 profile.ring: Ring
 profile.badge: Badge
+profile.pic.heading: Your picture is a sticker
+profile.pic.empty: A first impression draws your first sticker.
 profile.today.heading: Today’s sticker
 profile.today.none: Tap one of today’s to give it the check.
-profile.makers.heading: Your makers
-profile.makers.line: Each maker has a set of six, each tied to something they truly made or did. A first impression draws one you do not have yet, never a repeat. Only makers you have met are shown.
+profile.makers.heading: Stickers
+profile.makers.line: Earn stickers from responding to works, collect them in your library or display them
 profile.gilding.line: Gilding is a finish, not a prize: gild anything you own, and take it off again.
 profile.shelf.six: a set of six
 profile.shelf.single: single
@@ -397,7 +406,7 @@ profile.gild: Gild it
 profile.ungild: Take the gilding off
 profile.wear: Wear it
 profile.worn: ★ Worn beside your name
-profile.formed.heading: Who formed you
+profile.formed.heading: Who are your models
 profile.formed.line:
 profile.formed.placeholder: Add a name
 profile.formed.add: Add
