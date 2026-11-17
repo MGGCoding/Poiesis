@@ -560,6 +560,11 @@ footer{padding-block:34px 0; color:var(--muted-ground); font-size:.82rem; displa
 .bmh{font-family:var(--f-type); font-size:.62rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); padding:6px 10px 2px; border-top:1px solid var(--line); margin-top:2px}
 .whylink{font-family:var(--f-display); font-size:1.15rem; color:var(--ink-accent); text-decoration:none}
 .whylink:hover{text-decoration:underline}
+.smallprint{color:inherit; font-size:.82rem; opacity:.85}
+.fjoin{font-size:.8rem; line-height:1.45; color:var(--muted-ground, #6b5d50); margin:10px 0 12px}
+.fjoin a{color:inherit; text-decoration:underline}
+.reportlink{margin-left:auto; align-self:center; font-size:.72rem; color:var(--paper-mute, #8a7b6c); text-decoration:none; opacity:.8}
+.reportlink:hover{text-decoration:underline; opacity:1}
 .split.flip > :first-child{order:2}
 .rowbtns{display:flex; gap:6px; flex-wrap:wrap}
 .jbtns{display:flex; gap:6px; margin-bottom:8px; flex-wrap:wrap}

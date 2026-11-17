@@ -1,0 +1,3 @@
+# Files in site/ that Cloudflare should not publish (17 Nov 2026).
+RUNNING.md
+_headers

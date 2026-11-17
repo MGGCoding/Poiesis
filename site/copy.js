@@ -728,4 +728,11 @@ nb.kept.remove: Take out
 nb.kept.impression: First impression
 nb.kept.link: Synthesis
 nb.kept.reply: Reply
+
+# THE SMALL PRINT (small-print.html holds the full text; these are the lines that point to it)
+legal.join: By coming in you say you are 13 or older (with a parent’s okay if you are under 18) and you agree to
+legal.join.link: the small print
+legal.report: Report
+legal.report.subject: Report a post
+legal.email: hello@poetdaily.org
 `;

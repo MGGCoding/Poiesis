@@ -1,3 +1,25 @@
+Poiesis (poetdaily.org) — what you may reuse
+
+1. THE CODE: MIT License
+   The software in this folder (the .js, .css and .html files, as code) is
+   released under the MIT License below.
+
+2. THE WORDS AND PICTURES OF POIESIS: all rights reserved
+   Copyright (c) 2026 Nikolos Kyritsopoulos. All rights reserved.
+   This covers the original writing in this folder (in copy.js and days.js:
+   the essays, muse stories, notes, questions and translations), the
+   stickers, the mark and the visual design. The MIT License does not apply
+   to them. Short quotations with a link back to poetdaily.org are welcome.
+
+3. THE DAY'S WORKS: public domain
+   The poems, passages, Scripture (World English Bible) and paintings are in
+   the public domain in the United States and are not claimed by anyone here.
+
+4. OTHERS' WORK INCLUDED HERE
+   Typefaces: SIL Open Font License 1.1 (fonts/LICENSES.md).
+   Supabase client: MIT License (vendor/supabase-LICENSE.txt).
+
+-------------------------------------------------------------------------
 MIT License
 
 Copyright (c) 2026 Nikolos Kyritsopoulos

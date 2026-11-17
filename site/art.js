@@ -17,6 +17,7 @@
 /* Round 30 (3 Nov): "img" is the painting itself, taken from the Art Wall
    (Wikimedia Commons, public domain); the colour study shows if it fails to load. */
 /* 15–19 Nov (15 Nov): the art chat's picks, one a day, chosen for Niko; cards in muse-bank/art/. */
+/* 17–23 Nov (17 Nov): Niko's picks, every 'theme through the critics' work ("every piece that follows the theme thorugh the critics is great"). */
 window.POIESIS_ART = {
   "2026-11-01": { paintings: [
     { title: "The Voyage of Life: Old Age", img: "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4e/Thomas_Cole_-_The_Voyage_of_Life_Old_Age%2C_1842_%28National_Gallery_of_Art%29.jpg/960px-Thomas_Cole_-_The_Voyage_of_Life_Old_Age%2C_1842_%28National_Gallery_of_Art%29.jpg", artist: "Thomas Cole", date: "1842",
@@ -67,24 +68,87 @@ window.POIESIS_ART = {
       palette: ["#2a211a", "#b9894a", "#7a2e22"] }
   ]},
   "2026-11-17": { paintings: [
-    { title: "Zacchaeus in the Sycamore Awaiting the Passage of Jesus", img: "https://upload.wikimedia.org/wikipedia/commons/e/e2/Brooklyn_Museum_-_Zacchaeus_in_the_Sycamore_Awaiting_the_Passage_of_Jesus_%28Zach%C3%A9e_sur_le_sycomore_attendant_le_passage_de_J%C3%A9sus%29_-_James_Tissot.jpg", artist: "James Tissot", date: "1886–96",
-      medium: "Opaque watercolour over graphite", where: "Brooklyn Museum, New York",
-      note: "A rich man up a tree like a boy, waiting to get a look.",
-      link: "https://commons.wikimedia.org/w/index.php?title=Special:MediaSearch&type=image&search=Tissot%20Zacchaeus%20in%20the%20sycamore",
-      palette: ["#cdbf9c", "#6f7f4f", "#8a5a3c"] }
+    { title: "The Money Changer and His Wife", img: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/Le_pr%C3%AAteur_et_sa_femme_-_Quentin_Metsys_-_Mus%C3%A9e_du_Louvre_Peintures_INV_1444_%3B_MR_821.jpg/960px-Le_pr%C3%AAteur_et_sa_femme_-_Quentin_Metsys_-_Mus%C3%A9e_du_Louvre_Peintures_INV_1444_%3B_MR_821.jpg", artist: "Quentin Matsys", date: "1514",
+      where: "Louvre, Paris",
+      note: "He weighs coins; she has a prayer book open and is watching the scales.",
+      link: "https://en.wikipedia.org/wiki/The_Money_Changer_and_His_Wife",
+      palette: ["#6b5a3a", "#a8322a", "#2f4a5a"] }
   ]},
   "2026-11-18": { paintings: [
-    { title: "The Parable of the Talents (or Minas)", img: "https://commons.wikimedia.org/wiki/Special:FilePath/Willem_de_Poorter%27s_The_Parable_of_The_Talents_or_Minas.png?width=960", artist: "Willem de Poorter", date: "17th century (c. 1630s)",
-      medium: "Oil on panel, 45 × 55 cm", where: "National Gallery Prague",
-      note: "A servant gives his account of the coin he kept safe.",
-      link: "https://commons.wikimedia.org/wiki/File:Willem_de_Poorter%27s_The_Parable_of_The_Talents_or_Minas.png",
-      palette: ["#3a2e22", "#b08a4e", "#d8cdb4"] }
+    { title: "The Sower", img: "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/Jean-Fran%C3%A7ois_Millet_-_The_Sower_-_Google_Art_Project.jpg/960px-Jean-Fran%C3%A7ois_Millet_-_The_Sower_-_Google_Art_Project.jpg", artist: "Jean-François Millet", date: "1850",
+      where: "Museum of Fine Arts, Boston",
+      note: "A man throws seed downhill at dusk, with birds already behind him.",
+      link: "https://en.wikipedia.org/wiki/The_Sower_(Millet)",
+      palette: ["#c9a86a", "#5a4a32", "#8a7a5a"] }
   ]},
   "2026-11-19": { paintings: [
-    { title: "The Parable of the Unjust Steward", img: "https://commons.wikimedia.org/wiki/Special:FilePath/Parable_of_the_Unjust_Steward_Marinus_van_Reymerswaele.jpg?width=960", artist: "Marinus van Reymerswaele", date: "c. 1540",
-      medium: "Oil on oak panel, 77 × 96.5 cm", where: "Kunsthistorisches Museum, Vienna (Gemäldegalerie, inv. 962)",
-      note: "A steward before his master, the books between them.",
-      link: "https://www.khm.at/en/artworks/gleichnis-vom-untreuen-verwalter-1536",
-      palette: ["#7a2b24", "#c8b48a", "#2f3a36"] }
+    { title: "The Fighting Temeraire", img: "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/30/The_Fighting_Temeraire%2C_JMW_Turner%2C_National_Gallery.jpg/960px-The_Fighting_Temeraire%2C_JMW_Turner%2C_National_Gallery.jpg", artist: "J. M. W. Turner", date: "1838",
+      where: "National Gallery, London",
+      note: "An old warship towed to be broken up, under a burning sky.",
+      link: "https://en.wikipedia.org/wiki/The_Fighting_Temeraire",
+      palette: ["#e0a040", "#3a5a7a", "#2a2a2a"] }
+  ]},
+  "2026-11-20": { paintings: [
+    { title: "The Awakening Conscience", img: "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Hunt-AwakeningConscience1853.jpg/960px-Hunt-AwakeningConscience1853.jpg", artist: "William Holman Hunt", date: "1853",
+      where: "Tate Britain, London",
+      note: "A woman half rises from a man's lap, struck by something he hasn't noticed.",
+      link: "https://en.wikipedia.org/wiki/The_Awakening_Conscience",
+      palette: ["#3a5a3a", "#c8b48a", "#7a2b24"] }
+  ]},
+  "2026-11-21": { paintings: [
+    { title: "The Angelus", img: "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/JEAN-FRAN%C3%87OIS_MILLET_-_El_%C3%81ngelus_%28Museo_de_Orsay%2C_1857-1859._%C3%93leo_sobre_lienzo%2C_55.5_x_66_cm%29.jpg/960px-JEAN-FRAN%C3%87OIS_MILLET_-_El_%C3%81ngelus_%28Museo_de_Orsay%2C_1857-1859._%C3%93leo_sobre_lienzo%2C_55.5_x_66_cm%29.jpg", artist: "Jean-François Millet", date: "1857–59",
+      where: "Musée d'Orsay, Paris",
+      note: "Two people have stopped work in a field at dusk, before it is finished.",
+      link: "https://en.wikipedia.org/wiki/The_Angelus_(painting)",
+      palette: ["#8a7a4a", "#c9a86a", "#4a3a2a"] }
+  ]},
+  "2026-11-22": { paintings: [
+    { title: "The Peasant Wedding", img: "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/Pieter_Bruegel_the_Elder_-_Peasant_Wedding_-_Google_Art_Project_2.jpg/960px-Pieter_Bruegel_the_Elder_-_Peasant_Wedding_-_Google_Art_Project_2.jpg", artist: "Pieter Bruegel the Elder", date: "1567",
+      where: "Kunsthistorisches Museum, Vienna",
+      note: "A barn full of people, not grain; dinner carried in on a door.",
+      link: "https://en.wikipedia.org/wiki/The_Peasant_Wedding",
+      palette: ["#a8322a", "#c9a86a", "#5a4a2a"] }
+  ]},
+  "2026-11-23": { paintings: [
+    { title: "The Little Street", img: "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2b/Johannes_Vermeer_-_Gezicht_op_huizen_in_Delft%2C_bekend_als_%27Het_straatje%27_-_Google_Art_Project.jpg/960px-Johannes_Vermeer_-_Gezicht_op_huizen_in_Delft%2C_bekend_als_%27Het_straatje%27_-_Google_Art_Project.jpg", artist: "Johannes Vermeer", date: "c. 1657–58",
+      where: "Rijksmuseum, Amsterdam",
+      note: "A brick house, a woman sewing in a doorway, children on the pavement. Nothing happens.",
+      link: "https://en.wikipedia.org/wiki/The_Little_Street",
+      palette: ["#8a3a2a", "#e0d8c8", "#4a5a4a"] }
+  ]},
+  "2026-11-24": { paintings: [
+    { title: "The Gulf Stream", img: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bf/Winslow_Homer_-_The_Gulf_Stream_-_Metropolitan_Museum_of_Art.jpg/960px-Winslow_Homer_-_The_Gulf_Stream_-_Metropolitan_Museum_of_Art.jpg", artist: "Winslow Homer", date: "1899",
+      where: "Metropolitan Museum of Art, New York",
+      note: "A broken boat, sharks in the water, a storm coming. The man on deck is not panicking.",
+      link: "https://en.wikipedia.org/wiki/The_Gulf_Stream_(painting)",
+      palette: ["#2f6a7a", "#c9b48a", "#7a2a22"] }
+  ]},
+  "2026-11-25": { paintings: [
+    { title: "Saying Grace", img: "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Le_B%C3%A9n%C3%A9dicit%C3%A9_de_Jean_Sim%C3%A9on_Chardin_%28cropped%29.jpg/960px-Le_B%C3%A9n%C3%A9dicit%C3%A9_de_Jean_Sim%C3%A9on_Chardin_%28cropped%29.jpg", artist: "Jean-Siméon Chardin", date: "c. 1740",
+      where: "Louvre, Paris",
+      note: "Supper is ready; the youngest says thanks before anyone eats.",
+      link: "https://en.wikipedia.org/wiki/Saying_Grace_(Chardin)",
+      palette: ["#6a5a3a", "#c8b89a", "#7a3a2a"] }
+  ]},
+  "2026-11-26": { paintings: [
+    { title: "Supper at Emmaus", img: "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/98/Rembrandt_The_Supper_at_Emmaus.jpg/960px-Rembrandt_The_Supper_at_Emmaus.jpg", artist: "Rembrandt", date: "1648",
+      where: "Louvre, Paris",
+      note: "Two travellers at supper with a stranger; one of them has just understood.",
+      link: "https://en.wikipedia.org/wiki/Supper_at_Emmaus_(Rembrandt,_Louvre)",
+      palette: ["#4a3a22", "#c9a86a", "#2a221a"] }
+  ]},
+  "2026-11-27": { paintings: [
+    { title: "The Milkmaid", img: "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Johannes_Vermeer_-_Het_melkmeisje_-_Google_Art_Project.png/960px-Johannes_Vermeer_-_Het_melkmeisje_-_Google_Art_Project.png", artist: "Johannes Vermeer", date: "c. 1657–58",
+      where: "Rijksmuseum, Amsterdam",
+      note: "A kitchen maid pours milk into a bowl, slowly, with nobody watching.",
+      link: "https://en.wikipedia.org/wiki/The_Milkmaid_(Vermeer)",
+      palette: ["#c9a83a", "#2f4a7a", "#8a7a5a"] }
+  ]},
+  "2026-11-28": { paintings: [
+    { title: "Luncheon of the Boating Party", img: "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Pierre-Auguste_Renoir_-_Luncheon_of_the_Boating_Party_-_Google_Art_Project.jpg/960px-Pierre-Auguste_Renoir_-_Luncheon_of_the_Boating_Party_-_Google_Art_Project.jpg", artist: "Pierre-Auguste Renoir", date: "1880–81",
+      where: "The Phillips Collection, Washington, D.C.",
+      note: "After the rowing: friends linger over lunch on a terrace by the river.",
+      link: "https://en.wikipedia.org/wiki/Luncheon_of_the_Boating_Party",
+      palette: ["#c8b07a", "#3a5a7a", "#a8322a"] }
   ]}
 };

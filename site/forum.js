@@ -21,8 +21,9 @@
   const APP = window.PoiesisApp;
   if (!CFG.forum || !CFG.supabaseUrl || !CFG.supabaseAnonKey || !APP || !APP.forum) return;
 
-  const SDK = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js";
+  const SDK = "vendor/supabase-2.117.2.js";  // kept on our own site (17 Nov 2026): no third-party script host
   const T = (k, d) => APP.T(k, d);
+  const joinLine = () => `<p class="fjoin">${h(T("legal.join", "By coming in you say you are 13 or older (with a parent’s okay if you are under 18) and you agree to"))} <a href="small-print.html" target="_blank" rel="noopener">${h(T("legal.join.link", "the small print"))}</a>.</p>`;
   const h = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const PENDING = "poiesis.forum.pending";   // username / letter / beta word chosen before the account existed
   const LOOK = "poiesis.forum.looking";      // "just look around" for this visit
@@ -40,7 +41,7 @@
     return new Promise((resolve, reject) => {
       if (window.supabase && window.supabase.createClient) return resolve();
       const s = document.createElement("script");
-      s.src = SDK; s.async = true; s.crossOrigin = "anonymous";
+      s.src = SDK; s.async = true;
       s.onload = resolve; s.onerror = () => reject(new Error("sdk"));
       document.head.appendChild(s);
     });
@@ -290,12 +291,12 @@
     let card;
     if (mode === "name") {
       card = `<h3>${h(T("forum.name.title", "Choose a username"))}</h3><p class="fline">${h(T("forum.name.line", "This is the name others see beside what you write."))}</p>
-        <form data-f="name">${nameF}${wordF}${letterF}<button class="btn primary authwide">${h(T("forum.name.go", "Come in"))}</button></form>
+        <form data-f="name">${nameF}${wordF}${letterF}${joinLine()}<button class="btn primary authwide">${h(T("forum.name.go", "Come in"))}</button></form>
         <button type="button" class="linkbtn" data-g="out">${h(T("forum.notyou", "Not you? Sign out"))}</button>`;
     } else if (mode === "create") {
       card = `${tabs}<form data-f="create">${emailF}${nameF}
         ${field("fPw", T("forum.pw.new", "Password (6 or more characters)"), "password", 'autocomplete="new-password" minlength="6" required')}
-        ${wordF}${letterF}<button class="btn primary authwide">${h(T("forum.create.go", "Come in"))}</button></form>`;
+        ${wordF}${letterF}${joinLine()}<button class="btn primary authwide">${h(T("forum.create.go", "Come in"))}</button></form>`;
     } else {
       card = `${tabs}<form data-f="in">${emailF}
         ${field("fPw", T("forum.pw", "Password"), "password", 'autocomplete="current-password"')}

@@ -1030,10 +1030,14 @@ function keepReplyBtn(c,pid){ const on=isKept(keepKeyReply(pid,c.n,c.t)); return
 function keepWriting(o){ S.saved=S.saved||[]; const had=S.saved.find(x=>x.key===o.key);
  if(had){ S.saved=S.saved.filter(x=>x!==had); save(); toast(T("toast.keep.off","Taken out of your notebook.")); return false; }
  S.saved.unshift(Object.assign({id:uid("s"), date:today()}, o)); save(); toast(T("toast.keep.on","Saved to your notebook.")); return true; }
+// Report a post (17 Nov 2026): a plain email to the moderators; no counts, nothing automatic.
+function reportLink(p,m){ const to=T("legal.email","hello@poetdaily.org"); if(!to) return "";
+ const body=`Post ${p.id} · ${m.id} · ${p.at||""}\n\nWhat is wrong with it:\n`;
+ return `<a class="reportlink" href="mailto:${encodeURIComponent(to).replace("%40","@")}?subject=${encodeURIComponent(T("legal.report.subject","Report a post"))}&body=${encodeURIComponent(body)}">${esc(T("legal.report","Report"))}</a>`; }
 function postHTML(p, m, mine, closed){
  const P=mine?null:(PEOPLE[p.name]||null);
  const top=mine?myTop():(P?P.top:null);
- const topTip=top?(mine?`${STICKERS[top].series} · ${STICKERS[top].name}`:`${STICKERS[top].name} · ${p.name.split(" ")[0]} collected this ${GOT[p.name]||"earlier"}`):"";
+ const topTip=top?(mine?`${STICKERS[top].series} · ${STICKERS[top].name}`:`${STICKERS[top].name} · ${esc(p.name.split(" ")[0])} collected this ${GOT[p.name]||"earlier"}`):"";
  const badge=mine?S.profile.badge:(P?P.badge:"");
  const role=mine?[S.profile.line,S.profile.makes].filter(Boolean).join(" · "):(P?P.role:T("post.alsohere","Also writing in this browser"));
  const reps=[...(p.replies||[]), ...(window.PoiesisForum?window.PoiesisForum.repliesFor(p.id):[]), ...(S.replies[WK(p.id)]||[])];
@@ -1044,7 +1048,7 @@ function postHTML(p, m, mine, closed){
    <div class="first">${esc(p.first)}</div>
    ${p.later?`<div class="layer"><small>${esc(p.later.when)}</small>${p.later.poem?`<div class="poem">${esc(p.later.poem)}</div>`:""}${p.later.sketch?`<div class="sk s-garage" role="img" aria-label="Sketch"></div>`:""}${p.later.text?esc(p.later.text):""}</div>`:""}
   </div>
-  <div class="pact">${mine||closed?"":`<button class="btn" data-pa="like" aria-pressed="${!!S.likes[p.id]}">${S.likes[p.id]?T("post.moved.on","♥ Moved me"):T("post.moved.off","♡ Moved me")}</button>`}${closed?`<span class="muted" style="font-size:.84rem">Moved ${p.moved} people</span>`:`<button class="btn" data-pa="reply">${mine?T("post.addtothis","Add to this"):T("post.writeback","Write back")}${reps.length?` · ${reps.length}`:""}</button>`}${mine?"":bmMenu()}${keepBtn(p.id)}</div>
+  <div class="pact">${mine||closed?"":`<button class="btn" data-pa="like" aria-pressed="${!!S.likes[p.id]}">${S.likes[p.id]?T("post.moved.on","♥ Moved me"):T("post.moved.off","♡ Moved me")}</button>`}${closed?`<span class="muted" style="font-size:.84rem">Moved ${p.moved} people</span>`:`<button class="btn" data-pa="reply">${mine?T("post.addtothis","Add to this"):T("post.writeback","Write back")}${reps.length?` · ${reps.length}`:""}</button>`}${mine?"":bmMenu()}${keepBtn(p.id)}${mine||P?"":reportLink(p,m)}</div>
   ${shown.length?`<div class="comments">${shown.map(c=>`<div class="cm">${personAv(c.n)}<div><b>${esc(c.n==="You"?(S.profile.name||"You"):c.n)}</b> ${PEOPLE[c.n]?stickerHTML(PEOPLE[c.n].top,16):""} ${esc(c.t)} ${keepReplyBtn(c,p.id)}</div></div>`).join("")}</div>`:""}
   <div class="slot2"></div></article>`;
 }
@@ -1102,7 +1106,7 @@ function responsesHTML(m){
    <div>${postHTML({id:"me_"+m.id, at:when(s.at), first:s.text},m,true)}</div>
    <div class="linkfeed"><p class="type muted" style="margin:18px 0 6px">${T("others.linkfeed.heading","Syntheses that pass through this work")}</p>${[...myLinks.map(p=>postHTML(p,m,true))].join("")||`<p class="muted" style="margin:0;font-size:.9rem">${T("others.linkfeed.empty","None yet. Tap a thread between two works to connect them.")}</p>`}</div></section>`;
  }
- const names=posts.map(p=>p.name.split(" ")[0]);
+ const names=posts.map(p=>esc(p.name.split(" ")[0]));
  const who=names.length>2?`${names.slice(0,2).join(", ")} and ${names.length-2} other${names.length-2>1?"s":""}`:names.join(" and ");
  const closes=new Date(); closes.setDate(closes.getDate()+3); const cl=closes.toLocaleDateString(undefined,{weekday:"long"});
  if(!s) return gateWithTeasesHTML(m, posts,

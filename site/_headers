@@ -1,0 +1,16 @@
+# Security headers for poetdaily.org (Cloudflare reads this file and does not serve it).
+# Added 17 Nov 2026 (security + compliance). The content policy starts as Report-Only:
+# it only writes warnings to the browser console. Once a week of use shows no warnings,
+# rename Content-Security-Policy-Report-Only to Content-Security-Policy to enforce it.
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Strict-Transport-Security: max-age=31536000
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.wikimedia.org; font-src 'self'; connect-src 'self' https://toscnnevnoujsiexnkve.supabase.co wss://toscnnevnoujsiexnkve.supabase.co https://formsubmit.co https://script.google.com https://script.googleusercontent.com; form-action 'self' https://formsubmit.co; frame-ancestors 'none'; base-uri 'self'; object-src 'none'
+
+# The art wall is an editor's page with inline script.
+/art-wall.html
+  ! Content-Security-Policy-Report-Only
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.wikimedia.org; font-src 'self'; frame-ancestors 'none'; object-src 'none'
