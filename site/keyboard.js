@@ -3,8 +3,12 @@
  * A phone keyboard takes half the screen. While someone is typing:
  *   - the Muse/Notebook bar and the quick pen step aside;
  *   - the line being typed stays just above the keyboard (the page follows);
- *   - a slim strip at the top lets them peek at the work they are answering;
- *   - where the pen was, a Submit button; anything others will see asks once.
+ *   - a slim strip at the top: ? (the questions), the works to peek at, and
+ *     Submit (the pen's replacement); anything others will see asks once;
+ *   - the questions and notes around the box fold away; ? brings them back.
+ * 21 Nov, afternoon (Niko): Submit sat on his own typing, so it moved into the
+ * top strip; on iPhone Safari the address pill floats over the bottom, so the
+ * caret is kept clear of it too.
  *
  * Also fixes the jump after ~5 lines: the old autogrow collapsed the box to
  * "auto" on every keystroke, so iOS chased a caret that moved up and then
@@ -64,19 +68,38 @@ const TARGETS={
 function targetFor(el){ const d=el&&TARGETS[el.id]; if(!d) return null; const b=document.querySelector(d.sel); return b?{btn:b, pub:d.pub, peek:!!d.peek}:null; }
 
 /* ---------- the pieces on screen ---------- */
-let sub=null, conf=null, peek=null, active=null, tgt=null;
+let sub=null, conf=null, peek=null, qbtn=null, chips=null, body=null, active=null, tgt=null, marked=[];
+/* iPhone Safari (not the home-screen app) floats its address pill above the keyboard */
+const iosPill=(/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1))&&!navigator.standalone;
 const keep=e=>e.preventDefault();            /* a tap here must not close the keyboard */
 function build(){
  if(sub) return;
- sub=document.createElement("button"); sub.type="button"; sub.className="kbsub"; sub.hidden=true;
- sub.addEventListener("pointerdown",keep); sub.addEventListener("mousedown",keep);
- sub.addEventListener("click",onSubmit);
- conf=document.createElement("div"); conf.className="kbconfirm"; conf.hidden=true; conf.setAttribute("role","dialog");
- conf.addEventListener("pointerdown",keep); conf.addEventListener("mousedown",keep);
  peek=document.createElement("div"); peek.className="kbpeek"; peek.hidden=true;
  peek.addEventListener("pointerdown",e=>{ if(e.target.closest("button")) keep(e); }); peek.addEventListener("mousedown",e=>{ if(e.target.closest("button")) keep(e); });
- document.body.append(peek, conf, sub);
+ const row=document.createElement("div"); row.className="kbpeek-row";
+ qbtn=document.createElement("button"); qbtn.type="button"; qbtn.className="kbq"; qbtn.textContent="?"; qbtn.hidden=true;
+ qbtn.onclick=()=>{ const on=!R.classList.contains("kb-showq"); R.classList.toggle("kb-showq",on); qbtn.setAttribute("aria-pressed",String(on)); follow(); };
+ chips=document.createElement("div"); chips.className="kbpeek-chips";
+ sub=document.createElement("button"); sub.type="button"; sub.className="kbsub"; sub.hidden=true;
+ sub.addEventListener("click",onSubmit);
+ row.append(qbtn,chips,sub);
+ body=document.createElement("div"); body.className="kbpeek-body"; body.hidden=true;
+ peek.append(row,body);
+ conf=document.createElement("div"); conf.className="kbconfirm"; conf.hidden=true; conf.setAttribute("role","dialog");
+ conf.addEventListener("pointerdown",keep); conf.addEventListener("mousedown",keep);
+ document.body.append(peek, conf);
 }
+/* fold away what sits around the box: questions and notes (? brings those back), and the row with the page's own button (Submit stands in for it) */
+function fold(el){
+ unfold(); const host=el.parentElement; if(!host) return;
+ for(const c of host.children){ if(c===el) continue;
+  const cls=(tgt&&c.contains(tgt.btn))?"kb-hide":"kb-q";
+  c.classList.add(cls); marked.push([c,cls]); }
+ qbtn.hidden=!marked.some(m=>m[1]==="kb-q");
+ R.classList.remove("kb-showq"); qbtn.setAttribute("aria-pressed","false");
+}
+function unfold(){ marked.forEach(([c,cls])=>c.classList.remove(cls)); marked=[]; R.classList.remove("kb-showq"); }
+function showStrip(){ if(peek) peek.hidden=!(!sub.hidden||!qbtn.hidden||chips.children.length); }
 function syncSub(){
  if(!sub||!active) return;
  if(!tgt){ sub.hidden=true; return; }
@@ -103,12 +126,11 @@ function fire(){
 }
 const strip=s=>new DOMParser().parseFromString(String(s||""),"text/html").body.textContent;
 function buildPeek(){
- peek.innerHTML=""; peek.hidden=true;
+ chips.innerHTML=""; body.innerHTML=""; body.hidden=true;
  if(!tgt||!tgt.peek||!window.PoiesisApp||!window.PoiesisApp.peek) return;
  let works=[]; try{ works=window.PoiesisApp.peek(active.id)||[]; }catch(_){ works=[]; }
  if(!works.length) return;
- const row=document.createElement("div"); row.className="kbpeek-row";
- const body=document.createElement("div"); body.className="kbpeek-body"; body.hidden=true;
+ const row=chips;
  works.forEach((w,i)=>{
   const b=document.createElement("button"); b.type="button"; b.textContent=w.kind||w.title||"";
   b.setAttribute("aria-expanded","false"); b.title=strip(w.title);
@@ -126,7 +148,6 @@ function buildPeek(){
   };
   row.append(b);
  });
- peek.append(row,body); peek.hidden=false;
 }
 
 /* ---------- placing them in the part of the screen the keyboard leaves ---------- */
@@ -134,6 +155,7 @@ function place(){
  const vv=window.visualViewport;
  const top=vv?vv.offsetTop:0, h=vv?vv.height:innerHeight;
  R.style.setProperty("--kbt",top+"px"); R.style.setProperty("--kbh",h+"px");
+ R.style.setProperty("--kbs",((peek&&!peek.hidden)?peek.getBoundingClientRect().height:0)+"px");
 }
 
 /* keep the caret's line above the keyboard and below the peek strip */
@@ -144,7 +166,7 @@ function follow(){
   const t=active; if(!t||document.activeElement!==t) return;
   const vv=window.visualViewport, top=vv?vv.offsetTop:0, H=vv?vv.height:innerHeight;
   const ph=(peek&&!peek.hidden)?peek.getBoundingClientRect().height:0;
-  const reserve=(sub&&!sub.hidden)?66:18;
+  const reserve=iosPill?72:18;   /* clear of Safari's address pill */
   const cb=caretBottom(t), ct=cb-lineH(t);
   let d=0;
   if(cb>top+H-reserve) d=cb-(top+H-reserve);
@@ -157,16 +179,16 @@ function follow(){
 function on(el){
  build(); active=el; tgt=targetFor(el);
  R.classList.add("kb");
- conf.hidden=true; syncSub(); buildPeek(); place();
+ conf.hidden=true; syncSub(); buildPeek(); if(TARGETS[el.id]) fold(el); else { unfold(); qbtn.hidden=true; } showStrip(); place();
  follow(); setTimeout(()=>{ place(); follow(); },320);   /* again once the keyboard has risen */
 }
 function off(){
- active=null; tgt=null; R.classList.remove("kb");
+ active=null; tgt=null; R.classList.remove("kb"); unfold();
  if(sub){ sub.hidden=true; conf.hidden=true; peek.hidden=true; }
 }
 document.addEventListener("focusin",e=>{
  if(!touch.matches||!isField(e.target)) return;
- if(e.target.closest(".penbox")){ build(); active=e.target; tgt=null; R.classList.add("kb"); syncSub(); peek.hidden=true; place(); return; }
+ if(e.target.closest(".penbox")){ build(); unfold(); active=e.target; tgt=null; R.classList.add("kb"); syncSub(); peek.hidden=true; place(); return; }
  on(e.target);
 });
 document.addEventListener("focusout",()=>{

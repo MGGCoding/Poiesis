@@ -2371,18 +2371,24 @@ html[data-mlook] .hm-or:empty, html[data-mlook] .hm-others p:empty{display:none}
 html.kb .botbar, html.kb .pen{display:none!important}
 html.kb .penbox{top:calc(var(--kbt,0px) + 8px); bottom:auto; transform:rotate(-.6deg)}
 .kbsub, .kbconfirm, .kbpeek{display:none}
-html.kb .kbsub:not([hidden]){display:block; position:fixed; z-index:56; right:14px; top:calc(var(--kbt,0px) + var(--kbh,100vh) - 56px); height:44px; padding:0 20px; border:0; border-radius:22px; background:var(--accent); color:var(--on-accent); font:600 15px/44px var(--f-ui, sans-serif); box-shadow:var(--shadow); cursor:pointer; -webkit-tap-highlight-color:transparent}
-html.kb .kbsub:disabled{opacity:.45; box-shadow:none}
-html.kb .kbconfirm:not([hidden]){display:block; position:fixed; z-index:57; right:12px; top:calc(var(--kbt,0px) + var(--kbh,100vh) - 66px); transform:translateY(-100%) rotate(-.6deg); width:min(300px, calc(100vw - 24px)); box-sizing:border-box; background:var(--card); color:var(--card-ink); box-shadow:0 20px 40px -14px rgba(0,0,0,.5); padding:14px 16px 12px}
+html.kb .kbsub:not([hidden]){display:block; flex:none; margin-left:auto; height:32px; padding:0 16px; border:0; border-radius:16px; background:var(--accent); color:var(--on-accent); font:600 14px/32px var(--f-ui, sans-serif); cursor:pointer; -webkit-tap-highlight-color:transparent}
+html.kb .kbsub:disabled{opacity:.45}
+html.kb .kbconfirm:not([hidden]){display:block; position:fixed; z-index:57; right:10px; top:calc(var(--kbt,0px) + var(--kbs,44px) + 6px); transform:rotate(-.6deg); width:min(300px, calc(100vw - 20px)); box-sizing:border-box; background:var(--card); color:var(--card-ink); box-shadow:0 20px 40px -14px rgba(0,0,0,.5); padding:14px 16px 12px}
 .kbconfirm p{margin:0 0 12px; font-family:var(--f-hand); font-size:1.15rem; line-height:1.35}
 .kbconfirm-row{display:flex; justify-content:flex-end; gap:10px}
 html.kb .kbpeek:not([hidden]){display:block; position:fixed; z-index:55; left:0; right:0; top:var(--kbt,0px); background:var(--card); color:var(--card-ink); border-bottom:1px solid var(--card-rule, var(--line)); box-shadow:0 10px 24px -16px rgba(0,0,0,.5)}
-.kbpeek-row{display:flex; gap:6px; padding:6px 10px; overflow-x:auto; scrollbar-width:none}
-.kbpeek-row button{all:unset; box-sizing:border-box; flex:none; padding:4px 12px; border:1px solid var(--card-rule, var(--line)); border-radius:14px; font:500 13px/18px var(--f-ui, sans-serif); color:var(--paper-mute, var(--card-ink)); cursor:pointer; -webkit-tap-highlight-color:transparent}
-.kbpeek-row button[aria-expanded="true"]{background:var(--accent); color:var(--on-accent); border-color:var(--accent)}
+.kbpeek-row{display:flex; align-items:center; gap:5px; padding:6px 8px}
+.kbpeek-chips{display:flex; gap:4px; min-width:0; overflow-x:auto; scrollbar-width:none}
+.kbpeek-chips button{all:unset; box-sizing:border-box; flex:none; padding:4px 9px; border:1px solid var(--card-rule, var(--line)); border-radius:14px; font:500 13px/18px var(--f-ui, sans-serif); color:var(--paper-mute, var(--card-ink)); cursor:pointer; -webkit-tap-highlight-color:transparent}
+.kbpeek-chips button[aria-expanded="true"]{background:var(--accent); color:var(--on-accent); border-color:var(--accent)}
 .kbpeek-body{max-height:calc(var(--kbh,100vh) * .42); overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:2px 16px 12px}
 .kbpeek-t{margin:4px 0 0; font-family:var(--f-body, Georgia, serif); font-size:1.08rem}
 .kbpeek-by{margin:0 0 8px; font-style:italic; color:var(--paper-mute, inherit); font-size:.9rem}
 .kbpeek-x{white-space:pre-wrap; font-family:var(--f-body, Georgia, serif); font-size:.98rem; line-height:1.5}
+.kbq{all:unset; box-sizing:border-box; flex:none; width:30px; height:30px; border-radius:50%; border:1px solid var(--card-rule, var(--line)); text-align:center; font:600 15px/28px var(--f-ui, sans-serif); color:var(--paper-mute, var(--card-ink)); cursor:pointer; -webkit-tap-highlight-color:transparent}
+.kbq[hidden]{display:none}
+.kbq[aria-pressed="true"]{background:var(--accent); color:var(--on-accent); border-color:var(--accent)}
+/* the questions and notes around the box fold away while typing; ? brings the questions back */
+html.kb .kb-hide, html.kb:not(.kb-showq) .kb-q{display:none!important}
 /* iOS zooms into any box under 16px when it is tapped; that zoom is part of the "glitch" */
 @media (hover:none) and (pointer:coarse){ input.field, select.field, textarea.field, #nbSearch{font-size:16px} }
