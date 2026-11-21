@@ -1742,7 +1742,7 @@ function wireBoard(v){
  const sd=v.querySelector("#synDraft");
  if(sd){ autogrow(sd); sd.oninput=()=>{ S.synDrafts[WK(S.openSyn)]=sd.value; save(); autogrow(sd); v.querySelector(".sy-qs")?.classList.toggle("typing",/\S/.test(sd.value)); const b=v.querySelector('[data-act="pubsyn"]'); if(b) b.disabled=!sd.value.trim(); }; }
 }
-function autogrow(t){ t.style.height="auto"; t.style.height=Math.max(44,t.scrollHeight)+"px"; }
+function autogrow(t){ if(window.PoiesisKB) return window.PoiesisKB.grow(t); t.style.height="auto"; t.style.height=Math.max(44,t.scrollHeight)+"px"; }   /* keyboard.js: measured on a twin, never collapses (21 Nov) */
 function wireWriter(m){
  const d=$("#draft");
  if(d){ autogrow(d); d.oninput=()=>{ S.drafts[WK(m.id)]=d.value; save(); autogrow(d); const b=document.querySelector('[data-act="seal"]'); if(b) b.disabled=!d.value.trim(); }; }
@@ -2287,6 +2287,8 @@ window.PoiesisApp={ T, toast, today, state:()=>S,
  dropWelcome(){ const i=S.journal.findIndex(x=>x.id==="j_welcome"&&x.welcome&&x.body===T("welcome.body","")&&x.title===T("welcome.title","Welcome"));
   if(i<0) return false; S.journal.splice(i,1); if(S.nb&&S.nb.sel==="j_welcome") S.nb.sel=null; S.welcomed=true; save(true); return true; },
  openMember, live:LIVE,
+ // keyboard.js: the work(s) a writing box answers, for the peek strip above the keyboard (21 Nov)
+ peek(id){ const ids=(id==="synDraft"&&S.openSyn)?synSubjects(S.openSyn):[curMuse().id]; return ids.map(i=>MUSE[i]).filter(Boolean).map(m=>({kind:m.kind, title:m.title, maker:m.maker, date:m.date, text:m.poem||m.quote||""})); },
   who:WHO, table:Table };
 
 applyStaticCopy(); applyPrefs(); penInit(); render();

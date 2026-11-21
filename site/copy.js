@@ -523,6 +523,12 @@ pen.placeholder: Write it down…
 pen.close: Close
 pen.keep: Keep it in my notebook
 
+# WRITING ON A PHONE — while the keyboard is up, the pen becomes this button
+kb.submit: Submit
+kb.confirm: Publish this? Others will see it.
+kb.confirm.yes: Publish
+kb.confirm.no: Keep writing
+
 # THE CONSTITUTION — printed on the Why page, after the explanations (part one, verbatim)
 whybottom.heading: Discourse on Creation and the Muse
 whybottom.from: From the Constitution of Poiesis
